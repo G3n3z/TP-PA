@@ -19,6 +19,7 @@ public class ApoioUIText {
                 case GESTAO_DOCENTES -> UIGestao_Docentes();
                 case GESTAO_ESTAGIOS -> UIGestao_Estagios();
                 case OPCOES_CANDIDATURA -> UIOpcoes_Candidatura();
+                case ATRIBUICAOPROPOSTAS -> UIAtribuicao_Propostas();
                 default -> {
                     isfinished = true;
                 }
@@ -71,9 +72,7 @@ public class ApoioUIText {
                 case 2 -> {
                     context.recuarFase();
                 }
-
             }
-
         }
     }
     private void UIGestao_Docentes() {
@@ -104,18 +103,30 @@ public class ApoioUIText {
     private void UIOpcoes_Candidatura() {
         if(!context.fechado()) { //Se nao esta fechado
             switch (PAInput.chooseOption(context.getName(), "Inserção de Propostas", "Consulta de Propostas", "Edição de Propostas",
-                    "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Avançar Fase")) {
+                    "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase")) {
                 case 1 -> {}
                 case 2 -> {}
                 case 3 -> {}
                 case 4 -> {}
                 case 5 -> {}
+                case 6 -> context.fecharFase();
+                case 7 -> context.recuarFase();
+                case 8 -> context.avancarFase();
             }
         }
         else{
-            if (PAInput.chooseOption(context.getName(), "Avançar Fase") == 1) {
+            if (PAInput.chooseOption(context.getName(), "Avançar Fase", "Recuar Fase") == 1) {
                 context.avancarFase();
             }
+        }
+    }
+
+
+    private void UIAtribuicao_Propostas() {
+        switch (PAInput.chooseOption(context.getName(), "Recuar Fase", "Fechar Fase", "Avançar Fase")){
+            case 1 -> context.recuarFase();
+            case 2 -> context.fecharFase();
+            case 3 -> context.avancarFase();
         }
     }
 
