@@ -18,6 +18,8 @@ public class OpcoesCandidatura extends StateAdapter{
         return true;
     }
 
+
+    //asf
     @Override
     public boolean avancarFase() {
         changeState(atribuirPropostas);
