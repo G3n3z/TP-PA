@@ -9,6 +9,9 @@ public class OpcoesCandidatura extends StateAdapter{
         this.previousState = previousState;
     }
 
+
+    // teste
+
     @Override
     public boolean recuarFase() {
         changeState(previousState);
