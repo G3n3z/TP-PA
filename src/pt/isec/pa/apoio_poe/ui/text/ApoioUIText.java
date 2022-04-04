@@ -9,6 +9,7 @@ public class ApoioUIText {
     public ApoioUIText(ApoioContext context) {
         this.context = context;
     }
+
     public void start(){
         boolean isfinished = false;
         while (!isfinished) {
@@ -27,33 +28,54 @@ public class ApoioUIText {
 
 
     private void UIConfig_Options() {
+        String [] opcoes;
         if(!context.fechado()) { //Se nao esta fechado
-            switch (PAInput.chooseOption(context.getName(), "Gestao de Alunos", "Gestão de Docentes", "Gestão de Estágios", "Fechar Fase", "Avançar Fase")) {
-                case 1 -> context.gerirAlunos();
-                case 2 -> context.gerirDocentes();
-                case 3 -> context.gerirEstagios();
-                case 4 -> context.fecharFase();
-                case 5 -> context.avancarFase();
-            }
+            opcoes = new String[]{"Gestao de Alunos", "Gestão de Docentes", "Gestão de Estágios", "Fechar Fase", "Avançar Fase"};
+
         }
         else{
-            if (PAInput.chooseOption(context.getName(), "Avançar Fase") == 1) {
-                context.avancarFase();
+            opcoes = new String[]{"Gestao de Alunos", "Gestão de Docentes", "Gestão de Estágios", "Avançar Fase"};
+        }
+        switch (PAInput.chooseOption(context.getName(), opcoes)) {
+            case 1 -> context.gerirAlunos();
+            case 2 -> context.gerirDocentes();
+            case 3 -> context.gerirEstagios();
+            case 4 -> {
+                if (context.fechado()) {context.avancarFase();}
+                else  {context.fecharFase();}
             }
+            case 5 -> {if (!context.fechado()) context.avancarFase();}
         }
     }
+
+
+
     private void UIGestao_Clientes() {
         int option = 0;
-        option = PAInput.chooseOption(context.getName(), "Inserir Aluno", "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar");
-        switch (option) {
-            case 1 -> {}
-            case 2 -> {}
-            case 3 -> {}
+        if (!context.fechado()) {
+            option = PAInput.chooseOption(context.getName(), "Inserir Aluno", "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar");
+            switch (option) {
+                case 1 -> {}
+                case 2 -> {}
+                case 3 -> {}
+                case 4 -> {}
+                case 5 -> {
+                    context.recuarFase();
+                }
+            }
+        } else {
+            option = PAInput.chooseOption(context.getName(), "Consultar Alunos", "Voltar");
+            switch (option) {
+                case 1 -> {
+                }
+                case 2 -> {
+                    context.recuarFase();
+                }
+
+            }
+
         }
-
-        context.recuarFase();
     }
-
     private void UIGestao_Docentes() {
         int option = 0;
         option = PAInput.chooseOption(context.getName(), "Inserir Docente", "Consultar Docentes", "Editar Docente" ,"Remover Docente", "Voltar");

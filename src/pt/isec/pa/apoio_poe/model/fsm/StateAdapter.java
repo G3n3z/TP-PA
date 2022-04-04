@@ -1,8 +1,12 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import java.util.HashSet;
+import java.util.Set;
+
 abstract class StateAdapter implements IState{
     ApoioContext context;
     private boolean close;
+
     public StateAdapter(ApoioContext context, boolean isClosed) {
         this.context = context;
         close = isClosed;
@@ -40,8 +44,6 @@ abstract class StateAdapter implements IState{
     public EnumState getState() {
         return null;
     }
-
-
 
 
     /* Metodos para saber se a fase esta fechada ou nao */
