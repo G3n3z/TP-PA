@@ -24,9 +24,7 @@ public class ApoioContext {
     public boolean recuarFase(){
         return state.recuarFase();
     }
-    public boolean gerirAlunos(){
-        return state.gerirAlunos();
-    }
+    public boolean gerirAlunos(){ return state.gerirAlunos();}
     public boolean gerirDocentes(){
         return state.gerirDocentes();
     }

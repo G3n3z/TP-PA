@@ -24,6 +24,19 @@ public class ConfigOptions extends  StateAdapter{
         return true;
     }
 
+    @Override
+    public boolean gerirDocentes() {
+        if(isClose())
+            return false;
+        context.changeState(new GestaoDocentes(context, false));
+        return true;
+    }
 
-
+    @Override
+    public boolean gerirEstagios() {
+        if(isClose())
+            return false;
+        context.changeState(new GestaoEstagios(context, false));
+        return true;
+    }
 }

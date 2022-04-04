@@ -19,39 +19,35 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public boolean gerirAlunos() {
-        return false;
-    }
-
-    @Override
-    public boolean gerirDocentes() {
-        return false;
-    }
-
-    @Override
-    public boolean gerirEstagios() {
-        return false;
-    }
-
-    @Override
     public boolean avancarFase() {
         return false;
     }
-
     @Override
     public boolean recuarFase() {
         return false;
     }
-
+    @Override
+    public boolean gerirAlunos() {
+        return false;
+    }
+    @Override
+    public boolean gerirDocentes() {return false;}
+    @Override
+    public boolean gerirEstagios() {
+        return false;
+    }
     @Override
     public EnumState getState() {
         return null;
     }
 
+
+
+
+    /* Metodos para saber se a fase esta fechada ou nao */
     public boolean isClose() {
         return close;
     }
-
     public void setClose(boolean close) {
         this.close = close;
     }
