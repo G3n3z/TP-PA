@@ -44,6 +44,6 @@ public class ApoioContext {
         return state.fechado();
     }
 
-
+    //abc
 
 }
