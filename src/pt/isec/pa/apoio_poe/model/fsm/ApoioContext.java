@@ -1,11 +1,16 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ApoioContext {
     private IState state;
-
+    Map<EnumState, Boolean> closed;
 
     public ApoioContext() {
+        closed = new HashMap<>();
         state = new ConfigOptions(this, false);
+        //closed.putIfAbsent(state.getState(),state.fechado());
     }
     void changeState(IState newState){
         state = newState;
