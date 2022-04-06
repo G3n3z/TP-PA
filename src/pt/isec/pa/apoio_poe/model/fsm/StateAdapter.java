@@ -1,8 +1,5 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import java.util.HashSet;
-import java.util.Set;
-
 abstract class StateAdapter implements IState{
     ApoioContext context;
     private boolean close;
@@ -16,8 +13,12 @@ abstract class StateAdapter implements IState{
         context.changeState(newState);
     }
 
+    void changeState(EnumState newState){
+        changeState(newState.createState(context));
+    }
+
     @Override
-    public boolean fechar() {
+    public boolean close() {
         close = true;
         return true;
     }

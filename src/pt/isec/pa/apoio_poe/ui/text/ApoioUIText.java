@@ -30,7 +30,7 @@ public class ApoioUIText {
 
     private void UIConfig_Options() {
         String [] opcoes;
-        if(!context.fechado()) { //Se nao esta fechado
+        if(!context.isClosed()) { //Se nao esta fechado
             opcoes = new String[]{"Gestao de Alunos", "Gestão de Docentes", "Gestão de Estágios", "Fechar Fase", "Avançar Fase"};
 
         }
@@ -42,10 +42,10 @@ public class ApoioUIText {
             case 2 -> context.gerirDocentes();
             case 3 -> context.gerirEstagios();
             case 4 -> {
-                if (context.fechado()) {context.avancarFase();}
-                else  {context.fecharFase();}
+                if (context.isClosed()) {context.avancarFase();}
+                else  {context.closeFase();}
             }
-            case 5 -> {if (!context.fechado()) context.avancarFase();}
+            case 5 -> {if (!context.isClosed()) context.avancarFase();}
         }
     }
 
@@ -53,7 +53,7 @@ public class ApoioUIText {
 
     private void UIGestao_Clientes() {
         int option = 0;
-        if (!context.fechado()) {
+        if (!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Inserir Aluno", "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar");
             switch (option) {
                 case 1 -> {}
@@ -101,7 +101,7 @@ public class ApoioUIText {
     }
 
     private void UIOpcoes_Candidatura() {
-        if(!context.fechado()) { //Se nao esta fechado
+        if(!context.isClosed()) { //Se nao esta fechado
             switch (PAInput.chooseOption(context.getName(), "Inserção de Propostas", "Consulta de Propostas", "Edição de Propostas",
                     "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase")) {
                 case 1 -> {}
@@ -109,14 +109,15 @@ public class ApoioUIText {
                 case 3 -> {}
                 case 4 -> {}
                 case 5 -> {}
-                case 6 -> context.fecharFase();
+                case 6 -> context.closeFase();
                 case 7 -> context.recuarFase();
                 case 8 -> context.avancarFase();
             }
         }
         else{
-            if (PAInput.chooseOption(context.getName(), "Avançar Fase", "Recuar Fase") == 1) {
-                context.avancarFase();
+            switch  (PAInput.chooseOption(context.getName(), "Avançar Fase", "Recuar Fase")) {
+                case 1 -> context.avancarFase();
+                case 2 -> context.recuarFase();
             }
         }
     }
@@ -125,7 +126,7 @@ public class ApoioUIText {
     private void UIAtribuicao_Propostas() {
         switch (PAInput.chooseOption(context.getName(), "Recuar Fase", "Fechar Fase", "Avançar Fase")){
             case 1 -> context.recuarFase();
-            case 2 -> context.fecharFase();
+            case 2 -> context.closeFase();
             case 3 -> context.avancarFase();
         }
     }

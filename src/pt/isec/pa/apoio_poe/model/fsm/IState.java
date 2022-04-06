@@ -4,7 +4,7 @@ public interface IState {
     boolean avancarFase();
     boolean recuarFase();
     EnumState getState();
-    boolean fechar();
+    boolean close();
     boolean gerirAlunos();
     boolean gerirDocentes();
     boolean gerirEstagios();

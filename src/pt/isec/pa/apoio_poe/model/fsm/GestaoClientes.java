@@ -13,7 +13,7 @@ public class GestaoClientes extends StateAdapter{
 
     @Override
     public boolean recuarFase() {
-        changeState(new ConfigOptions(context, context.fechado()));
+        changeState(new ConfigOptions(context, context.isClosed()));
         return true;
     }
 }

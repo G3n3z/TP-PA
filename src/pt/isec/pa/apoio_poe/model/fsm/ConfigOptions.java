@@ -1,11 +1,11 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 public class ConfigOptions extends  StateAdapter{
-    private OpcoesCandidatura opcoesCandidatura;
+
 
     public ConfigOptions(ApoioContext context, Boolean isClosed) {
         super(context, isClosed);
-        opcoesCandidatura = new OpcoesCandidatura(context, false, this);
+
     }
 
     @Override
@@ -14,32 +14,34 @@ public class ConfigOptions extends  StateAdapter{
     }
 
     @Override
-    public boolean fechar() {
+    public boolean close() {
         setClose(true);
         return true;
     }
 
     @Override
     public boolean gerirAlunos() {
-        context.changeState(new GestaoClientes(context, context.fechado()));
+        changeState(EnumState.GESTAO_CLIENTES);
         return true;
     }
 
     @Override
     public boolean gerirDocentes() {
-        context.changeState(new GestaoDocentes(context, context.fechado()));
+        changeState(EnumState.GESTAO_DOCENTES);
         return true;
     }
 
     @Override
     public boolean gerirEstagios() {
-        context.changeState(new GestaoEstagios(context, context.fechado()));
+        changeState(EnumState.GESTAO_ESTAGIOS);
         return true;
     }
 
     @Override
     public boolean avancarFase() {
-        changeState(opcoesCandidatura);
+        changeState(EnumState.OPCOES_CANDIDATURA);
         return true;
     }
+
+
 }
