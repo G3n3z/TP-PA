@@ -19,8 +19,10 @@ public class CSVReader {
         }catch (FileNotFoundException e) {
             return false;
         }
+
         sc = new Scanner(br).useLocale(Locale.US);
         sc.useDelimiter("[,\n]");
+
         return true;
     }
 

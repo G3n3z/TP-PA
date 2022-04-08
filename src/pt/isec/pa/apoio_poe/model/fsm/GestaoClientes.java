@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
@@ -47,18 +48,16 @@ public class GestaoClientes extends StateAdapter{
                 classificacao = CSVReader.readDouble();
                 possibilidade = CSVReader.readBoolean();
             }catch (InputMismatchException e){
-                //Por mensagem em logo TODO
+                Log.getInstance().putMessage("Erro de leitura na linha " + index);
                 CSVReader.nextLine();
                 index++;
                 continue;
             }catch (NoSuchElementException e){
-                //Por mensagem em logo TODO
                 return index != 1;
             }
             aluno = new Aluno(email, nome, numAluno, curso,ramo,classificacao,possibilidade);
             if(!data.addAluno(aluno)){
-                //Por mensagem em logo TODO
-                System.out.println("Aluno nao inserido no index " + index);
+                Log.getInstance().putMessage("Aluno nao inserido no index " + index);
             }
             index++;
         }

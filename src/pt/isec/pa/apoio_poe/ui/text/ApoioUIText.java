@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
 import pt.isec.pa.apoio_poe.utils.PAInput;
 
@@ -58,7 +59,11 @@ public class ApoioUIText {
             switch (option) {
                 case 1 -> {
                     context.addAluno(PAInput.readString("Nome do ficheiro: ", true));
+                    while(Log.getInstance().hasNext()){
+                        System.out.println(Log.getInstance().getMessage());
                     }
+
+                }
                 case 2 -> {}
                 case 3 -> {System.out.println(context.getAlunos());}
                 case 4 -> {}
