@@ -1,15 +1,17 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.data.Data;
+
 public class AtribuicaoPropostas extends StateAdapter{
 
 
-    public AtribuicaoPropostas(ApoioContext context, boolean isClosed) {
-        super(context, isClosed);
+    public AtribuicaoPropostas(ApoioContext context, boolean isClosed, Data data) {
+        super(context, isClosed, data);
     }
 
     @Override
     public boolean recuarFase() {
-        changeState(new OpcoesCandidatura(context, context.getBooleanState(EnumState.OPCOES_CANDIDATURA)));
+        changeState(EnumState.OPCOES_CANDIDATURA);
         return true;
     }
 

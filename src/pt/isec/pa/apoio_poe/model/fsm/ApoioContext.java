@@ -1,15 +1,18 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.data.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ApoioContext {
     private IState state;
     Map<EnumState, Boolean> closed;
-
+    Data data;
     public ApoioContext() {
+        data = new Data();
         closed = new HashMap<>();
-        state = new ConfigOptions(this, false);
+        state = new ConfigOptions(this, false, data);
         closed.putIfAbsent(state.getState(),state.fechado());
     }
     void changeState(IState newState){
@@ -63,9 +66,11 @@ public class ApoioContext {
     }
 
 
+    public boolean addAluno(String file) {
+        return state.addAluno(file);
+    }
 
-
-
-
-
+    public String getAlunos() {
+        return data.getAlunos();
+    }
 }

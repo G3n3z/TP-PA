@@ -17,7 +17,7 @@ public class ApoioUIText {
                 case CONFIG_OPTIONS -> UIConfig_Options();
                 case GESTAO_CLIENTES -> UIGestao_Clientes();
                 case GESTAO_DOCENTES -> UIGestao_Docentes();
-                case GESTAO_ESTAGIOS -> UIGestao_Estagios();
+                case GESTAO_PROPOSTAS -> UIGestao_Estagios();
                 case OPCOES_CANDIDATURA -> UIOpcoes_Candidatura();
                 case ATRIBUICAOPROPOSTAS -> UIAtribuicao_Propostas();
                 default -> {
@@ -54,13 +54,15 @@ public class ApoioUIText {
     private void UIGestao_Clientes() {
         int option = 0;
         if (!context.isClosed()) {
-            option = PAInput.chooseOption(context.getName(), "Inserir Aluno", "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar");
+            option = PAInput.chooseOption(context.getName(), "Inserção Alunos Por Ficheiro CSV", "Inserir aluno manualmente", "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar");
             switch (option) {
-                case 1 -> {}
+                case 1 -> {
+                    context.addAluno(PAInput.readString("Nome do ficheiro: ", true));
+                    }
                 case 2 -> {}
-                case 3 -> {}
+                case 3 -> {System.out.println(context.getAlunos());}
                 case 4 -> {}
-                case 5 -> {
+                case 6 -> {
                     context.recuarFase();
                 }
             }
@@ -75,6 +77,8 @@ public class ApoioUIText {
             }
         }
     }
+
+
     private void UIGestao_Docentes() {
         int option = 0;
         option = PAInput.chooseOption(context.getName(), "Inserir Docente", "Consultar Docentes", "Editar Docente" ,"Remover Docente", "Voltar");

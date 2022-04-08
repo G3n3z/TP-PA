@@ -1,6 +1,9 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
+import pt.isec.pa.apoio_poe.utils.CSVReader;
+
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class TesteDelimiter {
@@ -21,22 +24,41 @@ public class TesteDelimiter {
     }
 
     public static void main(String[] args) {
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader("teste.csv"));
-        }catch (FileNotFoundException e) {
-            System.out.println("File not found");
+        if(!CSVReader.startScanner("teste.csv",",")){
+            System.out.println("Nao conseguiu ler o ficheiro");
             return;
         }
-        Scanner sc = new Scanner(br);
-        sc.useDelimiter(",");
-        String line = " ";
-        StringBuffer sb = new StringBuffer();
-        while (sc.hasNext()){
-            line = sc.nextLine();
-            sb.append(line).append("\n");
+        try {
+            while (CSVReader.hasNext()) {
+                try {
+                System.out.println("Long: " + CSVReader.readString());
+                System.out.println("Nome: " + CSVReader.readString());
+                System.out.println("Email: " + CSVReader.readString());
+                System.out.println("Curso: " + CSVReader.readString());
+                System.out.println("Ramo: " + CSVReader.readString());
+                System.out.println("Double: " + CSVReader.readDouble());
+                System.out.println("Bool: " + CSVReader.readBoolean());
+                }catch (InputMismatchException e){
+                    CSVReader.nextLine();
+                }
+            }
+        }catch (InputMismatchException e){
+            System.out.println(e.toString());
         }
-        System.out.println(sb.toString());
+
 
     }
+
+    public static void main3(String[] args) {
+        if(!CSVReader.startScanner("teste.csv",",")){
+            System.out.println("Nao conseguiu ler o ficheiro");
+            return;
+        }
+
+
+
+
+    }
+
+
 }

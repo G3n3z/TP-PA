@@ -1,17 +1,16 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.data.Data;
+
 public class OpcoesCandidatura extends StateAdapter{
 
-    public OpcoesCandidatura(ApoioContext context, boolean isClosed) {
-        super(context, isClosed);
+    public OpcoesCandidatura(ApoioContext context, boolean isClosed, Data data) {
+        super(context, isClosed, data);
     }
-
-
-    // teste
 
     @Override
     public boolean recuarFase() {
-        changeState(new ConfigOptions(context, context.getBooleanState(EnumState.CONFIG_OPTIONS)));
+        changeState(EnumState.CONFIG_OPTIONS);
         return true;
     }
 
@@ -19,7 +18,7 @@ public class OpcoesCandidatura extends StateAdapter{
     //asf
     @Override
     public boolean avancarFase() {
-        changeState(new AtribuicaoPropostas(context,context.getBooleanState(EnumState.ATRIBUICAOPROPOSTAS)));
+        changeState(EnumState.ATRIBUICAOPROPOSTAS);
         return true;
     }
 

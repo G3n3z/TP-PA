@@ -1,11 +1,12 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.data.Data;
+
 public class ConfigOptions extends  StateAdapter{
 
 
-    public ConfigOptions(ApoioContext context, Boolean isClosed) {
-        super(context, isClosed);
-
+    public ConfigOptions(ApoioContext context, boolean isClosed, Data data) {
+        super(context, isClosed, data);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ConfigOptions extends  StateAdapter{
 
     @Override
     public boolean gerirEstagios() {
-        changeState(EnumState.GESTAO_ESTAGIOS);
+        changeState(EnumState.GESTAO_PROPOSTAS);
         return true;
     }
 

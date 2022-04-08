@@ -1,12 +1,16 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.data.Data;
+
 abstract class StateAdapter implements IState{
     ApoioContext context;
+    Data data;
     private boolean close;
 
-    public StateAdapter(ApoioContext context, boolean isClosed) {
+    public StateAdapter(ApoioContext context, boolean isClosed, Data data) {
         this.context = context;
         close = isClosed;
+        this.data = data;
     }
 
     void changeState(IState newState){
@@ -14,7 +18,7 @@ abstract class StateAdapter implements IState{
     }
 
     void changeState(EnumState newState){
-        changeState(newState.createState(context));
+        changeState(newState.createState(context, data));
     }
 
     @Override
@@ -59,4 +63,11 @@ abstract class StateAdapter implements IState{
     public boolean fechado() {
         return close;
     }
+
+    @Override
+    public boolean addAluno(String file) {
+        return false;
+    }
+
+
 }

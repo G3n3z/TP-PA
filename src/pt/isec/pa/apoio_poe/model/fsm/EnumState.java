@@ -1,16 +1,18 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-public enum EnumState {
-    CONFIG_OPTIONS, GESTAO_CLIENTES, GESTAO_ESTAGIOS, GESTAO_DOCENTES, OPCOES_CANDIDATURA, ATRIBUICAOPROPOSTAS;
+import pt.isec.pa.apoio_poe.model.data.Data;
 
-    IState createState(ApoioContext context){
+public enum EnumState {
+    CONFIG_OPTIONS, GESTAO_CLIENTES, GESTAO_PROPOSTAS, GESTAO_DOCENTES, OPCOES_CANDIDATURA, ATRIBUICAOPROPOSTAS;
+
+    IState createState(ApoioContext context, Data data){
         return switch (this){
-            case CONFIG_OPTIONS -> new ConfigOptions(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS));
-            case GESTAO_CLIENTES -> new GestaoClientes(context,  context.getBooleanState(EnumState.GESTAO_CLIENTES));
-            case GESTAO_DOCENTES -> new GestaoDocentes(context,  context.getBooleanState(EnumState.GESTAO_DOCENTES));
-            case GESTAO_ESTAGIOS -> new GestaoEstagios(context,  context.getBooleanState(EnumState.GESTAO_ESTAGIOS));
-            case OPCOES_CANDIDATURA -> new OpcoesCandidatura(context,  context.getBooleanState(EnumState.OPCOES_CANDIDATURA));
-            case ATRIBUICAOPROPOSTAS -> new AtribuicaoPropostas(context,  context.getBooleanState(EnumState.ATRIBUICAOPROPOSTAS));
+            case CONFIG_OPTIONS -> new ConfigOptions(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS),data);
+            case GESTAO_CLIENTES -> new GestaoClientes(context,  context.getBooleanState(EnumState.GESTAO_CLIENTES),data);
+            case GESTAO_DOCENTES -> new GestaoDocentes(context,  context.getBooleanState(EnumState.GESTAO_DOCENTES), data);
+            case GESTAO_PROPOSTAS -> new GestaoEstagios(context,  context.getBooleanState(EnumState.GESTAO_PROPOSTAS), data);
+            case OPCOES_CANDIDATURA -> new OpcoesCandidatura(context,  context.getBooleanState(EnumState.OPCOES_CANDIDATURA), data);
+            case ATRIBUICAOPROPOSTAS -> new AtribuicaoPropostas(context,  context.getBooleanState(EnumState.ATRIBUICAOPROPOSTAS),data);
         };
     }
 
