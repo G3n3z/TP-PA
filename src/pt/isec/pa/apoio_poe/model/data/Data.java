@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.data;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class Data {
     Set<Aluno> alunos;
@@ -16,7 +17,13 @@ public class Data {
 
 
     public boolean addAluno(Aluno aluno) {
+
+        Stream<Docente> aux = docentes.stream().filter(d -> d.getEmail().equals(aluno.getEmail()));
+        if(aux.count()!= 0){
+            return false;
+        }
         return alunos.add(aluno);
+
     }
 
     public String getAlunos() {

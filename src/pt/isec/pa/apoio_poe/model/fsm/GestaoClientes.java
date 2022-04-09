@@ -36,10 +36,11 @@ public class GestaoClientes extends StateAdapter{
             //// por mensagem no logo //TODO
             return false;
         }
-        int index = 1;
+        int index = 0;
 
         while(CSVReader.hasNext()){
             try{
+                index++;
                 numAluno = CSVReader.readLong();
                 nome = CSVReader.readString();
                 email = CSVReader.readString();
@@ -47,21 +48,20 @@ public class GestaoClientes extends StateAdapter{
                 ramo = CSVReader.readString();
                 classificacao = CSVReader.readDouble();
                 possibilidade = CSVReader.readBoolean();
-            }catch (InputMismatchException e){
+            } catch (NoSuchElementException e){
                 Log.getInstance().putMessage("Erro de leitura na linha " + index);
                 CSVReader.nextLine();
-                index++;
                 continue;
-            }catch (NoSuchElementException e){
-                return index != 1;
             }
+
             aluno = new Aluno(email, nome, numAluno, curso,ramo,classificacao,possibilidade);
             if(!data.addAluno(aluno)){
                 Log.getInstance().putMessage("Aluno nao inserido no index " + index);
             }
             index++;
+            CSVReader.nextLine();
         }
-
-        return true;
+        //CSVReader.closeReaders();
+        return index!=1;
     }
 }
