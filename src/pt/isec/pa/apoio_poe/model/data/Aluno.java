@@ -10,6 +10,7 @@ public class Aluno extends Pessoa{
     double classificacao;
     boolean possibilidade;
     Proposta proposta;
+    Candidatura candidatura;
 
     public Aluno(String email, String nome, long numeroEstudante, String siglaCurso, String siglaRamo, double classificacao, boolean possibilidade) {
         super(email, nome);
@@ -47,5 +48,14 @@ public class Aluno extends Pessoa{
     @Override
     public int hashCode() {
         return Objects.hash(numeroEstudante, getEmail());
+    }
+
+    public String getSiglaRamo() {
+        return siglaRamo;
+    }
+
+
+    public long getNumeroAluno() {
+        return numeroEstudante;
     }
 }
