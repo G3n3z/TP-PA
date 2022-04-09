@@ -11,6 +11,7 @@ public class Data {
     public Data() {
         this.alunos = new HashSet<>();
         this.propostas = new HashSet<>();
+        this.docentes = new HashSet<>();
     }
 
 
@@ -23,5 +24,12 @@ public class Data {
         alunos.forEach(sb::append);
         return sb.toString();
     }
-    //sadsad
+
+    public boolean addDocente(Docente docente) { return docentes.add(docente); }
+
+    public String getDocentes() {
+        StringBuilder sb = new StringBuilder();
+        docentes.forEach(sb::append);
+        return sb.toString();
+    }
 }

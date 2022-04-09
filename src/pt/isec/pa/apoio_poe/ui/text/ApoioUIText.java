@@ -86,14 +86,34 @@ public class ApoioUIText {
 
     private void UIGestao_Docentes() {
         int option = 0;
-        option = PAInput.chooseOption(context.getName(), "Inserir Docente", "Consultar Docentes", "Editar Docente" ,"Remover Docente", "Voltar");
-        switch (option) {
-            case 1 -> {}
-            case 2 -> {}
-            case 3 -> {}
+        if(!context.isClosed()) {
+            option = PAInput.chooseOption(context.getName(), "Importar Docentes por CSV", "Inserir Docente", "Consultar Docentes", "Editar Docente", "Remover Docente", "Voltar");
+            switch (option) {
+                case 1 -> {
+                    context.importDocentes(PAInput.readString("Nome do ficheiro: ", true));
+                    while(Log.getInstance().hasNext()){
+                        System.out.println(Log.getInstance().getMessage());
+                    }
+                }
+                case 2 -> {
+                    //Inserir manual
+                }
+                case 3 -> { System.out.println(context.getDocentes()); }
+                case 4 -> {
+                    //Editar
+                }
+                case 5 -> {
+                    //Remover
+                }
+                case 6 -> { context.recuarFase(); }
+            }
+        }else {
+            option = PAInput.chooseOption(context.getName(), "Consultar Docentes", "Voltar");
+            switch (option) {
+                case 1 -> { System.out.println(context.getDocentes()); }
+                case 2 -> { context.recuarFase(); }
+            }
         }
-
-        context.recuarFase();
     }
 
     private void UIGestao_Estagios() {

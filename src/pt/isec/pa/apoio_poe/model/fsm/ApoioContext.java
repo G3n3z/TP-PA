@@ -9,12 +9,14 @@ public class ApoioContext {
     private IState state;
     Map<EnumState, Boolean> closed;
     Data data;
+
     public ApoioContext() {
         data = new Data();
         closed = new HashMap<>();
         state = new ConfigOptions(this, false, data);
         closed.putIfAbsent(state.getState(),state.fechado());
     }
+
     void changeState(IState newState){
         state = newState;
     }
@@ -72,5 +74,11 @@ public class ApoioContext {
 
     public String getAlunos() {
         return data.getAlunos();
+    }
+
+    public boolean importDocentes(String file){ return state.importDocentes(file);}
+
+    public String getDocentes(){
+        return data.getDocentes();
     }
 }

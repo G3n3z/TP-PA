@@ -10,5 +10,6 @@ public interface IState {
     boolean gerirEstagios();
     boolean fechado();
     boolean addAluno(String file);
+    boolean importDocentes(String file);
 
 }

@@ -21,7 +21,7 @@ public class CSVReader {
         }
 
         sc = new Scanner(br).useLocale(Locale.US);
-        sc.useDelimiter("[,\n]");
+        sc.useDelimiter("[,\n\r]+");
 
         return true;
     }
