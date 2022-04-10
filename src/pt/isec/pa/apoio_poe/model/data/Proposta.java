@@ -8,4 +8,7 @@ public class Proposta {
     private String titulo;
     private long numAluno;
 
+    public String getId() {
+        return id;
+    }
 }

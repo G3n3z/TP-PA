@@ -133,8 +133,8 @@ public class ApoioUIText {
         if(!context.isClosed()) { //Se nao esta fechado
             switch (PAInput.chooseOption(context.getName(), "Inserção de Propostas", "Consulta de Propostas", "Edição de Propostas",
                     "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase")) {
-                case 1 -> {}
-                case 2 -> {}
+                case 1 -> {context.addCandidatura(PAInput.readString("Ficheiro: ", true));}
+                case 2 -> {System.out.println(context.getCandidaturas());}
                 case 3 -> {}
                 case 4 -> {}
                 case 5 -> {}

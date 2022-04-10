@@ -58,4 +58,8 @@ public class Aluno extends Pessoa{
     public long getNumeroAluno() {
         return numeroEstudante;
     }
+
+    public void addCandidatura(Candidatura candidatura) {
+        this.candidatura = candidatura;
+    }
 }

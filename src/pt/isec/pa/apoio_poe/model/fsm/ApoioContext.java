@@ -81,4 +81,9 @@ public class ApoioContext {
     public String getDocentes(){
         return data.getDocentes();
     }
+    public String getCandidaturas(){return data.getCandidaturas();}
+
+    public void addCandidatura(String file) {
+        state.addCandidatura(file);
+    }
 }

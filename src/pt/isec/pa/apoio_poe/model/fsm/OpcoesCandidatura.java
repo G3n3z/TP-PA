@@ -65,12 +65,11 @@ public class OpcoesCandidatura extends StateAdapter{
             }
 
             candidatura = new Candidatura(numAluno, ids);
-            data.existsFieldsOfCandidatura(candidatura);
-            data.addCandidatura(candidatura);
+            if(data.existsFieldsOfCandidatura(candidatura)){
+                data.addCandidatura(candidatura);
+            }
+            CSVReader.nextLine();
         }
-
-
-
 
         return super.addCandidatura(file);
     }
