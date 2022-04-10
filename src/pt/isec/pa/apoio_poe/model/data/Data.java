@@ -26,6 +26,20 @@ public class Data {
         candidaturas = new HashSet<>();
     }
 
+    private Aluno getAluno(long naluno){
+        for(Aluno a : alunos){
+            if(a.getNumeroAluno() == naluno)
+                return a;
+        }
+        return null;
+    }
+    private Docente getDocente(String email){
+        for(Docente d : docentes){
+            if(d.getEmail().equalsIgnoreCase(email))
+                return d;
+        }
+        return null;
+    }
 
     public boolean addAluno(Aluno aluno) {
 
@@ -57,7 +71,10 @@ public class Data {
         return sb.toString();
     }
 
-    public boolean addProposta(Proposta proposta) { return propostas.add(proposta); }
+    public boolean addProposta(Proposta proposta) {
+        return propostas.add(proposta);
+    }
+
 
     public boolean verificaDocente(String docente) {
         Docente dummy = Docente.getDummyDocente(docente);
@@ -110,8 +127,16 @@ public class Data {
             if(propostas.stream().noneMatch(proposta -> !(proposta instanceof Projeto_Estagio) && id.equals(proposta.getId()))){
                 return false;
             }
+            if(propostaTemAluno(candidatura.getNumAluno(), id)){
+                return false;
+            }
         }
         return true;
+    }
+
+    //Verificar se existe alguma proposta com um certo id e numAluno
+    public boolean propostaTemAluno(long numAluno, String idProposta){
+        return propostas.stream().anyMatch(p -> p.getNumAluno() != null && p.getNumAluno() == numAluno && p.getId().equals(idProposta));
     }
 
     public String getCandidaturas() {
@@ -139,21 +164,6 @@ public class Data {
         return sb.toString();
     }
 
-    public String getPropostasWithFilter(int ...filters) {
-        HashSet<Proposta> aux =  new HashSet<>(propostas);
-        for (int i = 0 ; i < filters.length; i++){
-            switch (filters[i]){
-                case 1 -> {
-                    aux.removeIf(p -> p instanceof Projeto_Estagio);
-                }
-                case 2 -> {}
-                case 3 -> {}
-                case 4 -> {}
-            }
-        }
-        return "";
-    }
-
 
     public void atribuicaoAutomaticaEstagio_Proposta() {
 
@@ -167,5 +177,62 @@ public class Data {
                 }
             }
         }
+    }
+
+
+    public void changeNameAluno(long naluno,String novo_nome) {
+        Aluno a = getAluno(naluno);
+        if(a == null){
+            //Por mensagem no logo //TODO
+            return;
+        }
+        a.setNome(novo_nome);
+    }
+
+    public boolean removeAluno(long numero_de_aluno) {
+        return alunos.removeIf(a -> a.getNumeroAluno() == numero_de_aluno);
+    }
+
+    public boolean changeCursoAluno(String novo_curso, long nAluno) {
+        Aluno a = getAluno(nAluno);
+        if(a == null){
+            //Por mensagem no logo //TODO
+            return false;
+        }
+        a.setSiglaCurso(novo_curso);
+        return true;
+    }
+
+    public boolean changeRamoAluno(String novo_ramo, long nAluno) {
+        Aluno a = getAluno(nAluno);
+        if(a == null){
+            //Por mensagem no logo //TODO
+            return false;
+        }
+        a.setSiglaCurso(novo_ramo);
+        return true;
+    }
+
+    public boolean changeClassAluno(double nova_classificaçao, long nAluno) {
+        Aluno a = getAluno(nAluno);
+        if(a == null){
+            //Por mensagem no logo //TODO
+            return false;
+        }
+        a.setClassificacao(nova_classificaçao);
+        return true;
+    }
+
+    public boolean removeDocente(String email) {
+        return docentes.remove(Docente.getDummyDocente(email));
+    }
+
+    public boolean changeNameDocente(String novo_nome, String email) {
+        Docente d = getDocente(email);
+        if(d == null){
+            return false;
+        }
+        d.setNome(novo_nome);
+        return true;
     }
 }

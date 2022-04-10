@@ -55,4 +55,18 @@ public class GestaoDocentes extends StateAdapter{
         }
         return index != 1;
     }
+
+    @Override
+    public void removeDocente(String email) {
+        if(data.removeDocente(email)){
+            Log.getInstance().putMessage("Email não registado em nenhum docente");
+        }
+    }
+
+    @Override
+    public void changeNameDocente(String novo_nome, String email) {
+        if(data.changeNameDocente(novo_nome, email)){
+
+        }
+    }
 }

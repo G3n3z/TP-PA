@@ -9,6 +9,7 @@ public class Aluno extends Pessoa{
     String siglaRamo;
     double classificacao;
     boolean possibilidade;
+    Proposta propostaNaoConfirmada;
     Proposta proposta;
     Candidatura candidatura;
 
@@ -69,5 +70,21 @@ public class Aluno extends Pessoa{
     public void setProposta(Proposta p) {
         if(proposta == null)
             proposta = p;
+    }
+
+    public double getClassificacao() {
+        return classificacao;
+    }
+
+    public void setSiglaCurso(String siglaCurso) {
+        this.siglaCurso = siglaCurso;
+    }
+
+    public void setSiglaRamo(String siglaRamo) {
+        this.siglaRamo = siglaRamo;
+    }
+
+    public void setClassificacao(double classificacao) {
+        this.classificacao = classificacao;
     }
 }

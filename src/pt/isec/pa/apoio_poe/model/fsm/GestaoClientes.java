@@ -64,4 +64,38 @@ public class GestaoClientes extends StateAdapter{
         //CSVReader.closeReaders();
         return index!=1;
     }
+
+    @Override
+    public void changeName(String novo_nome, long naluno) {
+        data.changeNameAluno(naluno, novo_nome);
+    }
+
+    @Override
+    public void removeAluno(long numero_de_aluno) {
+        if(data.removeAluno(numero_de_aluno)){
+            Log.getInstance().putMessage("Numero de Aluno inexistente");
+        }
+    }
+
+    @Override
+    public void changeCursoAluno(String novo_curso, long nAluno) {
+        if(data.changeCursoAluno(novo_curso, nAluno)){
+            Log.getInstance().putMessage("Numero de Aluno inexistente");
+        }
+
+    }
+
+    @Override
+    public void changeRamoAluno(String novo_ramo, long nAluno) {
+        if(data.changeRamoAluno(novo_ramo, nAluno)){
+            Log.getInstance().putMessage("Numero de Aluno inexistente");
+        }
+    }
+
+    @Override
+    public void changeClassAluno(double nova_classificaçao, long nAluno) {
+        if(data.changeClassAluno(nova_classificaçao, nAluno)){
+            Log.getInstance().putMessage("Numero de Aluno inexistente");
+        }
+    }
 }

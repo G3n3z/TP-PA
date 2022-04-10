@@ -8,7 +8,7 @@ public class Proposta {
     private String tipo;
     private List<String> ramos;
     private String titulo;
-    private long numAluno; //mudar para derivadas que usam?? //TODO
+    private Long numAluno = null; //mudar para derivadas que usam?? //TODO
 
     public Proposta(String id, String tipo, String titulo, long numAluno) {
         this.id = id;
@@ -44,7 +44,9 @@ public class Proposta {
         return id;
     }
 
-    public long getNumAluno() {
+    public Long getNumAluno() {
         return numAluno;
     }
+
+
 }

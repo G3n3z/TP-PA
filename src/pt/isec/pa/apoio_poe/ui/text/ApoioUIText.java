@@ -66,7 +66,8 @@ public class ApoioUIText {
                 }
                 case 2 -> {}
                 case 3 -> {System.out.println(context.getAlunos());}
-                case 4 -> {}
+                case 4 -> {UIEditarAlunos(PAInput.readLong("Numero de Aluno"));}
+                case 5 -> {context.removeAluno(PAInput.readLong("Numero de Aluno"));}
                 case 6 -> {
                     context.recuarFase();
                 }
@@ -79,6 +80,21 @@ public class ApoioUIText {
                 case 2 -> {
                     context.recuarFase();
                 }
+            }
+        }
+    }
+
+
+    private void UIEditarAlunos(long nAluno) {
+        boolean sair = true;
+        while(sair){
+            switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Curso",
+                    "Ramo", "Classificacao", "Voltar")){
+                case 1 -> context.changeNameAluno(PAInput.readString("Novo nome", false), nAluno);
+                case 2 -> context.changeCursoAluno(PAInput.readString("Novo curso", true), nAluno);
+                case 3 -> context.changeRamoAluno(PAInput.readString("Novo ramo", true), nAluno);
+                case 4 -> context.changeClassAluno(PAInput.readNumber("Nova classificaçao"), nAluno);
+                default -> sair = false;
             }
         }
     }
@@ -99,11 +115,10 @@ public class ApoioUIText {
                     //Inserir manual
                 }
                 case 3 -> { System.out.println(context.getDocentes()); }
-                case 4 -> {
-                    //Editar
+                case 4 -> { UIEditarDocentes(PAInput.readString("Email do docente: ", true));
                 }
                 case 5 -> {
-                    //Remover
+                    context.removeDocente(PAInput.readString("Email do docente: ", true));
                 }
                 case 6 -> { context.recuarFase(); }
             }
@@ -112,6 +127,17 @@ public class ApoioUIText {
             switch (option) {
                 case 1 -> { System.out.println(context.getDocentes()); }
                 case 2 -> { context.recuarFase(); }
+            }
+        }
+    }
+
+    private void UIEditarDocentes(String email) {
+        boolean sair = true;
+        while(sair){
+            if (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar") == 1) {
+                context.changeNomeDocente(PAInput.readString("Novo nome: ", false), email);
+            } else {
+                sair = false;
             }
         }
     }

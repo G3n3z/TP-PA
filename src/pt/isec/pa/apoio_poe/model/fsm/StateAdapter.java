@@ -80,4 +80,25 @@ abstract class StateAdapter implements IState{
 
     @Override
     public void atribuicaoAutomaticaEstagio_Proposta() {}
+
+    @Override
+    public void changeName(String novo_nome, long nAluno) {}
+
+    @Override
+    public void removeAluno(long numero_de_aluno) {}
+
+    @Override
+    public void changeCursoAluno(String novo_curso, long nAluno) {}
+
+    @Override
+    public void changeRamoAluno(String novo_ramo, long nAluno) {}
+
+    @Override
+    public void changeClassAluno(double nova_classificaçao, long nAluno) {}
+
+    @Override
+    public void removeDocente(String numero_de_aluno){}
+
+    @Override
+    public void changeNameDocente(String novo_nome, String email) {}
 }
