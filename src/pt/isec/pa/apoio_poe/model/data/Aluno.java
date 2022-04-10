@@ -62,4 +62,9 @@ public class Aluno extends Pessoa{
     public void addCandidatura(Candidatura candidatura) {
         this.candidatura = candidatura;
     }
+
+    public void setProposta(Proposta p) {
+        if(proposta == null)
+            proposta = p;
+    }
 }

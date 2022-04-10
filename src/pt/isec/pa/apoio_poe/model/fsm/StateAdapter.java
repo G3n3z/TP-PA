@@ -75,4 +75,7 @@ abstract class StateAdapter implements IState{
 
     @Override
     public boolean addCandidatura(String file) {return false;}
+
+    @Override
+    public void atribuicaoAutomaticaEstagio_Proposta() {}
 }

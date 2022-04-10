@@ -71,6 +71,6 @@ public class OpcoesCandidatura extends StateAdapter{
             CSVReader.nextLine();
         }
 
-        return super.addCandidatura(file);
+        return true;
     }
 }
