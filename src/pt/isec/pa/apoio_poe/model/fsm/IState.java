@@ -12,4 +12,6 @@ public interface IState {
     boolean addAluno(String file);
     boolean importDocentes(String file);
     boolean importPropostas(String file);
+    boolean addCandidatura(String file);
+
 }
