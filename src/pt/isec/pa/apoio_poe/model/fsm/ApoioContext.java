@@ -87,4 +87,11 @@ public class ApoioContext {
     public String getPropostas() {
         return data.getPropostas();
     }
+
+    public String getCandidaturas(){return data.getCandidaturas();}
+
+    public void addCandidatura(String file) {
+        state.addCandidatura(file);
+    }
 }
+

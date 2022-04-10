@@ -40,4 +40,7 @@ public class Proposta {
                 ", titulo='" + titulo + '\'' +
                 ", numAluno=" + numAluno;
     }
+    public String getId() {
+        return id;
+    }
 }
