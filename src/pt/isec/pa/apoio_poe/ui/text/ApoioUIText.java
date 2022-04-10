@@ -118,15 +118,25 @@ public class ApoioUIText {
 
     private void UIGestao_Estagios() {
         int option = 0;
-
-
-        option = PAInput.chooseOption(context.getName(), "Inserir Estágio/Projeto", "Consultar Estágio/Projeto", "Editar Estágio/Projeto" ,"Remover Estágio/Projeto", "Voltar");
-        switch (option) {
-            case 1 -> {}
-            case 2 -> {}
-            case 3 -> {}
+        if(!context.isClosed()) {
+            option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos", "Inserir Estágio/Projeto", "Consultar Estágio/Projeto", "Editar Estágio/Projeto", "Remover Estágio/Projeto", "Voltar");
+            switch (option) {
+                case 1 -> {
+                    context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
+                    while(Log.getInstance().hasNext()){
+                        System.out.println(Log.getInstance().getMessage());
+                    }
+                }
+                case 3 -> { System.out.println(context.getPropostas()); }
+                case 6 -> { context.recuarFase(); }
+            }
+        }else {
+            option = PAInput.chooseOption(context.getName(), "Consultar Estágio/Projeto", "Voltar");
+            switch (option) {
+                case 1 -> { System.out.println(context.getPropostas()); }
+                case 2 -> { context.recuarFase(); }
+            }
         }
-        context.recuarFase();
     }
 
     private void UIOpcoes_Candidatura() {

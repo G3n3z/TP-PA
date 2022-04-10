@@ -1,9 +1,7 @@
 package pt.isec.pa.apoio_poe.utils;
 
 import java.io.*;
-import java.util.InputMismatchException;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class CSVReader {
 
@@ -39,6 +37,13 @@ public class CSVReader {
 
     public static String readString(){
         return sc.next();
+    }
+
+    public static List<String> readRamos(){
+        String [] tokens = sc.next().split("\\|");
+        List<String> ramos = new ArrayList<>();
+        ramos.addAll(Arrays.asList(tokens));
+        return ramos;
     }
 
     public static int readInt(){

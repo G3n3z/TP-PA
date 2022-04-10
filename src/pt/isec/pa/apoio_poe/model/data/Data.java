@@ -39,4 +39,32 @@ public class Data {
         docentes.forEach(sb::append);
         return sb.toString();
     }
+
+    public boolean addProposta(Proposta proposta) { return propostas.add(proposta); }
+
+    public boolean verificaDocente(String docente) {
+        Docente dummy = Docente.getDummyDocente(docente);
+        return docentes.contains(dummy);
+    }
+
+    public boolean verificaAluno(long numAluno) {
+        for(Aluno a : alunos) {
+            if (a.getNumeroEstudante() == numAluno)
+                return true;
+        }
+        return false;
+    }
+
+    public void atribuiproposta(Proposta proposta, long numAluno) {
+        for(Aluno a : alunos) {
+            if (a.getNumeroEstudante() == numAluno)
+                a.setProposta(proposta);
+        }
+    }
+
+    public String getPropostas() {
+        StringBuilder sb = new StringBuilder();
+        propostas.forEach(sb::append);
+        return sb.toString();
+    }
 }

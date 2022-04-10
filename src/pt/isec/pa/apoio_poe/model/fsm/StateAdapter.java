@@ -69,8 +69,9 @@ abstract class StateAdapter implements IState{
         return false;
     }
 
-
     @Override
     public boolean importDocentes(String file){ return false; }
 
+    @Override
+    public boolean importPropostas(String file) { return false; }
 }

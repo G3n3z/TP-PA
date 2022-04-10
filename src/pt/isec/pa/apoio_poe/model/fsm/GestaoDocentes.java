@@ -30,29 +30,29 @@ public class GestaoDocentes extends StateAdapter{
         if(!CSVReader.startScanner(file,",")){
             return false;
         }
+
         String email, nome;
         Docente docente;
-        int index = 1;
+        int index = 0;
 
         while (CSVReader.hasNext()){
             try{
+                index++;
                 nome = CSVReader.readString();
                 email = CSVReader.readString();
-            }catch (InputMismatchException e){
+            }catch (NoSuchElementException e){
                 Log.getInstance().putMessage("Erro de leitura na linha " + index);
                 CSVReader.nextLine();
                 index++;
                 continue;
-            }catch (NoSuchElementException e){
-                return index != 1;
             }
 
             docente = new Docente(email, nome);
             if(!data.addDocente(docente)){
                 Log.getInstance().putMessage("Docente nao inserido no index " + index);
             }
-            index++;
+            CSVReader.nextLine();
         }
-        return true;
+        return index != 1;
     }
 }

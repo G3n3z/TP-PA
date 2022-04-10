@@ -81,4 +81,10 @@ public class ApoioContext {
     public String getDocentes(){
         return data.getDocentes();
     }
+
+    public boolean importPropostas(String file) { return state.importPropostas(file);}
+
+    public String getPropostas() {
+        return data.getPropostas();
+    }
 }

@@ -7,6 +7,14 @@ public class Docente extends Pessoa{
 
     ArrayList<Proposta> propostas;
 
+    private Docente(String email){
+        super(email,null);
+    }
+
+    public static Docente getDummyDocente(String email){
+        return new Docente(email);
+    }
+
     public Docente(String email, String nome) {
         super(email, nome);
     }

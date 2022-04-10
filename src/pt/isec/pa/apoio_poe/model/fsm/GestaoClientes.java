@@ -58,7 +58,7 @@ public class GestaoClientes extends StateAdapter{
             if(!data.addAluno(aluno)){
                 Log.getInstance().putMessage("Aluno nao inserido no index " + index);
             }
-            index++;
+            //index++;
             CSVReader.nextLine();
         }
         //CSVReader.closeReaders();
