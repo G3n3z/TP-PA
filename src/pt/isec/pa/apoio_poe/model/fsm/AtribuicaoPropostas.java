@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 
 public class AtribuicaoPropostas extends StateAdapter{
 
@@ -24,5 +25,10 @@ public class AtribuicaoPropostas extends StateAdapter{
     public boolean close() {
         setClose(true);
         return true;
+    }
+
+    @Override
+    public void atribuicaoAutomaticaEstagio_Proposta() {
+        data.atribuicaoAutomaticaEstagio_Proposta();
     }
 }

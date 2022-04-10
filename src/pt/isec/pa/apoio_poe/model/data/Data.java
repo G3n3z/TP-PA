@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import java.util.function.Predicate;
 import java.util.stream.Stream;
+
 
 public class Data {
     Set<Aluno> alunos;
@@ -136,6 +139,33 @@ public class Data {
         return sb.toString();
     }
 
+    public String getPropostasWithFilter(int ...filters) {
+        HashSet<Proposta> aux =  new HashSet<>(propostas);
+        for (int i = 0 ; i < filters.length; i++){
+            switch (filters[i]){
+                case 1 -> {
+                    aux.removeIf(p -> p instanceof Projeto_Estagio);
+                }
+                case 2 -> {}
+                case 3 -> {}
+                case 4 -> {}
+            }
+        }
+        return "";
+    }
 
 
+    public void atribuicaoAutomaticaEstagio_Proposta() {
+
+        for (Proposta p : propostas){
+            if(!(p instanceof Projeto_Estagio)){
+                continue;
+            }
+            for(Aluno aluno : alunos){
+                if(aluno.getNumeroAluno() == p.getNumAluno()){
+                    aluno.setProposta(p);
+                }
+            }
+        }
+    }
 }

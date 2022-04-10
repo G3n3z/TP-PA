@@ -43,4 +43,8 @@ public class Proposta {
     public String getId() {
         return id;
     }
+
+    public long getNumAluno() {
+        return numAluno;
+    }
 }
