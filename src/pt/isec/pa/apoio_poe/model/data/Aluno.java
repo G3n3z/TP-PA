@@ -25,10 +25,6 @@ public class Aluno extends Pessoa{
         return numeroEstudante;
     }
 
-    public void setProposta(Proposta proposta) {
-        this.proposta = proposta;
-    }
-
     @Override
     public String toString() {
         return "Aluno{" +
