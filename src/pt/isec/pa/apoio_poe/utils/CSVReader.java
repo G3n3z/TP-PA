@@ -74,7 +74,6 @@ public class CSVReader {
     public static long readLong(){
         return sc.nextLong();
     }
-    public static boolean hasNextN(){return sc.hasNext("\n");}
     public static boolean hasNext(){return sc.hasNext();}
     public static void closeReaders(){
        try {

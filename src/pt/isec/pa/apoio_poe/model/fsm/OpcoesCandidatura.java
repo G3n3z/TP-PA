@@ -86,17 +86,10 @@ public class OpcoesCandidatura extends StateAdapter{
             Log.getInstance().putMessage("Não existe aluno com o numero: " + candidatura.getNumAluno());
             return false;
         }
-        //Se os ids da proposta existem----
-/*        HashSet<Proposta> p = new HashSet<>();
-        p = getProposta(p, candidatura.getIdProposta());
-        if(p.size() < candidatura.getIdProposta().size()){
-            return false;
-        }*/
         return !candidaturaTemPropostaComAluno(candidatura);
     }
 
     public boolean candidaturaTemPropostaComAluno(Candidatura candidatura){
-        //Se a proposta ja tem aluno
         int find = 0;
         boolean notfind;  //testa se certo id passado na candidatura existe para poder imprimir
         for (String id : candidatura.getIdProposta()) {
@@ -114,6 +107,7 @@ public class OpcoesCandidatura extends StateAdapter{
             }
             if(notfind){Log.getInstance().putMessage("A candidatura do aluno: " + candidatura.getNumAluno() +
                     "está a propor-se ao à proposta: " + id + " que não existe");
+                //fazer return escusa contar o numero de ids TODO
             }
         }
         return find != candidatura.getIdProposta().size();

@@ -192,9 +192,9 @@ public class ApoioUIText {
                     "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase")) {
                 case 1 -> {context.addCandidatura(PAInput.readString("Ficheiro: ", true));}
                 case 2 -> {System.out.println(context.getCandidaturas());}
-                case 3 -> {UIObtencaoDeListaDeAluno();}
-                case 4 -> {}
-                case 5 -> {}
+                case 3 -> {}
+                case 4 -> {UIObtencaoDeListaDeAluno();}
+                case 5 -> {UIObtencaoDeListaDeProposta();}
                 case 6 -> context.closeFase();
                 case 7 -> context.recuarFase();
                 case 8 -> context.avancarFase();
@@ -208,11 +208,55 @@ public class ApoioUIText {
         }
     }
 
+    private void UIObtencaoDeListaDeProposta() {
+        boolean sair = false;
+        int []opcoes = new int[]{0,0,0,0};
+        int index = 0, num = 0;
+        String []filters = new String[] {"Autopropostas de alunos","Propostas de docentes","Propostas com candidaturas","Propostas sem candidatura"};
+        String []options = new String[]{"Autopropostas de alunos [ ]","Propostas de docentes [ ]","Propostas com candidaturas [ ]","Propostas sem candidatura [ ]", "Mostrar", "Voltar"};
+        while (!sair){
+            num = 0;
+            switch (PAInput.chooseOption("Filtros para obtenção de lista de proposta de projecto/estágio", options)){
+                case 1 ->{
+                    num = 1;
+                }
+                case 2 ->{num = 2;}
+                case 3 -> {num = 3;}
+                case 4 -> {num = 4;}
+                case 5 -> {System.out.println(context.getPropostasWithFiltersToString(opcoes));}
+                case 6 -> sair = true;
+
+            }
+            if(num!= 0){
+                if (opcoes[num - 1] == 0) {
+                    opcoes[num - 1] = num;
+                    options[num - 1] = filters[num - 1].concat(" [X]");
+                } else {
+                    opcoes[num - 1] = 0;
+                    options[num - 1] = filters[num - 1].concat(" [ ]");
+                }
+            }
+
+        }
+    }
+
+    private boolean notExistsInArray(int[] opcoes, int j) {
+        for(int i : opcoes){
+            if(i == j){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void UIObtencaoDeListaDeAluno() {
         boolean sair = false;
-        while(sair){
+        while(!sair){
             switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada", "Sem candidatura regista")){
-                case 1 -> {}
+                case 1 -> System.out.println(context.obtencaoAlunosComAutoProposta());
+                case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
+                case 3 -> System.out.println(context.obtencaoAlunosSemCandidatura());
+                default -> sair = true;
             }
 
         }

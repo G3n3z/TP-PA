@@ -11,7 +11,7 @@ public class Aluno extends Pessoa{
     boolean possibilidade;
     Proposta propostaNaoConfirmada;
     Proposta proposta;
-    Candidatura candidatura;
+    Candidatura candidatura = null;
 
     public Aluno(String email, String nome, long numeroEstudante, String siglaCurso, String siglaRamo, double classificacao, boolean possibilidade) {
         super(email, nome);
