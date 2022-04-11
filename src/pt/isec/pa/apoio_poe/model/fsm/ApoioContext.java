@@ -85,10 +85,10 @@ public class ApoioContext {
     public boolean importPropostas(String file) { return state.importPropostas(file);}
 
     public String getPropostas() {
-        return data.getPropostas();
+        return data.getPropostasToString();
     }
 
-    public String getCandidaturas(){return data.getCandidaturas();}
+    public String getCandidaturas(){return data.getCandidaturasToString();}
 
     public void addCandidatura(String file) {
         state.addCandidatura(file);
@@ -121,5 +121,12 @@ public class ApoioContext {
     public void changeNomeDocente(String novo_nome, String email) {
         state.changeNameDocente(novo_nome, email);
     }
+    public String obtencaoAlunosComAutoProposta(){
+        return data.obtencaoAlunosComAutoProposta();
+    }
+    public String obtencaoAlunosComCandidatura(){
+        return data.obtencaoAlunosComCandidatura();
+    }
+
 }
 

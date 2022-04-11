@@ -9,7 +9,7 @@ public class Main {
 
         ApoioContext context = new ApoioContext();
         ApoioUIText ui = new ApoioUIText(context);
-        ui.start();
+        ui.start(args);
 
     }
 }

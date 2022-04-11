@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Proposta {
     private String id;
@@ -48,5 +49,22 @@ public class Proposta {
         return numAluno;
     }
 
+    public List<String> getRamos() {
+        return new ArrayList<>(ramos);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Proposta))
+            return false;
+        Proposta proposta = (Proposta) o;
+        return getId().equals(proposta.getId());
+    }
 
 }

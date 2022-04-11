@@ -32,36 +32,43 @@ public class GestaoPropostas extends StateAdapter{
     @Override
     public boolean importPropostas(String file) {
         if(!CSVReader.startScanner(file,",")){
+            Log.getInstance().putMessage("O ficheiro não existe");
             return false;
         }
 
         String tipo;
-        int index = 0;
+        int index = 1;
 
-        while (CSVReader.hasNext()){
-            try{
-                index++;
-                tipo = CSVReader.readString();
-                switch (tipo){
-                    case "T1" -> {
-                        if(!leT1(index))
-                            throw new NoSuchElementException();
+        try{
+            while (CSVReader.hasNext()) {
+                try {
+
+                    tipo = CSVReader.readString();
+                    switch (tipo) {
+                        case "T1" -> {
+                            if (!leT1(index))
+                                throw new NoSuchElementException();
+                        }
+                        case "T2" -> {
+                            if (!leT2(index))
+                                throw new NoSuchElementException();
+                        }
+                        case "T3" -> {
+                            if (!leT3(index))
+                                throw new NoSuchElementException();
+                        }
                     }
-                    case "T2" -> {
-                        if(!leT2(index))
-                            throw new NoSuchElementException();
-                    }
-                    case "T3" -> {
-                        if(!leT3(index))
-                            throw new NoSuchElementException();
-                    }
+                } catch (NoSuchElementException e) {
+                    Log.getInstance().putMessage("Erro de leitura na linha " + index);
+                    CSVReader.nextLine();
+                    index++;
+                    continue;
                 }
-            }catch (NoSuchElementException e){
-                Log.getInstance().putMessage("Erro de leitura na linha " + index);
+                index++;
                 CSVReader.nextLine();
-                continue;
             }
-            CSVReader.nextLine();
+        }catch (IllegalStateException e){
+            Log.getInstance().putMessage("Erro na linha: " + index);
         }
         return index != 1;
     }

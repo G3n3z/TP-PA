@@ -1,6 +1,5 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,5 +40,9 @@ public class Candidatura {
                 "numAluno=" + numAluno +
                 ", idProposta=" + idProposta +
                 '}';
+    }
+
+    public Boolean containsPropostaById(String id){
+        return idProposta.contains(id);
     }
 }

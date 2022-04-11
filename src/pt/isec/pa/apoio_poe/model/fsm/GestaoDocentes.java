@@ -28,31 +28,39 @@ public class GestaoDocentes extends StateAdapter{
     @Override
     public boolean importDocentes(String file){
         if(!CSVReader.startScanner(file,",")){
+            Log.getInstance().putMessage("O ficheiro não existe");
             return false;
         }
 
         String email, nome;
         Docente docente;
-        int index = 0;
+        int index = 1;
 
-        while (CSVReader.hasNext()){
-            try{
+        try{
+            while (CSVReader.hasNext()) {
+                try {
+
+                    nome = CSVReader.readString();
+                    email = CSVReader.readString();
+                } catch (NoSuchElementException e) {
+                    Log.getInstance().putMessage("Erro de leitura na linha " + index);
+                    CSVReader.nextLine();
+                    index++;
+                    continue;
+                }
+
+                docente = new Docente(email, nome);
+                if (!data.addDocente(docente)) {
+                    Log.getInstance().putMessage("Docente nao inserido no index " + index);
+                }
                 index++;
-                nome = CSVReader.readString();
-                email = CSVReader.readString();
-            }catch (NoSuchElementException e){
-                Log.getInstance().putMessage("Erro de leitura na linha " + index);
                 CSVReader.nextLine();
-                index++;
-                continue;
             }
-
-            docente = new Docente(email, nome);
-            if(!data.addDocente(docente)){
-                Log.getInstance().putMessage("Docente nao inserido no index " + index);
-            }
-            CSVReader.nextLine();
+            CSVReader.closeReaders();
+        }catch (IllegalStateException e){
+            Log.getInstance().putMessage("Erro na linha: " + index);
         }
+
         return index != 1;
     }
 

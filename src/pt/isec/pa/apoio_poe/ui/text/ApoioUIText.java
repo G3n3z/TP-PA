@@ -11,9 +11,30 @@ public class ApoioUIText {
         this.context = context;
     }
 
-    public void start(){
+    public void start(String[] args){
+        if(args.length != 0){
+            context.gerirAlunos();
+            System.out.println("Modo Debug");
+            context.addAluno("teste.csv");
+            context.recuarFase();
+
+            context.gerirDocentes();
+            context.importDocentes("testeD.csv");
+            context.recuarFase();
+
+            context.gerirEstagios();
+            context.importPropostas("testeP.csv");
+            context.recuarFase();
+
+            context.avancarFase();
+            context.addCandidatura("testeC.csv");
+            context.recuarFase();
+        }
+
+
         boolean isfinished = false;
         while (!isfinished) {
+            System.out.println(Log.getInstance().getAllMessage());
             switch (context.getState()) {
                 case CONFIG_OPTIONS -> UIConfig_Options();
                 case GESTAO_CLIENTES -> UIGestao_Clientes();
@@ -171,7 +192,7 @@ public class ApoioUIText {
                     "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase")) {
                 case 1 -> {context.addCandidatura(PAInput.readString("Ficheiro: ", true));}
                 case 2 -> {System.out.println(context.getCandidaturas());}
-                case 3 -> {}
+                case 3 -> {UIObtencaoDeListaDeAluno();}
                 case 4 -> {}
                 case 5 -> {}
                 case 6 -> context.closeFase();
@@ -184,6 +205,16 @@ public class ApoioUIText {
                 case 1 -> context.avancarFase();
                 case 2 -> context.recuarFase();
             }
+        }
+    }
+
+    private void UIObtencaoDeListaDeAluno() {
+        boolean sair = false;
+        while(sair){
+            switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada", "Sem candidatura regista")){
+                case 1 -> context.
+            }
+
         }
     }
 

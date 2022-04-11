@@ -1,16 +1,13 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import java.util.function.Predicate;
-import java.util.stream.Stream;
+
 
 
 public class Data {
@@ -26,7 +23,15 @@ public class Data {
         candidaturas = new HashSet<>();
     }
 
-    private Aluno getAluno(long naluno){
+    public Set<Proposta> getPropostas() {
+        return propostas;
+    }
+
+    public Set<Candidatura> getCandidaturas() {
+        return candidaturas;
+    }
+
+    public Aluno getAluno(long naluno){
         for(Aluno a : alunos){
             if(a.getNumeroAluno() == naluno)
                 return a;
@@ -40,7 +45,16 @@ public class Data {
         }
         return null;
     }
-
+    public HashSet<Proposta> getPropostaAPartirDeId(HashSet<Proposta> p, List<String> idProposta){
+        for (Proposta proposta : propostas){
+            for (String id : idProposta){
+                if(proposta.getId().equals(id)){
+                    p.add(proposta);
+                }
+            }
+        }
+        return p;
+    }
     public boolean addAluno(Aluno aluno) {
 
         if(docentes.stream().anyMatch(d -> d.getEmail().equals(aluno.getEmail()))){
@@ -96,7 +110,7 @@ public class Data {
         }
     }
 
-    public String getPropostas() {
+    public String getPropostasToString() {
         StringBuilder sb = new StringBuilder();
         propostas.forEach(sb::append);
         return sb.toString();
@@ -114,32 +128,23 @@ public class Data {
          }
          return true;
     }
-
-    public boolean existsFieldsOfCandidatura(Candidatura candidatura) {
-
-        if(alunos.stream().noneMatch(aluno -> {       //Se nenhum aluno corresponder ao numero de aluno da candidatura e se o ramo do aluno nao abrangir o ramo da candidatura
-            return aluno.getNumeroAluno() == candidatura.getNumAluno() && candidatura.getIdProposta().stream().anyMatch(c -> c.equals(aluno.getSiglaRamo()));
-        })){
-            return false;
-        }
-        //Se os ids da proposta existem----
-        for(String id : candidatura.getIdProposta()){
-            if(propostas.stream().noneMatch(proposta -> !(proposta instanceof Projeto_Estagio) && id.equals(proposta.getId()))){
-                return false;
-            }
-            if(propostaTemAluno(candidatura.getNumAluno(), id)){
-                return false;
+    public List<String> getRamosDeProposta(String id){
+        for(Proposta p : propostas){
+            if(p.getId().equals(id)){
+                return p.getRamos();
             }
         }
-        return true;
+        return null;
     }
+
+
 
     //Verificar se existe alguma proposta com um certo id e numAluno
     public boolean propostaTemAluno(long numAluno, String idProposta){
         return propostas.stream().anyMatch(p -> p.getNumAluno() != null && p.getNumAluno() == numAluno && p.getId().equals(idProposta));
     }
 
-    public String getCandidaturas() {
+    public String getCandidaturasToString() {
         StringBuilder sb = new StringBuilder();
 
         candidaturas.forEach(sb::append);
@@ -234,5 +239,68 @@ public class Data {
         }
         d.setNome(novo_nome);
         return true;
+    }
+
+    public HashSet<Proposta> getAutoPropostas() {
+        HashSet<Proposta> p = new HashSet<>();
+        for (Proposta proposta : propostas){
+            if(proposta instanceof Projeto_Estagio)
+                p.add(proposta);
+        }
+        return p;
+    }
+
+    public HashSet<Proposta> getProjetos() {
+        HashSet<Proposta> p = new HashSet<>();
+        for (Proposta proposta : propostas){
+            if(proposta instanceof Projeto)
+                p.add(proposta);
+        }
+        return p;
+    }
+    public String getPropostasWithFiltersToString(int ...filters){
+        StringBuilder sb = new StringBuilder();
+        getPropostasWithFilters(filters).forEach( p -> sb.append(p).append("\n"));
+        return sb.toString();
+    }
+
+    public  Set<Proposta> getPropostasWithFilters(int ...filters){
+        Set<Proposta> propostas = new HashSet<>();
+        for (int i : filters){
+            switch (i){
+                case 1 -> propostas.addAll(getAutoPropostas());
+                case 2 -> propostas.addAll(getProjetos());
+                case 3 -> propostas.addAll(getPropostasComCandidatura());
+                case 4 -> propostas.addAll(getPropostasSemCandidatura());
+            }
+        }
+        return propostas;
+    }
+
+    private HashSet<Proposta> getPropostasSemCandidatura() {
+        HashSet<Proposta> propostasReturn = new HashSet<>();
+        for (Proposta p : propostas){
+            if(!(p instanceof Projeto_Estagio)) {
+                for (Candidatura c : candidaturas) {
+                    if (!c.containsPropostaById(p.getId())) {
+                        propostasReturn.add(p);
+                    }
+                }
+            }
+        }
+        return propostasReturn;
+    }
+
+    private HashSet<Proposta> getPropostasComCandidatura() {
+
+        HashSet<Proposta> propostasReturn = new HashSet<>();
+        for (Proposta p : propostas){
+            for (Candidatura c : candidaturas){
+                if(c.containsPropostaById(p.getId())) {
+                    propostasReturn.add(p);
+                }
+            }
+        }
+        return propostasReturn;
     }
 }

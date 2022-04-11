@@ -53,23 +53,23 @@ public class CSVReader {
         return sc.nextDouble();
     }
 
-    public static void nextLine(){
+    public static boolean nextLine(){
         String line;
         try {
             line = br.readLine();
 
         }catch (IOException e){
 
-            return;
+            return false;
         }
         if(line == null){
-            return;
+            return false;
         }
         sc.close();
         sc = new Scanner(line).useLocale(Locale.US);
         sc.useDelimiter("[,\r\n]");
 
-        //sc.nextLine();
+        return true;
     }
     public static long readLong(){
         return sc.nextLong();
