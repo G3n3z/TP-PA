@@ -212,7 +212,7 @@ public class ApoioUIText {
         boolean sair = false;
         while(sair){
             switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada", "Sem candidatura regista")){
-                case 1 -> context.
+                case 1 -> {}
             }
 
         }
