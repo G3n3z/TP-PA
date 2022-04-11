@@ -96,11 +96,8 @@ public class ApoioUIText {
         } else {
             option = PAInput.chooseOption(context.getName(), "Consultar Alunos", "Voltar");
             switch (option) {
-                case 1 -> {
-                }
-                case 2 -> {
-                    context.recuarFase();
-                }
+                case 1 -> System.out.println(context.getAlunos());
+                case 2 -> context.recuarFase();
             }
         }
     }
@@ -192,7 +189,7 @@ public class ApoioUIText {
                     "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase")) {
                 case 1 -> {context.addCandidatura(PAInput.readString("Ficheiro: ", true));}
                 case 2 -> {System.out.println(context.getCandidaturas());}
-                case 3 -> {}
+                case 3 -> {UIEditarCandidaturas();}
                 case 4 -> {UIObtencaoDeListaDeAluno();}
                 case 5 -> {UIObtencaoDeListaDeProposta();}
                 case 6 -> context.closeFase();
@@ -206,6 +203,10 @@ public class ApoioUIText {
                 case 2 -> context.recuarFase();
             }
         }
+    }
+
+    private void UIEditarCandidaturas() {
+
     }
 
     private void UIObtencaoDeListaDeProposta() {

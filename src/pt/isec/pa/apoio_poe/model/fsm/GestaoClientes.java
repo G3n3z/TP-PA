@@ -55,10 +55,11 @@ public class GestaoClientes extends StateAdapter{
                     index++;
                     continue;
                 }
-
-                aluno = new Aluno(email, nome, numAluno, curso, ramo, classificacao, possibilidade);
-                if (!data.addAluno(aluno)) {
-                    Log.getInstance().putMessage("Aluno nao inserido no index " + index);
+                if(fieldsCorrect(index,email, curso, ramo, classificacao)){
+                    aluno = new Aluno(email, nome, numAluno, curso, ramo, classificacao, possibilidade);
+                    if (!data.addAluno(aluno)) {
+                        Log.getInstance().putMessage("Aluno nao inserido no index " + index);
+                    }
                 }
                 index++;
                 if(!CSVReader.nextLine()) break;
@@ -67,6 +68,34 @@ public class GestaoClientes extends StateAdapter{
 
         return index!=1;
     }
+
+    private boolean fieldsCorrect(int index,String email, String curso, String ramo, double classificacao) {
+        boolean ok = true;
+        if(data.existeDocenteComEmail(email)){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um docente registado");
+            ok = false;
+        }
+        if(data.existeAlunoComEmail(email)){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um aluno registado");
+            ok = false;
+        }
+        if (!data.existeCursos(curso)){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um curso inexistente");
+            ok = false;
+        }
+        if (!data.existeRamos(ramo)){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um ramo inexistente");
+            ok =  false;
+        }
+        if(classificacao < 0 || classificacao > 1.0){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com uma classificação nao compreendidada" +
+                    "entre 0.0 e 1.0");
+            ok =  false;
+        }
+        return ok;
+    }
+
+
 
     @Override
     public void changeName(String novo_nome, long naluno) {
@@ -96,9 +125,10 @@ public class GestaoClientes extends StateAdapter{
     }
 
     @Override
-    public void changeClassAluno(double nova_classificaçao, long nAluno) {
-        if(data.changeClassAluno(nova_classificaçao, nAluno)){
+    public void changeClassAluno(double nova_classificacao, long nAluno) {
+        if(data.changeClassAluno(nova_classificacao, nAluno)){
             Log.getInstance().putMessage("Numero de Aluno inexistente");
         }
     }
+
 }

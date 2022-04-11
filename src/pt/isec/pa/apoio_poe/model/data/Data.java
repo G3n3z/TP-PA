@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.data;
 
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
+import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.util.HashSet;
 import java.util.List;
@@ -55,14 +56,18 @@ public class Data {
         }
         return p;
     }
+    public boolean existeDocenteComEmail(String email){
+        return docentes.stream().anyMatch(d -> d.getEmail().equals(email));
+    }
+    public boolean existeCursos(String siglaCurso){
+        return Constantes.getCursos().stream().anyMatch(curso -> curso.equals(siglaCurso));
+    }
+    public boolean existeRamos(String ramo) {
+        return Constantes.getRamos().stream().anyMatch(ramos -> ramos.equals(ramo));
+    }
+
     public boolean addAluno(Aluno aluno) {
-
-        if(docentes.stream().anyMatch(d -> d.getEmail().equals(aluno.getEmail()))){
-            return false;
-        }
-
         return alunos.add(aluno);
-
     }
 
     public String getAlunos() {
@@ -303,4 +308,10 @@ public class Data {
         }
         return propostasReturn;
     }
+
+    public boolean existeAlunoComEmail(String email) {
+        return alunos.stream().anyMatch(a -> a.getEmail().equals(email));
+    }
+
+
 }

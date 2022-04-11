@@ -8,9 +8,9 @@ public enum EnumState {
     IState createState(ApoioContext context, Data data){
         return switch (this){
             case CONFIG_OPTIONS -> new ConfigOptions(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS),data);
-            case GESTAO_CLIENTES -> new GestaoClientes(context,  context.getBooleanState(EnumState.GESTAO_CLIENTES),data);
-            case GESTAO_DOCENTES -> new GestaoDocentes(context,  context.getBooleanState(EnumState.GESTAO_DOCENTES), data);
-            case GESTAO_PROPOSTAS -> new GestaoPropostas(context,  context.getBooleanState(EnumState.GESTAO_PROPOSTAS), data);
+            case GESTAO_CLIENTES -> new GestaoClientes(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS),data);
+            case GESTAO_DOCENTES -> new GestaoDocentes(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS), data);
+            case GESTAO_PROPOSTAS -> new GestaoPropostas(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS), data);
             case OPCOES_CANDIDATURA -> new OpcoesCandidatura(context,  context.getBooleanState(EnumState.OPCOES_CANDIDATURA), data);
             case ATRIBUICAOPROPOSTAS -> new AtribuicaoPropostas(context,  context.getBooleanState(EnumState.ATRIBUICAOPROPOSTAS),data);
         };
