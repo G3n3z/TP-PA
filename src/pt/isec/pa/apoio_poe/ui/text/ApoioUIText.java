@@ -10,9 +10,12 @@ import pt.isec.pa.apoio_poe.utils.PAInput;
 public class ApoioUIText {
     private ApoioContext context;
     private ApoioManager manager;
+    private int flag;
+
     public ApoioUIText(ApoioContext context) {
         this.context = context;
         //manager = new ApoioManager();
+        flag = 0;
     }
 
     public void start(String[] args){
@@ -291,14 +294,21 @@ public class ApoioUIText {
 
     private void UIAtribuicao_PropostasComAnteriorFechada() {
         //Flag para voltar a executar
+        int option;
+        if(flag == 0)
+                option = PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
+                "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
+                "Atribuição manual de propostas disponíveis aos alunos",
+                "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                "Obtenção de listas de alunos ",
+                "Obtenção de listas de propostas de projecto estágio", "Undo", "Redo",
+                "Fechar", "Recuar Fase", "Avançar Fase");
+        else{
+            option = flag;
+            flag = 0;
+        }
         try {
-            switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
-                    "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
-                    "Atribuição manual de propostas disponíveis aos alunos",
-                    "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
-                    "Obtenção de listas de alunos ",
-                    "Obtenção de listas de propostas de projecto estágio", "Undo", "Redo",
-                    "Fechar", "Recuar Fase", "Avançar Fase")) {
+            switch (option) {
                 case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos TODO
                 case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
                 case 3 -> {}
@@ -333,6 +343,7 @@ public class ApoioUIText {
             UIConflito_Atribuicao_Candidatura_Exist_Conflict();
         }else {
             context.recuarFase();
+            flag = 2;
         }
 
     }

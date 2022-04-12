@@ -48,4 +48,9 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
         }
         return true;
     }
+
+    @Override
+    public EnumState getState() {
+        return EnumState.CONFLITO_ATRIBUICAO_CANDIDATURA;
+    }
 }

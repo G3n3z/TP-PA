@@ -46,9 +46,9 @@ public class Data {
         }
         return null;
     }
-    public HashSet<Proposta> getPropostaAPartirDeId(HashSet<Proposta> p, List<String> idProposta){
-        for (Proposta proposta : propostas){
-            for (String id : idProposta){
+    public List<Proposta> getPropostaAPartirDeId(List<Proposta> p, List<String> idProposta){
+        for (String id : idProposta){
+            for (Proposta proposta : propostas){
                 if(proposta.getId().equals(id)){
                     p.add(proposta);
                 }
@@ -349,10 +349,11 @@ public class Data {
     }
 
     private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
-        HashSet<Proposta> proposta = new HashSet<>();
+        List<Proposta> proposta = new ArrayList<>();
         ConflitoAtribuicaoAutomaticaException e = null;
         int i = 1; boolean sair = true;
         ciclo: for (Aluno a : alunosComMesmaMedia){
+            proposta.clear();
             proposta = getPropostaAPartirDeId(proposta, a.getCandidatura().getIdProposta());
             for(Proposta p : proposta){
                 if(!p.isAtribuida() ){//Se a proposta está atribuida
@@ -369,6 +370,7 @@ public class Data {
                             }
                         }
                         proposta_aluno.get(p).add(a);
+                        break;
                     }
                     else{
                         proposta_aluno.put(p, new ArrayList<>());
