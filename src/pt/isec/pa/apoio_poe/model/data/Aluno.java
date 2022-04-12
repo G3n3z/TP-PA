@@ -14,6 +14,11 @@ public class Aluno extends Pessoa {
     private Proposta proposta;
     private Candidatura candidatura = null;
 
+    private Aluno(long numeroEstudante){
+        super("", "");
+        this.numeroEstudante = numeroEstudante;
+    }
+
     public Aluno(String email, String nome, long numeroEstudante, String siglaCurso, String siglaRamo, double classificacao, boolean possibilidade) {
         super(email, nome);
         this.numeroEstudante = numeroEstudante;
@@ -24,10 +29,11 @@ public class Aluno extends Pessoa {
     }
 
     public static Aluno getDummyAluno(Aluno aluno){
-        Aluno dummy = new Aluno(aluno.getEmail(), aluno.getNome(), aluno.numeroEstudante, aluno.siglaCurso, aluno.siglaRamo, aluno.classificacao, aluno.possibilidade);
-        return dummy;
+        return new Aluno(aluno.getEmail(), aluno.getNome(), aluno.numeroEstudante, aluno.siglaCurso, aluno.siglaRamo, aluno.classificacao, aluno.possibilidade);
     }
-
+    public static Aluno getDummyAluno(long naluno){
+        return new Aluno(naluno);
+    }
     /*
 
         ===================GETS=======================
@@ -154,12 +160,12 @@ public class Aluno extends Pessoa {
 
         Aluno aluno = (Aluno) o;
 
-        return numeroEstudante == aluno.numeroEstudante && getEmail().equals(aluno.getEmail());
+        return numeroEstudante == aluno.numeroEstudante;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numeroEstudante, getEmail());
+        return Objects.hash(numeroEstudante);
     }
 
     public boolean temPropostaConfirmada(){

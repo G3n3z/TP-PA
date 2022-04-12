@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
@@ -32,12 +33,18 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
         Map<Proposta, ArrayList<Aluno>> proposta_aluno = data.getProposta_aluno();
         if(proposta_aluno.isEmpty())
             return false;
-
+        int index;
         for(Map.Entry<Proposta, ArrayList<Aluno>> set : proposta_aluno.entrySet()){
-            if(set.getValue().contains(numAluno)){
+            if(set.getValue().contains(Aluno.getDummyAluno(numAluno))){
                 exists = true;
-                //set.getValue().get()
+                index = set.getValue().indexOf(Aluno.getDummyAluno(numAluno));
+                set.getValue().get(index).setProposta(set.getKey());
+                proposta_aluno.remove(set.getKey());
             }
+        }
+        if(!exists){
+            Log.getInstance().putMessage("Não existe o numero de aluno indicado");
+            return false;
         }
         return true;
     }

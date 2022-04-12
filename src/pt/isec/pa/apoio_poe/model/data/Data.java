@@ -164,13 +164,13 @@ public class Data {
 
     public String obtencaoAlunosComCandidatura(){  //Obtenção de listas de alunos: om candidatura já registada.
         StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.candidatura != null).forEach(sb::append);
+        alunos.stream().filter(a -> a.getCandidatura() != null).forEach(sb::append);
         return sb.toString();
     }
 
     public String obtencaoAlunosSemCandidatura(){ //  Obtenção de listas de alunos: Sem candidatura registada.
         StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.candidatura == null).forEach(sb::append);
+        alunos.stream().filter(a -> a.getCandidatura() == null).forEach(sb::append);
         return sb.toString();
     }
 
