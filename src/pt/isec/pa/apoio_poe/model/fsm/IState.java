@@ -8,12 +8,13 @@ public interface IState {
     boolean gerirAlunos();
     boolean gerirDocentes();
     boolean gerirEstagios();
+    boolean conflitoAtribuicaoCandidatura();
     boolean fechado();
     boolean addAluno(String file);
     boolean importDocentes(String file);
     boolean importPropostas(String file);
     boolean addCandidatura(String file);
-    void atribuicaoAutomaticaEstagio_Proposta();
+    void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
 
     void changeName(String novo_nome, long nAluno);
 
@@ -28,5 +29,7 @@ public interface IState {
     void removeDocente(String numero_de_aluno);
 
     void changeNameDocente(String novo_nome, String email);
+    void addPropostaACandidatura(long nAluno, String idProposta);
 
+    void atribuicaoAutomaticaSemAtribuicoesDefinidas();
 }

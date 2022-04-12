@@ -10,7 +10,11 @@ public class Proposta {
     private List<String> ramos;
     private String titulo;
     private Long numAluno = null; //mudar para derivadas que usam?? //TODO
+    private boolean atribuida = false;
 
+    private Proposta(String id){
+        this.id = id;
+    }
     public Proposta(String id, String tipo, String titulo, long numAluno) {
         this.id = id;
         this.tipo = tipo;
@@ -31,6 +35,18 @@ public class Proposta {
         this.ramos = new ArrayList<>(ramos);
         this.titulo = titulo;
         this.numAluno = numAluno;
+    }
+
+    public static Proposta getDummy(String proposta) {
+        return new Proposta(proposta);
+    }
+
+    public boolean isAtribuida() {
+        return atribuida;
+    }
+
+    public void setAtribuida(boolean atribuida) {
+        this.atribuida = atribuida;
     }
 
     @Override

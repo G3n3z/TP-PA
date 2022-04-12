@@ -2,15 +2,16 @@ package pt.isec.pa.apoio_poe.model.data;
 
 import java.util.Objects;
 
-public class Aluno extends Pessoa{
+public class Aluno extends Pessoa {
 
-    long numeroEstudante;
-    String siglaCurso;
-    String siglaRamo;
-    double classificacao;
-    boolean possibilidade;
-    Proposta propostaNaoConfirmada;
-    Proposta proposta;
+    private long numeroEstudante;
+    private String siglaCurso;
+    private String siglaRamo;
+    private double classificacao;
+    private boolean possibilidade;
+    private Integer ordem = null;
+    private Proposta propostaNaoConfirmada;
+    private Proposta proposta;
     Candidatura candidatura = null;
 
     public Aluno(String email, String nome, long numeroEstudante, String siglaCurso, String siglaRamo, double classificacao, boolean possibilidade) {
@@ -22,27 +23,124 @@ public class Aluno extends Pessoa{
         this.possibilidade = possibilidade;
     }
 
-    public long getNumeroEstudante() {
-        return numeroEstudante;
+    /*
+
+        ===================GETS=======================
+
+     */
+
+    public Integer getOrdem() {
+        return ordem;
     }
 
-    @Override
-    public String toString() {
-        return "Aluno{" +
-                " nome: " + getNome() +
-                " email: " + getEmail() +
-                " numeroEstudante=" + numeroEstudante +
-                ", siglaCurso='" + siglaCurso + '\'' +
-                ", siglaRamo='" + siglaRamo + '\'' +
-                ", classificacao=" + classificacao +
-                ", possibilidade=" + possibilidade +
-                ", proposta=" + proposta +
-                "}\n";
+    public boolean isPossibilidade() {
+        return possibilidade;
+    }
+
+    public Proposta getPropostaNaoConfirmada() {
+        return propostaNaoConfirmada;
+    }
+
+    public Proposta getProposta() {
+        return proposta;
+    }
+
+    public Candidatura getCandidatura() {
+        return candidatura;
+    }
+
+    public long getNumeroEstudante() {
+        return numeroEstudante;
     }
 
     public String getSiglaCurso() {
         return siglaCurso;
     }
+
+    public String getSiglaRamo() {
+        return siglaRamo;
+    }
+
+    public long getNumeroAluno() {
+        return numeroEstudante;
+    }
+
+    public double getClassificacao() {
+        return classificacao;
+    }
+        /*
+
+        ===================SETS=======================
+
+     */
+
+    public void setPropostaNaoConfirmada(Proposta p) {
+        if (propostaNaoConfirmada == null)
+            propostaNaoConfirmada = p;
+    }
+
+    public void setProposta(Proposta proposta) {
+        if(this.proposta == null)
+            this.proposta = proposta;
+    }
+
+    public void setSiglaCurso(String siglaCurso) {
+        this.siglaCurso = siglaCurso;
+    }
+
+    public void setSiglaRamo(String siglaRamo) {
+        this.siglaRamo = siglaRamo;
+    }
+
+    public void setClassificacao(double classificacao) {
+        this.classificacao = classificacao;
+    }
+
+
+    public void addCandidatura(Candidatura candidatura) {
+        this.candidatura = candidatura;
+    }
+    public void addCandidatura(String candidatura) {
+        this.candidatura.getIdProposta().add(candidatura);
+    }
+
+    public void setOrdem(Integer ordem) {
+        this.ordem = ordem;
+    }
+
+    /*
+
+        ===================TOSTRING=======================
+
+     */
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Numero de Estudante: ").append(numeroEstudante).append(" Nome: ").append(getNome()).append(" Email: ").append(getEmail());
+        sb.append(" Curso: ").append(siglaCurso).append(" Ramo: ").append(siglaRamo)
+                .append(" Classificação: ").append(classificacao).append("Possibilidade de fazer Estágio: ")
+                .append(possibilidade).append("\n");
+        if(proposta != null){
+            sb.append("Proposta: ").append(proposta);
+        }else if(propostaNaoConfirmada != null){
+            sb.append("Proposta Nao Confirmada: ").append(propostaNaoConfirmada);
+        }else if(candidatura != null){
+            sb.append("Ainda sem proposta, mas com candidatura: ").append(candidatura);
+        }else{
+            sb.append("Ainda sem proposta e sem candidatura");
+        }
+
+
+
+        return sb.append("\n\n").toString();
+    }
+
+       /*
+
+        ===================HASHCODE && EQUALS=======================
+
+     */
 
     @Override
     public boolean equals(Object o) {
@@ -59,36 +157,16 @@ public class Aluno extends Pessoa{
         return Objects.hash(numeroEstudante, getEmail());
     }
 
-    public String getSiglaRamo() {
-        return siglaRamo;
+    public boolean temPropostaConfirmada(){
+        return proposta != null;
     }
 
-    public long getNumeroAluno() {
-        return numeroEstudante;
+    public boolean temPropostaNaoConfirmada(){
+        return propostaNaoConfirmada != null;
     }
 
-    public void addCandidatura(Candidatura candidatura) {
-        this.candidatura = candidatura;
-    }
 
-    public void setProposta(Proposta p) {
-        if(proposta == null)
-            proposta = p;
-    }
-
-    public double getClassificacao() {
-        return classificacao;
-    }
-
-    public void setSiglaCurso(String siglaCurso) {
-        this.siglaCurso = siglaCurso;
-    }
-
-    public void setSiglaRamo(String siglaRamo) {
-        this.siglaRamo = siglaRamo;
-    }
-
-    public void setClassificacao(double classificacao) {
-        this.classificacao = classificacao;
+    public boolean temCandidatura() {
+        return candidatura != null;
     }
 }

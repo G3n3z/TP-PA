@@ -3,10 +3,11 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public enum EnumState {
-    CONFIG_OPTIONS, GESTAO_CLIENTES, GESTAO_PROPOSTAS, GESTAO_DOCENTES, OPCOES_CANDIDATURA, ATRIBUICAOPROPOSTAS;
+    CONFLITO_ATRIBUICAO_CANDIDATURA ,CONFIG_OPTIONS, GESTAO_CLIENTES, GESTAO_PROPOSTAS, GESTAO_DOCENTES, OPCOES_CANDIDATURA, ATRIBUICAOPROPOSTAS;
 
     IState createState(ApoioContext context, Data data){
         return switch (this){
+            case CONFLITO_ATRIBUICAO_CANDIDATURA -> new ConflitoAtribuicaoCandidatura(context,false, data);
             case CONFIG_OPTIONS -> new ConfigOptions(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS),data);
             case GESTAO_CLIENTES -> new GestaoClientes(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS),data);
             case GESTAO_DOCENTES -> new GestaoDocentes(context,  context.getBooleanState(EnumState.CONFIG_OPTIONS), data);

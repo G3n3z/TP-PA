@@ -8,11 +8,11 @@ public class AlunoComparator implements Comparator<Aluno> {
     @Override
     public int compare(Aluno a1, Aluno a2) {
         if (a1.getClassificacao() - a2.getClassificacao()< 0){
-            return -1;
+            return 1;
         }else if (a1.getClassificacao() - a2.getClassificacao() == 0){
             return 0;
         }
         else
-            return 1;
+            return -1;
     }
 }

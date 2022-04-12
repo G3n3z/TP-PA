@@ -149,7 +149,8 @@ public class GestaoPropostas extends StateAdapter{
         if(!data.addProposta(autoproposta)){
             Log.getInstance().putMessage("Proposta nao inserido no index " + index);
         }
-        data.atribuiproposta(autoproposta, numAluno);
+        data.atribuipropostaNaoConfirmada(autoproposta, numAluno);
         return true;
     }
+
 }

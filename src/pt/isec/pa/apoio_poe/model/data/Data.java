@@ -1,14 +1,12 @@
 package pt.isec.pa.apoio_poe.model.data;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-
+import java.util.*;
 
 
 public class Data {
@@ -108,10 +106,10 @@ public class Data {
         return false;
     }
 
-    public void atribuiproposta(Proposta proposta, long numAluno) {
+    public void atribuipropostaNaoConfirmada(Proposta proposta, long numAluno) {
         for(Aluno a : alunos) {
             if (a.getNumeroEstudante() == numAluno)
-                a.setProposta(proposta);
+                a.setPropostaNaoConfirmada(proposta);
         }
     }
 
@@ -158,7 +156,7 @@ public class Data {
 
     public String obtencaoAlunosComAutoProposta(){ //Obtenção de listas de alunos: Com autoproposta.
         StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.proposta instanceof Projeto_Estagio).forEach(sb::append);
+        alunos.stream().filter(a -> a.getPropostaNaoConfirmada() instanceof Projeto_Estagio).forEach(sb::append);
         return sb.toString();
     }
 
@@ -175,16 +173,15 @@ public class Data {
     }
 
 
-    public void atribuicaoAutomaticaEstagio_Proposta() {
-
+    public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
+        Aluno aluno;
         for (Proposta p : propostas){
-            if(!(p instanceof Projeto_Estagio)){
+            if(p.getNumAluno() == null){
                 continue;
             }
-            for(Aluno aluno : alunos){
-                if(aluno.getNumeroAluno() == p.getNumAluno()){
-                    aluno.setProposta(p);
-                }
+            aluno = getAluno(p.getNumAluno());
+            if(aluno != null){
+                aluno.setProposta(p);
             }
         }
     }
@@ -313,5 +310,109 @@ public class Data {
         return alunos.stream().anyMatch(a -> a.getEmail().equals(email));
     }
 
+    public boolean existePropostaSemAluno(String proposta){
+        HashSet<Proposta> p = getPropostasSemAluno();
+        return p.contains(Proposta.getDummy(proposta));
+    }
 
+    private HashSet<Proposta> getPropostasSemAluno() {
+        HashSet<Proposta> propostaReturn = new HashSet<>();
+        for (Proposta p : propostas){
+            if(p.getNumAluno() == null){
+                propostaReturn.add(p);
+            }
+        }
+        return propostaReturn;
+    }
+
+
+    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
+        List<Aluno> al = new ArrayList<>();
+        List<Aluno> alunosComMesmaMedia;
+        for(Aluno a : alunos){
+            if(!a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada() && a.temCandidatura()){
+                al.add(a);
+            }
+        }
+        al.sort(new AlunoComparator());
+        //Pega-se na media de um aluno e obtem se todos os alunos com a mesma media
+        for(Aluno a : al){
+            alunosComMesmaMedia = obtemAlunosComMedia(a.getClassificacao(), al);
+            atribuiPropostaAAlunosComMesmaMedia(alunosComMesmaMedia);
+            //Limpar os alunos ja atribuidos
+        }
+
+        al.forEach(System.out::println);
+    }
+
+    private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
+        HashSet<Proposta> proposta = new HashSet<>();
+        Map<Aluno, Proposta> aluno_proposta = new HashMap<>();
+        int i;
+        for (Aluno a : alunosComMesmaMedia){
+            proposta = getPropostaAPartirDeId(proposta, a.getCandidatura().getIdProposta());
+            i = 1;
+            for(Proposta p : proposta){
+                if(!p.isAtribuida()){
+                    a.setOrdem(i);
+                    aluno_proposta.put(a, p);
+                    break;
+                }
+                i++;
+            }
+        }
+        i = 1;
+        ConflitoAtribuicaoAutomaticaException e = null;
+        for(Aluno a : alunosComMesmaMedia){
+            for(Aluno b  : alunosComMesmaMedia){
+                if(a != b && a.getProposta().equals(b.getProposta())){
+                    if(i == 1){
+                        e = new ConflitoAtribuicaoAutomaticaException();
+                        e.addAluno(a.getNumeroAluno());
+                    }
+                    e.addAluno(b.getNumeroAluno());
+                    i++;
+                }
+            }
+        }
+        if(e != null){
+            throw e;
+        }
+    }
+    private void atribuiPropostaAAlunosComMesmaMedia2(List<Aluno> alunosComMesmaMedia) {
+        HashSet<Proposta> proposta = new HashSet<>();
+        Map<Proposta, Aluno> proposta_aluno = new HashMap<>();
+        int i;
+        ConflitoAtribuicaoAutomaticaException e = null;
+        for (Aluno a : alunosComMesmaMedia){
+            proposta = getPropostaAPartirDeId(proposta, a.getCandidatura().getIdProposta());
+            i = 1;
+            for(Proposta p : proposta){
+                if(!p.isAtribuida()){
+                    if(proposta_aluno.containsKey(p)){ //Se já contem a proposta
+                        if(i == 1){
+                           e = new ConflitoAtribuicaoAutomaticaException();
+                           e.addAluno(a.getNumeroAluno());
+                        }
+                        e.addConflito(p.getId());
+                        //e.addAluno(proposta_aluno.get());
+                        i++;
+                    }else
+                        proposta_aluno.putIfAbsent(p, a);
+                }
+            }
+        }
+    }
+
+    private List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
+        List<Aluno>alunosComMesmaMedia = new ArrayList<>();
+        for(Aluno a : al){
+            if(a.getClassificacao() == classificacao){
+                alunosComMesmaMedia.add(a);
+            }else {
+                break;
+            }
+        }
+        return alunosComMesmaMedia;
+    }
 }

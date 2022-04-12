@@ -132,5 +132,20 @@ public class ApoioContext {
     public String obtencaoAlunosSemCandidatura(){
         return data.obtencaoAlunosSemCandidatura();
     }
+
+    public void addPropostaACandidatura(long nAluno, String idProposta) {
+        state.addPropostaACandidatura(nAluno, idProposta);
+    }
+
+    public void removePropostaACandidatura(long readLong, String readString) {
+    }
+
+    public void atribuicaoAutomatica() {
+        state.atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
+    }
+
+    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
+        state.atribuicaoAutomaticaSemAtribuicoesDefinidas();
+    }
 }
 

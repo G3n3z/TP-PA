@@ -45,6 +45,12 @@ abstract class StateAdapter implements IState{
     public boolean gerirEstagios() {
         return false;
     }
+
+    @Override
+    public boolean conflitoAtribuicaoCandidatura() {
+        return false;
+    }
+
     @Override
     public EnumState getState() {
         return null;
@@ -79,9 +85,6 @@ abstract class StateAdapter implements IState{
     public boolean addCandidatura(String file) {return false;}
 
     @Override
-    public void atribuicaoAutomaticaEstagio_Proposta() {}
-
-    @Override
     public void changeName(String novo_nome, long nAluno) {}
 
     @Override
@@ -101,4 +104,13 @@ abstract class StateAdapter implements IState{
 
     @Override
     public void changeNameDocente(String novo_nome, String email) {}
+
+    @Override
+    public void addPropostaACandidatura(long nAluno, String idProposta) {}
+
+    @Override
+    public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {}
+
+    @Override
+    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {}
 }

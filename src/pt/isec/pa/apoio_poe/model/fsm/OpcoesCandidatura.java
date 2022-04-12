@@ -5,7 +5,6 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
-import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 
 import java.util.*;
@@ -115,4 +114,15 @@ public class OpcoesCandidatura extends StateAdapter{
         return find != candidatura.getIdProposta().size();
     }
 
+    @Override
+    public void addPropostaACandidatura(long nAluno, String idProposta) {
+        Aluno a = data.getAluno(nAluno);
+        if(a == null){
+            Log.getInstance().putMessage("Numero de aluno não existente");
+            return;
+        }
+        if(data.existePropostaSemAluno(idProposta)){
+           a.addCandidatura(idProposta);
+        }
+    }
 }
