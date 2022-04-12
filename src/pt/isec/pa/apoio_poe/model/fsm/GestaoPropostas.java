@@ -39,37 +39,35 @@ public class GestaoPropostas extends StateAdapter{
         String tipo;
         int index = 1;
 
-        try{
-            while (CSVReader.hasNext()) {
-                try {
+        while (CSVReader.hasNext()) {
+            try {
 
-                    tipo = CSVReader.readString();
-                    switch (tipo) {
-                        case "T1" -> {
-                            if (!leT1(index))
-                                throw new NoSuchElementException();
-                        }
-                        case "T2" -> {
-                            if (!leT2(index))
-                                throw new NoSuchElementException();
-                        }
-                        case "T3" -> {
-                            if (!leT3(index))
-                                throw new NoSuchElementException();
-                        }
+                tipo = CSVReader.readString();
+                switch (tipo) {
+                    case "T1" -> {
+                        if (!leT1(index))
+                            throw new NoSuchElementException();
                     }
-                } catch (NoSuchElementException e) {
-                    Log.getInstance().putMessage("Erro de leitura na linha " + index);
-                    CSVReader.nextLine();
-                    index++;
-                    continue;
+                    case "T2" -> {
+                        if (!leT2(index))
+                            throw new NoSuchElementException();
+                    }
+                    case "T3" -> {
+                        if (!leT3(index))
+                            throw new NoSuchElementException();
+                    }
+                    default -> Log.getInstance().putMessage("Erro no index "+ index + " :tipo de proposta inexistente.");
                 }
+            } catch (NoSuchElementException e) {
+                Log.getInstance().putMessage("Erro de leitura na linha: " + index + " do ficheiro: " + file);
+                if(!CSVReader.nextLine()) break;
                 index++;
-                CSVReader.nextLine();
+                continue;
             }
-        }catch (IllegalStateException e){
-            Log.getInstance().putMessage("Erro na linha: " + index);
+            index++;
+            if(!CSVReader.nextLine()) break;
         }
+        CSVReader.closeReaders();
         return index != 1;
     }
 
@@ -90,13 +88,13 @@ public class GestaoPropostas extends StateAdapter{
         } catch (NoSuchElementException e){
             Proposta estagio = new Estagio(id,"T1",ramos,titulo,entidade);
             if(!data.addProposta(estagio)){
-                Log.getInstance().putMessage("Proposta nao inserida no index " + index);
+                Log.getInstance().putMessage("Proposta no index " + index + " nao inserida no index ");
             }
             return true;
         }
-        Proposta estagio = new Estagio(id,"T1",ramos,titulo,entidade,numAluno); //ver se correto TODO
+        Proposta estagio = new Estagio(id,"T1",ramos,titulo,entidade,numAluno);
         if(!data.addProposta(estagio)){
-            Log.getInstance().putMessage("Proposta nao inserida no index " + index);
+            Log.getInstance().putMessage("Proposta no index " + index + " nao inserida no index ");
         }
         return true;
     }
@@ -153,3 +151,5 @@ public class GestaoPropostas extends StateAdapter{
         return true;
     }
 }
+
+//verificacoes TODO

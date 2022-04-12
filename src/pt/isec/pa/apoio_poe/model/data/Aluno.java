@@ -47,7 +47,7 @@ public class Aluno extends Pessoa{
 
         Aluno aluno = (Aluno) o;
 
-        return numeroEstudante == aluno.numeroEstudante && getEmail().equals(aluno.getEmail());
+        return numeroEstudante == aluno.numeroEstudante && getEmail().equals(aluno.getEmail()); // mudar para so num aluno TODO
     }
 
     @Override

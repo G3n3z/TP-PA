@@ -21,7 +21,7 @@ public class Estagio extends Proposta {
     public String toString() {
         return "Estagio{ " +
                 super.toString() +
-                " entidade='" + entidade + '\'' +
+                ", entidade='" + entidade + '\'' +
                 " }\n";
     }
 }
