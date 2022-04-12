@@ -12,7 +12,7 @@ public class Aluno extends Pessoa {
     private Integer ordem = null;
     private Proposta propostaNaoConfirmada;
     private Proposta proposta;
-    Candidatura candidatura = null;
+    private Candidatura candidatura = null;
 
     public Aluno(String email, String nome, long numeroEstudante, String siglaCurso, String siglaRamo, double classificacao, boolean possibilidade) {
         super(email, nome);
@@ -21,6 +21,11 @@ public class Aluno extends Pessoa {
         this.siglaRamo = siglaRamo;
         this.classificacao = classificacao;
         this.possibilidade = possibilidade;
+    }
+
+    public static Aluno getDummyAluno(Aluno aluno){
+        Aluno dummy = new Aluno(aluno.getEmail(), aluno.getNome(), aluno.numeroEstudante, aluno.siglaCurso, aluno.siglaRamo, aluno.classificacao, aluno.possibilidade);
+        return dummy;
     }
 
     /*
