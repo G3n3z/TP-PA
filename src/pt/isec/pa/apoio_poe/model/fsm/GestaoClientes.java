@@ -39,32 +39,32 @@ public class GestaoClientes extends StateAdapter{
         int index = 1;
 
 
-            while (CSVReader.hasNext()) {
-                try {
+        while (CSVReader.hasNext()) {
+            try {
 
-                    numAluno = CSVReader.readLong();
-                    nome = CSVReader.readString();
-                    email = CSVReader.readString();
-                    curso = CSVReader.readString();
-                    ramo = CSVReader.readString();
-                    classificacao = CSVReader.readDouble();
-                    possibilidade = CSVReader.readBoolean();
-                } catch (NoSuchElementException e) {
-                    Log.getInstance().putMessage("Erro de leitura na linha: " + index + " do ficheiro: " + file);
-                    if(!CSVReader.nextLine()) break;
-                    index++;
-                    continue;
-                }
-                if(fieldsCorrect(index,email, curso, ramo, classificacao)){
-                    aluno = new Aluno(email, nome, numAluno, curso, ramo, classificacao, possibilidade);
-                    if (!data.addAluno(aluno)) {
-                        Log.getInstance().putMessage("Aluno nao inserido no index " + index);
-                    }
-                }
-                index++;
+                numAluno = CSVReader.readLong();
+                nome = CSVReader.readString();
+                email = CSVReader.readString();
+                curso = CSVReader.readString();
+                ramo = CSVReader.readString();
+                classificacao = CSVReader.readDouble();
+                possibilidade = CSVReader.readBoolean();
+            } catch (NoSuchElementException e) {
+                Log.getInstance().putMessage("Erro de leitura na linha: " + index + " do ficheiro: " + file);
                 if(!CSVReader.nextLine()) break;
+                index++;
+                continue;
             }
-            CSVReader.closeReaders();
+            if(fieldsCorrect(index,email, curso, ramo, classificacao)){
+                aluno = new Aluno(email, nome, numAluno, curso, ramo, classificacao, possibilidade);
+                if (!data.addAluno(aluno)) {
+                    Log.getInstance().putMessage("Aluno nao inserido no index " + index);
+                }
+            }
+            index++;
+            if(!CSVReader.nextLine()) break;
+        }
+        CSVReader.closeReaders();
 
         return index!=1;
     }

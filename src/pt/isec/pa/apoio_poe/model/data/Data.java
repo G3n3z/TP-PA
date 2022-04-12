@@ -100,7 +100,7 @@ public class Data {
         return docentes.contains(dummy);
     }
 
-    public boolean verificaAluno(long numAluno) {
+    public boolean verificaNumAluno(long numAluno) {
         for(Aluno a : alunos) {
             if (a.getNumeroEstudante() == numAluno)
                 return true;
@@ -147,6 +147,21 @@ public class Data {
     //Verificar se existe alguma proposta com um certo id e numAluno
     public boolean propostaTemAluno(long numAluno, String idProposta){
         return propostas.stream().anyMatch(p -> p.getNumAluno() != null && p.getNumAluno() == numAluno && p.getId().equals(idProposta));
+    }
+
+    //verificar se a sigla do aluno corresponde a alguma das listadas na proposta
+    public boolean verificaRamoAluno(long numAluno, List<String> ramos){
+        return alunos.stream().anyMatch(p -> p.getNumeroAluno() == numAluno && ramos.contains(p.getSiglaCurso()));
+    }
+
+    //verificar se o aluno tem possibilidade de aceder a estagios alem de projetos //verificar a utilidade TODO
+    public boolean verificaPossibilidade(long numAluno){
+        return alunos.stream().anyMatch(p ->p.getNumeroAluno() == numAluno && p.isPossibilidade());
+    }
+
+    //verificar se o aluno ja contem um proposta atribuida
+    public boolean verificaJaAtribuido(long numAluno){
+        return alunos.stream().anyMatch(p ->p.getNumeroAluno() == numAluno && !(p.temPropostaNaoConfirmada() || p.temPropostaConfirmada()));
     }
 
     public String getCandidaturasToString() {
