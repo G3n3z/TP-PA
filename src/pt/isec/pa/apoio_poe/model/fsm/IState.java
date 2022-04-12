@@ -32,4 +32,8 @@ public interface IState {
     void addPropostaACandidatura(long nAluno, String idProposta);
 
     void atribuicaoAutomaticaSemAtribuicoesDefinidas();
+
+    boolean existConflict();
+
+    boolean resolveConflito(long numAluno);
 }

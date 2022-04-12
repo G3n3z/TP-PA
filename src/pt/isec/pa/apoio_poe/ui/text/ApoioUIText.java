@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
@@ -45,6 +46,7 @@ public class ApoioUIText {
                 case GESTAO_PROPOSTAS -> UIGestao_Estagios();
                 case OPCOES_CANDIDATURA -> UIOpcoes_Candidatura();
                 case ATRIBUICAOPROPOSTAS -> UIAtribuicao_Propostas();
+                case CONFLITO_ATRIBUICAO_CANDIDATURA -> UIConflito_Atribuicao_Candidatura();
                 default -> isfinished = true;
 
             }
@@ -288,24 +290,29 @@ public class ApoioUIText {
     }
 
     private void UIAtribuicao_PropostasComAnteriorFechada() {
-        switch (PAInput.chooseOption(context.getName(),"Atribuição automática das autopropostas ou propostas de docentes",
-                "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
-                "Atribuição manual de propostas disponíveis aos alunos",
-                "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
-                "Obtenção de listas de alunos ",
-                "Obtenção de listas de propostas de projecto estágio","Undo", "Redo",
-                "Fechar","Recuar Fase", "Avançar Fase")){
-            case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos TODO
-            case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
-            case 3 -> {}
-            case 4 -> {}
-            case 5 -> {}
-            case 6 -> {}
-            case 7 -> {}
-            case 8 -> {}
-            case 9 -> context.closeFase();
-            case 10 -> context.recuarFase();
-            case 11 -> context.avancarFase();
+        //Flag para voltar a executar
+        try {
+            switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
+                    "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
+                    "Atribuição manual de propostas disponíveis aos alunos",
+                    "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                    "Obtenção de listas de alunos ",
+                    "Obtenção de listas de propostas de projecto estágio", "Undo", "Redo",
+                    "Fechar", "Recuar Fase", "Avançar Fase")) {
+                case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos TODO
+                case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
+                case 3 -> {}
+                case 4 -> {}
+                case 5 -> {}
+                case 6 -> {}
+                case 7 -> {}
+                case 8 -> {}
+                case 9 -> context.closeFase();
+                case 10 -> context.recuarFase();
+                case 11 -> context.avancarFase();
+            }
+        }catch (ConflitoAtribuicaoAutomaticaException e){
+            context.conflitoAtribuicaoCandidatura();
         }
     }
 
@@ -320,5 +327,24 @@ public class ApoioUIText {
         }
     }
 
+    private void UIConflito_Atribuicao_Candidatura() {
+        System.out.println(context.getConflitoToString());
+        if(context.existConflict()){
+            UIConflito_Atribuicao_Candidatura_Exist_Conflict();
+        }else {
+            context.recuarFase();
+        }
+
+    }
+
+
+    private void UIConflito_Atribuicao_Candidatura_Exist_Conflict() {
+        switch (PAInput.chooseOption("Conflito na Atribuição de Candidatuas","Consultar Dados de Alunos em conflito",
+                "Consultar Dados da Proposta", "Atribuir a Aluno")){
+            case 1 -> System.out.println(context.consultaAlunosConflito());
+            case 2 -> System.out.println(context.consultaPropostaConflito());
+            case 3 ->context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
+        }
+    }
 
 }

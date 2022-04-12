@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.data;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
+import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.utils.Constantes;
@@ -14,12 +15,13 @@ public class Data {
     Set<Docente> docentes;
     Set<Proposta> propostas;
     Set<Candidatura> candidaturas;
-
+    Map<Proposta, ArrayList<Aluno>> proposta_aluno;
     public Data() {
         this.alunos = new HashSet<>();
         this.propostas = new HashSet<>();
         this.docentes = new HashSet<>();
         candidaturas = new HashSet<>();
+        proposta_aluno = new HashMap<>();
     }
 
     public Set<Proposta> getPropostas() {
@@ -339,6 +341,7 @@ public class Data {
         for(Aluno a : al){
             alunosComMesmaMedia = obtemAlunosComMedia(a.getClassificacao(), al);
             atribuiPropostaAAlunosComMesmaMedia(alunosComMesmaMedia);
+            alunosComMesmaMedia.clear();
             //Limpar os alunos ja atribuidos
         }
 
@@ -347,61 +350,53 @@ public class Data {
 
     private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
         HashSet<Proposta> proposta = new HashSet<>();
-        Map<Aluno, Proposta> aluno_proposta = new HashMap<>();
-        int i;
-        for (Aluno a : alunosComMesmaMedia){
+        ConflitoAtribuicaoAutomaticaException e = null;
+        int i = 1; boolean sair = true;
+        ciclo: for (Aluno a : alunosComMesmaMedia){
             proposta = getPropostaAPartirDeId(proposta, a.getCandidatura().getIdProposta());
-            i = 1;
             for(Proposta p : proposta){
-                if(!p.isAtribuida()){
+                if(!p.isAtribuida() ){//Se a proposta está atribuida
+                    if(p instanceof Estagio && !a.isPossibilidade()){
+                        continue;
+                    }
                     a.setOrdem(i);
-                    aluno_proposta.put(a, p);
-                    break;
+                    if(proposta_aluno.containsKey(p)){ //Se já contem a proposta
+                        if(proposta_aluno.get(p).size() == 1){
+                            sair = !sair;
+                            if(sair){
+                                proposta_aluno.remove(p);
+                                break ciclo;
+                            }
+                        }
+                        proposta_aluno.get(p).add(a);
+                    }
+                    else{
+                        proposta_aluno.put(p, new ArrayList<>());
+                        proposta_aluno.get(p).add(a);
+                        break;
+                    }
                 }
                 i++;
             }
         }
-        i = 1;
-        ConflitoAtribuicaoAutomaticaException e = null;
-        for(Aluno a : alunosComMesmaMedia){
-            for(Aluno b  : alunosComMesmaMedia){
-                if(a != b && a.getProposta().equals(b.getProposta())){
-                    if(i == 1){
-                        e = new ConflitoAtribuicaoAutomaticaException();
-                        e.addAluno(a.getNumeroAluno());
-                    }
-                    e.addAluno(b.getNumeroAluno());
-                    i++;
+        i = 0;
+        for(Map.Entry<Proposta, ArrayList<Aluno>> set : proposta_aluno.entrySet()){
+            if(set.getValue().size() == 1){
+                set.getValue().get(0).setProposta(set.getKey());
+                set.getKey().setAtribuida(true);
+                proposta_aluno.remove(set.getKey());
+            }
+            else{
+                i++;
+                if(i == 1){
+                    e = new ConflitoAtribuicaoAutomaticaException();
                 }
             }
         }
         if(e != null){
             throw e;
         }
-    }
-    private void atribuiPropostaAAlunosComMesmaMedia2(List<Aluno> alunosComMesmaMedia) {
-        HashSet<Proposta> proposta = new HashSet<>();
-        Map<Proposta, Aluno> proposta_aluno = new HashMap<>();
-        int i;
-        ConflitoAtribuicaoAutomaticaException e = null;
-        for (Aluno a : alunosComMesmaMedia){
-            proposta = getPropostaAPartirDeId(proposta, a.getCandidatura().getIdProposta());
-            i = 1;
-            for(Proposta p : proposta){
-                if(!p.isAtribuida()){
-                    if(proposta_aluno.containsKey(p)){ //Se já contem a proposta
-                        if(i == 1){
-                           e = new ConflitoAtribuicaoAutomaticaException();
-                           e.addAluno(a.getNumeroAluno());
-                        }
-                        e.addConflito(p.getId());
-                        //e.addAluno(proposta_aluno.get());
-                        i++;
-                    }else
-                        proposta_aluno.putIfAbsent(p, a);
-                }
-            }
-        }
+
     }
 
     private List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
@@ -414,5 +409,44 @@ public class Data {
             }
         }
         return alunosComMesmaMedia;
+    }
+
+    public String getConflitoToString() {
+        StringBuilder sb = new StringBuilder();
+        proposta_aluno.forEach((k,v) -> {
+            sb.append("Proposta com id: ").append(k.getId()).append(" com conflito\n");
+            sb.append("Lista de alunos com sobreposição\n");
+            v.forEach(aluno -> {
+                sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" email: ").append(aluno.getEmail()).append("\n");
+            } );
+        });
+        return sb.toString();
+    }
+
+    public boolean existConflit() {
+        return proposta_aluno.size() > 0;
+    }
+
+    public String consultaAlunosConflito() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Alunos: \n");
+        proposta_aluno.forEach((k,v) -> {
+            v.forEach(sb::append);
+        });
+
+        return sb.toString();
+    }
+
+    public String consultaPropostaConflito() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Proposta");
+        proposta_aluno.forEach((k,v) ->{
+            sb.append(k);
+        });
+        return sb.toString();
+    }
+
+    public Map<Proposta, ArrayList<Aluno>> getProposta_aluno() {
+        return proposta_aluno;
     }
 }

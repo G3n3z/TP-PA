@@ -16,6 +16,12 @@ public class AtribuicaoPropostas extends StateAdapter{
     }
 
     @Override
+    public boolean conflitoAtribuicaoCandidatura() {
+        changeState(EnumState.CONFLITO_ATRIBUICAO_CANDIDATURA);
+        return true;
+    }
+
+    @Override
     public EnumState getState() {
         return EnumState.ATRIBUICAOPROPOSTAS;
     }

@@ -147,5 +147,29 @@ public class ApoioContext {
     public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
         state.atribuicaoAutomaticaSemAtribuicoesDefinidas();
     }
+
+    public void conflitoAtribuicaoCandidatura() {
+        state.conflitoAtribuicaoCandidatura();
+    }
+
+    public String getConflitoToString() {
+        return data.getConflitoToString();
+    }
+
+    public boolean existConflict() {
+        return state.existConflict();
+    }
+
+    public String consultaAlunosConflito() {
+        return data.consultaAlunosConflito();
+    }
+
+    public String consultaPropostaConflito() {
+        return data.consultaPropostaConflito();
+    }
+
+    public boolean resolveConflito(long numAluno) {
+        return state.resolveConflito(numAluno);
+    }
 }
 

@@ -113,4 +113,14 @@ abstract class StateAdapter implements IState{
 
     @Override
     public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {}
+
+    @Override
+    public boolean existConflict() {
+        return false;
+    }
+
+    @Override
+    public boolean resolveConflito(long numAluno) {
+        return false;
+    }
 }
