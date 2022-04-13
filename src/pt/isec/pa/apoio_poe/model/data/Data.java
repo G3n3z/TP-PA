@@ -100,9 +100,9 @@ public class Data {
         return docentes.contains(dummy);
     }
 
-    public boolean verificaAluno(long numAluno) {
+    public boolean verificaNumAluno(long numAluno) {
         for(Aluno a : alunos) {
-            if (a.getNumeroEstudante() == numAluno)
+            if (a.getNumeroAluno() == numAluno)
                 return true;
         }
         return false;
@@ -110,7 +110,7 @@ public class Data {
 
     public void atribuipropostaNaoConfirmada(Proposta proposta, long numAluno) {
         for(Aluno a : alunos) {
-            if (a.getNumeroEstudante() == numAluno)
+            if (a.getNumeroAluno() == numAluno)
                 a.setPropostaNaoConfirmada(proposta);
         }
     }
@@ -149,6 +149,21 @@ public class Data {
         return propostas.stream().anyMatch(p -> p.getNumAluno() != null && p.getNumAluno() == numAluno && p.getId().equals(idProposta));
     }
 
+    //verificar se a sigla do aluno corresponde a alguma das listadas na proposta
+    public boolean verificaRamoAluno(long numAluno, List<String> ramos){
+        return alunos.stream().anyMatch(p -> p.getNumeroAluno() == numAluno && ramos.contains(p.getSiglaRamo()));
+    }
+
+    //verificar se o aluno tem possibilidade de aceder a estagios alem de projetos //verificar a utilidade TODO
+    public boolean verificaPossibilidade(long numAluno){
+        return alunos.stream().anyMatch(p ->p.getNumeroAluno() == numAluno && p.isPossibilidade());
+    }
+
+    //verificar se o aluno ja contem um proposta atribuida
+    public boolean verificaJaAtribuido(long numAluno){
+        return alunos.stream().anyMatch(p ->p.getNumeroAluno() == numAluno && (p.temPropostaNaoConfirmada() || p.temPropostaConfirmada()));
+    }
+
     public String getCandidaturasToString() {
         StringBuilder sb = new StringBuilder();
 
@@ -159,6 +174,12 @@ public class Data {
     public String obtencaoAlunosComAutoProposta(){ //Obtenção de listas de alunos: Com autoproposta.
         StringBuilder sb = new StringBuilder();
         alunos.stream().filter(a -> a.getPropostaNaoConfirmada() instanceof Projeto_Estagio).forEach(sb::append);
+        return sb.toString();
+    }
+
+    public String obtencaoAlunosComAutoPropostaAtribuida(){ //Obtenção de listas de alunos: Com autoproposta.
+        StringBuilder sb = new StringBuilder();
+        alunos.stream().filter(a -> a.getProposta() instanceof Projeto_Estagio).forEach(sb::append);
         return sb.toString();
     }
 
@@ -174,6 +195,11 @@ public class Data {
         return sb.toString();
     }
 
+    public String obtencaoAlunosSemProposta() { //Obter listas de alunos sem propostas registadas ou confirmadas.
+        StringBuilder sb = new StringBuilder();
+        alunos.stream().filter(a -> a.getProposta() == null && a.getPropostaNaoConfirmada() == null).forEach(sb::append);
+        return sb.toString();
+    }
 
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
         Aluno aluno;
@@ -451,4 +477,6 @@ public class Data {
     public Map<Proposta, ArrayList<Aluno>> getProposta_aluno() {
         return proposta_aluno;
     }
+
+
 }

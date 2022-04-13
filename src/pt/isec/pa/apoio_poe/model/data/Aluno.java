@@ -60,9 +60,6 @@ public class Aluno extends Pessoa {
         return candidatura;
     }
 
-    public long getNumeroEstudante() {
-        return numeroEstudante;
-    }
 
     public String getSiglaCurso() {
         return siglaCurso;

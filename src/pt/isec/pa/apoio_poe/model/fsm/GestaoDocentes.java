@@ -36,32 +36,38 @@ public class GestaoDocentes extends StateAdapter{
         Docente docente;
         int index = 1;
 
-        try{
-            while (CSVReader.hasNext()) {
-                try {
 
-                    nome = CSVReader.readString();
-                    email = CSVReader.readString();
-                } catch (NoSuchElementException e) {
-                    Log.getInstance().putMessage("Erro de leitura na linha " + index);
-                    CSVReader.nextLine();
-                    index++;
-                    continue;
-                }
+        while (CSVReader.hasNext()) {
+            try {
 
+                nome = CSVReader.readString();
+                email = CSVReader.readString();
+            } catch (NoSuchElementException e) {
+                Log.getInstance().putMessage("Erro de leitura na linha: " + index + "do ficheiro: "+file);
+                if(!CSVReader.nextLine()) break;
+                index++;
+                continue;
+            }
+            if(checkDocente(index, email)){
                 docente = new Docente(email, nome);
                 if (!data.addDocente(docente)) {
-                    Log.getInstance().putMessage("Docente nao inserido no index " + index);
+                    Log.getInstance().putMessage("Docente nao inserido no index " + index + " : email ja registado por outro docente\n");
                 }
-                index++;
-                CSVReader.nextLine();
             }
-            CSVReader.closeReaders();
-        }catch (IllegalStateException e){
-            Log.getInstance().putMessage("Erro na linha: " + index);
+            index++;
+            if(!CSVReader.nextLine()) break;
         }
+        CSVReader.closeReaders();
 
         return index != 1;
+    }
+
+    private boolean checkDocente(int index, String email) {
+        if(data.existeAlunoComEmail(email)){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um docente com um email ja registado por um aluno\n");
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -258,11 +258,11 @@ public class ApoioUIText {
     private void UIObtencaoDeListaDeAluno() {
         boolean sair = false;
         while(!sair){
-            switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada", "Sem candidatura regista")){
+            switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada", "Sem candidatura regista", "Voltar")){
                 case 1 -> System.out.println(context.obtencaoAlunosComAutoProposta());
                 case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
                 case 3 -> System.out.println(context.obtencaoAlunosSemCandidatura());
-                default -> sair = true;
+                case 4 -> sair = true;
             }
 
         }
@@ -313,7 +313,7 @@ public class ApoioUIText {
                 case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
                 case 3 -> {}
                 case 4 -> {}
-                case 5 -> {}
+                case 5 -> UIObtencaoDeListaDeAlunoAtribuicao();
                 case 6 -> {}
                 case 7 -> {}
                 case 8 -> {}
@@ -330,10 +330,24 @@ public class ApoioUIText {
         switch (PAInput.chooseOption(context.getName(),"Obtenção de listas de alunos",
                 "Obtenção de listas de propostas de projecto estágio",
                 "Recuar Fase", "Avançar Fase")){
-            case 1 -> {}
+            case 1 -> UIObtencaoDeListaDeAlunoAtribuicao();
             case 2 -> {}
             case 3 -> context.recuarFase();
             case 4 -> context.avancarFase();
+        }
+    }
+
+    private void UIObtencaoDeListaDeAlunoAtribuicao() {
+        boolean sair = false;
+        while(!sair){
+            switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Têm autoproposta associada", "Têm candidatura já registada", "Têm proposta atribuída", "Não têm qualquer proposta atribuída", "Voltar")){
+                case 1 -> System.out.println(context.obtencaoAlunosComAutoPropostaAtribuida());
+                case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
+                case 3 -> System.out.println(); //TODO
+                case 4 -> System.out.println(context.obtencaoAlunosSemProposta());
+                case 5 -> sair = true;
+            }
+
         }
     }
 

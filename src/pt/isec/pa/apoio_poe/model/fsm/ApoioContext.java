@@ -123,14 +123,25 @@ public class ApoioContext {
     public void changeNomeDocente(String novo_nome, String email) {
         state.changeNameDocente(novo_nome, email);
     }
+
     public String obtencaoAlunosComAutoProposta(){
         return data.obtencaoAlunosComAutoProposta();
     }
+
+    public String obtencaoAlunosComAutoPropostaAtribuida() {
+        return data.obtencaoAlunosComAutoPropostaAtribuida();
+    }
+
     public String obtencaoAlunosComCandidatura(){
         return data.obtencaoAlunosComCandidatura();
     }
+
     public String obtencaoAlunosSemCandidatura(){
         return data.obtencaoAlunosSemCandidatura();
+    }
+
+    public String obtencaoAlunosSemProposta(){
+        return data.obtencaoAlunosSemProposta();
     }
 
     public void addPropostaACandidatura(long nAluno, String idProposta) {
