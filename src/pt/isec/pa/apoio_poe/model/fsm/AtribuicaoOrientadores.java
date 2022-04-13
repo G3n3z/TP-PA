@@ -34,7 +34,7 @@ public class AtribuicaoOrientadores extends StateAdapter {
     }
 
     @Override
-    public boolean gestaoOrientadores() {
+    public boolean gerirOrientadores() {
         changeState(EnumState.GESTAO_ORIENTADORES);
         return true;
     }

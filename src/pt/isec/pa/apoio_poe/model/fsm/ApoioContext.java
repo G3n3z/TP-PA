@@ -201,5 +201,9 @@ public class ApoioContext {
     public void associacaoAutomaticaDeDocentesAPropostas() {
         state.associacaoAutomaticaDeDocentesAPropostas();
     }
+
+    public void gerirOrientadores() {
+        state.gerirOrientadores();
+    }
 }
 

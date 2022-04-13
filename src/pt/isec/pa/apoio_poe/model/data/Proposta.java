@@ -83,5 +83,8 @@ public class Proposta {
         return getId().equals(proposta.getId());
     }
 
+    public void setNumAluno(long numAluno){
+        this.numAluno = numAluno;
+    }
 
 }

@@ -51,11 +51,14 @@ public class ApoioUIText {
                 case ATRIBUICAOPROPOSTAS -> UIAtribuicao_Propostas();
                 case CONFLITO_ATRIBUICAO_CANDIDATURA -> UIConflito_Atribuicao_Candidatura();
                 case ATRIBUICAO_ORIENTADORES -> UIAtribuicao_Orientadores();
+                case GESTAO_ORIENTADORES -> UIGestao_Orientadores();
                 default -> isfinished = true;
 
             }
         }
     }
+
+
 
 
     private void UIConfig_Options() {
@@ -408,11 +411,20 @@ public class ApoioUIText {
         switch (PAInput.chooseOption(context.getName(),"Associação automática dos docentes proponentes de projetos como orientador dos mesmos",
                 "Gestao de Orientadores", "Obtenção de dados de Orientadores", "Recuar Fase" ,"Fechar Fase e Avançar")){
             case 1 -> {context.associacaoAutomaticaDeDocentesAPropostas();}
-            case 2 -> {}
+            case 2 -> context.gerirOrientadores();
             case 3 -> {}
             case 4 -> {}
             case 5 -> {}
         }
     }
 
+    private void UIGestao_Orientadores() {
+        switch (PAInput.chooseOption(context.getName(),"Atribuir Orientador", "Consultar Orientadores", "Alterar Docente","Eliminar Orientador","Voltar")){
+            case 1 -> {context.associacaoAutomaticaDeDocentesAPropostas();}
+            case 2 -> context.gerirOrientadores();
+            case 3 -> {}
+            case 4 -> {}
+            case 5 -> {}
+        }
+    }
 }

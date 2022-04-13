@@ -123,7 +123,7 @@ abstract class StateAdapter implements IState{
     public void associacaoAutomaticaDeDocentesAPropostas() {}
 
     @Override
-    public boolean gestaoOrientadores() {
+    public boolean gerirOrientadores() {
         return false;
     }
 

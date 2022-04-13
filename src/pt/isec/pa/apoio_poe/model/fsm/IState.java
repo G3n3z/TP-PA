@@ -9,7 +9,7 @@ public interface IState {
     boolean gerirDocentes();
     boolean gerirEstagios();
     boolean conflitoAtribuicaoCandidatura();
-    boolean gestaoOrientadores();
+    boolean gerirOrientadores();
     boolean fechado();
     boolean addAluno(String file);
     boolean importDocentes(String file);

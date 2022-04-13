@@ -446,6 +446,7 @@ public class Data {
             if(set.getValue().size() == 1){
                 set.getValue().get(0).setProposta(set.getKey());
                 set.getKey().setAtribuida(true);
+                set.getKey().setNumAluno(set.getValue().get(0).getNumeroAluno());
                 proposta.add(set.getKey()); //Adiciona à lista para remover posteriormente
             }
             else{
