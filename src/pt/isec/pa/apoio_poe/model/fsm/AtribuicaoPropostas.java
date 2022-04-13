@@ -11,6 +11,12 @@ public class AtribuicaoPropostas extends StateAdapter{
     }
 
     @Override
+    public boolean avancarFase(){
+        changeState(EnumState.ATRIBUICAO_ORIENTADORES);
+        return true;
+    }
+
+    @Override
     public boolean recuarFase() {
         changeState(EnumState.OPCOES_CANDIDATURA);
         return true;
