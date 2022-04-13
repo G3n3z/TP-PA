@@ -542,8 +542,6 @@ public class Data {
 
     public boolean atribuicaoManual(long nAluno, String idProposta) {
         Aluno a = getAluno(nAluno);
-        if(a == null)
-            return false;
         Proposta p = getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
         if(p == null)
             return false;
@@ -577,6 +575,29 @@ public class Data {
             }
         }
 
+    }
+
+    public boolean verificaElegibilidade(long nAluno, String idProposta) {
+        Aluno a = getAluno(nAluno);
+        Proposta p = getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
+        return !(p.getTipo().equals("T1") && a.isPossibilidade());
+    }
+
+    public boolean verificaCondicaoFechoF1() {
+        int pDA = (int) propostas.stream().filter(proposta -> proposta.getRamos().contains("DA")).count();
+        int pRAS = (int) propostas.stream().filter(proposta -> proposta.getRamos().contains("RAS")).count();
+        int pSI = (int) propostas.stream().filter(proposta -> proposta.getRamos().contains("SI")).count();
+
+        int totDA = 0, totRAS = 0, totSI = 0;
+        for(Aluno a : alunos){
+            if(a.getSiglaRamo().equals("DA"))
+                totDA++;
+            if(a.getSiglaRamo().equals("RAS"))
+                totRAS++;
+            if(a.getSiglaRamo().equals("SI"))
+                totSI++;
+        }
+        return (propostas.size() >= alunos.size()) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
     }
 
     public boolean setOrientador(String emailDocente, String id) {

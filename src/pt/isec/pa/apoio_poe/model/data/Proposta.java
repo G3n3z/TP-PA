@@ -63,6 +63,10 @@ public class Proposta {
         return id;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
     public Long getNumAluno() {
         return numAluno;
     }

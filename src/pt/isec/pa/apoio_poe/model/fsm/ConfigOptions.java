@@ -16,7 +16,8 @@ public class ConfigOptions extends  StateAdapter{
 
     @Override
     public boolean close() {
-        setClose(true);
+        if(data.verificaCondicaoFechoF1())
+            setClose(true);
         return true;
     }
 
@@ -43,6 +44,5 @@ public class ConfigOptions extends  StateAdapter{
         changeState(EnumState.OPCOES_CANDIDATURA);
         return true;
     }
-
 
 }

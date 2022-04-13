@@ -216,10 +216,6 @@ public class GestaoPropostas extends StateAdapter{
             Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno de ramo diferente");
             ok = false;
         }
-        if(!data.verificaPossibilidade(numAluno)){
-            Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno não elegível");
-            ok = false;
-        }
         if(data.verificaJaAtribuido(numAluno)){
             Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno com proposta já atribuída");
             ok = false;
@@ -235,10 +231,6 @@ public class GestaoPropostas extends StateAdapter{
         }
         if(data.verificaJaAtribuido(numAluno)){
             Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno com proposta já atribuída");
-            ok = false;
-        }
-        if(!data.verificaPossibilidade(numAluno)){
-            Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno não elegível");
             ok = false;
         }
         return ok;

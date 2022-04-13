@@ -15,6 +15,7 @@ public interface IState {
     boolean importDocentes(String file);
     boolean importPropostas(String file);
     boolean addCandidatura(String file);
+
     void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
 
     void changeName(String novo_nome, long nAluno);
