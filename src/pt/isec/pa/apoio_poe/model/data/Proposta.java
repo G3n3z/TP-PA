@@ -11,6 +11,8 @@ public class Proposta {
     private String titulo;
     private Long numAluno = null;
     private boolean atribuida = false;
+    Docente proponente;
+    Docente orientador;
 
     private Proposta(String id){
         this.id = id;
@@ -87,4 +89,35 @@ public class Proposta {
         this.numAluno = numAluno;
     }
 
+    public void setDocenteOrientador(Docente d) {
+        orientador = d;
+    }
+    public void setDocenteProponente(Docente d) {
+        proponente = d;
+    }
+    public boolean temDocenteOrientador(){
+        return orientador != null;
+    }
+    public boolean temDocenteProponente(){
+        return proponente != null;
+    }
+
+    public void setDocenteOrientadorDocenteProponente() {
+        orientador = proponente;
+    }
+
+    public String getEmailOrientador() {
+        if(orientador != null){
+            return orientador.getEmail();
+        }
+        return "";
+    }
+
+    public void removeOrientador() {
+        orientador = null;
+    }
+
+    public Docente getOrientador() {
+        return orientador;
+    }
 }

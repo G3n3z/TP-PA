@@ -35,7 +35,8 @@ public class CommandManager {
     public boolean redo() {
         if (redoCmds.isEmpty())
             return false;
-        ICommand cmd = redoCmds.pop(); cmd.execute();
+        ICommand cmd = redoCmds.pop();
+        cmd.execute();
         history.push(cmd);
         return true;
     }

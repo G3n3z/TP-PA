@@ -7,8 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 
 public class Projeto extends Proposta {
     String docente;
-    Docente proponente;
-    Docente orientador;
+
 
     public Projeto(String id, String tipo, List<String> ramos, String titulo, String docente) {
         super(id, tipo, ramos, titulo);
@@ -32,20 +31,5 @@ public class Projeto extends Proposta {
         return docente;
     }
 
-    public void setDocenteOrientador(Docente d) {
-        orientador = d;
-    }
-    public void setDocenteProponente(Docente d) {
-        proponente = d;
-    }
-    public boolean temDocenteOrientador(){
-        return orientador != null;
-    }
-    public boolean temDocenteProponente(){
-        return proponente != null;
-    }
 
-    public void setDocenteOrientadorDocenteProponente() {
-        orientador = proponente;
-    }
 }

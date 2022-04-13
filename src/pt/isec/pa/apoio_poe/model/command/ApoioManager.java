@@ -23,4 +23,15 @@ public class ApoioManager {
         return cm.invokeCommand(new RemocaoManualProposta(data, nAluno, idProposta));
     }
 
+    public boolean atribuirOrientador(String emailDocente, String idProposta) {
+        return cm.invokeCommand(new AtribuicaoOrientadorProposta(data, emailDocente, idProposta));
+    }
+
+    public boolean alterarDocente(String emailDocente, String idProposta) {
+        return cm.invokeCommand(new AlteracaoOrientador(data, emailDocente, idProposta));
+    }
+
+    public boolean removerDocente(String emailDocente, String idProposta) {
+        return cm.invokeCommand(new RemoverOrientadorProposta(data, emailDocente, idProposta));
+    }
 }

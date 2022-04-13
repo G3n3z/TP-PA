@@ -420,11 +420,28 @@ public class ApoioUIText {
 
     private void UIGestao_Orientadores() {
         switch (PAInput.chooseOption(context.getName(),"Atribuir Orientador", "Consultar Orientadores", "Alterar Docente","Eliminar Orientador","Voltar")){
-            case 1 -> {context.associacaoAutomaticaDeDocentesAPropostas();}
-            case 2 -> context.gerirOrientadores();
-            case 3 -> {}
-            case 4 -> {}
-            case 5 -> {}
+            case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 2 -> UIObtencaoDadosOrientadores();
+            case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 4 -> manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 5 -> context.recuarFase();
+        }
+    }
+
+    private void UIObtencaoDadosOrientadores() {
+        boolean sair = false;
+        while (!sair){
+            switch (PAInput.chooseOption("Obtenção de dados diversos sobre atribuição de orientadores",
+                    "Lista de estudantes com proposta atribuída e com orientador associado",
+                    "lista de estudantes com proposta atribuída mas sem orientador associado",
+                    "número de orientações por docente, em média, mínimo, máximo, e por docente especificado",
+                    "Voltar")){
+                case 1 -> System.out.println(context.getAlunosComPropostaEOrientador());
+                case 2 -> System.out.println(context.getAlunosComPropostaESemOrientador());
+                case 3 -> System.out.println(context.getEstatisticasPorDocente());
+                case 4 -> sair = true;
+
+            }
         }
     }
 }

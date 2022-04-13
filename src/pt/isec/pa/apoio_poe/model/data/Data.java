@@ -207,7 +207,7 @@ public class Data {
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
         Aluno aluno;
         for (Proposta p : propostas){
-            if(p.getNumAluno() == null){
+            if(p.getNumAluno() == null || (p instanceof Estagio)){
                 continue;
             }
             aluno = getAluno(p.getNumAluno());
@@ -561,8 +561,7 @@ public class Data {
 
     public void associacaoAutomaticaDeDocentesAPropostas() {
         for(Proposta proposta : propostas){
-            if(proposta instanceof Projeto){
-                Projeto p = (Projeto) proposta;
+            if(proposta instanceof Projeto p){
                 if(!p.temDocenteOrientador() && p.temDocenteProponente()){
                     p.setDocenteOrientadorDocenteProponente();
                 }
@@ -578,5 +577,80 @@ public class Data {
             }
         }
 
+    }
+
+    public boolean setOrientador(String emailDocente, String id) {
+        for (Proposta p : propostas){
+            if(p.getId().equalsIgnoreCase(id) && p instanceof Projeto projeto){
+                projeto.setDocenteOrientador(getDocente(emailDocente));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removerOrientador(String emailDocente, String id) {
+        for (Proposta p : propostas){
+            if(p.getId().equalsIgnoreCase(id) && p instanceof Projeto projeto){
+                if(projeto.getEmailOrientador().equals(emailDocente)){
+                    projeto.removeOrientador();
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getAlunosComPropostaEOrientador() {
+        StringBuilder sb = new StringBuilder();
+        for (Aluno a : alunos){
+            if (a.temPropostaConfirmada()){
+                if(a.getProposta().temDocenteOrientador()){
+                    sb.append("O aluno ").append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" tem a proposta ").append(a.getProposta().getId())
+                            .append(" Orientada pelo docente: ").append(a.getProposta().getEmailOrientador());
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public String getAlunosComPropostaESemOrientador() {
+        StringBuilder sb = new StringBuilder();
+        for (Aluno a : alunos){
+            if (a.temPropostaConfirmada()){
+                if(!a.getProposta().temDocenteOrientador()){
+                    sb.append("O aluno ").append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" tem a proposta ").append(a.getProposta().getId())
+                            .append(" Sem Orientador");
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public String getEstatisticasPorDocente() {
+        StringBuilder sb = new StringBuilder();
+        Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
+        for (Proposta p : propostas){
+            if(p.temDocenteOrientador()){
+                if(docente_proposta.containsKey(p.getOrientador())){
+                    docente_proposta.get(p.getOrientador()).add(p);
+                }else {
+                    docente_proposta.put(p.getOrientador(),new ArrayList<>());
+                    docente_proposta.get(p.getOrientador()).add(p);
+                }
+
+            }
+        }
+        int min = 0, max = 0;
+        for(Map.Entry<Docente, ArrayList<Proposta>> set: docente_proposta.entrySet()){
+
+        }
+        return  "";
+    }
+
+    public double getNumeroDeOrientacoesPorDocente(){
+        return 0.0;
     }
 }

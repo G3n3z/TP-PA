@@ -205,5 +205,17 @@ public class ApoioContext {
     public void gerirOrientadores() {
         state.gerirOrientadores();
     }
+
+    public String getAlunosComPropostaEOrientador() {
+        return data.getAlunosComPropostaEOrientador();
+    }
+
+    public String getAlunosComPropostaESemOrientador() {
+        return data.getAlunosComPropostaESemOrientador();
+    }
+
+    public String getEstatisticasPorDocente() {
+        return data.getEstatisticasPorDocente();
+    }
 }
 
