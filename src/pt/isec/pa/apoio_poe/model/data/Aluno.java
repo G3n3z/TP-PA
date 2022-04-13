@@ -88,8 +88,15 @@ public class Aluno extends Pessoa {
     }
 
     public void setProposta(Proposta proposta) {
-        if(this.proposta == null)
-            this.proposta = proposta;
+        if(this.proposta != null){
+            return;
+        }
+        this.proposta = proposta;
+        if(candidatura == null){
+            ordem = 1;
+            return;
+        }
+        ordem = candidatura.getIdProposta().indexOf(proposta.getId()) + 1;
     }
 
     public void setSiglaCurso(String siglaCurso) {
@@ -114,6 +121,9 @@ public class Aluno extends Pessoa {
 
     public void setOrdem(Integer ordem) {
         this.ordem = ordem;
+    }
+    public void removeProposta(){
+        this.proposta = null;
     }
 
     /*

@@ -16,4 +16,11 @@ public class ApoioManager {
     public boolean hasRedo() { return cm.hasRedo(); }
     public boolean redo() { return cm.redo(); }
 
+    public boolean atribuicaoManual(long nAluno, String idProposta){
+        return cm.invokeCommand(new AtribuicaoManualProposta(data, nAluno, idProposta));
+    }
+    public boolean remocaoManual(long nAluno, String idProposta){
+        return cm.invokeCommand(new RemocaoManualProposta(data, nAluno, idProposta));
+    }
+
 }

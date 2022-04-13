@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 import java.util.HashMap;
@@ -181,6 +182,14 @@ public class ApoioContext {
 
     public boolean resolveConflito(long numAluno) {
         return state.resolveConflito(numAluno);
+    }
+
+    public String getTodosAlunosComPropostaAtribuida() {
+        return data.getTodosAlunosComPropostaAtribuida();
+    }
+
+    public ApoioManager getManager() {
+        return new ApoioManager(data);
     }
 }
 

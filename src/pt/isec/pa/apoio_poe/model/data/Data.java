@@ -46,7 +46,8 @@ public class Data {
         }
         return null;
     }
-    public List<Proposta> getPropostaAPartirDeId(List<Proposta> p, List<String> idProposta){
+
+    public List<Proposta> getPropostasAPartirDeId(List<Proposta> p, List<String> idProposta){
         for (String id : idProposta){
             for (Proposta proposta : propostas){
                 if(proposta.getId().equals(id)){
@@ -110,8 +111,10 @@ public class Data {
 
     public void atribuipropostaNaoConfirmada(Proposta proposta, long numAluno) {
         for(Aluno a : alunos) {
-            if (a.getNumeroAluno() == numAluno)
+            if (a.getNumeroAluno() == numAluno) {
                 a.setPropostaNaoConfirmada(proposta);
+                break;
+            }
         }
     }
 
@@ -177,7 +180,7 @@ public class Data {
         return sb.toString();
     }
 
-    public String obtencaoAlunosComAutoPropostaAtribuida(){ //Obtenção de listas de alunos: Com autoproposta.
+    public String obtencaoAlunosComAutoPropostaAtribuida(){ //Obtenção de listas de alunos: Com autoproposta atribuida.
         StringBuilder sb = new StringBuilder();
         alunos.stream().filter(a -> a.getProposta() instanceof Projeto_Estagio).forEach(sb::append);
         return sb.toString();
@@ -210,6 +213,7 @@ public class Data {
             aluno = getAluno(p.getNumAluno());
             if(aluno != null){
                 aluno.setProposta(p);
+                aluno.setOrdem(1);
             }
         }
     }
@@ -346,7 +350,7 @@ public class Data {
     private HashSet<Proposta> getPropostasSemAluno() {
         HashSet<Proposta> propostaReturn = new HashSet<>();
         for (Proposta p : propostas){
-            if(p.getNumAluno() == null){
+            if(p.getNumAluno() == null && !p.isAtribuida()){
                 propostaReturn.add(p);
             }
         }
@@ -365,8 +369,10 @@ public class Data {
         al.sort(new AlunoComparator());
         //Pega-se na media de um aluno e obtem se todos os alunos com a mesma media
         for(Aluno a : al){
+            if(a.temPropostaConfirmada()) continue;
             alunosComMesmaMedia = obtemAlunosComMedia(a.getClassificacao(), al);
             atribuiPropostaAAlunosComMesmaMedia(alunosComMesmaMedia);
+            //al.removeAll(alunosComMesmaMedia);
             alunosComMesmaMedia.clear();
             //Limpar os alunos ja atribuidos
         }
@@ -377,16 +383,16 @@ public class Data {
     private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
         List<Proposta> proposta = new ArrayList<>();
         ConflitoAtribuicaoAutomaticaException e = null;
-        int i = 1; boolean sair = true;
+        int i; boolean sair = true;
         ciclo: for (Aluno a : alunosComMesmaMedia){
+            if(a.temPropostaConfirmada()) continue;
             proposta.clear();
-            proposta = getPropostaAPartirDeId(proposta, a.getCandidatura().getIdProposta());
+            proposta = getPropostasAPartirDeId(proposta, a.getCandidatura().getIdProposta());
             for(Proposta p : proposta){
                 if(!p.isAtribuida() ){//Se a proposta está atribuida
                     if(p instanceof Estagio && !a.isPossibilidade()){
                         continue;
                     }
-                    a.setOrdem(i);
                     if(proposta_aluno.containsKey(p)){ //Se já contem a proposta
                         if(proposta_aluno.get(p).size() == 1){
                             sair = !sair;
@@ -404,15 +410,14 @@ public class Data {
                         break;
                     }
                 }
-                i++;
             }
         }
-        i = 0;
+        i = 0; proposta.clear();
         for(Map.Entry<Proposta, ArrayList<Aluno>> set : proposta_aluno.entrySet()){
             if(set.getValue().size() == 1){
                 set.getValue().get(0).setProposta(set.getKey());
                 set.getKey().setAtribuida(true);
-                proposta_aluno.remove(set.getKey());
+                proposta.add(set.getKey()); //Adiciona à lista para remover posteriormente
             }
             else{
                 i++;
@@ -421,19 +426,19 @@ public class Data {
                 }
             }
         }
+        proposta.forEach( p -> proposta_aluno.remove(p));
         if(e != null){
             throw e;
         }
 
     }
 
+
     private List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
         List<Aluno>alunosComMesmaMedia = new ArrayList<>();
         for(Aluno a : al){
             if(a.getClassificacao() == classificacao){
                 alunosComMesmaMedia.add(a);
-            }else {
-                break;
             }
         }
         return alunosComMesmaMedia;
@@ -479,4 +484,48 @@ public class Data {
     }
 
 
+    public String getTodosAlunosComPropostaAtribuida() {
+        StringBuilder sb = new StringBuilder();
+        alunos.stream().filter(Aluno::temPropostaConfirmada).forEach(aluno -> {
+            sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" ").append(aluno.getNome())
+                    .append(" tem a proposta ").append(aluno.getProposta().getId()).append(" Ordem: ")
+                    .append(aluno.getOrdem()).append("\n");
+        });
+
+        return sb.toString();
+    }
+
+    public boolean todosOsAlunosComCandidaturaTemPropostaAssocaida(){
+        return (alunos.stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada);
+    }
+
+
+    public String qualAlunoComCandidaturaSemPropostaAssocaida() {
+        StringBuilder sb = new StringBuilder();
+        (alunos.stream().filter(Aluno::temCandidatura)).filter(aluno -> !aluno.temPropostaConfirmada()).forEach(a -> {
+            sb.append("Aluno ").append( a.getNumeroAluno()).append(" - ").append(a.getNome())
+                    .append("Tem candidatura: ").append(a.getCandidatura()).
+                    append("\nMas não tem proposta associada \n");
+        });
+        return sb.toString();
+    }
+
+    public boolean atribuicaoManual(long nAluno, String idProposta) {
+        Aluno a = getAluno(nAluno);
+        if(a == null)
+            return false;
+        Proposta p = getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
+        if(p == null)
+            return false;
+        a.setProposta(p);
+        return true;
+    }
+
+    public boolean remocaoManual(long nAluno, String idProposta) {
+        Aluno a = getAluno(nAluno);
+        if(a == null)
+            return false;
+        a.removeProposta();
+        return true;
+    }
 }

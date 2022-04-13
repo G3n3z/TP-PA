@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class AtribuicaoPropostas extends StateAdapter{
@@ -28,8 +29,12 @@ public class AtribuicaoPropostas extends StateAdapter{
 
     @Override
     public boolean close() {
-        setClose(true);
-        return true;
+        if(data.todosOsAlunosComCandidaturaTemPropostaAssocaida()){
+            setClose(true);
+            return true;
+        }
+        Log.getInstance().putMessage(data.qualAlunoComCandidaturaSemPropostaAssocaida());
+        return false;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class ApoioUIText {
 
     public ApoioUIText(ApoioContext context) {
         this.context = context;
-        //manager = new ApoioManager();
+        manager = context.getManager();
         flag = 0;
     }
 
@@ -295,14 +295,15 @@ public class ApoioUIText {
     private void UIAtribuicao_PropostasComAnteriorFechada() {
         //Flag para voltar a executar
         int option;
-        if(flag == 0)
-                option = PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
+        String []options = new String[]{"Atribuição automática das autopropostas ou propostas de docentes",
                 "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
                 "Atribuição manual de propostas disponíveis aos alunos",
                 "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
                 "Obtenção de listas de alunos ",
                 "Obtenção de listas de propostas de projecto estágio", "Undo", "Redo",
-                "Fechar", "Recuar Fase", "Avançar Fase");
+                "Fechar", "Recuar Fase", "Avançar Fase"};
+        if(flag == 0)
+                option = PAInput.chooseOption(context.getName(), options);
         else{
             option = flag;
             flag = 0;
@@ -311,12 +312,12 @@ public class ApoioUIText {
             switch (option) {
                 case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos TODO
                 case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
-                case 3 -> {}
-                case 4 -> {}
+                case 3 -> {manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
+                case 4 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
                 case 5 -> UIObtencaoDeListaDeAlunoAtribuicao();
                 case 6 -> {}
-                case 7 -> {}
-                case 8 -> {}
+                case 7 -> manager.undo();
+                case 8 -> manager.redo();
                 case 9 -> context.closeFase();
                 case 10 -> context.recuarFase();
                 case 11 -> context.avancarFase();
@@ -343,7 +344,7 @@ public class ApoioUIText {
             switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Têm autoproposta associada", "Têm candidatura já registada", "Têm proposta atribuída", "Não têm qualquer proposta atribuída", "Voltar")){
                 case 1 -> System.out.println(context.obtencaoAlunosComAutoPropostaAtribuida());
                 case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
-                case 3 -> System.out.println(); //TODO
+                case 3 -> System.out.println(context.getTodosAlunosComPropostaAtribuida()); //TODO
                 case 4 -> System.out.println(context.obtencaoAlunosSemProposta());
                 case 5 -> sair = true;
             }

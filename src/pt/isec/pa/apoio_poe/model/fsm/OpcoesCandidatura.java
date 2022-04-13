@@ -87,6 +87,14 @@ public class OpcoesCandidatura extends StateAdapter{
             Log.getInstance().putMessage("Não existe aluno com o numero: " + candidatura.getNumAluno());
             return false;
         }
+        if(candidatura.getIdProposta().size() == 0){
+            Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " tentou inserir uma candidatura vazia" );
+            return false;
+        }
+        if(a.temPropostaNaoConfirmada() || a.temPropostaConfirmada()){
+            Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " já tem uma proposta associada");
+        }
+
         return !candidaturaTemPropostaComAluno(candidatura);
     }
 
