@@ -119,7 +119,7 @@ public class GestaoPropostas extends StateAdapter{
         }
         try {
             numAluno = CSVReader.readLong();
-        } catch (InputMismatchException e){
+        } catch (NoSuchElementException e){
             if(checkT2(index,ramos,docente)) {
                 Proposta projeto = new Projeto(id, "T2", ramos, titulo, docente);
                 if (!data.addProposta(projeto)) {
@@ -201,8 +201,8 @@ public class GestaoPropostas extends StateAdapter{
 
     private boolean checkT2Aluno(int index, List<String> ramos, String docente, long numAluno) {
         boolean ok = checkRamos(index, ramos);
-        if(data.existeDocenteComEmail(docente)){
-            Log.getInstance().putMessage("Na linha " + index + " está a tentar um docente não registado");
+        if(!data.existeDocenteComEmail(docente)){
+            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um docente não registado");
             ok = false;
         }
         if(!data.verificaNumAluno(numAluno)){
@@ -226,7 +226,7 @@ public class GestaoPropostas extends StateAdapter{
 
     private boolean checkT3(int index, long numAluno) {
         boolean ok = true;
-        if(data.verificaNumAluno(numAluno)){
+        if(!data.verificaNumAluno(numAluno)){
             Log.getInstance().putMessage("Na linha " + index + " aluno atribuído inexistente");
             ok = false;
         }
