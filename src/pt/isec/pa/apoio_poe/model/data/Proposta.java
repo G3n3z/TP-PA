@@ -9,7 +9,7 @@ public class Proposta {
     private String tipo;
     private List<String> ramos;
     private String titulo;
-    private Long numAluno = null; //mudar para derivadas que usam?? //TODO
+    private Long numAluno = null;
     private boolean atribuida = false;
 
     private Proposta(String id){

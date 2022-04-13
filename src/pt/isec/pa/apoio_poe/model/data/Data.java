@@ -298,6 +298,12 @@ public class Data {
         return sb.toString();
     }
 
+    public String getPropostasWithFiltersToStringAtribuicao(int ...filters){
+        StringBuilder sb = new StringBuilder();
+        getPropostasWithFiltersAtribuicao(filters).forEach( p -> sb.append(p).append("\n"));
+        return sb.toString();
+    }
+
     public  Set<Proposta> getPropostasWithFilters(int ...filters){
         Set<Proposta> propostas = new HashSet<>();
         for (int i : filters){
@@ -306,6 +312,19 @@ public class Data {
                 case 2 -> propostas.addAll(getProjetos());
                 case 3 -> propostas.addAll(getPropostasComCandidatura());
                 case 4 -> propostas.addAll(getPropostasSemCandidatura());
+            }
+        }
+        return propostas;
+    }
+
+    public  Set<Proposta> getPropostasWithFiltersAtribuicao(int ...filters){
+        Set<Proposta> propostas = new HashSet<>();
+        for (int i : filters){
+            switch (i){
+                case 1 -> propostas.addAll(getAutoPropostas());
+                case 2 -> propostas.addAll(getProjetos());
+                case 3 -> propostas.addAll(getPropostasSemAluno());
+                case 4 -> propostas.addAll(getPropostasAtribuidas());
             }
         }
         return propostas;
@@ -342,15 +361,25 @@ public class Data {
         return alunos.stream().anyMatch(a -> a.getEmail().equals(email));
     }
 
-    public boolean existePropostaSemAluno(String proposta){
+    public boolean existePropostaSemAluno(String proposta){ //Verifica se nas propostas
         HashSet<Proposta> p = getPropostasSemAluno();
         return p.contains(Proposta.getDummy(proposta));
     }
 
-    private HashSet<Proposta> getPropostasSemAluno() {
+    private HashSet<Proposta> getPropostasSemAluno() { //Devolve "lista" de propostas não atribuídas a alunos
         HashSet<Proposta> propostaReturn = new HashSet<>();
         for (Proposta p : propostas){
             if(p.getNumAluno() == null && !p.isAtribuida()){
+                propostaReturn.add(p);
+            }
+        }
+        return propostaReturn;
+    }
+
+    private HashSet<Proposta> getPropostasAtribuidas() { //Devolve "lista" de propostas atribuídas a alunos
+        HashSet<Proposta> propostaReturn = new HashSet<>();
+        for (Proposta p : propostas){
+            if(p.getNumAluno() != null && p.isAtribuida()){
                 propostaReturn.add(p);
             }
         }

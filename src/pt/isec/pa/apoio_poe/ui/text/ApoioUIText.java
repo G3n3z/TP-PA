@@ -315,7 +315,7 @@ public class ApoioUIText {
                 case 3 -> {manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
                 case 4 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
                 case 5 -> UIObtencaoDeListaDeAlunoAtribuicao();
-                case 6 -> {}
+                case 6 -> UIObtencaoDeListaDePropostaAtribuida();
                 case 7 -> manager.undo();
                 case 8 -> manager.redo();
                 case 9 -> context.closeFase();
@@ -332,7 +332,7 @@ public class ApoioUIText {
                 "Obtenção de listas de propostas de projecto estágio",
                 "Recuar Fase", "Avançar Fase")){
             case 1 -> UIObtencaoDeListaDeAlunoAtribuicao();
-            case 2 -> {}
+            case 2 -> UIObtencaoDeListaDePropostaAtribuida();
             case 3 -> context.recuarFase();
             case 4 -> context.avancarFase();
         }
@@ -344,9 +344,39 @@ public class ApoioUIText {
             switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Têm autoproposta associada", "Têm candidatura já registada", "Têm proposta atribuída", "Não têm qualquer proposta atribuída", "Voltar")){
                 case 1 -> System.out.println(context.obtencaoAlunosComAutoPropostaAtribuida());
                 case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
-                case 3 -> System.out.println(context.getTodosAlunosComPropostaAtribuida()); //TODO
+                case 3 -> System.out.println(context.getTodosAlunosComPropostaAtribuida());
                 case 4 -> System.out.println(context.obtencaoAlunosSemProposta());
                 case 5 -> sair = true;
+            }
+
+        }
+    }
+
+    private void UIObtencaoDeListaDePropostaAtribuida() {
+        boolean sair = false;
+        int []opcoes = new int[]{0,0,0,0};
+        int num;
+        String []filters = new String[] {"Autopropostas de alunos","Propostas de docentes","Propostas não atribuídas","Propostas atribuídas"};
+        String []options = new String[]{"Autopropostas de alunos [ ]","Propostas de docentes [ ]","Propostas não atribuídas [ ]","Propostas atribuídas [ ]", "Mostrar", "Voltar"};
+        while (!sair){
+            num = 0;
+            switch (PAInput.chooseOption("Filtros para obtenção de lista de proposta de projecto/estágio", options)){
+                case 1 -> num = 1;
+                case 2 -> num = 2;
+                case 3 -> num = 3;
+                case 4 -> num = 4;
+                case 5 -> System.out.println(context.getPropostasWithFiltersToStringAtribuicao(opcoes));
+                case 6 -> sair = true;
+
+            }
+            if(num!= 0){
+                if (opcoes[num - 1] == 0) {
+                    opcoes[num - 1] = num;
+                    options[num - 1] = filters[num - 1].concat(" [X]");
+                } else {
+                    opcoes[num - 1] = 0;
+                    options[num - 1] = filters[num - 1].concat(" [ ]");
+                }
             }
 
         }

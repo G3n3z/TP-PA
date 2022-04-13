@@ -88,9 +88,15 @@ public class ApoioContext {
     public String getPropostas() {
         return data.getPropostasToString();
     }
+
     public String getPropostasWithFiltersToString(int ...filters){
         return data.getPropostasWithFiltersToString(filters);
     }
+
+    public String getPropostasWithFiltersToStringAtribuicao(int ...filters){
+        return data.getPropostasWithFiltersToStringAtribuicao(filters);
+    }
+
     public String getCandidaturas(){return data.getCandidaturasToString();}
 
     public void addCandidatura(String file) {
