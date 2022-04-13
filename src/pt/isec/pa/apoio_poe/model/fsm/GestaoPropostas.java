@@ -121,9 +121,11 @@ public class GestaoPropostas extends StateAdapter{
             numAluno = CSVReader.readLong();
         } catch (NoSuchElementException e){
             if(checkT2(index,ramos,docente)) {
-                Proposta projeto = new Projeto(id, "T2", ramos, titulo, docente);
+                Projeto projeto = new Projeto(id, "T2", ramos, titulo, docente);
                 if (!data.addProposta(projeto)) {
                     Log.getInstance().putMessage("Proposta nao inserida no index " + index + ": id ja existente\n");
+                }else{
+                    data.atribuiDocente(projeto);
                 }
             }
             return true;
@@ -132,6 +134,7 @@ public class GestaoPropostas extends StateAdapter{
             Proposta projeto = new Projeto(id, "T2", ramos, titulo, docente, numAluno);
             if (data.addProposta(projeto)) {
                 data.atribuipropostaNaoConfirmada(projeto, numAluno);
+                data.atribuiDocente((Projeto) projeto);
             } else
                 Log.getInstance().putMessage("Proposta nao inserida no index " + index + ": id ja existente\n");
         }

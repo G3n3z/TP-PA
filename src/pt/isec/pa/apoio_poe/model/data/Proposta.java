@@ -83,4 +83,5 @@ public class Proposta {
         return getId().equals(proposta.getId());
     }
 
+
 }

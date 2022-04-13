@@ -50,6 +50,7 @@ public class ApoioUIText {
                 case OPCOES_CANDIDATURA -> UIOpcoes_Candidatura();
                 case ATRIBUICAOPROPOSTAS -> UIAtribuicao_Propostas();
                 case CONFLITO_ATRIBUICAO_CANDIDATURA -> UIConflito_Atribuicao_Candidatura();
+                case ATRIBUICAO_ORIENTADORES -> UIAtribuicao_Orientadores();
                 default -> isfinished = true;
 
             }
@@ -400,6 +401,17 @@ public class ApoioUIText {
             case 1 -> System.out.println(context.consultaAlunosConflito());
             case 2 -> System.out.println(context.consultaPropostaConflito());
             case 3 ->context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
+        }
+    }
+
+    private void UIAtribuicao_Orientadores() {
+        switch (PAInput.chooseOption(context.getName(),"Associação automática dos docentes proponentes de projetos como orientador dos mesmos",
+                "Gestao de Orientadores", "Obtenção de dados de Orientadores", "Recuar Fase" ,"Fechar Fase e Avançar")){
+            case 1 -> {context.associacaoAutomaticaDeDocentesAPropostas();}
+            case 2 -> {}
+            case 3 -> {}
+            case 4 -> {}
+            case 5 -> {}
         }
     }
 

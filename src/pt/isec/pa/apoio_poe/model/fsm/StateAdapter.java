@@ -51,11 +51,6 @@ abstract class StateAdapter implements IState{
         return false;
     }
 
-    @Override
-    public EnumState getState() {
-        return null;
-    }
-
 
     /* Metodos para saber se a fase esta fechada ou nao */
     public boolean isClose() {
@@ -123,4 +118,14 @@ abstract class StateAdapter implements IState{
     public boolean resolveConflito(long numAluno) {
         return false;
     }
+
+    @Override
+    public void associacaoAutomaticaDeDocentesAPropostas() {}
+
+    @Override
+    public boolean gestaoOrientadores() {
+        return false;
+    }
+
+
 }

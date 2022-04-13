@@ -197,5 +197,9 @@ public class ApoioContext {
     public ApoioManager getManager() {
         return new ApoioManager(data);
     }
+
+    public void associacaoAutomaticaDeDocentesAPropostas() {
+        state.associacaoAutomaticaDeDocentesAPropostas();
+    }
 }
 

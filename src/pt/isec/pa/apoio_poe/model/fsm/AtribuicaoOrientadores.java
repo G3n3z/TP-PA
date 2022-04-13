@@ -27,4 +27,15 @@ public class AtribuicaoOrientadores extends StateAdapter {
     public boolean close() {
         return false;
     }
+
+    @Override
+    public void associacaoAutomaticaDeDocentesAPropostas() {
+        data.associacaoAutomaticaDeDocentesAPropostas();
+    }
+
+    @Override
+    public boolean gestaoOrientadores() {
+        changeState(EnumState.GESTAO_ORIENTADORES);
+        return true;
+    }
 }

@@ -557,4 +557,25 @@ public class Data {
         a.removeProposta();
         return true;
     }
+
+    public void associacaoAutomaticaDeDocentesAPropostas() {
+        for(Proposta proposta : propostas){
+            if(proposta instanceof Projeto){
+                Projeto p = (Projeto) proposta;
+                if(!p.temDocenteOrientador() && p.temDocenteProponente()){
+                    p.setDocenteOrientadorDocenteProponente();
+                }
+            }
+        }
+    }
+
+    public void atribuiDocente(Projeto projeto) {
+        for (Docente d : docentes){
+            if(d.getEmail().equalsIgnoreCase(projeto.getEmailDocente())){
+                projeto.setDocenteProponente(d);
+                break;
+            }
+        }
+
+    }
 }

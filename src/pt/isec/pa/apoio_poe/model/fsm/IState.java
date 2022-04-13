@@ -9,6 +9,7 @@ public interface IState {
     boolean gerirDocentes();
     boolean gerirEstagios();
     boolean conflitoAtribuicaoCandidatura();
+    boolean gestaoOrientadores();
     boolean fechado();
     boolean addAluno(String file);
     boolean importDocentes(String file);
@@ -36,4 +37,6 @@ public interface IState {
     boolean existConflict();
 
     boolean resolveConflito(long numAluno);
+
+    void associacaoAutomaticaDeDocentesAPropostas();
 }
