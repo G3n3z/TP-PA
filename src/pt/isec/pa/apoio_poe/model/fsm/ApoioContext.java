@@ -49,8 +49,9 @@ public class ApoioContext {
     }
 
     public boolean closeFase(){
-        closed.put(state.getState(), true);
-        return state.close();
+        if(state.close())
+            closed.put(state.getState(), true);
+        return true;
     }
 
     public boolean isClosed(){

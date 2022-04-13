@@ -39,6 +39,7 @@ public class AtribuicaoPropostas extends StateAdapter{
             setClose(true);
             return true;
         }
+        Log.getInstance().putMessage("Nao foi possivel fechar");
         Log.getInstance().putMessage(data.qualAlunoComCandidaturaSemPropostaAssocaida());
         return false;
     }

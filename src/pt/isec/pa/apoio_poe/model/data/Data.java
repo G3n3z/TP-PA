@@ -561,11 +561,11 @@ public class Data {
 
     public void associacaoAutomaticaDeDocentesAPropostas() {
         for(Proposta proposta : propostas){
-            if(proposta instanceof Projeto p){
-                if(!p.temDocenteOrientador() && p.temDocenteProponente()){
-                    p.setDocenteOrientadorDocenteProponente();
-                }
+
+            if(!proposta.temDocenteOrientador() && proposta.temDocenteProponente()){
+                proposta.setDocenteOrientadorDocenteProponente();
             }
+
         }
     }
 
@@ -581,9 +581,12 @@ public class Data {
 
     public boolean setOrientador(String emailDocente, String id) {
         for (Proposta p : propostas){
-            if(p.getId().equalsIgnoreCase(id) && p instanceof Projeto projeto){
-                projeto.setDocenteOrientador(getDocente(emailDocente));
-                return true;
+            if(p.getId().equalsIgnoreCase(id) ){
+                if(!p.temDocenteOrientador()) {
+                    p.setDocenteOrientador(getDocente(emailDocente));
+                    return true;
+                }else return false;
+
             }
         }
         return false;
@@ -591,9 +594,9 @@ public class Data {
 
     public boolean removerOrientador(String emailDocente, String id) {
         for (Proposta p : propostas){
-            if(p.getId().equalsIgnoreCase(id) && p instanceof Projeto projeto){
-                if(projeto.getEmailOrientador().equals(emailDocente)){
-                    projeto.removeOrientador();
+            if(p.getId().equalsIgnoreCase(id)){
+                if(p.getEmailOrientador().equals(emailDocente)){
+                    p.removeOrientador();
                     return true;
                 }else {
                     return false;
@@ -632,6 +635,7 @@ public class Data {
     public String getEstatisticasPorDocente() {
         StringBuilder sb = new StringBuilder();
         Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
+        docentes.forEach(d -> docente_proposta.put(d, new ArrayList<>()));
         for (Proposta p : propostas){
             if(p.temDocenteOrientador()){
                 if(docente_proposta.containsKey(p.getOrientador())){
@@ -643,14 +647,28 @@ public class Data {
 
             }
         }
-        int min = 0, max = 0;
+        int min = 0, max = 0, count = 0, index = 0;
         for(Map.Entry<Docente, ArrayList<Proposta>> set: docente_proposta.entrySet()){
+            if(index == 0){
+                max = min = set.getValue().size();
+                index++;
+            }
+            if(set.getValue().size() < min){
+                min = set.getValue().size();
+            }
+            if(set.getValue().size() > max){
+                max = set.getValue().size();
+            }
+            count += set.getValue().size();
 
         }
-        return  "";
+        double media = (double) count / docentes.size();
+        sb.append("O numero em media : ").append(media).append(" o minimo: ").append(min).append(" o maximo: ").append(max).append("\n");
+        docente_proposta.forEach((k,v) -> {
+            sb.append("O docente : ").append(k.getEmail()).append(" - ").append(k.getNome()).append(" é orientador de ").append(v.size())
+                    .append(" propostas").append("\n");
+        });
+        return  sb.toString();
     }
 
-    public double getNumeroDeOrientacoesPorDocente(){
-        return 0.0;
-    }
 }

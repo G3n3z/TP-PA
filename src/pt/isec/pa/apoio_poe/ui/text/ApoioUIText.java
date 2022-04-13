@@ -410,9 +410,9 @@ public class ApoioUIText {
     private void UIAtribuicao_Orientadores() {
         switch (PAInput.chooseOption(context.getName(),"Associação automática dos docentes proponentes de projetos como orientador dos mesmos",
                 "Gestao de Orientadores", "Obtenção de dados de Orientadores", "Recuar Fase" ,"Fechar Fase e Avançar")){
-            case 1 -> {context.associacaoAutomaticaDeDocentesAPropostas();}
+            case 1 -> context.associacaoAutomaticaDeDocentesAPropostas();
             case 2 -> context.gerirOrientadores();
-            case 3 -> {}
+            case 3 -> UIObtencaoDadosOrientadores();
             case 4 -> {}
             case 5 -> {}
         }
@@ -421,7 +421,7 @@ public class ApoioUIText {
     private void UIGestao_Orientadores() {
         switch (PAInput.chooseOption(context.getName(),"Atribuir Orientador", "Consultar Orientadores", "Alterar Docente","Eliminar Orientador","Voltar")){
             case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
-            case 2 -> UIObtencaoDadosOrientadores();
+            case 2 -> context.getAlunosComPropostaEOrientador();
             case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 4 -> manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 5 -> context.recuarFase();

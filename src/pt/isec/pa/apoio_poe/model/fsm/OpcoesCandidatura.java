@@ -38,6 +38,7 @@ public class OpcoesCandidatura extends StateAdapter{
     public boolean close() {
         if(context.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
+            return true;
         }
         return false;
     }
