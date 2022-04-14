@@ -52,6 +52,7 @@ public class ApoioUIText {
                 case CONFLITO_ATRIBUICAO_CANDIDATURA -> UIConflito_Atribuicao_Candidatura();
                 case ATRIBUICAO_ORIENTADORES -> UIAtribuicao_Orientadores();
                 case GESTAO_ORIENTADORES -> UIGestao_Orientadores();
+                case CONSULTA -> UIConsulta();
                 default -> isfinished = true;
 
             }
@@ -433,8 +434,8 @@ public class ApoioUIText {
         while (!sair){
             switch (PAInput.chooseOption("Obtenção de dados diversos sobre atribuição de orientadores",
                     "Lista de estudantes com proposta atribuída e com orientador associado",
-                    "lista de estudantes com proposta atribuída mas sem orientador associado",
-                    "número de orientações por docente, em média, mínimo, máximo, e por docente especificado",
+                    "Lista de estudantes com proposta atribuída mas sem orientador associado",
+                    "Número de orientações por docente, em média, mínimo, máximo, e por docente especificado",
                     "Voltar")){
                 case 1 -> System.out.println(context.getAlunosComPropostaEOrientador());
                 case 2 -> System.out.println(context.getAlunosComPropostaESemOrientador());
@@ -444,4 +445,19 @@ public class ApoioUIText {
             }
         }
     }
+
+    private void UIConsulta() {
+        switch (PAInput.chooseOption(context.getName(), "Lista de alunos com propostas atribuídas",
+                "Lista de estudantes sem propostas atribuídas e com opções de candidatura",
+                "Conjunto de propostas disponíveis", "Conjunto de propostas atribuídas",
+                "Número de orientações por docente, em média, mínimo, máximo, e por docente especificado.")){
+            case 1 -> System.out.println(context.getTodosAlunosComPropostaAtribuida());
+            case 2 -> System.out.println(context.obtencaoAlunosSemPropostaComCandidatura());
+            case 3 -> System.out.println(context.getPropostasWithFiltersToString(0,0,1,0));
+            case 4 -> System.out.println(context.getEstatisticasPorDocente());
+        }
+    }
+
+
+
 }
