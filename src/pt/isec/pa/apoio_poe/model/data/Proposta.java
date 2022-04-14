@@ -75,6 +75,10 @@ public class Proposta {
         return new ArrayList<>(ramos);
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
     @Override
     public int hashCode(){
         return Objects.hash(id);

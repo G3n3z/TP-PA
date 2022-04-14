@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 public class AtribuicaoPropostas extends StateAdapter{
 
@@ -52,5 +53,16 @@ public class AtribuicaoPropostas extends StateAdapter{
     @Override
     public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
         data.atribuicaoAutomaticaSemAtribuicoesDefinidas();
+    }
+
+    @Override
+    public boolean exportarCSV(String file) {
+        if(!CSVWriter.startWriter(file)){
+            return false;
+        }
+        data.exportAlunosCandidaturaProposta();
+        CSVWriter.closeFile();
+
+        return true;
     }
 }

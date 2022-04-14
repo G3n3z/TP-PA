@@ -7,6 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -234,5 +235,14 @@ public class GestaoPropostas extends StateAdapter{
             ok = false;
         }
         return ok;
+    }
+
+    @Override
+    public boolean exportarCSV(String file) {
+        if(!CSVWriter.startWriter(file)){
+            return false;
+        }
+        data.exportProposta();
+        return true;
     }
 }

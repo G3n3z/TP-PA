@@ -40,4 +40,6 @@ public interface IState {
     boolean resolveConflito(long numAluno);
 
     void associacaoAutomaticaDeDocentesAPropostas();
+
+    boolean exportarCSV(String file);
 }

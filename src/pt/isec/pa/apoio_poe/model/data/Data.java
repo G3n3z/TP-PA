@@ -5,6 +5,7 @@ import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.util.*;
@@ -195,7 +196,7 @@ public class Data {
 
     public String obtencaoAlunosSemCandidatura(){ //  Obtenção de listas de alunos: Sem candidatura registada.
         StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.getCandidatura() == null).forEach(sb::append);
+        alunos.stream().filter(a -> a.getCandidatura() == null && (!a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())).forEach(sb::append);
         return sb.toString();
     }
 
@@ -447,7 +448,7 @@ public class Data {
             if(set.getValue().size() == 1){
                 set.getValue().get(0).setProposta(set.getKey());
                 set.getKey().setAtribuida(true);
-                set.getKey().setNumAluno(set.getValue().get(0).getNumeroAluno());
+                //set.getKey().setNumAluno(set.getValue().get(0).getNumeroAluno());
                 proposta.add(set.getKey()); //Adiciona à lista para remover posteriormente
             }
             else{
@@ -543,8 +544,11 @@ public class Data {
 
     public boolean atribuicaoManual(long nAluno, String idProposta) {
         Aluno a = getAluno(nAluno);
+        if (a == null){
+            return false;
+        }
         Proposta p = getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
-        if(p == null)
+        if(p == null || p.isAtribuida())
             return false;
         a.setProposta(p);
         return true;
@@ -553,6 +557,8 @@ public class Data {
     public boolean remocaoManual(long nAluno, String idProposta) {
         Aluno a = getAluno(nAluno);
         if(a == null)
+            return false;
+        if(a.getProposta() instanceof Projeto_Estagio)
             return false;
         a.removeProposta();
         return true;
@@ -581,7 +587,7 @@ public class Data {
     public boolean verificaElegibilidade(long nAluno, String idProposta) {
         Aluno a = getAluno(nAluno);
         Proposta p = getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
-        return !(p.getTipo().equals("T1") && a.isPossibilidade());
+        return p.getTipo().equals("T1") && a.isPossibilidade();
     }
 
     public boolean verificaCondicaoFechoF1() {
@@ -598,7 +604,8 @@ public class Data {
             if(a.getSiglaRamo().equals("SI"))
                 totSI++;
         }
-        return (propostas.size() >= alunos.size()) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
+        //return (propostas.size() >= alunos.size()) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
+        return true;
     }
 
     public boolean setOrientador(String emailDocente, String id) {
@@ -710,4 +717,84 @@ public class Data {
         }
         return sb.toString();
     }
+
+    private void exportarAluno(Aluno a, boolean breakLine){
+        CSVWriter.writeLine(",", breakLine,a.getNumeroAluno(),a.getNome(), a.getEmail(), a.getSiglaCurso(),
+                a.getSiglaRamo(),(Double)a.getClassificacao(), a.isPossibilidade());
+    }
+    private void exportarDocente(Docente d, boolean breakLine){
+        CSVWriter.writeLine(",", breakLine, d.getNome(),d.getEmail());
+    }
+
+    private void exportarProposta(Proposta p, boolean breakLine){
+        CSVWriter.writeLine(",", breakLine, p.getTipo(), p.getId(), p.getRamos(),p.getTitulo(), p.getEmailOrientador(), p.getNumAluno());
+    }
+    private void exportarCandidatura(Candidatura c, boolean breakLine){
+        CSVWriter.writeLine(",",breakLine, c.getNumAluno(), c.getIdProposta());
+    }
+
+
+    public boolean exportAlunos(String file) {
+
+        for (Aluno a : alunos){
+            exportarAluno(a, true);
+        }
+        return true;
+    }
+
+    public void exportDocente() {
+        for(Docente d : docentes){
+            exportarDocente(d,true);
+        }
+    }
+
+    public void exportProposta() {
+
+        for (Proposta p: propostas){
+            exportarProposta(p,true);
+        }
+    }
+
+    public void exportCandidatura() {
+        for(Candidatura c : candidaturas){
+            exportarCandidatura(c, true);
+        }
+    }
+
+    public void exportAlunosCandidaturaProposta() {
+        for (Aluno a : alunos){
+            exportarAluno(a,false);
+            if(a.temCandidatura()){
+                exportarCandidatura(a.getCandidatura(), false);
+            }
+            if(a.temPropostaConfirmada()){
+                exportarProposta(a.getProposta(), false);
+                CSVWriter.writeLine(",",false, a.getOrdem());
+            }
+            CSVWriter.writeLine("",true);
+        }
+    }
+
+    public void exportAlunosCandidaturaPropostaComOrientador() {
+        for (Aluno a : alunos){
+            exportarAluno(a,false);
+            if(a.temCandidatura()){
+                exportarCandidatura(a.getCandidatura(), false);
+            }
+            if(a.temPropostaConfirmada()){
+                exportarProposta(a.getProposta(), false);
+                CSVWriter.writeLine(",",false, a.getOrdem());
+            }
+            else{
+                CSVWriter.writeLine("",true);
+                continue;
+            }
+            if(a.getProposta().temDocenteOrientador()){
+                exportarDocente(a.getProposta().getOrientador(),false);
+            }
+            CSVWriter.writeLine("",true);
+        }
+    }
+
+
 }

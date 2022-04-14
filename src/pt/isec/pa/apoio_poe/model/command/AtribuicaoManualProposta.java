@@ -8,7 +8,10 @@ public class AtribuicaoManualProposta extends CommandAdapter{
     private String idProposta;
 
     public AtribuicaoManualProposta(Data data, long nAluno ,String idProposta) {
+
         super(data);
+        this.nAluno = nAluno;
+        this.idProposta = idProposta;
     }
 
     @Override
@@ -16,13 +19,19 @@ public class AtribuicaoManualProposta extends CommandAdapter{
          if(data.existePropostaSemAluno(idProposta)){
              if(!data.verificaNumAluno(nAluno)){
                  Log.getInstance().putMessage("Número de aluno " + nAluno + " incorreto.\n");
+                 return false;
              }
              if(data.verificaElegibilidade(nAluno, idProposta)){
                  Log.getInstance().putMessage("Aluno " + nAluno + " não pode aceder a estágio.\n");
+                 return false;
              }
-             return data.atribuicaoManual(nAluno, idProposta);
+             if(!data.atribuicaoManual(nAluno, idProposta)){
+                 Log.getInstance().putMessage("Algo correu mal\n");
+                 return false;
+             }
+             return true;
          }
-         Log.getInstance().putMessage("Proposta " + idProposta + " com id incorreto ou com alunos já atribuído.\n");
+         Log.getInstance().putMessage("Proposta " + idProposta + " com id incorreto.\n");
          return false;
     }
 

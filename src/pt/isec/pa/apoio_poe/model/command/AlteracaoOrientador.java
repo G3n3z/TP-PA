@@ -9,6 +9,8 @@ public class AlteracaoOrientador extends CommandAdapter{
     public AlteracaoOrientador(Data data, String emailDocente, String id) {
         super(data);
         oldEmailDocente = emailDocente;
+        this.emailDocente = emailDocente;
+        this.id = id;
     }
 
     @Override

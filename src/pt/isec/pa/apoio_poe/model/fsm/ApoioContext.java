@@ -222,5 +222,9 @@ public class ApoioContext {
     public String obtencaoAlunosSemPropostaComCandidatura() {
         return data.obtencaoAlunosSemPropostaComCandidatura();
     }
+
+    public void exportaCSV(String file) {
+        state.exportarCSV(file);
+    }
 }
 

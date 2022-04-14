@@ -92,11 +92,19 @@ public class Aluno extends Pessoa {
             return;
         }
         this.proposta = proposta;
-        if(candidatura == null){
-            ordem = 1;
+        this.proposta.setAtribuida(true);
+        if(candidatura == null ){
+            if(proposta.getNumAluno() != null){
+                ordem = 1;
+            }
+            else
+                ordem = 0;
             return;
         }
-        ordem = candidatura.getIdProposta().indexOf(proposta.getId()) + 1;
+        if(candidatura.getIdProposta().contains(proposta.getId())){
+            ordem = candidatura.getIdProposta().indexOf(proposta.getId()) + 1;
+        }else
+            ordem = 0;
     }
 
     public void setSiglaCurso(String siglaCurso) {
@@ -123,6 +131,8 @@ public class Aluno extends Pessoa {
         this.ordem = ordem;
     }
     public void removeProposta(){
+        if(proposta != null)
+            this.proposta.setAtribuida(false);
         this.proposta = null;
     }
 

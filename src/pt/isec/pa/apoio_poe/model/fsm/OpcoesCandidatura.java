@@ -6,6 +6,7 @@ import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.*;
 
@@ -88,6 +89,10 @@ public class OpcoesCandidatura extends StateAdapter{
             Log.getInstance().putMessage("Não existe aluno com o numero: " + candidatura.getNumAluno());
             return false;
         }
+        if(a.temPropostaNaoConfirmada() || a.temPropostaConfirmada()){
+            Log.getInstance().putMessage("O aluno " + a.getNumeroAluno() + " - " + a.getNome() +"já possui uma proposta");
+            return false;
+        }
         if(candidatura.getIdProposta().size() == 0){
             Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " tentou inserir uma candidatura vazia" );
             return false;
@@ -133,5 +138,15 @@ public class OpcoesCandidatura extends StateAdapter{
         if(data.existePropostaSemAluno(idProposta)){
            a.addCandidatura(idProposta);
         }
+    }
+
+    @Override
+    public boolean exportarCSV(String file) {
+        if(!CSVWriter.startWriter(file)){
+            return false;
+        }
+        data.exportCandidatura();
+        CSVWriter.closeFile();
+        return true;
     }
 }

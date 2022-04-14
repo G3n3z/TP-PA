@@ -4,8 +4,8 @@ import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
 public class GestaoClientes extends StateAdapter{
@@ -131,4 +131,13 @@ public class GestaoClientes extends StateAdapter{
         }
     }
 
+    @Override
+    public boolean exportarCSV(String file) {
+        if(CSVWriter.startWriter(file)){
+            data.exportAlunos(file);
+            CSVWriter.closeFile();
+            return true;
+        }
+        return false;
+    }
 }

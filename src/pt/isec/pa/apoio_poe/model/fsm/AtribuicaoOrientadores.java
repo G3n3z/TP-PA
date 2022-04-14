@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 public class AtribuicaoOrientadores extends StateAdapter {
     public AtribuicaoOrientadores(ApoioContext context, boolean isClosed, Data data) {
@@ -36,6 +37,16 @@ public class AtribuicaoOrientadores extends StateAdapter {
     @Override
     public boolean gerirOrientadores() {
         changeState(EnumState.GESTAO_ORIENTADORES);
+        return true;
+    }
+    @Override
+    public boolean exportarCSV(String file) {
+        if(!CSVWriter.startWriter(file)){
+            return false;
+        }
+        data.exportAlunosCandidaturaPropostaComOrientador();
+        CSVWriter.closeFile();
+
         return true;
     }
 }

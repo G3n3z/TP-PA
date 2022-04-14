@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
+import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
@@ -82,5 +83,15 @@ public class GestaoDocentes extends StateAdapter{
         if(data.changeNameDocente(novo_nome, email)){
 
         }
+    }
+
+    @Override
+    public boolean exportarCSV(String file) {
+        if(!CSVWriter.startWriter(file)){
+            return false;
+        }
+        data.exportDocente();
+        CSVWriter.closeFile();
+        return true;
     }
 }

@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.command;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class ApoioManager {
@@ -11,10 +12,25 @@ public class ApoioManager {
         cm = new CommandManager();
     }
 
-    public boolean hasUndo() { return cm.hasUndo(); }
-    public boolean undo() { return cm.undo(); }
-    public boolean hasRedo() { return cm.hasRedo(); }
-    public boolean redo() { return cm.redo(); }
+    public boolean hasUndo() {
+        return cm.hasUndo();
+    }
+    public boolean undo() {
+        if(hasUndo())
+            return cm.undo();
+        Log.getInstance().putMessage("Não é possivel fazer undo");
+        return false;
+    }
+
+    public boolean hasRedo() {
+        return cm.hasRedo();
+    }
+    public boolean redo() {
+        if (hasRedo())
+            return cm.redo();
+        Log.getInstance().putMessage("Não é possivel fazer redo");
+        return false;
+    }
 
     public boolean atribuicaoManual(long nAluno, String idProposta){
         return cm.invokeCommand(new AtribuicaoManualProposta(data, nAluno, idProposta));
