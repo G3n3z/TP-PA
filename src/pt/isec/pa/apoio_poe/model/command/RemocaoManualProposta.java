@@ -9,6 +9,8 @@ public class RemocaoManualProposta extends CommandAdapter{
 
     public RemocaoManualProposta(Data data, long nAluno ,String idProposta) {
         super(data);
+        this.nAluno = nAluno;
+        this.idProposta = idProposta;
     }
 
     @Override

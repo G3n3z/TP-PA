@@ -6,7 +6,10 @@ public class RemoverOrientadorProposta extends CommandAdapter{
     private String emailDocente;
     private String id;
     public RemoverOrientadorProposta(Data data, String emailDocente, String id) {
+
         super(data);
+        this.emailDocente = emailDocente;
+        this.id = id;
     }
 
     @Override

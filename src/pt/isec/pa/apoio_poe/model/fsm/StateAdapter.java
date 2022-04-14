@@ -127,5 +127,8 @@ abstract class StateAdapter implements IState{
         return false;
     }
 
-
+    @Override
+    public boolean exportarCSV(String file) {
+        return false;
+    }
 }
