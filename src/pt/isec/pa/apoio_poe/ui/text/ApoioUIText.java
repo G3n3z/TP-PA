@@ -104,10 +104,11 @@ public class ApoioUIText {
 
             }
         } else {
-            option = PAInput.chooseOption(context.getName(), "Consultar Alunos", "Voltar");
+            option = PAInput.chooseOption(context.getName(), "Consultar Alunos","Exportar Alunos", "Voltar");
             switch (option) {
                 case 1 -> System.out.println(context.getAlunos());
-                case 2 -> context.recuarFase();
+                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 3 -> context.recuarFase();
             }
         }
     }
@@ -143,7 +144,6 @@ public class ApoioUIText {
                 case 3 -> System.out.println(context.getDocentes());
                 case 4 -> UIEditarDocentes(PAInput.readString("Email do docente: ", true));
                 case 5 -> context.removeDocente(PAInput.readString("Email do docente: ", true));
-
                 case 6 -> context.recuarFase();
             }
         }else {
@@ -169,7 +169,7 @@ public class ApoioUIText {
     private void UIGestao_Estagios() {
         int option;
         if(!context.isClosed()) {
-            option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos", "Inserir Estágio/Projeto", "Consultar Estágio/Projeto", "Editar Estágio/Projeto", "Remover Estágio/Projeto", "Voltar");
+            option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos", "Exportar para CSV Estágio/Projeto", "Consultar Estágio/Projeto", "Editar Estágio/Projeto", "Remover Estágio/Projeto", "Voltar");
             switch (option) {
                 case 1 -> {
                     context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
@@ -177,7 +177,10 @@ public class ApoioUIText {
                         System.out.println(Log.getInstance().getMessage());
                     }
                 }
+                case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));
                 case 3 -> System.out.println(context.getPropostas());
+                case 4 -> UIEditarPropostas();
+                case 5 -> context.removerProposta(PAInput.readString("Id Propostas: ",true));
                 case 6 -> context.recuarFase();
             }
         }else {
@@ -188,6 +191,10 @@ public class ApoioUIText {
                 case 3 -> context.recuarFase();
             }
         }
+    }
+
+    private void UIEditarPropostas() {
+        //TODO
     }
 
     private void UIOpcoes_Candidatura() {
@@ -245,16 +252,20 @@ public class ApoioUIText {
                 case 6 -> sair = true;
 
             }
-            if(num!= 0){
-                if (opcoes[num - 1] == 0) {
-                    opcoes[num - 1] = num;
-                    options[num - 1] = filters[num - 1].concat(" [X]");
-                } else {
-                    opcoes[num - 1] = 0;
-                    options[num - 1] = filters[num - 1].concat(" [ ]");
-                }
-            }
+            selecionaFiltros(opcoes, num, filters, options);
 
+        }
+    }
+
+    private void selecionaFiltros(int[] opcoes, int num, String[] filters, String[] options) {
+        if(num!= 0){
+            if (opcoes[num - 1] == 0) {
+                opcoes[num - 1] = num;
+                options[num - 1] = filters[num - 1].concat(" [X]");
+            } else {
+                opcoes[num - 1] = 0;
+                options[num - 1] = filters[num - 1].concat(" [ ]");
+            }
         }
     }
 
@@ -326,7 +337,7 @@ public class ApoioUIText {
         }
         try {
             switch (option) {
-                case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos TODO
+                case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos
                 case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
                 case 3 -> {manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
                 case 4 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
@@ -387,15 +398,7 @@ public class ApoioUIText {
                 case 6 -> sair = true;
 
             }
-            if(num!= 0){
-                if (opcoes[num - 1] == 0) {
-                    opcoes[num - 1] = num;
-                    options[num - 1] = filters[num - 1].concat(" [X]");
-                } else {
-                    opcoes[num - 1] = 0;
-                    options[num - 1] = filters[num - 1].concat(" [ ]");
-                }
-            }
+            selecionaFiltros(opcoes, num, filters, options);
 
         }
     }
@@ -429,7 +432,7 @@ public class ApoioUIText {
             case 3 -> context.gerirOrientadores();
             case 4 -> UIObtencaoDadosOrientadores();
             case 5 -> context.recuarFase();
-            case 6 -> context.avancarFase();
+            case 6 -> context.closeFase();
         }
     }
 
@@ -468,8 +471,9 @@ public class ApoioUIText {
             case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
             case 2 -> System.out.println(context.getTodosAlunosComPropostaAtribuida());
             case 3 -> System.out.println(context.obtencaoAlunosSemPropostaComCandidatura());
-            case 4 -> System.out.println(context.getPropostasWithFiltersToString(0,0,1,0));
-            case 5 -> System.out.println(context.getEstatisticasPorDocente());
+            case 4 -> System.out.println(context.getPropostasDisponiveis());
+            case 5 -> System.out.println(context.getPropostasAtribuidas());
+            case 6 -> System.out.println(context.getEstatisticasPorDocente());
         }
     }
 

@@ -245,4 +245,12 @@ public class GestaoPropostas extends StateAdapter{
         data.exportProposta();
         return true;
     }
+
+    @Override
+    public void removeProposta(String id) {
+        if(!data.verificaProposta(id)){
+            Log.getInstance().putMessage("Nao existe o id inserido");
+        }
+        data.removeProposta(id);
+    }
 }

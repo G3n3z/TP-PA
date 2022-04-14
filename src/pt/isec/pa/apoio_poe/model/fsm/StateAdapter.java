@@ -131,4 +131,12 @@ abstract class StateAdapter implements IState{
     public boolean exportarCSV(String file) {
         return false;
     }
+
+    @Override
+    public void removeProposta(String id) {}
+
+    @Override
+    public void removePropostaACandidatura(String id, long naluno) {
+
+    }
 }

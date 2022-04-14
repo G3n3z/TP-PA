@@ -80,8 +80,8 @@ public class GestaoDocentes extends StateAdapter{
 
     @Override
     public void changeNameDocente(String novo_nome, String email) {
-        if(data.changeNameDocente(novo_nome, email)){
-
+        if(!data.changeNameDocente(novo_nome, email)){
+            Log.getInstance().putMessage("Nao existe docente com este email");
         }
     }
 

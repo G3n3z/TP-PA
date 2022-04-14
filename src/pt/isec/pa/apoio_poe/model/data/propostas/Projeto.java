@@ -32,4 +32,7 @@ public class Projeto extends Proposta {
     }
 
 
+    public void setEmailDocente(String email) {
+        docente = email;
+    }
 }

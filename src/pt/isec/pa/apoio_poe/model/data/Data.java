@@ -159,7 +159,7 @@ public class Data {
         return alunos.stream().anyMatch(p -> p.getNumeroAluno() == numAluno && ramos.contains(p.getSiglaRamo()));
     }
 
-    //verificar se o aluno tem possibilidade de aceder a estagios alem de projetos //verificar a utilidade TODO
+    //verificar se o aluno tem possibilidade de aceder a estagios alem de projetos //verificar a utilidade
     public boolean verificaPossibilidade(long numAluno){
         return alunos.stream().anyMatch(p ->p.getNumeroAluno() == numAluno && p.isPossibilidade());
     }
@@ -224,22 +224,48 @@ public class Data {
     public void changeNameAluno(long naluno,String novo_nome) {
         Aluno a = getAluno(naluno);
         if(a == null){
-            //Por mensagem no logo //TODO
             return;
         }
         a.setNome(novo_nome);
     }
 
     public boolean removeAluno(long numero_de_aluno) {
-        return alunos.removeIf(a -> a.getNumeroAluno() == numero_de_aluno);
+        Aluno a = getAluno(numero_de_aluno);
+        if(a == null){
+            return false;
+        }
+        if(a.temCandidatura()){
+            candidaturas.remove(a.getCandidatura());
+        }
+        if (a.temPropostaNaoConfirmada()){
+            if(a.getPropostaNaoConfirmada() instanceof Projeto_Estagio){
+                propostas.remove(a.getPropostaNaoConfirmada());
+            }
+            else {
+                a.getPropostaNaoConfirmada().setAtribuida(false);
+                a.getPropostaNaoConfirmada().setNumAluno(null);
+            }
+        }
+
+        if(a.temPropostaConfirmada()){
+            if(a.getProposta() instanceof Projeto_Estagio){
+                propostas.remove(a.getProposta());
+            }
+            else {
+                a.getProposta().setAtribuida(false);
+                a.getProposta().setNumAluno(null);
+            }
+        }
+        return alunos.remove(a);
+
     }
 
     public boolean changeCursoAluno(String novo_curso, long nAluno) {
         Aluno a = getAluno(nAluno);
         if(a == null){
-            //Por mensagem no logo //TODO
             return false;
         }
+
         a.setSiglaCurso(novo_curso);
         return true;
     }
@@ -247,24 +273,39 @@ public class Data {
     public boolean changeRamoAluno(String novo_ramo, long nAluno) {
         Aluno a = getAluno(nAluno);
         if(a == null){
-            //Por mensagem no logo //TODO
             return false;
         }
         a.setSiglaCurso(novo_ramo);
         return true;
     }
 
-    public boolean changeClassAluno(double nova_classificaçao, long nAluno) {
+    public boolean changeClassAluno(double nova_classificacao, long nAluno) {
         Aluno a = getAluno(nAluno);
         if(a == null){
-            //Por mensagem no logo //TODO
             return false;
         }
-        a.setClassificacao(nova_classificaçao);
+        a.setClassificacao(nova_classificacao);
         return true;
     }
 
     public boolean removeDocente(String email) {
+        Docente d = getDocente(email);
+        if(d == null){
+            return false;
+        }
+        for (Proposta p : propostas){
+            if(p instanceof Projeto projeto){
+                if(projeto.getEmailDocente().equalsIgnoreCase(email)){
+                    projeto.setEmailDocente(null);
+                }
+                if (p.getOrientador() != null && p.getOrientador().getEmail().equalsIgnoreCase(email)){
+                    p.setDocenteOrientador(null);
+                }
+                if(p.getProponente() != null && p.getProponente().getEmail().equalsIgnoreCase(email)){
+                    p.setDocenteProponente(null);
+                }
+            }
+        }
         return docentes.remove(Docente.getDummyDocente(email));
     }
 
@@ -702,18 +743,20 @@ public class Data {
 
     public String obtencaoAlunosSemPropostaComCandidatura() {
         StringBuilder sb = new StringBuilder();
-        for (Aluno a : alunos){
-            if(a.temPropostaConfirmada() && a.temPropostaNaoConfirmada())
+        for (Aluno a : alunos) {
+            if (a.temPropostaConfirmada() && a.temPropostaNaoConfirmada())
                 continue;
-            if(!a.temCandidatura())
+            if (!a.temCandidatura())
                 continue;
-            Stream<Proposta> propostaStream = (getPropostasAPartirDeId(new ArrayList<>(), a.getCandidatura().getIdProposta())).stream().filter(p -> !p.isAtribuida());
-            if(propostaStream.findAny().isPresent()){
-                sb.append("Proposta Disponivel da candidatura: ").append(a.getCandidatura().getIdProposta().toString());
+            List<Proposta> propostaStream = (getPropostasAPartirDeId(new ArrayList<>(), a.getCandidatura().getIdProposta()));
+            if (propostaStream.stream().anyMatch(p -> !p.isAtribuida()))
+                sb.append("Aluno: ").append(a.getNumeroAluno()).append(" - ").append(a.getNumeroAluno()).append(" com proposta(s) disponivel da sua candidatura: ");
+            for (Proposta p : propostaStream) {
+                if (!p.isAtribuida())
+                    sb.append(p.getId()).append(" ");
             }
-            propostaStream.forEach(pr -> sb.append(pr.getId()).append(" "));
-            sb.append("\n");
 
+            sb.append("\n");
         }
         return sb.toString();
     }
@@ -800,4 +843,61 @@ public class Data {
     }
 
 
+    public String getPropostasDisponiveis() {
+        StringBuilder sb = new StringBuilder();
+        propostas.stream().filter(p -> !p.isAtribuida() && !(p instanceof Projeto_Estagio)).forEach(p -> sb.append(p).append("\n"));
+        return sb.toString();
+    }
+
+    public String getPropostasAtribuidasToString() {
+        StringBuilder sb = new StringBuilder();
+        propostas.stream().filter(Proposta::isAtribuida).forEach(p -> sb.append(p).append("\n"));
+        return sb.toString();
+    }
+
+    public boolean verificaProposta(String id) {
+        return propostas.stream().anyMatch(p -> p.getId().equals(id));
+    }
+
+    public void removeProposta(String id) {
+        for (Candidatura c : candidaturas){
+            if(c.containsPropostaById(id)){
+                c.removeProposta(id);
+            }
+        }
+        for (Aluno a : alunos){
+            if(a.temPropostaNaoConfirmada()){
+                if(a.getPropostaNaoConfirmada().getId().equals(id)){
+                    a.setPropostaNaoConfirmada(null);
+                }
+            }
+            if (a.temPropostaConfirmada()){
+                if (a.getProposta().getId().equals(id)){
+                    a.setProposta(null);
+                }
+            }
+        }
+        propostas.removeIf(p -> p.getId().equals(id));
+    }
+
+    public boolean alunoTemCandidatura(long nAluno){
+        Aluno a = getAluno(nAluno);
+        if(a == null)
+            return false;
+        return a.temCandidatura();
+    }
+
+    public boolean removePropostaACandidatura(String id, long nAluno) {
+        Aluno a = getAluno(nAluno);
+        if(a == null){
+            return false;
+        }
+        if(!a.temCandidatura()){
+            return false;
+        }
+        if(a.getCandidatura().containsPropostaById(id)){
+            a.getCandidatura().removeProposta(id);
+        }
+        return true;
+    }
 }

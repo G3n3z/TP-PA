@@ -95,7 +95,7 @@ public class Proposta {
         return getId().equals(proposta.getId());
     }
 
-    public void setNumAluno(long numAluno){
+    public void setNumAluno(Long numAluno){
         this.numAluno = numAluno;
     }
 
@@ -129,5 +129,8 @@ public class Proposta {
 
     public Docente getOrientador() {
         return orientador;
+    }
+    public Docente getProponente() {
+        return proponente;
     }
 }

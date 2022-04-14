@@ -156,7 +156,8 @@ public class ApoioContext {
         state.addPropostaACandidatura(nAluno, idProposta);
     }
 
-    public void removePropostaACandidatura(long readLong, String readString) {
+    public void removePropostaACandidatura(long nAluno, String id) {
+        state.removePropostaACandidatura(id, nAluno);
     }
 
     public void atribuicaoAutomatica() {
@@ -225,6 +226,18 @@ public class ApoioContext {
 
     public void exportaCSV(String file) {
         state.exportarCSV(file);
+    }
+
+    public String getPropostasDisponiveis() {
+        return data.getPropostasDisponiveis();
+    }
+
+    public String getPropostasAtribuidas(){
+        return data.getPropostasAtribuidasToString();
+    }
+
+    public void removerProposta(String id) {
+        state.removeProposta(id);
     }
 }
 

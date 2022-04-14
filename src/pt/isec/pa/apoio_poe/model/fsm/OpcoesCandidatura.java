@@ -122,7 +122,7 @@ public class OpcoesCandidatura extends StateAdapter{
             }
             if(notfind){Log.getInstance().putMessage("A candidatura do aluno: " + candidatura.getNumAluno() +
                     "está a propor-se ao à proposta: " + id + " que não existe");
-                //fazer return escusa contar o numero de ids TODO
+
             }
         }
         return find != candidatura.getIdProposta().size();
@@ -148,5 +148,21 @@ public class OpcoesCandidatura extends StateAdapter{
         data.exportCandidatura();
         CSVWriter.closeFile();
         return true;
+    }
+
+    @Override
+    public void removePropostaACandidatura(String id, long naluno) {
+        if(!data.verificaProposta(id)){
+            Log.getInstance().putMessage("Nao existe o id inserido");
+            return;
+        }
+        if(!data.alunoTemCandidatura(naluno)){
+            Log.getInstance().putMessage("O aluno " + naluno + " nao tem candidatura");
+            return;
+        }
+        if(!data.removePropostaACandidatura(id, naluno)){
+            Log.getInstance().putMessage("O aluno " + naluno + " nao tem essa proposta na sua candidatura");
+        }
+
     }
 }

@@ -13,6 +13,7 @@ public class AtribuicaoOrientadores extends StateAdapter {
         return false;
     }
 
+
     @Override
     public boolean recuarFase() {
         changeState(EnumState.ATRIBUICAOPROPOSTAS);
@@ -26,7 +27,9 @@ public class AtribuicaoOrientadores extends StateAdapter {
 
     @Override
     public boolean close() {
-        return false;
+        setClose(true);
+        changeState(EnumState.CONSULTA);
+        return true;
     }
 
     @Override

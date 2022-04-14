@@ -45,4 +45,8 @@ public class Candidatura {
     public Boolean containsPropostaById(String id){
         return idProposta.contains(id);
     }
+
+    public void removeProposta(String id) {
+        idProposta.remove(id);
+    }
 }

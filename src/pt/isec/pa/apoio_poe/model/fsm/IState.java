@@ -42,4 +42,8 @@ public interface IState {
     void associacaoAutomaticaDeDocentesAPropostas();
 
     boolean exportarCSV(String file);
+
+    void removeProposta(String id);
+
+    void removePropostaACandidatura(String id, long naluno);
 }
