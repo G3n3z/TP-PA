@@ -73,22 +73,22 @@ public class CSVWriter {
             }
         }
 
+        if (usePreviousDelimiter){
+            line = delimiter + line;
+        }
 
         if (breakLine && args.length == 0){
-            usePreviousDelimiter = false;
             pw.println();
         }
         else if(breakLine) {
             pw.println(line);
-            usePreviousDelimiter = false;
         }
         else {
-            if (usePreviousDelimiter){
-                line = delimiter + line;
-            }
             pw.print(line);
             usePreviousDelimiter = true;
+            return true;
         }
+        usePreviousDelimiter = false;
         return true;
     }
 

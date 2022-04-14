@@ -794,8 +794,8 @@ public class Data {
             }
             if(a.getProposta().temDocenteOrientador()){
                 exportarDocente(a.getProposta().getOrientador(),true);
-            }
-            CSVWriter.writeLine(",",true);
+            }else
+                CSVWriter.writeLine(",",true);
         }
     }
 
