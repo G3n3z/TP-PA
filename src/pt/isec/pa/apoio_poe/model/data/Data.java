@@ -8,6 +8,7 @@ import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 
 public class Data {
@@ -200,7 +201,7 @@ public class Data {
 
     public String obtencaoAlunosSemProposta() { //Obter listas de alunos sem propostas registadas ou confirmadas.
         StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.getProposta() == null && a.getPropostaNaoConfirmada() == null).forEach(sb::append);
+        alunos.stream().filter(a -> !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada()).forEach(sb::append);
         return sb.toString();
     }
 
@@ -692,4 +693,21 @@ public class Data {
         return  sb.toString();
     }
 
+    public String obtencaoAlunosSemPropostaComCandidatura() {
+        StringBuilder sb = new StringBuilder();
+        for (Aluno a : alunos){
+            if(a.temPropostaConfirmada() && a.temPropostaNaoConfirmada())
+                continue;
+            if(!a.temCandidatura())
+                continue;
+            Stream<Proposta> propostaStream = (getPropostasAPartirDeId(new ArrayList<>(), a.getCandidatura().getIdProposta())).stream().filter(p -> !p.isAtribuida());
+            if(propostaStream.findAny().isPresent()){
+                sb.append("Proposta Disponivel da candidatura: ").append(a.getCandidatura().getIdProposta().toString());
+            }
+            propostaStream.forEach(pr -> sb.append(pr.getId()).append(" "));
+            sb.append("\n");
+
+        }
+        return sb.toString();
+    }
 }

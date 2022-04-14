@@ -218,5 +218,9 @@ public class ApoioContext {
     public String getEstatisticasPorDocente() {
         return data.getEstatisticasPorDocente();
     }
+
+    public String obtencaoAlunosSemPropostaComCandidatura() {
+        return data.obtencaoAlunosSemPropostaComCandidatura();
+    }
 }
 
