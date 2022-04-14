@@ -727,7 +727,10 @@ public class Data {
     }
 
     private void exportarProposta(Proposta p, boolean breakLine){
-        CSVWriter.writeLine(",", breakLine, p.getTipo(), p.getId(), p.getRamos(),p.getTitulo(), p.getEmailOrientador(), p.getNumAluno());
+        if(p instanceof Projeto projeto)
+            CSVWriter.writeLine(",", breakLine, p.getTipo(), p.getId(), p.getRamos(),p.getTitulo(), projeto.getEmailDocente(), p.getNumAluno());
+        else
+            CSVWriter.writeLine(",", breakLine, p.getTipo(), p.getId(), p.getRamos(),p.getTitulo(), p.getNumAluno());
     }
     private void exportarCandidatura(Candidatura c, boolean breakLine){
         CSVWriter.writeLine(",",breakLine, c.getNumAluno(), c.getIdProposta());
@@ -786,13 +789,13 @@ public class Data {
                 CSVWriter.writeLine(",",false, a.getOrdem());
             }
             else{
-                CSVWriter.writeLine("",true);
+                CSVWriter.writeLine(",",true);
                 continue;
             }
             if(a.getProposta().temDocenteOrientador()){
-                exportarDocente(a.getProposta().getOrientador(),false);
+                exportarDocente(a.getProposta().getOrientador(),true);
             }
-            CSVWriter.writeLine("",true);
+            CSVWriter.writeLine(",",true);
         }
     }
 

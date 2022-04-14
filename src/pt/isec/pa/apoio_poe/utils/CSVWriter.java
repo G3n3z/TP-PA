@@ -9,6 +9,7 @@ public class CSVWriter {
 
     private static BufferedReader bw;
     private static PrintWriter pw;
+    private static boolean usePreviousDelimiter = false;
 
     public static boolean startWriter(String file){
 
@@ -21,6 +22,7 @@ public class CSVWriter {
             }
             return false;
         }
+        usePreviousDelimiter = false;
         return true;
     }
 
@@ -56,6 +58,7 @@ public class CSVWriter {
                         }
                     }
                 }
+                continue;
             }
             else{
                 continue;
@@ -64,15 +67,28 @@ public class CSVWriter {
                 line = line.concat(delimiter);
         }
 
-        if(breakLine) {
-            while(delimiter != null && delimiter.length() > 0 && line.charAt(line.length()-1) == ','){
+        if(line.length() > 0){
+            while(delimiter != null && delimiter.length() > 0 && line.charAt(line.length()-1) == delimiter.charAt(0)){
                 line = line.substring(0, line.length()-1);
             }
-            pw.println(line);
         }
-        else
-            pw.print(line);
 
+
+        if (breakLine && args.length == 0){
+            usePreviousDelimiter = false;
+            pw.println();
+        }
+        else if(breakLine) {
+            pw.println(line);
+            usePreviousDelimiter = false;
+        }
+        else {
+            if (usePreviousDelimiter){
+                line = delimiter + line;
+            }
+            pw.print(line);
+            usePreviousDelimiter = true;
+        }
         return true;
     }
 
