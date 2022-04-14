@@ -290,10 +290,20 @@ public class ApoioUIText {
     }
 
     private void UIAtribuicao_PropostasSemAnteriorFechada() {
-        switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes", "Recuar Fase", "Avançar Fase")){
+        switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
+                "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                "Obtenção de listas de alunos ",
+                "Obtenção de listas de propostas de projecto estágio", "Undo", "Redo",
+                "Fechar", "Recuar Fase", "Avançar Fase")){
             case 1 -> context.atribuicaoAutomatica();
-            case 2 -> context.recuarFase();
-            case 3 -> context.avancarFase();
+            case 2 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
+            case 3 -> UIObtencaoDeListaDeAlunoAtribuicao();
+            case 4 -> UIObtencaoDeListaDePropostaAtribuida();
+            case 5 -> manager.undo();
+            case 6 -> manager.redo();
+            case 7 -> context.closeFase();
+            case 8 -> context.recuarFase();
+            case 9 -> context.avancarFase();
         }
     }
 
@@ -414,8 +424,9 @@ public class ApoioUIText {
             case 1 -> context.associacaoAutomaticaDeDocentesAPropostas();
             case 2 -> context.gerirOrientadores();
             case 3 -> UIObtencaoDadosOrientadores();
-            case 4 -> {}
-            case 5 -> {}
+            case 4 -> context.recuarFase();
+            case 5 -> { context.closeFase();
+                        context.avancarFase(); }
         }
     }
 
