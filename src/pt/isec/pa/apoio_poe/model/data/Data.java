@@ -591,9 +591,9 @@ public class Data {
     }
 
     public boolean verificaCondicaoFechoF1() {
-        int pDA = (int) propostas.stream().filter(proposta -> proposta.getRamos().contains("DA")).count();
-        int pRAS = (int) propostas.stream().filter(proposta -> proposta.getRamos().contains("RAS")).count();
-        int pSI = (int) propostas.stream().filter(proposta -> proposta.getRamos().contains("SI")).count();
+        int pDA = (int) propostas.stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("DA")).count();
+        int pRAS = (int) propostas.stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("RAS")).count();
+        int pSI = (int) propostas.stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("SI")).count();
 
         int totDA = 0, totRAS = 0, totSI = 0;
         for(Aluno a : alunos){
@@ -641,7 +641,7 @@ public class Data {
             if (a.temPropostaConfirmada()){
                 if(a.getProposta().temDocenteOrientador()){
                     sb.append("O aluno ").append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" tem a proposta ").append(a.getProposta().getId())
-                            .append(" Orientada pelo docente: ").append(a.getProposta().getEmailOrientador());
+                            .append(" Orientada pelo docente: ").append(a.getProposta().getEmailOrientador()).append('\n');
                 }
             }
         }
@@ -654,7 +654,7 @@ public class Data {
             if (a.temPropostaConfirmada()){
                 if(!a.getProposta().temDocenteOrientador()){
                     sb.append("O aluno ").append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" tem a proposta ").append(a.getProposta().getId())
-                            .append(" Sem Orientador");
+                            .append(" Sem Orientador\n");
                 }
             }
         }

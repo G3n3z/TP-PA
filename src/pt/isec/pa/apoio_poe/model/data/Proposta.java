@@ -72,6 +72,8 @@ public class Proposta {
     }
 
     public List<String> getRamos() {
+        if(ramos == null)
+            return null;
         return new ArrayList<>(ramos);
     }
 

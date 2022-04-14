@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class ConfigOptions extends  StateAdapter{
@@ -17,8 +18,14 @@ public class ConfigOptions extends  StateAdapter{
     @Override
     public boolean close() {
         //if(data.verificaCondicaoFechoF1())
+        if(data.verificaCondicaoFechoF1()) {
             setClose(true);
-        return true;
+            return true;
+        }
+        Log.getInstance().putMessage("Condições de fecho de fase não alcançadas\n" +
+                "Por favor verifique se o numero total de propostas é igual ou superior ao número total de alunos e se,\n" +
+                "para cada ramo, o número total de propostas é igual ou superior ao número de alunos.\n");
+        return false;
     }
 
     @Override
