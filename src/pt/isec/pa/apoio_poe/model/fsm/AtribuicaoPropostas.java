@@ -31,7 +31,7 @@ public class AtribuicaoPropostas extends StateAdapter{
 
     @Override
     public EnumState getState() {
-        return EnumState.ATRIBUICAOPROPOSTAS;
+        return EnumState.ATRIBUICAO_PROPOSTAS;
     }
 
     @Override

@@ -172,7 +172,7 @@ public class Data {
     public String getCandidaturasToString() {
         StringBuilder sb = new StringBuilder();
 
-        candidaturas.forEach(sb::append);
+        candidaturas.forEach( candidatura -> sb.append(candidatura).append('\n'));
         return sb.toString();
     }
 
@@ -780,7 +780,7 @@ public class Data {
     }
 
 
-    public boolean exportAlunos(String file) {
+    public boolean exportAlunos() {
 
         for (Aluno a : alunos){
             exportarAluno(a, true);

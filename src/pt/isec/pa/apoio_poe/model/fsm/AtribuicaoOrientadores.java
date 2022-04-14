@@ -16,7 +16,7 @@ public class AtribuicaoOrientadores extends StateAdapter {
 
     @Override
     public boolean recuarFase() {
-        changeState(EnumState.ATRIBUICAOPROPOSTAS);
+        changeState(EnumState.ATRIBUICAO_PROPOSTAS);
         return true;
     }
 

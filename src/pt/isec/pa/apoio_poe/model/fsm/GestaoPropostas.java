@@ -187,7 +187,7 @@ public class GestaoPropostas extends StateAdapter{
             Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno não elegível");
             ok = false;
         }
-        if(!data.verificaJaAtribuido(numAluno)){
+        if(data.verificaJaAtribuido(numAluno)){
             Log.getInstance().putMessage("Na linha " + index + " atribuição de proposta a aluno com proposta já atribuída");
             ok = false;
         }
@@ -239,11 +239,12 @@ public class GestaoPropostas extends StateAdapter{
 
     @Override
     public boolean exportarCSV(String file) {
-        if(!CSVWriter.startWriter(file)){
-            return false;
+        if(CSVWriter.startWriter(file)){
+            data.exportProposta();
+            CSVWriter.closeFile();
+            return true;
         }
-        data.exportProposta();
-        return true;
+        return false;
     }
 
     @Override

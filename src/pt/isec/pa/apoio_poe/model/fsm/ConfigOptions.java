@@ -17,7 +17,6 @@ public class ConfigOptions extends  StateAdapter{
 
     @Override
     public boolean close() {
-        //if(data.verificaCondicaoFechoF1())
         if(data.verificaCondicaoFechoF1()) {
             setClose(true);
             return true;
@@ -30,7 +29,7 @@ public class ConfigOptions extends  StateAdapter{
 
     @Override
     public boolean gerirAlunos() {
-        changeState(EnumState.GESTAO_CLIENTES);
+        changeState(EnumState.GESTAO_ALUNOS);
         return true;
     }
 
