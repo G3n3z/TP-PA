@@ -26,7 +26,7 @@ public class OpcoesCandidatura extends StateAdapter{
     //asf
     @Override
     public boolean avancarFase() {
-        changeState(EnumState.ATRIBUICAOPROPOSTAS);
+        changeState(EnumState.ATRIBUICAO_PROPOSTAS);
         return true;
     }
 

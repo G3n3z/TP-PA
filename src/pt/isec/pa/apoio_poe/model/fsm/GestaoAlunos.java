@@ -8,15 +8,15 @@ import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.NoSuchElementException;
 
-public class GestaoClientes extends StateAdapter{
+public class GestaoAlunos extends StateAdapter{
 
-    public GestaoClientes(ApoioContext context, boolean isClosed, Data data) {
+    public GestaoAlunos(ApoioContext context, boolean isClosed, Data data) {
         super(context, isClosed, data);
     }
 
     @Override
     public EnumState getState() {
-        return EnumState.GESTAO_CLIENTES;
+        return EnumState.GESTAO_ALUNOS;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GestaoClientes extends StateAdapter{
         boolean possibilidade;
         Aluno aluno;
         if(!CSVReader.startScanner(file, ",")){
-            Log.getInstance().putMessage("O ficheiro não existe");
+            Log.getInstance().putMessage("O ficheiro não existe\n");
             return false;
         }
         int index = 1;
@@ -41,7 +41,6 @@ public class GestaoClientes extends StateAdapter{
 
         while (CSVReader.hasNext()) {
             try {
-
                 numAluno = CSVReader.readLong();
                 nome = CSVReader.readString();
                 email = CSVReader.readString();
@@ -134,7 +133,7 @@ public class GestaoClientes extends StateAdapter{
     @Override
     public boolean exportarCSV(String file) {
         if(CSVWriter.startWriter(file)){
-            data.exportAlunos(file);
+            data.exportAlunos();
             CSVWriter.closeFile();
             return true;
         }
