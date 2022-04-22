@@ -2,6 +2,8 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.data.Data;
 
+import java.io.*;
+
 abstract class StateAdapter implements IState{
     ApoioContext context;
     Data data;
@@ -58,6 +60,48 @@ abstract class StateAdapter implements IState{
     }
     public void setClose(boolean close) {
         this.close = close;
+    }
+
+    @Override
+    public void obtencaoDadosOrientador() {}
+    public void obtencaoListaProposta(){}
+
+    @Override
+    public void editarCandidaturas() {}
+
+    @Override
+    public void editarDocentes() {}
+
+    @Override
+    public void editarAlunos() {}
+
+    @Override
+    public void editarPropostas() {}
+
+    @Override
+    public boolean load() throws IOException, ClassNotFoundException {return false;}
+
+    @Override
+    public void begin() {}
+
+    @Override
+    public boolean save() throws IOException {
+        return false;
+    }
+
+    @Override
+    public void sair() {
+        data.setLastState(getState());
+        changeState(EnumState.SAIR);
+    }
+
+    @Override
+    public void obtencaoListaAlunos() {}
+
+
+    @Override
+    public boolean existFileBin() {
+        return false;
     }
 
     @Override
@@ -139,4 +183,5 @@ abstract class StateAdapter implements IState{
     public void removePropostaACandidatura(String id, long naluno) {
 
     }
+
 }

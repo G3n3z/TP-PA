@@ -1,5 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import java.io.IOException;
+
 public interface IState {
     boolean avancarFase();
     boolean recuarFase();
@@ -10,6 +12,13 @@ public interface IState {
     boolean gerirEstagios();
     boolean conflitoAtribuicaoCandidatura();
     boolean gerirOrientadores();
+    void obtencaoDadosOrientador();
+    void obtencaoListaProposta();
+    void obtencaoListaAlunos();
+    void editarCandidaturas();
+    void editarDocentes();
+    void editarAlunos();
+    void editarPropostas();
     boolean fechado();
     boolean addAluno(String file);
     boolean importDocentes(String file);
@@ -46,4 +55,14 @@ public interface IState {
     void removeProposta(String id);
 
     void removePropostaACandidatura(String id, long naluno);
+
+    boolean load() throws IOException, ClassNotFoundException;
+
+    void begin();
+
+    boolean save() throws IOException;
+
+    void sair();
+    boolean existFileBin();
+
 }

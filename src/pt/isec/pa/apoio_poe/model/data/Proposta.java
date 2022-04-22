@@ -1,10 +1,11 @@
 package pt.isec.pa.apoio_poe.model.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Proposta {
+public class Proposta implements Serializable {
     private String id;
     private String tipo;
     private List<String> ramos;
@@ -17,7 +18,7 @@ public class Proposta {
     private Proposta(String id){
         this.id = id;
     }
-    public Proposta(String id, String tipo, String titulo, long numAluno) {
+    public Proposta(String id, String tipo, String titulo, Long numAluno) {
         this.id = id;
         this.tipo = tipo;
         this.titulo = titulo;
@@ -31,7 +32,7 @@ public class Proposta {
         this.titulo = titulo;
     }
 
-    public Proposta(String id, String tipo, List<String> ramos, String titulo, long numAluno) {
+    public Proposta(String id, String tipo, List<String> ramos, String titulo, Long numAluno) {
         this.id = id;
         this.tipo = tipo;
         this.ramos = new ArrayList<>(ramos);
@@ -76,7 +77,17 @@ public class Proposta {
             return null;
         return new ArrayList<>(ramos);
     }
-
+    public String getRamosToExport(){
+        if(ramos == null)
+            return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ramos.size(); i++){
+            sb.append(ramos.get(i));
+            if (i != ramos.size() - 1)
+                sb.append("|");
+        }
+        return sb.toString();
+    }
     public String getTitulo() {
         return titulo;
     }
@@ -132,5 +143,13 @@ public class Proposta {
     }
     public Docente getProponente() {
         return proponente;
+    }
+
+    public Proposta getClone() {
+        return null;
+    }
+
+    public Object[] exportProposta() {
+        return null;
     }
 }

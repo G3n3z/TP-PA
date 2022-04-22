@@ -239,12 +239,13 @@ public class GestaoPropostas extends StateAdapter{
 
     @Override
     public boolean exportarCSV(String file) {
-        if(CSVWriter.startWriter(file)){
-            data.exportProposta();
-            CSVWriter.closeFile();
-            return true;
+        if(!CSVWriter.startWriter(file)){
+            return false;
         }
-        return false;
+        for(Proposta p : data.getProposta())
+            CSVWriter.writeLine(",", true,p.exportProposta());
+        CSVWriter.closeFile();
+        return true;
     }
 
     @Override
@@ -253,5 +254,10 @@ public class GestaoPropostas extends StateAdapter{
             Log.getInstance().putMessage("Nao existe o id inserido");
         }
         data.removeProposta(id);
+    }
+
+    @Override
+    public void editarPropostas() {
+        changeState(EnumState.EDITAR_PROPOSTAS);
     }
 }

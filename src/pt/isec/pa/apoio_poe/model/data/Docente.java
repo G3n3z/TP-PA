@@ -1,11 +1,8 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Docente extends Pessoa{
-
-    ArrayList<Proposta> propostas;
 
     private Docente(String email){
         super(email,null);
@@ -40,5 +37,13 @@ public class Docente extends Pessoa{
     @Override
     public int hashCode() {
         return Objects.hash(getEmail());
+    }
+
+    public Docente getClone() {
+        return new Docente(getEmail(),getNome());
+    }
+
+    public Object[] getExportDocente() {
+        return new Object[]{getNome(),getEmail()};
     }
 }

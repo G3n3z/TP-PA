@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +15,16 @@ public class ApoioContext {
     public ApoioContext() {
         data = new Data();
         closed = new HashMap<>();
-        state = new ConfigOptions(this, false, data);
+        state = new LoadState(this, false, data);
         closed.putIfAbsent(state.getState(),state.fechado());
+        data.getBooleanState(EnumState.LOAD_STATE);
     }
-
+    public boolean getBooleanState(EnumState enumstate){
+        return data.getBooleanState(enumstate);
+    }
     void changeState(IState newState){
         state = newState;
+        //data = newState.getData();
     }
 
     public EnumState getState(){
@@ -50,7 +55,7 @@ public class ApoioContext {
 
     public boolean closeFase(){
         if(state.close())
-            closed.put(state.getState(), true);
+            data.closeState(state.getState());
         return true;
     }
 
@@ -58,16 +63,6 @@ public class ApoioContext {
         return state.fechado();
     }
 
-    public boolean getBooleanState(EnumState enumstate){
-        Boolean state = closed.get(enumstate);
-        if(state == null){
-            closed.put(enumstate, false);
-            return false;
-        }
-        else {
-            return state;
-        }
-    }
 
 
     public boolean addAluno(String file) {
@@ -75,7 +70,7 @@ public class ApoioContext {
     }
 
     public String getAlunos() {
-        return data.getAlunos();
+        return data.getAlunosToString();
     }
 
     public boolean importDocentes(String file){ return state.importDocentes(file);}
@@ -238,6 +233,58 @@ public class ApoioContext {
 
     public void removerProposta(String id) {
         state.removeProposta(id);
+    }
+
+    public void obtencaoDadosOrientador() {
+        state.obtencaoDadosOrientador();
+    }
+
+    public void obtencaoListaProposta() {
+        state.obtencaoListaProposta();
+    }
+
+    public void obtencaoListaAlunos() {
+        state.obtencaoListaAlunos();
+    }
+
+    public void editarAlunos() {
+        state.editarAlunos();
+    }
+
+    public void editarCandidaturas() {
+        state.editarCandidaturas();
+    }
+
+    public void editarDocentes() {
+        state.editarDocentes();
+    }
+
+    public void editarPropostas() {
+        state.editarPropostas();
+    }
+
+    public void load() throws IOException, ClassNotFoundException {
+        state.load();
+    }
+
+    public void begin() {
+        state.begin();
+    }
+
+    public void sair() {
+        state.sair();
+    }
+
+    public void save() throws IOException {
+        state.save();
+    }
+
+    public boolean existsFileBin() {
+        return state.existFileBin();
+    }
+
+    protected void setData(Data data) {
+        this.data = data;
     }
 }
 

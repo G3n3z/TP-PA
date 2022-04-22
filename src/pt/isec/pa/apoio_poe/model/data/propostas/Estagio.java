@@ -12,7 +12,7 @@ public class Estagio extends Proposta {
         this.entidade = entidade;
     }
 
-    public Estagio(String id, String tipo, List<String> ramos, String titulo, String entidade, long numAluno) {
+    public Estagio(String id, String tipo, List<String> ramos, String titulo, String entidade, Long numAluno) {
         super(id, tipo, ramos, titulo, numAluno);
         this.entidade = entidade;
     }
@@ -24,4 +24,20 @@ public class Estagio extends Proposta {
                 " entidade='" + entidade + '\'' +
                 " }\n";
     }
+
+    @Override
+    public Proposta getClone() {
+
+        Proposta clone =  new Estagio(getId(),getTipo(), getRamos(), getTitulo(), entidade, getNumAluno());
+        clone.setAtribuida(isAtribuida());
+        clone.setDocenteProponente(getProponente());
+        clone.setDocenteOrientador(getOrientador());
+        return clone;
+    }
+
+    @Override
+    public Object[] exportProposta() {
+        return new Object[]{getTipo(),getId(),getRamosToExport(),getTitulo(),entidade,getNumAluno()};
+    }
+
 }

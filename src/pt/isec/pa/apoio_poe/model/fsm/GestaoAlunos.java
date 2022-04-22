@@ -6,6 +6,7 @@ import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class GestaoAlunos extends StateAdapter{
@@ -23,6 +24,11 @@ public class GestaoAlunos extends StateAdapter{
     public boolean recuarFase() {
         changeState(EnumState.CONFIG_OPTIONS);
         return true;
+    }
+
+    @Override
+    public void editarAlunos() {
+        changeState(EnumState.EDITAR_ALUNOS);
     }
 
     @Override
@@ -96,10 +102,6 @@ public class GestaoAlunos extends StateAdapter{
 
 
 
-    @Override
-    public void changeName(String novo_nome, long naluno) {
-        data.changeNameAluno(naluno, novo_nome);
-    }
 
     @Override
     public void removeAluno(long numero_de_aluno) {
@@ -108,43 +110,17 @@ public class GestaoAlunos extends StateAdapter{
         }
     }
 
-    @Override
-    public void changeCursoAluno(String novo_curso, long nAluno) {
-        if(!data.existeCursos(novo_curso)){
-            Log.getInstance().putMessage("Nao existe o curso inserido");
-            return;
-        }
-        if(data.changeCursoAluno(novo_curso, nAluno)){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
-        }
 
-    }
-
-    @Override
-    public void changeRamoAluno(String novo_ramo, long nAluno) {
-        if(!data.existeRamos(novo_ramo)){
-            Log.getInstance().putMessage("Nao existe o ramo inserido");
-            return;
-        }
-        if(data.changeRamoAluno(novo_ramo, nAluno)){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
-        }
-    }
-
-    @Override
-    public void changeClassAluno(double nova_classificacao, long nAluno) {
-        if (nova_classificacao < 0.0 || nova_classificacao > 1.0){
-            Log.getInstance().putMessage("Classificação nao se encontra entre 0.0 e 1.0");
-        }
-        if(data.changeClassAluno(nova_classificacao, nAluno)){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
-        }
-    }
 
     @Override
     public boolean exportarCSV(String file) {
+        List<Aluno> alunos;
         if(CSVWriter.startWriter(file)){
-            data.exportAlunos();
+            alunos = data.getAlunos();
+            for(Aluno a: alunos){
+                CSVWriter.writeLine(",",true, a.getExportAluno());
+            }
+
             CSVWriter.closeFile();
             return true;
         }

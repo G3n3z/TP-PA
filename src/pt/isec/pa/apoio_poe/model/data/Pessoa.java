@@ -1,6 +1,8 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-public class Pessoa {
+import java.io.Serializable;
+
+public class Pessoa implements Serializable {
     private String email;
     private String nome;
 
@@ -24,4 +26,6 @@ public class Pessoa {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+
 }

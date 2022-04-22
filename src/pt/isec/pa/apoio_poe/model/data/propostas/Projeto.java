@@ -14,7 +14,7 @@ public class Projeto extends Proposta {
         this.docente = docente;
     }
 
-    public Projeto(String id, String tipo, List<String> ramos, String titulo, String docente, long numAluno) {
+    public Projeto(String id, String tipo, List<String> ramos, String titulo, String docente, Long numAluno) {
         super(id, tipo, ramos, titulo, numAluno);
         this.docente = docente;
     }
@@ -35,4 +35,20 @@ public class Projeto extends Proposta {
     public void setEmailDocente(String email) {
         docente = email;
     }
+
+    @Override
+    public Proposta getClone() {
+
+        Proposta clone =  new Projeto(getId(),getTipo(), getRamos(), getTitulo(), docente, getNumAluno());
+        clone.setAtribuida(isAtribuida());
+        clone.setDocenteProponente(getProponente());
+        clone.setDocenteOrientador(getOrientador());
+        return clone;
+    }
+
+    @Override
+    public Object[] exportProposta() {
+        return new Object[]{getTipo(),getId(), getRamosToExport(),getTitulo(),docente,getNumAluno()};
+    }
+
 }

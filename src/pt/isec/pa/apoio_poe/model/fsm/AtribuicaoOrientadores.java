@@ -52,4 +52,8 @@ public class AtribuicaoOrientadores extends StateAdapter {
 
         return true;
     }
+    @Override
+    public void obtencaoDadosOrientador() {
+        changeState(EnumState.OBTENCAO_DADOS_ORIENTADORES);
+    }
 }

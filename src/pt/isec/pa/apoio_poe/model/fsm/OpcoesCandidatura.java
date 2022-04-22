@@ -31,13 +31,28 @@ public class OpcoesCandidatura extends StateAdapter{
     }
 
     @Override
+    public void editarCandidaturas() {
+        changeState(EnumState.EDITAR_CANDIDATURAS);
+    }
+
+    @Override
+    public void obtencaoListaAlunos() {
+        changeState(EnumState.OBTENCAO_LISTA_ALUNOS);
+    }
+
+    @Override
+    public void obtencaoListaProposta() {
+        changeState(EnumState.OBTENCAO_LISTA_PROPOSTAS);
+    }
+
+    @Override
     public EnumState getState() {
         return EnumState.OPCOES_CANDIDATURA;
     }
 
     @Override
     public boolean close() {
-        if(context.getBooleanState(EnumState.CONFIG_OPTIONS)){
+        if(data.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
             return true;
         }
@@ -109,7 +124,7 @@ public class OpcoesCandidatura extends StateAdapter{
         boolean notfind;  //testa se certo id passado na candidatura existe para poder imprimir
         for (String id : candidatura.getIdProposta()) {
             notfind = true;
-            for (Proposta p : data.getPropostas()) {
+            for (Proposta p : data.getProposta()) {
                 if(p.getId().equalsIgnoreCase(id)){
                     find++;
                     notfind = false;
@@ -135,9 +150,14 @@ public class OpcoesCandidatura extends StateAdapter{
             Log.getInstance().putMessage("Numero de aluno não existente");
             return;
         }
+        if(!a.temCandidatura()){
+            Log.getInstance().putMessage("O aluno não tem candidatura");
+            return;
+        }
         if(data.existePropostaSemAluno(idProposta)){
            a.addCandidatura(idProposta);
         }
+
     }
 
     @Override
@@ -145,7 +165,9 @@ public class OpcoesCandidatura extends StateAdapter{
         if(!CSVWriter.startWriter(file)){
             return false;
         }
-        data.exportCandidatura();
+        for(Candidatura c : data.getCandidaturas()){
+            CSVWriter.writeLine(",",true, c.getExportCandidatura());
+        }
         CSVWriter.closeFile();
         return true;
     }

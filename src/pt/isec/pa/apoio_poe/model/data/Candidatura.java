@@ -1,9 +1,10 @@
 package pt.isec.pa.apoio_poe.model.data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Candidatura {
+public class Candidatura implements Serializable {
     private long numAluno;
      private List<String> idProposta;
 
@@ -48,5 +49,27 @@ public class Candidatura {
 
     public void removeProposta(String id) {
         idProposta.remove(id);
+    }
+
+    public Candidatura getClone() {
+        return new Candidatura(numAluno,idProposta);
+    }
+
+    private String getIdsToExport(){
+
+        if(idProposta == null)
+                return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < idProposta.size(); i++){
+            sb.append(idProposta.get(i));
+            if (i != idProposta.size() - 1)
+                sb.append(",");
+            }
+        return sb.toString();
+
+    }
+
+    public Object[] getExportCandidatura() {
+        return new Object[]{numAluno,getIdsToExport()};
     }
 }

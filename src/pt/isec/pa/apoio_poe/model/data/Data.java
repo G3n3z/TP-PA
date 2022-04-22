@@ -5,33 +5,59 @@ import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
+import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
+import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Stream;
 
 
-public class Data {
+public class Data implements Serializable {
+    static final long serialVersionUID = 2L;
+    private final String ficheiroBin = "load.dat";
+    private EnumState lastState;
     Set<Aluno> alunos;
     Set<Docente> docentes;
     Set<Proposta> propostas;
     Set<Candidatura> candidaturas;
     Map<Proposta, ArrayList<Aluno>> proposta_aluno;
+    Map<EnumState, Boolean> closed;
     public Data() {
         this.alunos = new HashSet<>();
         this.propostas = new HashSet<>();
         this.docentes = new HashSet<>();
         candidaturas = new HashSet<>();
         proposta_aluno = new HashMap<>();
+        closed = new HashMap<>();
+    }
+    public boolean getBooleanState(EnumState enumstate){
+        Boolean state = closed.get(enumstate);
+        if(state == null){
+            closed.put(enumstate, false);
+            return false;
+        }
+        else {
+            return state;
+        }
     }
 
-    public Set<Proposta> getPropostas() {
-        return propostas;
+    public EnumState getLastState() {
+        return lastState;
     }
 
-    public Set<Candidatura> getCandidaturas() {
-        return candidaturas;
+    public void setLastState(EnumState lastState) {
+        this.lastState = lastState;
+    }
+
+    public void closeState(EnumState state){
+        closed.put(state,true);
+    }
+
+
+
+    public String getFicheiroBin() {
+        return ficheiroBin;
     }
 
     public Aluno getAluno(long naluno){
@@ -41,12 +67,47 @@ public class Data {
         }
         return null;
     }
+
+    public Aluno getAlunoClone(long naluno){
+        for(Aluno a : alunos){
+            if(a.getNumeroAluno() == naluno)
+                return a.getClone();
+        }
+        return null;
+    }
+
+    public List<Aluno> getAlunos(){
+        List<Aluno> al = new ArrayList<>();
+        al.addAll(alunos);
+        return al;
+    }
+    public List<Docente> getDocente(){
+        List<Docente> dc = new ArrayList<>();
+        for (Docente d : docentes){
+            dc.add(d);
+        }
+        return dc;
+    }
+    public List<Proposta> getProposta(){
+        List<Proposta> pr = new ArrayList<>();
+        for (Proposta p : propostas){
+            pr.add(p);
+        }
+        return pr;
+    }
     private Docente getDocente(String email){
         for(Docente d : docentes){
             if(d.getEmail().equalsIgnoreCase(email))
                 return d;
         }
         return null;
+    }
+    public List<Candidatura> getCandidaturas(){
+        List<Candidatura> cand = new ArrayList<>();
+        for(Candidatura c : candidaturas){
+            cand.add(c.getClone());
+        }
+        return cand;
     }
 
     public List<Proposta> getPropostasAPartirDeId(List<Proposta> p, List<String> idProposta){
@@ -59,6 +120,7 @@ public class Data {
         }
         return p;
     }
+
     public boolean existeDocenteComEmail(String email){
         return docentes.stream().anyMatch(d -> d.getEmail().equals(email));
     }
@@ -73,7 +135,7 @@ public class Data {
         return alunos.add(aluno);
     }
 
-    public String getAlunos() {
+    public String getAlunosToString() {
         StringBuilder sb = new StringBuilder();
         alunos.forEach(sb::append);
         return sb.toString();
@@ -207,17 +269,7 @@ public class Data {
     }
 
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
-        Aluno aluno;
-        for (Proposta p : propostas){
-            if(p.getNumAluno() == null || (p instanceof Estagio)){
-                continue;
-            }
-            aluno = getAluno(p.getNumAluno());
-            if(aluno != null){
-                aluno.setProposta(p);
-                aluno.setOrdem(1);
-            }
-        }
+
     }
 
 
@@ -429,85 +481,7 @@ public class Data {
         return propostaReturn;
     }
 
-
-    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
-        List<Aluno> al = new ArrayList<>();
-        List<Aluno> alunosComMesmaMedia;
-        for(Aluno a : alunos){
-            if(!a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada() && a.temCandidatura()){
-                al.add(a);
-            }
-        }
-        al.sort(new AlunoComparator());
-        //Pega-se na media de um aluno e obtem se todos os alunos com a mesma media
-        for(Aluno a : al){
-            if(a.temPropostaConfirmada()) continue;
-            alunosComMesmaMedia = obtemAlunosComMedia(a.getClassificacao(), al);
-            atribuiPropostaAAlunosComMesmaMedia(alunosComMesmaMedia);
-            //al.removeAll(alunosComMesmaMedia);
-            alunosComMesmaMedia.clear();
-            //Limpar os alunos ja atribuidos
-        }
-
-        al.forEach(System.out::println);
-    }
-
-    private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
-        List<Proposta> proposta = new ArrayList<>();
-        ConflitoAtribuicaoAutomaticaException e = null;
-        int i; boolean sair = true;
-        ciclo: for (Aluno a : alunosComMesmaMedia){
-            if(a.temPropostaConfirmada()) continue;
-            proposta.clear();
-            proposta = getPropostasAPartirDeId(proposta, a.getCandidatura().getIdProposta());
-            for(Proposta p : proposta){
-                if(!p.isAtribuida() ){//Se a proposta está atribuida
-                    if(p instanceof Estagio && !a.isPossibilidade()){
-                        continue;
-                    }
-                    if(proposta_aluno.containsKey(p)){ //Se já contem a proposta
-                        if(proposta_aluno.get(p).size() == 1){
-                            sair = !sair;
-                            if(sair){
-                                proposta_aluno.remove(p);
-                                break ciclo;
-                            }
-                        }
-                        proposta_aluno.get(p).add(a);
-                        break;
-                    }
-                    else{
-                        proposta_aluno.put(p, new ArrayList<>());
-                        proposta_aluno.get(p).add(a);
-                        break;
-                    }
-                }
-            }
-        }
-        i = 0; proposta.clear();
-        for(Map.Entry<Proposta, ArrayList<Aluno>> set : proposta_aluno.entrySet()){
-            if(set.getValue().size() == 1){
-                set.getValue().get(0).setProposta(set.getKey());
-                set.getKey().setAtribuida(true);
-                //set.getKey().setNumAluno(set.getValue().get(0).getNumeroAluno());
-                proposta.add(set.getKey()); //Adiciona à lista para remover posteriormente
-            }
-            else{
-                i++;
-                if(i == 1){
-                    e = new ConflitoAtribuicaoAutomaticaException();
-                }
-            }
-        }
-        proposta.forEach( p -> proposta_aluno.remove(p));
-        if(e != null){
-            throw e;
-        }
-
-    }
-
-
-    private List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
+    public List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
         List<Aluno>alunosComMesmaMedia = new ArrayList<>();
         for(Aluno a : al){
             if(a.getClassificacao() == classificacao){
@@ -568,9 +542,6 @@ public class Data {
         return sb.toString();
     }
 
-    public boolean todosOsAlunosComCandidaturaTemPropostaAssocaida(){
-        return (alunos.stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada);
-    }
 
 
     public String qualAlunoComCandidaturaSemPropostaAssocaida() {
@@ -900,4 +871,6 @@ public class Data {
         }
         return true;
     }
+
+
 }

@@ -54,7 +54,7 @@ public class CSVWriter {
                 for (var a : array){
                     if(a instanceof String s){
                         if(delimiter != null){
-                            line = line.concat(s+delimiter);
+                            line = line.concat(s+ delimiter);
                         }
                     }
                 }

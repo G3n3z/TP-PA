@@ -1,8 +1,9 @@
 package pt.isec.pa.apoio_poe.model.data;
 
+import java.util.Arrays;
 import java.util.Objects;
 
-public class Aluno extends Pessoa {
+public class Aluno extends Pessoa implements Cloneable{
 
     private long numeroEstudante;
     private String siglaCurso;
@@ -81,6 +82,8 @@ public class Aluno extends Pessoa {
         ===================SETS=======================
 
      */
+
+
 
     public void setPropostaNaoConfirmada(Proposta p) {
         if (propostaNaoConfirmada == null)
@@ -196,5 +199,39 @@ public class Aluno extends Pessoa {
 
     public boolean temCandidatura() {
         return candidatura != null;
+    }
+
+    @Override
+    public Aluno clone() {
+        try {
+            Aluno clone = (Aluno) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            if(clone.candidatura!= null)
+                //clone.candidatura = candidatura.getClone();
+            if(clone.propostaNaoConfirmada != null){
+                //clone.propostaNaoConfirmada = propostaNaoConfirmada.getClone();
+            }
+            if(clone.proposta != null){
+                //clone.proposta = proposta.getClone();
+            }
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+    public Aluno getClone() {
+        Aluno clone = new Aluno(getEmail(), getNome(),numeroEstudante,siglaCurso,siglaRamo, classificacao,possibilidade);
+        if(candidatura != null)
+            clone.candidatura = candidatura.getClone();
+        if(propostaNaoConfirmada!= null)
+            clone.propostaNaoConfirmada = propostaNaoConfirmada.getClone();
+        if (proposta !=null)
+            clone.proposta = proposta.getClone();
+        return clone;
+    }
+
+    public Object[] getExportAluno() {
+        return new Object[]{numeroEstudante,getNome(), getEmail(),siglaCurso,siglaRamo,
+        classificacao,possibilidade};
     }
 }

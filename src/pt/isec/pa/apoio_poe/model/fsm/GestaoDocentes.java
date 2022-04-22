@@ -6,7 +6,7 @@ import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
-import java.util.InputMismatchException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class GestaoDocentes extends StateAdapter{
@@ -24,6 +24,11 @@ public class GestaoDocentes extends StateAdapter{
     @Override
     public EnumState getState() {
         return EnumState.GESTAO_DOCENTES;
+    }
+
+    @Override
+    public void editarDocentes() {
+        changeState(EnumState.EDITAR_DOCENTES);
     }
 
     @Override
@@ -78,20 +83,21 @@ public class GestaoDocentes extends StateAdapter{
         }
     }
 
-    @Override
-    public void changeNameDocente(String novo_nome, String email) {
-        if(!data.changeNameDocente(novo_nome, email)){
-            Log.getInstance().putMessage("Nao existe docente com este email");
-        }
-    }
+
 
     @Override
     public boolean exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
             return false;
         }
-        data.exportDocente();
+        List<Docente> docentes = data.getDocente();
+        for (Docente d: docentes){
+            CSVWriter.writeLine(",",true, d.getExportDocente());
+        }
         CSVWriter.closeFile();
         return true;
     }
+
+
+
 }
