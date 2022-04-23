@@ -61,6 +61,7 @@ public class CSVReader {
     public static Double readDouble(){
         return sc.nextDouble();
     }
+
     public static Double readDouble2() throws InvalidField {
         try{
             return sc.nextDouble();
@@ -87,11 +88,11 @@ public class CSVReader {
 
         return true;
     }
+
     public static long readLong(){
-
         return sc.nextLong();
-
     }
+
     public static long readLong2() throws InvalidField {
         try {
             return sc.nextLong();
@@ -99,7 +100,9 @@ public class CSVReader {
             throw new InvalidField("Erro de leitura no long");
         }
     }
+
     public static boolean hasNext(){return sc.hasNext();}
+
     public static void closeReaders(){
        try {
            br.close();

@@ -100,7 +100,7 @@ public class ApoioUIText {
 
     private void UILoadState() {
         if(context.existsFileBin()) {
-            switch (PAInput.chooseOption("Pretende carregar o ultimo estadod da Aplicação?", "Sim", "Nao")) {
+            switch (PAInput.chooseOption("Pretende carregar o ultimo estado da Aplicação?", "Sim", "Nao")) {
                 case 1 -> {
                     try {
                         context.load();
@@ -262,8 +262,8 @@ public class ApoioUIText {
 
     private void UIEditarPropostas() {
         //TODO
-        switch  (PAInput.chooseOption(context.getName(), "Avançar Fase", "Recuar Fase", "Exit")) {
-            case 1 -> context.avancarFase();
+        switch  (PAInput.chooseOption(context.getName(), "Em construção", "Recuar Fase", "Exit")) {
+            case 1 -> {}
             case 2 -> context.recuarFase();
             case 3 -> context.sair();
         }
@@ -287,10 +287,15 @@ public class ApoioUIText {
             }
         }
         else{
-            switch  (PAInput.chooseOption(context.getName(), "Avançar Fase", "Recuar Fase", "Exit")) {
-                case 1 -> context.avancarFase();
-                case 2 -> context.recuarFase();
-                case 3 -> context.sair();
+            switch  (PAInput.chooseOption(context.getName(), "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Obtencao de Listas de alunos",
+                    "Obtenção de listas de propostas de projecto/estágio", "Recuar Fase", "Avançar Fase", "Exit")) {
+                case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 2 -> System.out.println(context.getCandidaturas());
+                case 3 -> context.obtencaoListaAlunos();
+                case 4 -> context.obtencaoListaProposta();
+                case 5 -> context.recuarFase();
+                case 6 -> context.avancarFase();
+                case 7 -> context.sair();
             }
         }
     }

@@ -22,6 +22,7 @@ public class ApoioContext {
     public boolean getBooleanState(EnumState enumstate){
         return data.getBooleanState(enumstate);
     }
+
     void changeState(IState newState){
         state = newState;
         //data = newState.getData();

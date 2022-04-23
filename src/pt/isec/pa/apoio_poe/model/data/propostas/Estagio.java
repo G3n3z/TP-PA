@@ -19,10 +19,10 @@ public class Estagio extends Proposta {
 
     @Override
     public String toString() {
-        return "Estagio{ " +
+        return "Estagio-> " +
                 super.toString() +
-                " entidade='" + entidade + '\'' +
-                " }\n";
+                "; Entidade: " + entidade +
+                ".\n";
     }
 
     @Override

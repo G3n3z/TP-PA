@@ -18,10 +18,9 @@ public class Docente extends Pessoa{
 
     @Override
     public String toString() {
-        return "Docente{" +
-                " nome: " + getNome() +
-                " email: " + getEmail() +
-                "}\n";
+        return "Nome: " + getNome() +
+                "; Email: " + getEmail() +
+                ".\n";
     }
 
     @Override

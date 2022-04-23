@@ -142,10 +142,6 @@ public class Data implements Serializable {
     }
 
     public boolean addDocente(Docente docente) {
-        if(alunos.stream().anyMatch(a -> a.getEmail().equals(docente.getEmail()))){
-            return false;
-        }
-
         return docentes.add(docente);
     }
 

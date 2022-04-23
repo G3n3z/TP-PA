@@ -64,9 +64,11 @@ public class GestaoDocentes extends StateAdapter{
         CSVReader.closeReaders();
         return index != 1;
     }
+
+    // Le um docente numa linha de csv
     private Docente readDocente(int index) throws IncompleteCSVLine, InvalidField {
         String email, nome;
-        Docente docente;
+
         try {
 
             nome = CSVReader.readString();
@@ -78,11 +80,10 @@ public class GestaoDocentes extends StateAdapter{
         return new Docente(email, nome);
     }
 
-
-
+    // Verifica se o email esta ja atribuido a um aluno
     private boolean checkDocente(int index, String email) throws InvalidField {
         if(data.existeAlunoComEmail(email)){
-            throw new InvalidField("Linha " + index + " -> Email atribuido a um aluno");
+            throw new InvalidField("Linha " + index + " -> Email já registado num aluno.");
         }
         return true;
     }

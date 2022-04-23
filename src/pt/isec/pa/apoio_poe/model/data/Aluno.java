@@ -32,6 +32,7 @@ public class Aluno extends Pessoa implements Cloneable{
     public static Aluno getDummyAluno(Aluno aluno){
         return new Aluno(aluno.getEmail(), aluno.getNome(), aluno.numeroEstudante, aluno.siglaCurso, aluno.siglaRamo, aluno.classificacao, aluno.possibilidade);
     }
+
     public static Aluno getDummyAluno(long naluno){
         return new Aluno(naluno);
     }
@@ -77,13 +78,11 @@ public class Aluno extends Pessoa implements Cloneable{
     public double getClassificacao() {
         return classificacao;
     }
-        /*
+    /*
 
         ===================SETS=======================
 
-     */
-
-
+    */
 
     public void setPropostaNaoConfirmada(Proposta p) {
         if (propostaNaoConfirmada == null)
@@ -122,10 +121,10 @@ public class Aluno extends Pessoa implements Cloneable{
         this.classificacao = classificacao;
     }
 
-
     public void addCandidatura(Candidatura candidatura) {
         this.candidatura = candidatura;
     }
+
     public void addCandidatura(String candidatura) {
         this.candidatura.getIdProposta().add(candidatura);
     }
@@ -133,6 +132,7 @@ public class Aluno extends Pessoa implements Cloneable{
     public void setOrdem(Integer ordem) {
         this.ordem = ordem;
     }
+
     public void removeProposta(){
         if(proposta != null)
             this.proposta.setAtribuida(false);
@@ -148,23 +148,21 @@ public class Aluno extends Pessoa implements Cloneable{
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Numero de Estudante: ").append(numeroEstudante).append(" Nome: ").append(getNome()).append(" Email: ").append(getEmail());
-        sb.append(" Curso: ").append(siglaCurso).append(" Ramo: ").append(siglaRamo)
-                .append(" Classificação: ").append(classificacao).append("Possibilidade de fazer Estágio: ")
-                .append(possibilidade).append("\n");
+        sb.append("Numero de Estudante: ").append(numeroEstudante).append("; Nome: ").append(getNome()).append("; Email: ").append(getEmail());
+        sb.append("; Curso: ").append(siglaCurso).append("; Ramo: ").append(siglaRamo)
+                .append("; Classificação: ").append(classificacao).append("; Possibilidade de fazer Estágio: ")
+                .append(possibilidade).append(";\n");
         if(proposta != null){
             sb.append("Proposta: ").append(proposta);
         }else if(propostaNaoConfirmada != null){
             sb.append("Proposta Nao Confirmada: ").append(propostaNaoConfirmada);
         }else if(candidatura != null){
-            sb.append("Ainda sem proposta, mas com candidatura: ").append(candidatura);
+            sb.append("Ainda sem proposta, mas com candidatura: ").append(candidatura).append("\n");
         }else{
-            sb.append("Ainda sem proposta e sem candidatura");
+            sb.append("Ainda sem proposta e sem candidatura.").append("\n");
         }
 
-
-
-        return sb.append("\n\n").toString();
+        return sb.append("\n").toString();
     }
 
        /*

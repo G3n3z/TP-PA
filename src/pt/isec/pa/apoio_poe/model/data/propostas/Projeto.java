@@ -21,10 +21,10 @@ public class Projeto extends Proposta {
 
     @Override
     public String toString() {
-        return "Projeto{ " +
+        return "Projeto-> " +
                 super.toString() +
-                " docente='" + docente + '\'' +
-                " }\n";
+                " Docente: " + docente +
+                ".\n";
     }
 
     public String getEmailDocente() {

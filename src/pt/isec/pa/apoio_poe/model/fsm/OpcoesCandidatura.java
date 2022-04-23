@@ -22,8 +22,6 @@ public class OpcoesCandidatura extends StateAdapter{
         return true;
     }
 
-
-    //asf
     @Override
     public boolean avancarFase() {
         changeState(EnumState.ATRIBUICAO_PROPOSTAS);
@@ -113,7 +111,7 @@ public class OpcoesCandidatura extends StateAdapter{
             return false;
         }
         if(a.temPropostaNaoConfirmada() || a.temPropostaConfirmada()){
-            Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " já tem uma proposta associada");
+            Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " já tem uma proposta associada"); //TODO: verificar se é o mesmo feito em cima
         }
 
         return !candidaturaTemPropostaComAluno(candidatura);

@@ -54,11 +54,11 @@ public class Proposta implements Serializable {
 
     @Override
     public String toString() {
-        return "id='" + id + '\'' +
-                ", tipo='" + tipo + '\'' +
-                ", ramos=" + ramos +
-                ", titulo='" + titulo + '\'' +
-                ", numAluno=" + numAluno;
+        return "Id: " + id +
+                "; Tipo: " + tipo +
+                "; Ramos: " + ramos +
+                "; Titulo: " + titulo +
+                "; Aluno atribuido: " + numAluno;
     }
     public String getId() {
         return id;

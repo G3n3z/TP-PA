@@ -1,6 +1,5 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
@@ -10,7 +9,6 @@ import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -67,6 +65,8 @@ public class GestaoAlunos extends StateAdapter{
         CSVReader.closeReaders();
         return index != 1;
     }
+
+    // le um aluno de uma linha do ficheiro CSV
     private Aluno readAluno(int index) throws InvalidField, IncompleteCSVLine {
         String email, nome, ramo, curso;
         Long numAluno;
@@ -97,11 +97,11 @@ public class GestaoAlunos extends StateAdapter{
 
     }
 
-
-    private boolean fieldsCorrect(int index,String email, String curso, String ramo, double classificacao) throws InvalidField {
+    // verifica se campos corretos
+    private void fieldsCorrect(int index, String email, String curso, String ramo, double classificacao) throws InvalidField {
         boolean ok = true;
         StringBuilder sb = new StringBuilder();
-        InvalidField e;
+        //InvalidField e; //TODO: nao e usado, verificar se necessario de futuro
 
         if(data.existeDocenteComEmail(email)){
             //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um docente registado");
@@ -130,10 +130,8 @@ public class GestaoAlunos extends StateAdapter{
             sb.append("Classificação nao compreendidada entre 0.0 e 1.0.");
         }
         if(!ok){
-            throw new InvalidField("Na linha " + index + " -> " + sb.toString());
+            throw new InvalidField("Na linha " + index + " -> " + sb);
         }
-
-        return ok;
     }
 
 

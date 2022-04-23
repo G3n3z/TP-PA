@@ -9,9 +9,9 @@ public class Projeto_Estagio extends Proposta {
 
     @Override
     public String toString() {
-        return "Projeto_Estagio{ " +
+        return "Projeto_Estagio-> " +
                 super.toString() +
-                " }\n";
+                ".\n";
     }
 
     @Override

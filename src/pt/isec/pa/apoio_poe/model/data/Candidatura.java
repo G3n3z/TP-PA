@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Candidatura implements Serializable {
     private long numAluno;
-     private List<String> idProposta;
+    private List<String> idProposta;
 
     public Candidatura(long numAluno, List<String> idProposta) {
         this.numAluno = numAluno;
@@ -37,10 +37,9 @@ public class Candidatura implements Serializable {
 
     @Override
     public String toString() {
-        return "Candidatura{" +
-                "numAluno=" + numAluno +
-                ", idProposta=" + idProposta +
-                '}';
+        return "Candidatura-> " +
+                "Aluno: " + numAluno +
+                "; Propostas candidatadas: " + idProposta;
     }
 
     public Boolean containsPropostaById(String id){
