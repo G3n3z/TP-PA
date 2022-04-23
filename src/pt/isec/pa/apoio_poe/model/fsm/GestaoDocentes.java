@@ -103,7 +103,7 @@ public class GestaoDocentes extends StateAdapter{
         }
         List<Docente> docentes = data.getDocente();
         for (Docente d: docentes){
-            CSVWriter.writeLine(",",true, d.getExportDocente());
+            CSVWriter.writeLine(",",true,false, d.getExportDocente());
         }
         CSVWriter.closeFile();
         return true;

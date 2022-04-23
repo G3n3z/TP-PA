@@ -102,37 +102,7 @@ public class CSVWriter {
         String line = "";
         for (Object o : args){
             index++;
-            if(o instanceof Boolean b){
-                line = line.concat((b ? "true" : "false"));
-            }
-            else if (o instanceof String s){
-                line = line.concat(s);
-            }
-            else if (o instanceof Double d){
-                line = line.concat(String.valueOf(d));
-            }
-            else if (o instanceof Integer i){
-                line = line.concat(String.valueOf(i));
-            }
-            else if (o instanceof Float f){
-                line = line.concat(String.valueOf(f));
-            }
-            else if (o instanceof Long l){
-                line = line.concat(String.valueOf(l));
-            }
-            else if(o instanceof List<?> array){
-                for (var a : array){
-                    if(a instanceof String s){
-                        if(delimiter != null){
-                            line = line.concat(s+ delimiter);
-                        }
-                    }
-                }
-                continue;
-            }
-            else{
-                continue;
-            }
+            line = line.concat(CSVWriter.parseObject(o,delimiter));
             if(delimiter != null && index < args.length)
                 line = line.concat(delimiter);
         }
@@ -150,6 +120,33 @@ public class CSVWriter {
         return true;
     }
 
+    private static String parseObject(Object o, String delimiter) {
+
+        if (o instanceof Boolean b) {
+            return (b ? "true" : "false");
+        } else if (o instanceof String s) {
+            return s;
+        } else if (o instanceof Double d) {
+            return String.valueOf(d);
+        } else if (o instanceof Integer i) {
+            return String.valueOf(i);
+        } else if (o instanceof Float f) {
+            return String.valueOf(f);
+        } else if (o instanceof Long l) {
+            return String.valueOf(l);
+        } else if (o instanceof List<?> array) {
+            String line = "";
+            for (var a : array) {
+                if (a instanceof String s) {
+                    if (delimiter != null) {
+                        line = line.concat(s + delimiter);
+                    }
+                }
+            }
+            return line;
+        }
+        return "";
+    }
     public static boolean closeFile(){
         if(pw == null)
             return false;

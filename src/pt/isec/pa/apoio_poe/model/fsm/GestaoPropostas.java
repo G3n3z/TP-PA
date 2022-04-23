@@ -245,7 +245,7 @@ public class GestaoPropostas extends StateAdapter{
             return false;
         }
         for(Proposta p : data.getProposta())
-            CSVWriter.writeLine(",", true,p.exportProposta());
+            CSVWriter.writeLine(",", true, false,p.exportProposta());
         CSVWriter.closeFile();
         return true;
     }
