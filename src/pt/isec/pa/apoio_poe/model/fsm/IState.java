@@ -1,5 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+
 import java.io.IOException;
 
 public interface IState {
@@ -20,10 +22,10 @@ public interface IState {
     void editarAlunos();
     void editarPropostas();
     boolean fechado();
-    boolean addAluno(String file);
-    boolean importDocentes(String file);
+    boolean addAluno(String file) throws CollectionBaseException;
+    boolean importDocentes(String file) throws CollectionBaseException;
     boolean importPropostas(String file);
-    boolean addCandidatura(String file);
+    boolean addCandidatura(String file) throws CollectionBaseException;
 
     void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
 
