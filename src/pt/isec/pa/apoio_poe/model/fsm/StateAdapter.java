@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 import java.io.*;
@@ -110,18 +111,18 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public boolean addAluno(String file) {
+    public boolean addAluno(String file) throws CollectionBaseException {
         return false;
     }
 
     @Override
-    public boolean importDocentes(String file){ return false; }
+    public boolean importDocentes(String file) throws CollectionBaseException { return false; }
 
     @Override
     public boolean importPropostas(String file) { return false; }
 
     @Override
-    public boolean addCandidatura(String file) {return false;}
+    public boolean addCandidatura(String file) throws CollectionBaseException {return false;}
 
     @Override
     public void changeName(String novo_nome, long nAluno) {}

@@ -48,7 +48,11 @@ public class ApoioUIText {
                 context.recuarFase();
 
                 context.avancarFase();
-                context.addCandidatura("testeC.csv");
+                try {
+                    context.addCandidatura("cand.csv");
+                }catch (CollectionBaseException c){
+                    System.out.println(c.getMessageOfExceptions());
+                }
                 context.recuarFase();
             }
 
@@ -274,7 +278,13 @@ public class ApoioUIText {
             switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
                     "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
 
-                case 1 -> context.addCandidatura(PAInput.readString("Ficheiro: ", true));
+                case 1 -> {
+                    try {
+                        context.addCandidatura(PAInput.readString("Ficheiro: ", true));
+                    }catch (CollectionBaseException c){
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+                }
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getCandidaturas());
                 case 4 -> context.editarCandidaturas();
@@ -426,7 +436,7 @@ public class ApoioUIText {
         }
         try {
             switch (option) {
-                case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos TODO
+                case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos
                 case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
                 case 3 -> {manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
                 case 4 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}

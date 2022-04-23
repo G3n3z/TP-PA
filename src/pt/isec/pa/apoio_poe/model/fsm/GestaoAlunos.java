@@ -36,7 +36,7 @@ public class GestaoAlunos extends StateAdapter{
 
 
     @Override
-    public boolean addAluno(String file) {
+    public boolean addAluno(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file, ",")){
             Log.getInstance().putMessage("O ficheiro não existe\n");
             return false;
@@ -60,9 +60,9 @@ public class GestaoAlunos extends StateAdapter{
             if(!CSVReader.nextLine())
                 break;
         }
+        CSVReader.closeReaders();
         if(col != null)
             throw col;
-        CSVReader.closeReaders();
         return index != 1;
     }
 
@@ -101,8 +101,6 @@ public class GestaoAlunos extends StateAdapter{
     private void fieldsCorrect(int index, String email, String curso, String ramo, double classificacao) throws InvalidField {
         boolean ok = true;
         StringBuilder sb = new StringBuilder();
-        //InvalidField e; //TODO: nao e usado, verificar se necessario de futuro
-
         if(data.existeDocenteComEmail(email)){
             //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um docente registado");
             sb.append("Email já registado num docente. ");

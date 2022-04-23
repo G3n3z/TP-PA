@@ -35,7 +35,7 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     @Override
-    public boolean importDocentes(String file){
+    public boolean importDocentes(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
         if(!CSVReader.startScanner(file,",")){
             Log.getInstance().putMessage("O ficheiro não existe");
@@ -59,9 +59,10 @@ public class GestaoDocentes extends StateAdapter{
             if(!CSVReader.nextLine())
                 break;
         }
+        CSVReader.closeReaders();
         if(col != null)
             throw col;
-        CSVReader.closeReaders();
+
         return index != 1;
     }
 

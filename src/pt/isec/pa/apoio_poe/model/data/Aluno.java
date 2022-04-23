@@ -15,7 +15,7 @@ public class Aluno extends Pessoa implements Cloneable{
     private Proposta proposta;
     private Candidatura candidatura = null;
 
-    private Aluno(long numeroEstudante){
+    private Aluno(Long numeroEstudante){
         super("", "");
         this.numeroEstudante = numeroEstudante;
     }
@@ -178,7 +178,7 @@ public class Aluno extends Pessoa implements Cloneable{
 
         Aluno aluno = (Aluno) o;
 
-        return numeroEstudante == aluno.numeroEstudante;
+        return Objects.equals(numeroEstudante, aluno.numeroEstudante);
     }
 
     @Override
@@ -199,24 +199,7 @@ public class Aluno extends Pessoa implements Cloneable{
         return candidatura != null;
     }
 
-    @Override
-    public Aluno clone() {
-        try {
-            Aluno clone = (Aluno) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            if(clone.candidatura!= null)
-                //clone.candidatura = candidatura.getClone();
-            if(clone.propostaNaoConfirmada != null){
-                //clone.propostaNaoConfirmada = propostaNaoConfirmada.getClone();
-            }
-            if(clone.proposta != null){
-                //clone.proposta = proposta.getClone();
-            }
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
+
     public Aluno getClone() {
         Aluno clone = new Aluno(getEmail(), getNome(),numeroEstudante,siglaCurso,siglaRamo, classificacao,possibilidade);
         if(candidatura != null)

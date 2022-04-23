@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
@@ -66,7 +67,7 @@ public class ApoioContext {
 
 
 
-    public boolean addAluno(String file) {
+    public boolean addAluno(String file) throws CollectionBaseException {
         return state.addAluno(file);
     }
 
@@ -74,7 +75,7 @@ public class ApoioContext {
         return state.getAlunosToString();
     }
 
-    public boolean importDocentes(String file){ return state.importDocentes(file);}
+    public boolean importDocentes(String file) throws CollectionBaseException { return state.importDocentes(file);}
 
     public String getDocentesToString(){
         return state.getDocentesToString();
@@ -96,7 +97,7 @@ public class ApoioContext {
 
     public String getCandidaturas(){return data.getCandidaturasToString();}
 
-    public void addCandidatura(String file) {
+    public void addCandidatura(String file) throws CollectionBaseException {
         state.addCandidatura(file);
     }
 

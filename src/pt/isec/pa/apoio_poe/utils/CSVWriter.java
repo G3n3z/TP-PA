@@ -1,9 +1,9 @@
 package pt.isec.pa.apoio_poe.utils;
 
 import java.io.*;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class CSVWriter {
 

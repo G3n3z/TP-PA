@@ -1,5 +1,8 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
@@ -22,6 +25,8 @@ public class OpcoesCandidatura extends StateAdapter{
         return true;
     }
 
+
+    //asf
     @Override
     public boolean avancarFase() {
         changeState(EnumState.ATRIBUICAO_PROPOSTAS);
@@ -58,66 +63,84 @@ public class OpcoesCandidatura extends StateAdapter{
     }
 
     @Override
-    public boolean addCandidatura(String file) {
+    public boolean addCandidatura(String file) throws CollectionBaseException {
+        CollectionBaseException col = null;
         if(!CSVReader.startScanner(file, ",")){
-            Log.getInstance().putMessage("O ficheiro não existe");
-            return false;
+            col = new CollectionBaseException();
+            col.putException(new InvalidField("O ficheiro não existe"));
+            throw col;
         }
-        long numAluno;
-        List<String> ids = new ArrayList<>();
-        int index = 1;
+        int index = 0;
         Candidatura candidatura;
 
         while(CSVReader.hasNext()){
             try {
-                numAluno = CSVReader.readLong();
-                while (CSVReader.hasNext()){
-                    ids.add(CSVReader.readString());
-                }
-            }catch (NoSuchElementException e){
-                Log.getInstance().putMessage("Erro de leitura na linha: " + index + " do ficheiro: " + file);
-                if(!CSVReader.nextLine()) break;
                 index++;
-                continue;
-            }
-
-            candidatura = new Candidatura(numAluno, new ArrayList<>(ids));
-            if(existsFieldsOfCandidatura(candidatura)){
-                if(!data.addCandidatura(candidatura)){
-                    Log.getInstance().putMessage("O aluno ja tem uma candidatura registada linha: " + index );
+                candidatura = readCandidatura(index);
+                if(candidatura != null )
+                    if(!data.addCandidatura(candidatura)){
+                        throw new InvalidField("Linha: " + index + " -> O aluno: " + candidatura.getNumAluno() +" ja tem uma candidatura registada");
                 }
+            } catch (InvalidField | IncompleteCSVLine e ) {
+                if(col == null){
+                    col = new CollectionBaseException();
+                }
+                col.putException(e);
             }
-
             if(!CSVReader.nextLine()) break;
-            ids.clear();
-            index++;
+
         }
         CSVReader.closeReaders();
-        return index!=0;
+        if(col != null)
+            throw col;
+        return index != 1;
+
+    }
+    public Candidatura readCandidatura(int index) throws IncompleteCSVLine, InvalidField {
+        long numAluno;
+        List<String> ids = new ArrayList<>();
+        try {
+            numAluno = CSVReader.readLong2();
+            while (CSVReader.hasNext()){
+                ids.add(CSVReader.readString());
+            }
+        }catch (NoSuchElementException e){
+            IncompleteCSVLine ex = new IncompleteCSVLine("Na linha " + index + " -> Linha Incompleta");
+            ex.putLine(index);
+            throw ex;
+        } catch (InvalidField e) {
+            e.addToBeginMessage("Na linha " + index + " -> ");
+            e.addToMessage(" numero de aluno");
+            e.putLine(index);
+            throw e;
+        }
+        Candidatura candidatura = new Candidatura(numAluno, new ArrayList<>(ids));
+        if(!existsFieldsOfCandidatura(candidatura,index))
+            return null;
+
+        return candidatura;
     }
 
-    public boolean existsFieldsOfCandidatura(Candidatura candidatura) {
+    public boolean existsFieldsOfCandidatura(Candidatura candidatura, int index) throws InvalidField {
         Aluno a = data.getAluno(candidatura.getNumAluno());
+        StringBuilder sb = new StringBuilder();
+        InvalidField e;
         if(a == null) {
-            Log.getInstance().putMessage("Não existe aluno com o numero: " + candidatura.getNumAluno());
-            return false;
+            throw new InvalidField("Linha: " +  index + "-> Não existe aluno com o numero: " + candidatura.getNumAluno() + ". ");
         }
         if(a.temPropostaNaoConfirmada() || a.temPropostaConfirmada()){
-            Log.getInstance().putMessage("O aluno " + a.getNumeroAluno() + " - " + a.getNome() +"já possui uma proposta");
-            return false;
+            sb.append("O aluno ").append("já possui uma proposta. ");
         }
         if(candidatura.getIdProposta().size() == 0){
-            Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " tentou inserir uma candidatura vazia" );
-            return false;
+            sb.append("Tentou inserir uma candidatura vazia. ");
         }
-        if(a.temPropostaNaoConfirmada() || a.temPropostaConfirmada()){
-            Log.getInstance().putMessage("O aluno : " + candidatura.getNumAluno() + " já tem uma proposta associada"); //TODO: verificar se é o mesmo feito em cima
+        if(sb.toString().length() > 0){
+            throw new InvalidField("Linha: " + index + " -> " + sb.toString());
         }
-
-        return !candidaturaTemPropostaComAluno(candidatura);
+        return !candidaturaTemPropostaComAluno(candidatura, index);
     }
 
-    public boolean candidaturaTemPropostaComAluno(Candidatura candidatura){
+    public boolean candidaturaTemPropostaComAluno(Candidatura candidatura, int index) throws InvalidField {
         int find = 0;
         boolean notfind;  //testa se certo id passado na candidatura existe para poder imprimir
         for (String id : candidatura.getIdProposta()) {
@@ -127,13 +150,13 @@ public class OpcoesCandidatura extends StateAdapter{
                     find++;
                     notfind = false;
                     if (p.getNumAluno() != null) {
-                        Log.getInstance().putMessage("A candidatura do aluno: " + candidatura.getNumAluno() +
+                        throw new InvalidField("Linha: " + index + " -> A candidatura do aluno: " + candidatura.getNumAluno() +
                                 " está a propor-se ao à proposta " + p.getId() + " que já tem aluno associado");
-                        return true;
                     }
                 }
             }
-            if(notfind){Log.getInstance().putMessage("A candidatura do aluno: " + candidatura.getNumAluno() +
+            if(notfind){
+                throw new InvalidField("A candidatura do aluno: " + candidatura.getNumAluno() +
                     "está a propor-se ao à proposta: " + id + " que não existe");
 
             }
