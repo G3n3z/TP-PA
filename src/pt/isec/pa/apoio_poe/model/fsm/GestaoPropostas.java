@@ -1,6 +1,8 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
+import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
@@ -253,11 +255,33 @@ public class GestaoPropostas extends StateAdapter{
         if(!data.verificaProposta(id)){
             Log.getInstance().putMessage("Nao existe o id inserido");
         }
-        data.removeProposta(id);
+        for (Candidatura c : data.getCandidaturas()){
+            if(c.containsPropostaById(id)){
+                c.removeProposta(id);
+            }
+        }
+        for (Aluno a : data.getAlunos()){
+            if(a.temPropostaNaoConfirmada()){
+                if(a.getPropostaNaoConfirmada().getId().equals(id)){
+                    a.setPropostaNaoConfirmada(null);
+                }
+            }
+            if (a.temPropostaConfirmada()){
+                if (a.getProposta().getId().equals(id)){
+                    a.setProposta(null);
+                }
+            }
+        }
+        data.getProposta().removeIf(p -> p.getId().equals(id));
     }
 
     @Override
     public void editarPropostas() {
         changeState(EnumState.EDITAR_PROPOSTAS);
+    }
+
+    @Override
+    public String getPropostasToString() {
+        return data.getPropostasToString();
     }
 }

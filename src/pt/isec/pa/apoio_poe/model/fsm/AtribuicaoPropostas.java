@@ -10,6 +10,7 @@ import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -60,10 +61,19 @@ public class AtribuicaoPropostas extends StateAdapter{
             return true;
         }
         Log.getInstance().putMessage("Nao foi possivel fechar");
-        Log.getInstance().putMessage(data.qualAlunoComCandidaturaSemPropostaAssocaida());
+        Log.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
         return false;
     }
 
+    public String qualAlunoComCandidaturaSemPropostaAssocaida() {
+        StringBuilder sb = new StringBuilder();
+        (data.getAlunos().stream().filter(Aluno::temCandidatura)).filter(aluno -> !aluno.temPropostaConfirmada()).forEach(a -> {
+            sb.append("Aluno ").append( a.getNumeroAluno()).append(" - ").append(a.getNome())
+                    .append("Tem candidatura: ").append(a.getCandidatura()).
+                    append("\nMas não tem proposta associada \n");
+        });
+        return sb.toString();
+    }
     @Override
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
         Aluno aluno;
@@ -93,14 +103,22 @@ public class AtribuicaoPropostas extends StateAdapter{
         //Pega-se na media de um aluno e obtem se todos os alunos com a mesma media
         for(Aluno a : al){
             if(a.temPropostaConfirmada()) continue;
-            alunosComMesmaMedia = data.obtemAlunosComMedia(a.getClassificacao(), al);
+            alunosComMesmaMedia = obtemAlunosComMedia(a.getClassificacao(), al);
             atribuiPropostaAAlunosComMesmaMedia(alunosComMesmaMedia);
             alunosComMesmaMedia.clear();
         }
 
         al.forEach(System.out::println);
     }
-
+    public List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
+        List<Aluno>alunosComMesmaMedia = new ArrayList<>();
+        for(Aluno a : al){
+            if(a.getClassificacao() == classificacao){
+                alunosComMesmaMedia.add(a);
+            }
+        }
+        return alunosComMesmaMedia;
+    }
     private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
         List<Proposta> proposta = new ArrayList<>();
         ConflitoAtribuicaoAutomaticaException e = null;
@@ -161,7 +179,18 @@ public class AtribuicaoPropostas extends StateAdapter{
         if(!CSVWriter.startWriter(file)){
             return false;
         }
-        data.exportAlunosCandidaturaProposta();
+
+        for(Aluno a : data.getAlunos()) {
+            CSVWriter.writeLine(",", false, false, a.getExportAluno());
+            if(a.temCandidatura())
+                CSVWriter.writeLine(",", false, true,a.getCandidatura().getExportCandidatura());
+            if(a.temPropostaConfirmada()) {
+                CSVWriter.writeLine(",", false, true, a.getProposta().exportProposta());
+                CSVWriter.writeLine(",", false, true, a.getOrdem());
+            }
+            CSVWriter.writeLine(",", true,false);
+        }
+        //data.exportAlunosCandidaturaProposta();
         CSVWriter.closeFile();
 
         return true;

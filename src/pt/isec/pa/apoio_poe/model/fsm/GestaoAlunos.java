@@ -118,12 +118,17 @@ public class GestaoAlunos extends StateAdapter{
         if(CSVWriter.startWriter(file)){
             alunos = data.getAlunos();
             for(Aluno a: alunos){
-                CSVWriter.writeLine(",",true, a.getExportAluno());
+                CSVWriter.writeLine(",",true, false, a.getExportAluno());
             }
 
             CSVWriter.closeFile();
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getAlunosToString() {
+        return data.getAlunosToString();
     }
 }

@@ -69,28 +69,28 @@ public class ApoioContext {
         return state.addAluno(file);
     }
 
-    public String getAlunos() {
-        return data.getAlunosToString();
+    public String getAlunosToString() {
+        return state.getAlunosToString();
     }
 
     public boolean importDocentes(String file){ return state.importDocentes(file);}
 
-    public String getDocentes(){
-        return data.getDocentes();
+    public String getDocentesToString(){
+        return state.getDocentesToString();
     }
 
     public boolean importPropostas(String file) { return state.importPropostas(file);}
 
-    public String getPropostas() {
-        return data.getPropostasToString();
+    public String getPropostasToString() {
+        return state.getPropostasToString();
     }
 
     public String getPropostasWithFiltersToString(int ...filters){
-        return data.getPropostasWithFiltersToString(filters);
+        return state.getPropostasWithFiltersToString(filters);
     }
 
     public String getPropostasWithFiltersToStringAtribuicao(int ...filters){
-        return data.getPropostasWithFiltersToStringAtribuicao(filters);
+        return state.getPropostasWithFiltersToStringAtribuicao(filters);
     }
 
     public String getCandidaturas(){return data.getCandidaturasToString();}
@@ -128,23 +128,23 @@ public class ApoioContext {
     }
 
     public String obtencaoAlunosComAutoProposta(){
-        return data.obtencaoAlunosComAutoProposta();
+        return state.obtencaoAlunosComAutoProposta();
     }
 
     public String obtencaoAlunosComAutoPropostaAtribuida() {
-        return data.obtencaoAlunosComAutoPropostaAtribuida();
+        return state.obtencaoAlunosComAutoPropostaAtribuida();
     }
 
     public String obtencaoAlunosComCandidatura(){
-        return data.obtencaoAlunosComCandidatura();
+        return state.obtencaoAlunosComCandidatura();
     }
 
     public String obtencaoAlunosSemCandidatura(){
-        return data.obtencaoAlunosSemCandidatura();
+        return state.obtencaoAlunosSemCandidatura();
     }
 
     public String obtencaoAlunosSemProposta(){
-        return data.obtencaoAlunosSemProposta();
+        return state.obtencaoAlunosSemProposta();
     }
 
     public void addPropostaACandidatura(long nAluno, String idProposta) {
@@ -168,7 +168,7 @@ public class ApoioContext {
     }
 
     public String getConflitoToString() {
-        return data.getConflitoToString();
+        return state.getConflitoToString();
     }
 
     public boolean existConflict() {
@@ -188,7 +188,7 @@ public class ApoioContext {
     }
 
     public String getTodosAlunosComPropostaAtribuida() {
-        return data.getTodosAlunosComPropostaAtribuida();
+        return state.getTodosAlunosComPropostaAtribuida();
     }
 
     public ApoioManager getManager() {
@@ -204,19 +204,19 @@ public class ApoioContext {
     }
 
     public String getAlunosComPropostaEOrientador() {
-        return data.getAlunosComPropostaEOrientador();
+        return state.getAlunosComPropostaEOrientador();
     }
 
     public String getAlunosComPropostaESemOrientador() {
-        return data.getAlunosComPropostaESemOrientador();
+        return state.getAlunosComPropostaESemOrientador();
     }
 
     public String getEstatisticasPorDocente() {
-        return data.getEstatisticasPorDocente();
+        return state.getEstatisticasPorDocente();
     }
 
     public String obtencaoAlunosSemPropostaComCandidatura() {
-        return data.obtencaoAlunosSemPropostaComCandidatura();
+        return state.obtencaoAlunosSemPropostaComCandidatura();
     }
 
     public void exportaCSV(String file) {
@@ -224,11 +224,11 @@ public class ApoioContext {
     }
 
     public String getPropostasDisponiveis() {
-        return data.getPropostasDisponiveis();
+        return state.getPropostasDisponiveis();
     }
 
     public String getPropostasAtribuidas(){
-        return data.getPropostasAtribuidasToString();
+        return state.getPropostasAtribuidasToString();
     }
 
     public void removerProposta(String id) {

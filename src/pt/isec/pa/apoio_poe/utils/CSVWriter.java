@@ -26,12 +26,15 @@ public class CSVWriter {
         return true;
     }
 
+
+
     public static boolean writeLine(String delimiter, Boolean breakLine, Object... args){
         if(pw == null)
             return false;
         int index = 0;
         String line = "";
         for (Object o : args){
+
             if(o instanceof Boolean b){
                 line = line.concat((b ? "true" : "false"));
             }
@@ -92,6 +95,60 @@ public class CSVWriter {
         return true;
     }
 
+    public static boolean writeLine(String delimiter, Boolean breakLine, Boolean usePreviousDelimiter, Object... args){
+        if(pw == null)
+            return false;
+        int index = 0;
+        String line = "";
+        for (Object o : args){
+            index++;
+            if(o instanceof Boolean b){
+                line = line.concat((b ? "true" : "false"));
+            }
+            else if (o instanceof String s){
+                line = line.concat(s);
+            }
+            else if (o instanceof Double d){
+                line = line.concat(String.valueOf(d));
+            }
+            else if (o instanceof Integer i){
+                line = line.concat(String.valueOf(i));
+            }
+            else if (o instanceof Float f){
+                line = line.concat(String.valueOf(f));
+            }
+            else if (o instanceof Long l){
+                line = line.concat(String.valueOf(l));
+            }
+            else if(o instanceof List<?> array){
+                for (var a : array){
+                    if(a instanceof String s){
+                        if(delimiter != null){
+                            line = line.concat(s+ delimiter);
+                        }
+                    }
+                }
+                continue;
+            }
+            else{
+                continue;
+            }
+            if(delimiter != null && index < args.length)
+                line = line.concat(delimiter);
+        }
+
+        if (usePreviousDelimiter){
+            line = delimiter + line;
+        }
+        if(breakLine) {
+            pw.println(line);
+        }
+        else {
+            pw.print(line);
+            return true;
+        }
+        return true;
+    }
 
     public static boolean closeFile(){
         if(pw == null)

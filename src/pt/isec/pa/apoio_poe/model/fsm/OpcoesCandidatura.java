@@ -166,7 +166,7 @@ public class OpcoesCandidatura extends StateAdapter{
             return false;
         }
         for(Candidatura c : data.getCandidaturas()){
-            CSVWriter.writeLine(",",true, c.getExportCandidatura());
+            CSVWriter.writeLine(",",true,false, c.getExportCandidatura());
         }
         CSVWriter.closeFile();
         return true;
@@ -178,13 +178,23 @@ public class OpcoesCandidatura extends StateAdapter{
             Log.getInstance().putMessage("Nao existe o id inserido");
             return;
         }
-        if(!data.alunoTemCandidatura(naluno)){
+        Aluno a = data.getAluno(naluno);
+        if(a == null){
+            Log.getInstance().putMessage("Nao existe nenhum aluno com este numero inserido");
+            return;
+        }
+        if(!a.temCandidatura()){
             Log.getInstance().putMessage("O aluno " + naluno + " nao tem candidatura");
             return;
         }
-        if(!data.removePropostaACandidatura(id, naluno)){
+        if(a.getCandidatura().containsPropostaById(id)){
+            a.getCandidatura().removeProposta(id);
+        }
+        else{
             Log.getInstance().putMessage("O aluno " + naluno + " nao tem essa proposta na sua candidatura");
         }
 
     }
+
+
 }

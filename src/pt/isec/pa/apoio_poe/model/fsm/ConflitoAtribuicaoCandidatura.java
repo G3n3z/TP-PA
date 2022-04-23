@@ -24,7 +24,7 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
 
     @Override
     public boolean existConflict() {
-        return data.existConflit();
+        return data.getProposta_aluno().size() > 0;
     }
 
     @Override
@@ -52,5 +52,18 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
     @Override
     public EnumState getState() {
         return EnumState.CONFLITO_ATRIBUICAO_CANDIDATURA;
+    }
+
+    @Override
+    public String getConflitoToString() {
+        StringBuilder sb = new StringBuilder();
+        data.getProposta_aluno().forEach((k,v) -> {
+            sb.append("Proposta com id: ").append(k.getId()).append(" com conflito\n");
+            sb.append("Lista de alunos com sobreposição\n");
+            v.forEach(aluno -> {
+                sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" email: ").append(aluno.getEmail()).append("\n");
+            } );
+        });
+        return sb.toString();
     }
 }

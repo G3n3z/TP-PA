@@ -65,4 +65,39 @@ public interface IState {
     void sair();
     boolean existFileBin();
 
+    String getAlunosToString();
+
+    String getDocentesToString();
+
+    String getPropostasToString();
+
+    String getPropostasWithFiltersToString(int[] filters);
+
+    String obtencaoAlunosComAutoProposta();
+
+    String obtencaoAlunosComCandidatura();
+
+    String obtencaoAlunosSemCandidatura();
+
+    String obtencaoAlunosComAutoPropostaAtribuida();
+
+    String getTodosAlunosComPropostaAtribuida();
+
+    String obtencaoAlunosSemProposta();
+
+    String getPropostasWithFiltersToStringAtribuicao(int[] filters);
+
+    String getAlunosComPropostaEOrientador();
+
+    String getAlunosComPropostaESemOrientador();
+
+    String getEstatisticasPorDocente();
+
+    String obtencaoAlunosSemPropostaComCandidatura();
+
+    String getPropostasDisponiveis();
+
+    String getPropostasAtribuidasToString();
+
+    String getConflitoToString();
 }

@@ -140,7 +140,7 @@ public class ApoioUIText {
                     }
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 3 -> System.out.println(context.getAlunos());
+                case 3 -> System.out.println(context.getAlunosToString());
                 case 4 -> context.editarAlunos();
                 case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno"));
                 case 6 -> context.recuarFase();
@@ -151,7 +151,7 @@ public class ApoioUIText {
             option = PAInput.chooseOption(context.getName(), "Exportar Alunos para CSV", "Consultar Alunos", "Voltar","Exit");
             switch (option) {
                 case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 2 -> System.out.println(context.getAlunos());
+                case 2 -> System.out.println(context.getAlunosToString());
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
             }
@@ -186,7 +186,7 @@ public class ApoioUIText {
                     }
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 3 -> System.out.println(context.getDocentes());
+                case 3 -> System.out.println(context.getDocentesToString());
                 case 4 -> context.editarDocentes();
                 case 5 -> context.removeDocente(PAInput.readString("Email do docente: ", true));
                 case 6 -> context.recuarFase();
@@ -196,7 +196,7 @@ public class ApoioUIText {
             option = PAInput.chooseOption(context.getName(), "Exportar Docentes para CSV", "Consultar Docentes", "Voltar","Exit");
             switch (option) {
                 case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 2 -> System.out.println(context.getDocentes());
+                case 2 -> System.out.println(context.getDocentesToString());
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
             }
@@ -228,7 +228,7 @@ public class ApoioUIText {
                     }
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));
-                case 3 -> System.out.println(context.getPropostas());
+                case 3 -> System.out.println(context.getPropostasToString());
                 case 4 -> context.editarPropostas();
                 case 5 -> context.removerProposta(PAInput.readString("Id Propostas: ",true));
                 case 6 -> context.recuarFase();
@@ -237,7 +237,7 @@ public class ApoioUIText {
         }else {
             option = PAInput.chooseOption(context.getName(), "Consultar Estágio/Projeto", "Exportar para CSV", "Voltar", "Exit");
             switch (option) {
-                case 1 -> System.out.println(context.getPropostas());
+                case 1 -> System.out.println(context.getPropostasToString());
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
@@ -521,7 +521,7 @@ public class ApoioUIText {
     private void UIGestao_Orientadores() {
         switch (PAInput.chooseOption(context.getName(),"Atribuir Orientador", "Consultar Orientadores", "Alterar Docente","Eliminar Orientador","Voltar", "Exit")){
             case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
-            case 2 -> context.getAlunosComPropostaEOrientador();
+            case 2 -> System.out.println(context.getAlunosComPropostaEOrientador());
             case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 4 -> manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 5 -> context.recuarFase();

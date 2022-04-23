@@ -184,4 +184,93 @@ abstract class StateAdapter implements IState{
 
     }
 
+    @Override
+    public String getAlunosToString() {
+        return null;
+    }
+
+    @Override
+    public String getDocentesToString() {
+        return null;
+    }
+
+    @Override
+    public String getPropostasToString() {
+        return null;
+    }
+
+    @Override
+    public String getPropostasWithFiltersToString(int[] filters) {
+        return null;
+    }
+
+    @Override
+    public String obtencaoAlunosComAutoProposta() {
+        return null;
+    }
+
+    @Override
+    public String obtencaoAlunosComCandidatura() {
+        return null;
+    }
+
+    @Override
+    public String obtencaoAlunosSemCandidatura() {
+        return null;
+    }
+
+    @Override
+    public String getTodosAlunosComPropostaAtribuida() {
+        return null;
+    }
+
+    @Override
+    public String obtencaoAlunosComAutoPropostaAtribuida() {
+        return null;
+    }
+
+    @Override
+    public String obtencaoAlunosSemProposta() {
+        return null;
+    }
+
+    @Override
+    public String getPropostasWithFiltersToStringAtribuicao(int[] filters) {
+        return null;
+    }
+
+    @Override
+    public String getAlunosComPropostaEOrientador() {
+        return null;
+    }
+
+    @Override
+    public String getAlunosComPropostaESemOrientador() {
+        return null;
+    }
+
+    @Override
+    public String getEstatisticasPorDocente() {
+        return null;
+    }
+
+    @Override
+    public String obtencaoAlunosSemPropostaComCandidatura() {
+        return null;
+    }
+
+    @Override
+    public String getPropostasDisponiveis() {
+        return null;
+    }
+
+    @Override
+    public String getConflitoToString() {
+        return null;
+    }
+
+    @Override
+    public String getPropostasAtribuidasToString() {
+        return null;
+    }
 }

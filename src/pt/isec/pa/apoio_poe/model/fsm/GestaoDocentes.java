@@ -98,6 +98,8 @@ public class GestaoDocentes extends StateAdapter{
         return true;
     }
 
-
-
+    @Override
+    public String getDocentesToString() {
+        return data.getDocentesToString();
+    }
 }

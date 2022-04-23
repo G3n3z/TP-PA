@@ -1,6 +1,8 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 public class AtribuicaoOrientadores extends StateAdapter {
@@ -34,7 +36,11 @@ public class AtribuicaoOrientadores extends StateAdapter {
 
     @Override
     public void associacaoAutomaticaDeDocentesAPropostas() {
-        data.associacaoAutomaticaDeDocentesAPropostas();
+        for(Proposta proposta : data.getProposta()){
+            if(!proposta.temDocenteOrientador() && proposta.temDocenteProponente()){
+                proposta.setDocenteOrientadorDocenteProponente();
+            }
+        }
     }
 
     @Override
@@ -47,7 +53,20 @@ public class AtribuicaoOrientadores extends StateAdapter {
         if(!CSVWriter.startWriter(file)){
             return false;
         }
-        data.exportAlunosCandidaturaPropostaComOrientador();
+        for(Aluno a : data.getAlunos()) {
+            CSVWriter.writeLine(",", false, false, a.getExportAluno());
+            if(a.temCandidatura())
+                CSVWriter.writeLine(",", false, true,a.getCandidatura().getExportCandidatura());
+            if(a.temPropostaConfirmada()) {
+                CSVWriter.writeLine(",", false, true, a.getProposta().exportProposta());
+                CSVWriter.writeLine(",", false, true, a.getOrdem());
+            }
+            if(a.getProposta().temDocenteOrientador()){
+                CSVWriter.writeLine(",",false,true,a.getProposta().getOrientador().getExportDocente());
+            }
+            CSVWriter.writeLine(",", true,false);
+        }
+
         CSVWriter.closeFile();
 
         return true;

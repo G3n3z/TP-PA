@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class ConfigOptions extends  StateAdapter{
@@ -17,7 +18,7 @@ public class ConfigOptions extends  StateAdapter{
 
     @Override
     public boolean close() {
-        if(data.verificaCondicaoFechoF1()) {
+        if(verificaCondicaoFechoF1()) {
             setClose(true);
             return true;
         }
@@ -48,6 +49,23 @@ public class ConfigOptions extends  StateAdapter{
     @Override
     public boolean avancarFase() {
         changeState(EnumState.OPCOES_CANDIDATURA);
+        return true;
+    }
+    public boolean verificaCondicaoFechoF1() {
+        int pDA = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("DA")).count();
+        int pRAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("RAS")).count();
+        int pSI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("SI")).count();
+
+        int totDA = 0, totRAS = 0, totSI = 0;
+        for(Aluno a : data.getAlunos()){
+            if(a.getSiglaRamo().equals("DA"))
+                totDA++;
+            if(a.getSiglaRamo().equals("RAS"))
+                totRAS++;
+            if(a.getSiglaRamo().equals("SI"))
+                totSI++;
+        }
+        //return (propostas.size() >= alunos.size()) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
         return true;
     }
 

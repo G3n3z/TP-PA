@@ -1,8 +1,5 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
-import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
-import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
@@ -76,6 +73,9 @@ public class Data implements Serializable {
         return null;
     }
 
+    public List<Docente> getDocentes() {
+        return new ArrayList<>(docentes);
+    }
     public List<Aluno> getAlunos(){
         List<Aluno> al = new ArrayList<>();
         al.addAll(alunos);
@@ -149,7 +149,7 @@ public class Data implements Serializable {
         return docentes.add(docente);
     }
 
-    public String getDocentes() {
+    public String getDocentesToString() {
         StringBuilder sb = new StringBuilder();
         docentes.forEach(sb::append);
         return sb.toString();
@@ -200,21 +200,6 @@ public class Data implements Serializable {
          }
          return true;
     }
-    public List<String> getRamosDeProposta(String id){
-        for(Proposta p : propostas){
-            if(p.getId().equals(id)){
-                return p.getRamos();
-            }
-        }
-        return null;
-    }
-
-
-
-    //Verificar se existe alguma proposta com um certo id e numAluno
-    public boolean propostaTemAluno(long numAluno, String idProposta){
-        return propostas.stream().anyMatch(p -> p.getNumAluno() != null && p.getNumAluno() == numAluno && p.getId().equals(idProposta));
-    }
 
     //verificar se a sigla do aluno corresponde a alguma das listadas na proposta
     public boolean verificaRamoAluno(long numAluno, List<String> ramos){
@@ -237,41 +222,6 @@ public class Data implements Serializable {
         candidaturas.forEach( candidatura -> sb.append(candidatura).append('\n'));
         return sb.toString();
     }
-
-    public String obtencaoAlunosComAutoProposta(){ //Obtenção de listas de alunos: Com autoproposta.
-        StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.getPropostaNaoConfirmada() instanceof Projeto_Estagio).forEach(sb::append);
-        return sb.toString();
-    }
-
-    public String obtencaoAlunosComAutoPropostaAtribuida(){ //Obtenção de listas de alunos: Com autoproposta atribuida.
-        StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.getProposta() instanceof Projeto_Estagio).forEach(sb::append);
-        return sb.toString();
-    }
-
-    public String obtencaoAlunosComCandidatura(){  //Obtenção de listas de alunos: om candidatura já registada.
-        StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.getCandidatura() != null).forEach(sb::append);
-        return sb.toString();
-    }
-
-    public String obtencaoAlunosSemCandidatura(){ //  Obtenção de listas de alunos: Sem candidatura registada.
-        StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> a.getCandidatura() == null && (!a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())).forEach(sb::append);
-        return sb.toString();
-    }
-
-    public String obtencaoAlunosSemProposta() { //Obter listas de alunos sem propostas registadas ou confirmadas.
-        StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(a -> !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada()).forEach(sb::append);
-        return sb.toString();
-    }
-
-    public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
-
-    }
-
 
     public void changeNameAluno(long naluno,String novo_nome) {
         Aluno a = getAluno(naluno);
@@ -387,45 +337,8 @@ public class Data implements Serializable {
         }
         return p;
     }
-    public String getPropostasWithFiltersToString(int ...filters){
-        StringBuilder sb = new StringBuilder();
-        getPropostasWithFilters(filters).forEach( p -> sb.append(p).append("\n"));
-        return sb.toString();
-    }
 
-    public String getPropostasWithFiltersToStringAtribuicao(int ...filters){
-        StringBuilder sb = new StringBuilder();
-        getPropostasWithFiltersAtribuicao(filters).forEach( p -> sb.append(p).append("\n"));
-        return sb.toString();
-    }
-
-    public  Set<Proposta> getPropostasWithFilters(int ...filters){
-        Set<Proposta> propostas = new HashSet<>();
-        for (int i : filters){
-            switch (i){
-                case 1 -> propostas.addAll(getAutoPropostas());
-                case 2 -> propostas.addAll(getProjetos());
-                case 3 -> propostas.addAll(getPropostasComCandidatura());
-                case 4 -> propostas.addAll(getPropostasSemCandidatura());
-            }
-        }
-        return propostas;
-    }
-
-    public  Set<Proposta> getPropostasWithFiltersAtribuicao(int ...filters){
-        Set<Proposta> propostas = new HashSet<>();
-        for (int i : filters){
-            switch (i){
-                case 1 -> propostas.addAll(getAutoPropostas());
-                case 2 -> propostas.addAll(getProjetos());
-                case 3 -> propostas.addAll(getPropostasSemAluno());
-                case 4 -> propostas.addAll(getPropostasAtribuidas());
-            }
-        }
-        return propostas;
-    }
-
-    private HashSet<Proposta> getPropostasSemCandidatura() {
+    public HashSet<Proposta> getPropostasSemCandidatura() {
         HashSet<Proposta> propostasReturn = new HashSet<>();
         for (Proposta p : propostas){
             if(!(p instanceof Projeto_Estagio)) {
@@ -439,7 +352,7 @@ public class Data implements Serializable {
         return propostasReturn;
     }
 
-    private HashSet<Proposta> getPropostasComCandidatura() {
+    public HashSet<Proposta> getPropostasComCandidatura() {
 
         HashSet<Proposta> propostasReturn = new HashSet<>();
         for (Proposta p : propostas){
@@ -461,7 +374,7 @@ public class Data implements Serializable {
         return p.contains(Proposta.getDummy(proposta));
     }
 
-    private HashSet<Proposta> getPropostasSemAluno() { //Devolve "lista" de propostas não atribuídas a alunos
+    public HashSet<Proposta> getPropostasSemAluno() { //Devolve "lista" de propostas não atribuídas a alunos
         HashSet<Proposta> propostaReturn = new HashSet<>();
         for (Proposta p : propostas){
             if(p.getNumAluno() == null && !p.isAtribuida()){
@@ -471,7 +384,7 @@ public class Data implements Serializable {
         return propostaReturn;
     }
 
-    private HashSet<Proposta> getPropostasAtribuidas() { //Devolve "lista" de propostas atribuídas a alunos
+    public HashSet<Proposta> getPropostasAtribuidas() { //Devolve "lista" de propostas atribuídas a alunos
         HashSet<Proposta> propostaReturn = new HashSet<>();
         for (Proposta p : propostas){
             if(p.getNumAluno() != null && p.isAtribuida()){
@@ -481,31 +394,6 @@ public class Data implements Serializable {
         return propostaReturn;
     }
 
-    public List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
-        List<Aluno>alunosComMesmaMedia = new ArrayList<>();
-        for(Aluno a : al){
-            if(a.getClassificacao() == classificacao){
-                alunosComMesmaMedia.add(a);
-            }
-        }
-        return alunosComMesmaMedia;
-    }
-
-    public String getConflitoToString() {
-        StringBuilder sb = new StringBuilder();
-        proposta_aluno.forEach((k,v) -> {
-            sb.append("Proposta com id: ").append(k.getId()).append(" com conflito\n");
-            sb.append("Lista de alunos com sobreposição\n");
-            v.forEach(aluno -> {
-                sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" email: ").append(aluno.getEmail()).append("\n");
-            } );
-        });
-        return sb.toString();
-    }
-
-    public boolean existConflit() {
-        return proposta_aluno.size() > 0;
-    }
 
     public String consultaAlunosConflito() {
         StringBuilder sb = new StringBuilder();
@@ -530,30 +418,6 @@ public class Data implements Serializable {
         return proposta_aluno;
     }
 
-
-    public String getTodosAlunosComPropostaAtribuida() {
-        StringBuilder sb = new StringBuilder();
-        alunos.stream().filter(Aluno::temPropostaConfirmada).forEach(aluno -> {
-            sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" ").append(aluno.getNome())
-                    .append(" tem a proposta ").append(aluno.getProposta().getId()).append(" Ordem: ")
-                    .append(aluno.getOrdem()).append("\n");
-        });
-
-        return sb.toString();
-    }
-
-
-
-    public String qualAlunoComCandidaturaSemPropostaAssocaida() {
-        StringBuilder sb = new StringBuilder();
-        (alunos.stream().filter(Aluno::temCandidatura)).filter(aluno -> !aluno.temPropostaConfirmada()).forEach(a -> {
-            sb.append("Aluno ").append( a.getNumeroAluno()).append(" - ").append(a.getNome())
-                    .append("Tem candidatura: ").append(a.getCandidatura()).
-                    append("\nMas não tem proposta associada \n");
-        });
-        return sb.toString();
-    }
-
     public boolean atribuicaoManual(long nAluno, String idProposta) {
         Aluno a = getAluno(nAluno);
         if (a == null){
@@ -576,16 +440,6 @@ public class Data implements Serializable {
         return true;
     }
 
-    public void associacaoAutomaticaDeDocentesAPropostas() {
-        for(Proposta proposta : propostas){
-
-            if(!proposta.temDocenteOrientador() && proposta.temDocenteProponente()){
-                proposta.setDocenteOrientadorDocenteProponente();
-            }
-
-        }
-    }
-
     public void atribuiDocente(Projeto projeto) {
         for (Docente d : docentes){
             if(d.getEmail().equalsIgnoreCase(projeto.getEmailDocente())){
@@ -602,23 +456,7 @@ public class Data implements Serializable {
         return p.getTipo().equals("T1") && a.isPossibilidade();
     }
 
-    public boolean verificaCondicaoFechoF1() {
-        int pDA = (int) propostas.stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("DA")).count();
-        int pRAS = (int) propostas.stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("RAS")).count();
-        int pSI = (int) propostas.stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("SI")).count();
 
-        int totDA = 0, totRAS = 0, totSI = 0;
-        for(Aluno a : alunos){
-            if(a.getSiglaRamo().equals("DA"))
-                totDA++;
-            if(a.getSiglaRamo().equals("RAS"))
-                totRAS++;
-            if(a.getSiglaRamo().equals("SI"))
-                totSI++;
-        }
-        //return (propostas.size() >= alunos.size()) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
-        return true;
-    }
 
     public boolean setOrientador(String emailDocente, String id) {
         for (Proposta p : propostas){
@@ -647,229 +485,8 @@ public class Data implements Serializable {
         return false;
     }
 
-    public String getAlunosComPropostaEOrientador() {
-        StringBuilder sb = new StringBuilder();
-        for (Aluno a : alunos){
-            if (a.temPropostaConfirmada()){
-                if(a.getProposta().temDocenteOrientador()){
-                    sb.append("O aluno ").append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" tem a proposta ").append(a.getProposta().getId())
-                            .append(" Orientada pelo docente: ").append(a.getProposta().getEmailOrientador()).append('\n');
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    public String getAlunosComPropostaESemOrientador() {
-        StringBuilder sb = new StringBuilder();
-        for (Aluno a : alunos){
-            if (a.temPropostaConfirmada()){
-                if(!a.getProposta().temDocenteOrientador()){
-                    sb.append("O aluno ").append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" tem a proposta ").append(a.getProposta().getId())
-                            .append(" Sem Orientador\n");
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    public String getEstatisticasPorDocente() {
-        StringBuilder sb = new StringBuilder();
-        Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
-        docentes.forEach(d -> docente_proposta.put(d, new ArrayList<>()));
-        for (Proposta p : propostas){
-            if(p.temDocenteOrientador()){
-                if(docente_proposta.containsKey(p.getOrientador())){
-                    docente_proposta.get(p.getOrientador()).add(p);
-                }else {
-                    docente_proposta.put(p.getOrientador(),new ArrayList<>());
-                    docente_proposta.get(p.getOrientador()).add(p);
-                }
-
-            }
-        }
-        int min = 0, max = 0, count = 0, index = 0;
-        for(Map.Entry<Docente, ArrayList<Proposta>> set: docente_proposta.entrySet()){
-            if(index == 0){
-                max = min = set.getValue().size();
-                index++;
-            }
-            if(set.getValue().size() < min){
-                min = set.getValue().size();
-            }
-            if(set.getValue().size() > max){
-                max = set.getValue().size();
-            }
-            count += set.getValue().size();
-
-        }
-        double media = (double) count / docentes.size();
-        sb.append("O numero em media : ").append(media).append(" o minimo: ").append(min).append(" o maximo: ").append(max).append("\n");
-        docente_proposta.forEach((k,v) -> {
-            sb.append("O docente : ").append(k.getEmail()).append(" - ").append(k.getNome()).append(" é orientador de ").append(v.size())
-                    .append(" propostas").append("\n");
-        });
-        return  sb.toString();
-    }
-
-    public String obtencaoAlunosSemPropostaComCandidatura() {
-        StringBuilder sb = new StringBuilder();
-        for (Aluno a : alunos) {
-            if (a.temPropostaConfirmada() && a.temPropostaNaoConfirmada())
-                continue;
-            if (!a.temCandidatura())
-                continue;
-            List<Proposta> propostaStream = (getPropostasAPartirDeId(new ArrayList<>(), a.getCandidatura().getIdProposta()));
-            if (propostaStream.stream().anyMatch(p -> !p.isAtribuida()))
-                sb.append("Aluno: ").append(a.getNumeroAluno()).append(" - ").append(a.getNumeroAluno()).append(" com proposta(s) disponivel da sua candidatura: ");
-            for (Proposta p : propostaStream) {
-                if (!p.isAtribuida())
-                    sb.append(p.getId()).append(" ");
-            }
-
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    private void exportarAluno(Aluno a, boolean breakLine){
-        CSVWriter.writeLine(",", breakLine,a.getNumeroAluno(),a.getNome(), a.getEmail(), a.getSiglaCurso(),
-                a.getSiglaRamo(),(Double)a.getClassificacao(), a.isPossibilidade());
-    }
-    private void exportarDocente(Docente d, boolean breakLine){
-        CSVWriter.writeLine(",", breakLine, d.getNome(),d.getEmail());
-    }
-
-    private void exportarProposta(Proposta p, boolean breakLine){
-        if(p instanceof Projeto projeto)
-            CSVWriter.writeLine(",", breakLine, p.getTipo(), p.getId(), p.getRamos(),p.getTitulo(), projeto.getEmailDocente(), p.getNumAluno());
-        else
-            CSVWriter.writeLine(",", breakLine, p.getTipo(), p.getId(), p.getRamos(),p.getTitulo(), p.getNumAluno());
-    }
-    private void exportarCandidatura(Candidatura c, boolean breakLine){
-        CSVWriter.writeLine(",",breakLine, c.getNumAluno(), c.getIdProposta());
-    }
-
-
-    public boolean exportAlunos() {
-
-        for (Aluno a : alunos){
-            exportarAluno(a, true);
-        }
-        return true;
-    }
-
-    public void exportDocente() {
-        for(Docente d : docentes){
-            exportarDocente(d,true);
-        }
-    }
-
-    public void exportProposta() {
-
-        for (Proposta p: propostas){
-            exportarProposta(p,true);
-        }
-    }
-
-    public void exportCandidatura() {
-        for(Candidatura c : candidaturas){
-            exportarCandidatura(c, true);
-        }
-    }
-
-    public void exportAlunosCandidaturaProposta() {
-        for (Aluno a : alunos){
-            exportarAluno(a,false);
-            if(a.temCandidatura()){
-                exportarCandidatura(a.getCandidatura(), false);
-            }
-            if(a.temPropostaConfirmada()){
-                exportarProposta(a.getProposta(), false);
-                CSVWriter.writeLine(",",false, a.getOrdem());
-            }
-            CSVWriter.writeLine("",true);
-        }
-    }
-
-    public void exportAlunosCandidaturaPropostaComOrientador() {
-        for (Aluno a : alunos){
-            exportarAluno(a,false);
-            if(a.temCandidatura()){
-                exportarCandidatura(a.getCandidatura(), false);
-            }
-            if(a.temPropostaConfirmada()){
-                exportarProposta(a.getProposta(), false);
-                CSVWriter.writeLine(",",false, a.getOrdem());
-            }
-            else{
-                CSVWriter.writeLine(",",true);
-                continue;
-            }
-            if(a.getProposta().temDocenteOrientador()){
-                exportarDocente(a.getProposta().getOrientador(),true);
-            }else
-                CSVWriter.writeLine(",",true);
-        }
-    }
-
-
-    public String getPropostasDisponiveis() {
-        StringBuilder sb = new StringBuilder();
-        propostas.stream().filter(p -> !p.isAtribuida() && !(p instanceof Projeto_Estagio)).forEach(p -> sb.append(p).append("\n"));
-        return sb.toString();
-    }
-
-    public String getPropostasAtribuidasToString() {
-        StringBuilder sb = new StringBuilder();
-        propostas.stream().filter(Proposta::isAtribuida).forEach(p -> sb.append(p).append("\n"));
-        return sb.toString();
-    }
-
     public boolean verificaProposta(String id) {
         return propostas.stream().anyMatch(p -> p.getId().equals(id));
-    }
-
-    public void removeProposta(String id) {
-        for (Candidatura c : candidaturas){
-            if(c.containsPropostaById(id)){
-                c.removeProposta(id);
-            }
-        }
-        for (Aluno a : alunos){
-            if(a.temPropostaNaoConfirmada()){
-                if(a.getPropostaNaoConfirmada().getId().equals(id)){
-                    a.setPropostaNaoConfirmada(null);
-                }
-            }
-            if (a.temPropostaConfirmada()){
-                if (a.getProposta().getId().equals(id)){
-                    a.setProposta(null);
-                }
-            }
-        }
-        propostas.removeIf(p -> p.getId().equals(id));
-    }
-
-    public boolean alunoTemCandidatura(long nAluno){
-        Aluno a = getAluno(nAluno);
-        if(a == null)
-            return false;
-        return a.temCandidatura();
-    }
-
-    public boolean removePropostaACandidatura(String id, long nAluno) {
-        Aluno a = getAluno(nAluno);
-        if(a == null){
-            return false;
-        }
-        if(!a.temCandidatura()){
-            return false;
-        }
-        if(a.getCandidatura().containsPropostaById(id)){
-            a.getCandidatura().removeProposta(id);
-        }
-        return true;
     }
 
 
