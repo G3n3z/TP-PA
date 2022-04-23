@@ -1,5 +1,8 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
@@ -33,45 +36,53 @@ public class GestaoDocentes extends StateAdapter{
 
     @Override
     public boolean importDocentes(String file){
+        CollectionBaseException col = null;
         if(!CSVReader.startScanner(file,",")){
             Log.getInstance().putMessage("O ficheiro não existe");
             return false;
         }
-
-        String email, nome;
         Docente docente;
-        int index = 1;
-
-
+        int index = 0;
         while (CSVReader.hasNext()) {
             try {
-
-                nome = CSVReader.readString();
-                email = CSVReader.readString();
-            } catch (NoSuchElementException e) {
-                Log.getInstance().putMessage("Erro de leitura na linha: " + index + "do ficheiro: "+file);
-                if(!CSVReader.nextLine()) break;
                 index++;
-                continue;
-            }
-            if(checkDocente(index, email)){
-                docente = new Docente(email, nome);
-                if (!data.addDocente(docente)) {
-                    Log.getInstance().putMessage("Docente nao inserido no index " + index + " : email ja registado por outro docente\n");
+                if (!data.addDocente(readDocente(index))) {
+                    throw new InvalidField("Linha " + index + " -> Email já registado num docente");
                 }
             }
-            index++;
-            if(!CSVReader.nextLine()) break;
+            catch (InvalidField | IncompleteCSVLine e){
+                if(col == null){
+                    col = new CollectionBaseException();
+                }
+                col.putException(e);
+            }
+            if(!CSVReader.nextLine())
+                break;
         }
+        if(col != null)
+            throw col;
         CSVReader.closeReaders();
-
         return index != 1;
     }
+    private Docente readDocente(int index) throws IncompleteCSVLine, InvalidField {
+        String email, nome;
+        Docente docente;
+        try {
 
-    private boolean checkDocente(int index, String email) {
+            nome = CSVReader.readString();
+            email = CSVReader.readString();
+        } catch (NoSuchElementException e) {
+            throw new IncompleteCSVLine("Linha " + index +" -> Linha Incompleta");
+        }
+        checkDocente(index, email);
+        return new Docente(email, nome);
+    }
+
+
+
+    private boolean checkDocente(int index, String email) throws InvalidField {
         if(data.existeAlunoComEmail(email)){
-            Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um docente com um email ja registado por um aluno\n");
-            return false;
+            throw new InvalidField("Linha " + index + " -> Email atribuido a um aluno");
         }
         return true;
     }

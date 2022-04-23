@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
@@ -24,11 +25,22 @@ public class ApoioUIText {
                 context.begin();
                 context.gerirAlunos();
                 System.out.println("Modo Debug");
-                context.addAluno("teste.csv");
+                try {
+                    context.addAluno("teste.csv");
+                }catch (CollectionBaseException c){
+                    System.out.println(c.getMessageOfExceptions());
+                }
                 context.recuarFase();
 
                 context.gerirDocentes();
-                context.importDocentes("testeD.csv");
+
+                try{
+                    context.importDocentes("testeD.csv");
+                }
+                catch (CollectionBaseException c){
+                    System.out.println(c.getMessageOfExceptions());
+                }
+
                 context.recuarFase();
 
                 context.gerirEstagios();
@@ -134,9 +146,10 @@ public class ApoioUIText {
             option = PAInput.chooseOption(context.getName(), "Inserção Alunos Por Ficheiro CSV", "Exportar Alunos para CSV" ,"Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar","Exit");
             switch (option) {
                 case 1 -> {
-                    context.addAluno(PAInput.readString("Nome do ficheiro: ", true));
-                    while(Log.getInstance().hasNext()){
-                        System.out.println(Log.getInstance().getMessage());
+                    try {
+                        context.addAluno(PAInput.readString("Nome do ficheiro: ", true));
+                    }catch (CollectionBaseException c){
+                        System.out.println(c.getMessageOfExceptions());
                     }
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
@@ -180,10 +193,12 @@ public class ApoioUIText {
             option = PAInput.chooseOption(context.getName(), "Importar Docentes por CSV", "Exportar Docentes para CSV", "Consultar Docentes", "Editar Docente", "Remover Docente", "Voltar", "Exit");
             switch (option) {
                 case 1 -> {
-                    context.importDocentes(PAInput.readString("Nome do ficheiro: ", true));
-                    while(Log.getInstance().hasNext()){
-                        System.out.println(Log.getInstance().getMessage());
+                    try{
+                        context.importDocentes(PAInput.readString("Nome do ficheiro: ", true));
+                    }catch (CollectionBaseException c){
+                        System.out.println(c.getMessageOfExceptions());
                     }
+
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getDocentesToString());

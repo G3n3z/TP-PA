@@ -1,5 +1,7 @@
 package pt.isec.pa.apoio_poe.utils;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
+
 import java.io.*;
 import java.util.*;
 
@@ -34,7 +36,14 @@ public class CSVReader {
 
         return sc.nextBoolean();
     }
+    public static Boolean readBoolean2() throws InvalidField {
 
+        try{
+            return sc.nextBoolean();
+        }catch (InputMismatchException e){
+            throw new InvalidField("Erro de leitura no Booleano");
+        }
+    }
     public static String readString(){
         return sc.next();
     }
@@ -51,6 +60,13 @@ public class CSVReader {
     }
     public static Double readDouble(){
         return sc.nextDouble();
+    }
+    public static Double readDouble2() throws InvalidField {
+        try{
+            return sc.nextDouble();
+        }catch (InputMismatchException e){
+            throw new InvalidField("Erro na leitura do double ");
+        }
     }
 
     public static boolean nextLine(){
@@ -72,7 +88,16 @@ public class CSVReader {
         return true;
     }
     public static long readLong(){
+
         return sc.nextLong();
+
+    }
+    public static long readLong2() throws InvalidField {
+        try {
+            return sc.nextLong();
+        }catch (InputMismatchException e){
+            throw new InvalidField("Erro de leitura no long");
+        }
     }
     public static boolean hasNext(){return sc.hasNext();}
     public static void closeReaders(){

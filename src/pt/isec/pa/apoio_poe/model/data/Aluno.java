@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class Aluno extends Pessoa implements Cloneable{
 
-    private long numeroEstudante;
+    private Long numeroEstudante;
     private String siglaCurso;
     private String siglaRamo;
-    private double classificacao;
-    private boolean possibilidade;
+    private Double classificacao;
+    private Boolean possibilidade;
     private Integer ordem = null;
     private Proposta propostaNaoConfirmada;
     private Proposta proposta;
@@ -20,7 +20,7 @@ public class Aluno extends Pessoa implements Cloneable{
         this.numeroEstudante = numeroEstudante;
     }
 
-    public Aluno(String email, String nome, long numeroEstudante, String siglaCurso, String siglaRamo, double classificacao, boolean possibilidade) {
+    public Aluno(String email, String nome, Long numeroEstudante, String siglaCurso, String siglaRamo, Double classificacao, Boolean possibilidade) {
         super(email, nome);
         this.numeroEstudante = numeroEstudante;
         this.siglaCurso = siglaCurso;
