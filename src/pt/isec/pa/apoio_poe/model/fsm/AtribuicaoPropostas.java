@@ -58,9 +58,10 @@ public class AtribuicaoPropostas extends StateAdapter{
     public boolean close() {
         if((data.getAlunos().stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada)){
             setClose(true);
+            Log.getInstance().putMessage("Fase fechada corretamente\n");
             return true;
         }
-        Log.getInstance().putMessage("Nao foi possivel fechar");
+        Log.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");
         Log.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
         return false;
     }
@@ -69,7 +70,7 @@ public class AtribuicaoPropostas extends StateAdapter{
         StringBuilder sb = new StringBuilder();
         (data.getAlunos().stream().filter(Aluno::temCandidatura)).filter(aluno -> !aluno.temPropostaConfirmada()).forEach(a -> {
             sb.append("Aluno ").append( a.getNumeroAluno()).append(" - ").append(a.getNome())
-                    .append("Tem candidatura: ").append(a.getCandidatura()).
+                    .append(" - Tem candidatura: ").append(a.getCandidatura()).
                     append("\nMas não tem proposta associada \n");
         });
         return sb.toString();

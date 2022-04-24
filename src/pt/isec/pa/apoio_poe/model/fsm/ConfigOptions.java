@@ -20,6 +20,7 @@ public class ConfigOptions extends  StateAdapter{
     public boolean close() {
         if(verificaCondicaoFechoF1()) {
             setClose(true);
+            Log.getInstance().putMessage("Fase fechada corretamente\n");
             return true;
         }
         Log.getInstance().putMessage("Condições de fecho de fase não alcançadas\n" +

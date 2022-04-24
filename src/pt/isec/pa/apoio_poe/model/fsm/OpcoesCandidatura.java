@@ -25,8 +25,6 @@ public class OpcoesCandidatura extends StateAdapter{
         return true;
     }
 
-
-    //asf
     @Override
     public boolean avancarFase() {
         changeState(EnumState.ATRIBUICAO_PROPOSTAS);
@@ -57,8 +55,11 @@ public class OpcoesCandidatura extends StateAdapter{
     public boolean close() {
         if(data.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
+            Log.getInstance().putMessage("Fase fechada corretamente\n");
             return true;
         }
+        Log.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +
+                "Fase anterior ainda aberta.");
         return false;
     }
 
