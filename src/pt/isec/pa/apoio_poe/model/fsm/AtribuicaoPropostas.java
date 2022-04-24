@@ -54,6 +54,11 @@ public class AtribuicaoPropostas extends StateAdapter{
         return EnumState.ATRIBUICAO_PROPOSTAS;
     }
 
+    /**
+     *
+     * @return Booleano para dizer se correu bem o fecho ou nao
+     */
+
     @Override
     public boolean close() {
         if((data.getAlunos().stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada)){
@@ -66,15 +71,10 @@ public class AtribuicaoPropostas extends StateAdapter{
         return false;
     }
 
-    public String qualAlunoComCandidaturaSemPropostaAssocaida() {
-        StringBuilder sb = new StringBuilder();
-        (data.getAlunos().stream().filter(Aluno::temCandidatura)).filter(aluno -> !aluno.temPropostaConfirmada()).forEach(a -> {
-            sb.append("Aluno ").append( a.getNumeroAluno()).append(" - ").append(a.getNome())
-                    .append(" - Tem candidatura: ").append(a.getCandidatura()).
-                    append("\nMas não tem proposta associada \n");
-        });
-        return sb.toString();
-    }
+    /**
+     * Atribuicao automatia das propostas_estágios aos alunos
+     */
+
     @Override
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
         Aluno aluno;
@@ -90,6 +90,38 @@ public class AtribuicaoPropostas extends StateAdapter{
         }
     }
 
+    /**
+     *
+     * @param file Nome do ficheiro
+     * @return Boolean se correu bem a importação
+     */
+
+    @Override
+    public boolean exportarCSV(String file) {
+        if(!CSVWriter.startWriter(file)){
+            return false;
+        }
+
+        for(Aluno a : data.getAlunos()) {
+            CSVWriter.writeLine(",", false, false, a.getExportAluno());
+            if(a.temCandidatura())
+                CSVWriter.writeLine(",", false, true,a.getCandidatura().getExportCandidatura());
+            if(a.temPropostaConfirmada()) {
+                CSVWriter.writeLine(",", false, true, a.getProposta().exportProposta());
+                CSVWriter.writeLine(",", false, true, a.getOrdem());
+            }
+            CSVWriter.writeLine(",", true,false);
+        }
+        //data.exportAlunosCandidaturaProposta();
+        CSVWriter.closeFile();
+
+        return true;
+    }
+
+    /**
+     * Atricao automatica dos alunos que tem candidatura
+     */
+
     @Override
     public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
 
@@ -100,7 +132,7 @@ public class AtribuicaoPropostas extends StateAdapter{
                 al.add(a);
             }
         }
-        al.sort(new AlunoComparator());
+        al.sort(new AlunoComparator()); //Ordenacao dos alunos por media: MODO decrescente
         //Pega-se na media de um aluno e obtem se todos os alunos com a mesma media
         for(Aluno a : al){
             if(a.temPropostaConfirmada()) continue;
@@ -109,8 +141,17 @@ public class AtribuicaoPropostas extends StateAdapter{
             alunosComMesmaMedia.clear();
         }
 
-        al.forEach(System.out::println);
+        al.forEach(System.out::println); //TODO
     }
+
+
+    /**
+     *
+     * @param classificacao     Classificação com a qual queremos obter todos os alunos
+     * @param al                Lista de alunos a returnar com a mesma media. Podem ser 0 ou mais
+     * @return                  Retorna lista com os alunos com a mesma media
+     */
+
     public List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {
         List<Aluno>alunosComMesmaMedia = new ArrayList<>();
         for(Aluno a : al){
@@ -120,6 +161,9 @@ public class AtribuicaoPropostas extends StateAdapter{
         }
         return alunosComMesmaMedia;
     }
+
+
+
     private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
         List<Proposta> proposta = new ArrayList<>();
         ConflitoAtribuicaoAutomaticaException e = null;
@@ -175,27 +219,19 @@ public class AtribuicaoPropostas extends StateAdapter{
 
     }
 
-    @Override
-    public boolean exportarCSV(String file) {
-        if(!CSVWriter.startWriter(file)){
-            return false;
-        }
+    /**
+     *
+     * @return Retorna uma STRING com os alunos que tem candidatura sem proposta associada
+     */
 
-        for(Aluno a : data.getAlunos()) {
-            CSVWriter.writeLine(",", false, false, a.getExportAluno());
-            if(a.temCandidatura())
-                CSVWriter.writeLine(",", false, true,a.getCandidatura().getExportCandidatura());
-            if(a.temPropostaConfirmada()) {
-                CSVWriter.writeLine(",", false, true, a.getProposta().exportProposta());
-                CSVWriter.writeLine(",", false, true, a.getOrdem());
-            }
-            CSVWriter.writeLine(",", true,false);
-        }
-        //data.exportAlunosCandidaturaProposta();
-        CSVWriter.closeFile();
-
-        return true;
+    private String qualAlunoComCandidaturaSemPropostaAssocaida() {
+        StringBuilder sb = new StringBuilder();
+        (data.getAlunos().stream().filter(Aluno::temCandidatura)).filter(aluno -> !aluno.temPropostaConfirmada()).forEach(a -> {
+            sb.append("Aluno ").append( a.getNumeroAluno()).append(" - ").append(a.getNome())
+                    .append(" - Tem candidatura: ").append(a.getCandidatura()).
+                    append("\nMas não tem proposta associada \n");
+        });
+        return sb.toString();
     }
-
 
 }
