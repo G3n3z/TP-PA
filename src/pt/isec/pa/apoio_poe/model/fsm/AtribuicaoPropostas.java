@@ -10,7 +10,6 @@ import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +37,9 @@ public class AtribuicaoPropostas extends StateAdapter{
         changeState(EnumState.CONFLITO_ATRIBUICAO_CANDIDATURA);
         return true;
     }
+
+    @Override
+    public void gestaoManualAtribuicoes() { changeState(EnumState.ATRIBUICAO_MANUAL_PROPOSTAS);}
 
     @Override
     public void obtencaoListaProposta() {

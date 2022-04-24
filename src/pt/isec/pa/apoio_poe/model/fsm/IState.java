@@ -14,6 +14,7 @@ public interface IState {
     boolean gerirEstagios();
     boolean conflitoAtribuicaoCandidatura();
     boolean gerirOrientadores();
+    void gestaoManualAtribuicoes();
     void obtencaoDadosOrientador();
     void obtencaoListaProposta();
     void obtencaoListaAlunos();

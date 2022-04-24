@@ -288,5 +288,9 @@ public class ApoioContext {
     protected void setData(Data data) {
         this.data = data;
     }
+
+    public void gestaoManualAtribuicoes() {
+        state.gestaoManualAtribuicoes();
+    }
 }
 
