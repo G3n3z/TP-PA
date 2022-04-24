@@ -401,18 +401,20 @@ public class ApoioUIText {
         switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
                 "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
                 "Obtenção de listas de alunos ",
-                "Obtenção de listas de propostas de projecto estágio", "Undo", "Redo",
+                "Obtenção de listas de propostas de projecto estágio",
+                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos", "Undo", "Redo",
                 "Fechar", "Recuar Fase", "Avançar Fase", "Exit")){
             case 1 -> context.atribuicaoAutomatica();
-            case 2 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
+            case 2 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
             case 3 -> context.obtencaoListaAlunos();
             case 4 -> context.obtencaoListaProposta();
-            case 5 -> manager.undo();
-            case 6 -> manager.redo();
-            case 7 -> context.closeFase();
-            case 8 -> context.recuarFase();
-            case 9 -> context.avancarFase();
-            case 10 -> context.sair();
+            case 5 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+            case 6 -> manager.undo();
+            case 7 -> manager.redo();
+            case 8 -> context.closeFase();
+            case 9 -> context.recuarFase();
+            case 10 -> context.avancarFase();
+            case 11 -> context.sair();
         }
     }
 
@@ -438,8 +440,8 @@ public class ApoioUIText {
             switch (option) {
                 case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos
                 case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
-                case 3 -> {manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
-                case 4 -> {manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));}
+                case 3 -> manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+                case 4 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
                 case 5 -> context.obtencaoListaAlunos();
                 case 6 -> context.obtencaoListaProposta();
                 case 7 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
@@ -458,7 +460,7 @@ public class ApoioUIText {
     private void UIAtribuicao_PropostasClosed() {
         switch (PAInput.chooseOption(context.getName(),"Obtenção de listas de alunos",
                 "Obtenção de listas de propostas de projecto estágio",
-                "Recuar Fase", "Avançar Fase", "Exit")){
+                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos", "Recuar Fase", "Avançar Fase", "Exit")){
             case 1 -> context.obtencaoListaAlunos();
             case 2 -> context.obtencaoListaProposta();
             case 3 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
