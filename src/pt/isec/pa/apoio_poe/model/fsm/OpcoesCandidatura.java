@@ -110,7 +110,7 @@ public class OpcoesCandidatura extends StateAdapter{
             ex.putLine(index);
             throw ex;
         } catch (InvalidField e) {
-            e.addToBeginMessage("Na linha " + index + " -> ");
+            e.addToBeginMessage("Na linha "     + index + " -> ");
             e.addToMessage(" numero de aluno");
             e.putLine(index);
             throw e;
