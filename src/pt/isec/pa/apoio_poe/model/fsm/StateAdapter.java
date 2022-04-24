@@ -174,6 +174,9 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
+    public void gestaoManualAtribuicoes() {}
+
+    @Override
     public boolean exportarCSV(String file) {
         return false;
     }

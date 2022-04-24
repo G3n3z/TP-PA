@@ -71,6 +71,7 @@ public class ApoioUIText {
                 case GESTAO_PROPOSTAS -> UIGestao_Estagios();
                 case OPCOES_CANDIDATURA -> UIOpcoes_Candidatura();
                 case ATRIBUICAO_PROPOSTAS -> UIAtribuicao_Propostas();
+                case ATRIBUICAO_MANUAL_PROPOSTAS -> UIAtribuicaoManualPropostas();
                 case CONFLITO_ATRIBUICAO_CANDIDATURA -> UIConflito_Atribuicao_Candidatura();
                 case ATRIBUICAO_ORIENTADORES -> UIAtribuicao_Orientadores();
                 case GESTAO_ORIENTADORES -> UIGestao_Orientadores();
@@ -89,7 +90,6 @@ public class ApoioUIText {
                 default -> isfinished = true;
 
             }
-
         }
     }
 
@@ -405,22 +405,20 @@ public class ApoioUIText {
 
     private void UIAtribuicao_PropostasSemAnteriorFechada() {
         switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
-                "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                "Gestão manual de atribuições",
                 "Obtenção de listas de alunos ",
                 "Obtenção de listas de propostas de projecto estágio",
-                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos", "Undo", "Redo",
+                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos",
                 "Fechar", "Recuar Fase", "Avançar Fase", "Exit")){
             case 1 -> context.atribuicaoAutomatica();
-            case 2 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+            case 2 -> context.gestaoManualAtribuicoes();
             case 3 -> context.obtencaoListaAlunos();
             case 4 -> context.obtencaoListaProposta();
             case 5 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-            case 6 -> manager.undo();
-            case 7 -> manager.redo();
-            case 8 -> context.closeFase();
-            case 9 -> context.recuarFase();
-            case 10 -> context.avancarFase();
-            case 11 -> context.sair();
+            case 6 -> context.closeFase();
+            case 7 -> context.recuarFase();
+            case 8 -> context.avancarFase();
+            case 9 -> context.sair();
         }
     }
 
@@ -429,11 +427,10 @@ public class ApoioUIText {
         int option;
         String []options = new String[]{"Atribuição automática das autopropostas ou propostas de docentes",
                 "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
-                "Atribuição manual de propostas disponíveis aos alunos",
-                "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                "Gestão manual de atribuições",
                 "Obtenção de listas de alunos ",
                 "Obtenção de listas de propostas de projecto estágio",
-                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos", "Undo", "Redo",
+                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos",
                 "Fechar", "Recuar Fase", "Avançar Fase", "Sair"};
 
         if(exception == null)
@@ -448,17 +445,14 @@ public class ApoioUIText {
                     context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
                     exception = null;
                 }
-                case 3 -> manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
-                case 4 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
-                case 5 -> context.obtencaoListaAlunos();
-                case 6 -> context.obtencaoListaProposta();
-                case 7 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 8 -> manager.undo();
-                case 9 -> manager.redo();
-                case 10 -> context.closeFase();
-                case 11 -> context.recuarFase();
-                case 12 -> context.avancarFase();
-                case 13 -> context.sair();
+                case 3 -> context.gestaoManualAtribuicoes();
+                case 4 -> context.obtencaoListaAlunos();
+                case 5 -> context.obtencaoListaProposta();
+                case 6 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 7 -> context.closeFase();
+                case 8 -> context.recuarFase();
+                case 9 -> context.avancarFase();
+                case 10 -> context.sair();
             }
         }catch (ConflitoAtribuicaoAutomaticaException e){
             context.conflitoAtribuicaoCandidatura();
@@ -543,6 +537,31 @@ public class ApoioUIText {
             case 1 -> System.out.println(context.consultaAlunosConflito());
             case 2 -> System.out.println(context.consultaPropostaConflito());
             case 3 ->context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
+        }
+    }
+
+
+    private void UIAtribuicaoManualPropostas(){
+        if(context.getBooleanState(EnumState.OPCOES_CANDIDATURA)) {
+            switch (PAInput.chooseOption(context.getName(), "Atribuição manual de propostas disponíveis aos alunos",
+                    "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                    "Undo", "Redo", "Voltar", "Sair")) {
+                case 1 -> manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+                case 2 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+                case 3 -> manager.undo();
+                case 4 -> manager.redo();
+                case 5 -> context.recuarFase();
+                case 6 -> context.sair();
+            }
+        } else{
+            switch (PAInput.chooseOption(context.getName(),"Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
+                    "Undo", "Redo", "Voltar", "Sair")) {
+                case 1 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+                case 2 -> manager.undo();
+                case 3 -> manager.redo();
+                case 4 -> context.recuarFase();
+                case 5 -> context.sair();
+            }
         }
     }
 
