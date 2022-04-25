@@ -292,7 +292,7 @@ public class Data implements Serializable {
             return false;
         }
         for (Proposta p : propostas){
-            if(p instanceof Projeto projeto){
+            if(p instanceof Projeto projeto && projeto.getEmailDocente() != null){
                 if(projeto.getEmailDocente().equalsIgnoreCase(d.getEmail())){
                     projeto.setEmailDocente(null);
                 }

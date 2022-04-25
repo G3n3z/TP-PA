@@ -164,7 +164,7 @@ public class ApoioUIText {
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getAlunosToString());
                 case 4 -> context.editarAlunos();
-                case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno"));
+                case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno: "));
                 case 6 -> context.removeAll();
                 case 7 -> context.recuarFase();
                 case 8 -> context.sair();

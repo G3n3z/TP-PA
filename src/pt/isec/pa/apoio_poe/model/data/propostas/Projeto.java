@@ -23,7 +23,7 @@ public class Projeto extends Proposta {
     public String toString() {
         return "Projeto-> " +
                 super.toString() +
-                " Docente: " + docente +
+                "; Docente: " + docente +
                 ".\n";
     }
 
