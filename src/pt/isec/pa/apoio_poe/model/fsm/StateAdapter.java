@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 import java.io.*;
@@ -283,4 +284,16 @@ abstract class StateAdapter implements IState{
     public boolean removeAll() {
         return false;
     }
+
+    @Override
+    public void changeTitulo(String id, String novo_titulo) throws InvalidArguments {}
+
+    @Override
+    public void changeEntidade(String id, String nova_entidade) throws InvalidArguments {}
+
+    @Override
+    public void addRamo(String id, String ramo) throws InvalidArguments {}
+
+    @Override
+    public void removeRamo(String id, String ramo) throws InvalidArguments {}
 }

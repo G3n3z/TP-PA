@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.ui.text;
 import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
@@ -272,10 +273,19 @@ public class ApoioUIText {
 
     private void UIEditarPropostas() {
         //TODO
-        switch  (PAInput.chooseOption(context.getName(), "Em construção", "Recuar Fase", "Exit")) {
-            case 1 -> {}
-            case 2 -> context.recuarFase();
-            case 3 -> context.sair();
+        try {
+            switch (PAInput.chooseOption(context.getName(), "Titulo", "Entidade", "Acrescentar Ramo", "Retirar Ramo", "Recuar Fase", "Exit")) {
+                case 1 -> {
+                    context.changeTitulo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Novo titulo: ", false));
+                }
+                case 2 -> context.changeEntidade(PAInput.readString("Id Proposta: ", true), PAInput.readString("Noa entidade: ", false));
+                case 3 -> context.addRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
+                case 4 -> context.removeRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
+                case 5 -> context.recuarFase();
+                case 6 -> context.sair();
+            }
+        }catch (InvalidArguments e){
+            System.out.println(e.getExcepMessage());
         }
     }
 

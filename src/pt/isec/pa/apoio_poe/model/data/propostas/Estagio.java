@@ -40,4 +40,7 @@ public class Estagio extends Proposta {
         return new Object[]{getTipo(),getId(),getRamosToExport(),getTitulo(),entidade,getNumAluno()};
     }
 
+    public void changeEntidade(String nova_entidade) {
+        entidade = nova_entidade;
+    }
 }

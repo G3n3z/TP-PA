@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
@@ -296,6 +297,22 @@ public class ApoioContext {
 
     public boolean removeAll() {
         return state.removeAll();
+    }
+
+    public void changeTitulo(String id, String novo_titulo) throws InvalidArguments {
+        state.changeTitulo(id, novo_titulo);
+    }
+
+    public void changeEntidade(String id, String nova_entidade) throws InvalidArguments {
+        state.changeEntidade(id, nova_entidade);
+    }
+
+    public void addRamo(String id, String ramo) throws InvalidArguments {
+        state.addRamo(id, ramo);
+    }
+
+    public void removeRamo(String id, String ramo) throws InvalidArguments {
+        state.removeRamo(id, ramo);
     }
 }
 

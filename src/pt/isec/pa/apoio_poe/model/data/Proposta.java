@@ -71,7 +71,12 @@ public class    Proposta implements Serializable {
     public Long getNumAluno() {
         return numAluno;
     }
-
+    public void addRamo(String newRamo){
+        if (ramos == null){
+            ramos = new ArrayList<>();
+        }
+        ramos.add(newRamo);
+    }
     public List<String> getRamos() {
         if(ramos == null)
             return null;
@@ -151,5 +156,13 @@ public class    Proposta implements Serializable {
 
     public Object[] exportProposta() {
         return null;
+    }
+
+    public void setTitulo(String novo_titulo) {
+        titulo = novo_titulo;
+    }
+
+    public void removeRamo(String ramo) {
+        ramos.remove(ramo);
     }
 }

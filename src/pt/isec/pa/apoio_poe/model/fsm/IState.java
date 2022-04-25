@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
 
 import java.io.IOException;
 
@@ -106,4 +107,12 @@ public interface IState {
     String getConflitoToString();
 
     boolean removeAll();
+
+    void changeTitulo(String id, String novo_titulo) throws InvalidArguments;
+
+    void changeEntidade(String id, String nova_entidade) throws InvalidArguments;
+
+    void addRamo(String id, String ramo) throws InvalidArguments;
+
+    void removeRamo(String id, String ramo) throws InvalidArguments;
 }
