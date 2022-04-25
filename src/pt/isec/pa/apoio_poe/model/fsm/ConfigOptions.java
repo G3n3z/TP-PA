@@ -53,12 +53,12 @@ public class ConfigOptions extends  StateAdapter{
         return true;
     }
     public boolean verificaCondicaoFechoF1() {
-        int pDA = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("DA")).count();
-        int pRAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("RAS")).count();
-        int pSI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("SI")).count();
-        int pDA_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("DA") && proposta.getRamos().contains("SI")).count();
-        int pDA_RAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("DA") && proposta.getRamos().contains("RAS")).count();
-        int pRAS_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getRamos().contains("RAS") && proposta.getRamos().contains("SI")).count();
+        int pDA = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA")).count();
+        int pRAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null  && proposta.getRamos().contains("RAS")).count();
+        int pSI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("SI")).count();
+        int pDA_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA") && proposta.getRamos().contains("SI")).count();
+        int pDA_RAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA") && proposta.getRamos().contains("RAS")).count();
+        int pRAS_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("RAS") && proposta.getRamos().contains("SI")).count();
 
         //5da 5si 2dasi -> 7ada 6asi -> da+si+dasi 12 TODO: remocao dos alunos que ja estao atribuidos e remocao das propostas ja atribuidas
 
