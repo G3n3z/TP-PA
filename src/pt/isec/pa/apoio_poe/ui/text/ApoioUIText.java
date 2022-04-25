@@ -12,13 +12,11 @@ import pt.isec.pa.apoio_poe.utils.PAInput;
 public class ApoioUIText {
     private ApoioContext context;
     private ApoioManager manager;
-    private int flag;
     private BaseException exception = null;
     boolean isfinished = false;
     public ApoioUIText(ApoioContext context) {
         this.context = context;
         manager = context.getManager();
-        flag = 0;
     }
 
     public void start(String[] args){
@@ -65,7 +63,7 @@ public class ApoioUIText {
 
             switch (context.getState()) {
                 case CONFIG_OPTIONS -> UIConfig_Options();
-                case GESTAO_ALUNOS -> UIGestao_Clientes();
+                case GESTAO_ALUNOS -> UIGestao_Alunos();
                 case GESTAO_DOCENTES -> UIGestao_Docentes();
                 case GESTAO_PROPOSTAS -> UIGestao_Estagios();
                 case OPCOES_CANDIDATURA -> UIOpcoes_Candidatura();
@@ -149,11 +147,11 @@ public class ApoioUIText {
 
 
 
-    private void UIGestao_Clientes() {
+    private void UIGestao_Alunos() {
         int option;
         if (!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Inserção Alunos Por Ficheiro CSV", "Exportar Alunos para CSV",
-                    "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Voltar","Exit");
+                    "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Remover todos os Alunos", "Voltar","Exit");
             switch (option) {
                 case 1 -> {
                     try {
@@ -166,8 +164,9 @@ public class ApoioUIText {
                 case 3 -> System.out.println(context.getAlunosToString());
                 case 4 -> context.editarAlunos();
                 case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno"));
-                case 6 -> context.recuarFase();
-                case 7 -> context.sair();
+                case 6 -> {} //TODO: Remover todos alunos
+                case 7 -> context.recuarFase();
+                case 8 -> context.sair();
 
             }
         } else {
@@ -545,14 +544,16 @@ public class ApoioUIText {
     private void UIAtribuicaoManualPropostas(){
 
         switch (PAInput.chooseOption(context.getName(), "Atribuição manual de propostas disponíveis aos alunos",
-                    "Remoção manual de uma atribuição previamente realizada ou de todas as atribuições",
-                    "Undo", "Redo", "Voltar", "Exit")) {
+                "Remoção manual de uma atribuição previamente realizada",
+                "Remoção manual de todas as atribuições",
+                "Undo", "Redo", "Voltar", "Exit")) {
             case 1 -> manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
             case 2 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
-            case 3 -> manager.undo();
-            case 4 -> manager.redo();
-            case 5 -> context.recuarFase();
-            case 6 -> context.sair();
+            case 3 -> manager.removerTodasAtribuicoes();
+            case 4 -> manager.undo();
+            case 5 -> manager.redo();
+            case 6 -> context.recuarFase();
+            case 7 -> context.sair();
         }
     }
 
@@ -574,7 +575,7 @@ public class ApoioUIText {
                 "Eliminar Orientador", "Undo", "Redo", "Voltar", "Exit")){
             case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 2 -> System.out.println(context.getAlunosComPropostaEOrientador());
-            case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true)); //TODO: ver metodo
             case 4 -> manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 5 -> manager.undo();
             case 6 -> manager.redo();

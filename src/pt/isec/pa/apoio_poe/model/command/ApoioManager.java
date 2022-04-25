@@ -50,4 +50,8 @@ public class ApoioManager {
     public boolean removerDocente(String emailDocente, String idProposta) {
         return cm.invokeCommand(new RemoverOrientadorProposta(data, emailDocente, idProposta));
     }
+
+    public boolean removerTodasAtribuicoes() {
+        return cm.invokeCommand(new RemocaoTotalAtribuicoes(data));
+    }
 }
