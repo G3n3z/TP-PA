@@ -1,7 +1,9 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoResolvido;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
@@ -12,6 +14,7 @@ public class ApoioUIText {
     private ApoioContext context;
     private ApoioManager manager;
     private int flag;
+    private BaseException exception = null;
     boolean isfinished = false;
     public ApoioUIText(ApoioContext context) {
         this.context = context;
@@ -60,6 +63,7 @@ public class ApoioUIText {
 
         while (!isfinished) {
             System.out.println(Log.getInstance().getAllMessage());
+
             switch (context.getState()) {
                 case CONFIG_OPTIONS -> UIConfig_Options();
                 case GESTAO_ALUNOS -> UIGestao_Clientes();
@@ -85,6 +89,7 @@ public class ApoioUIText {
                 default -> isfinished = true;
 
             }
+
         }
     }
 
@@ -431,16 +436,18 @@ public class ApoioUIText {
                 "Exportar para ficheiro CSV os dados referentes aos alunos inscritos", "Undo", "Redo",
                 "Fechar", "Recuar Fase", "Avançar Fase", "Sair"};
 
-        if(flag == 0)
+        if(exception == null)
                 option = PAInput.chooseOption(context.getName(), options);
         else{
-            option = flag;
-            flag = 0;
+            option = 2;
         }
         try {
             switch (option) {
                 case 1 -> context.atribuicaoAutomatica(); // Atribuiçao automatica de projetos_estagios e projetos
-                case 2 -> context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
+                case 2 -> {
+                    context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
+                    exception = null;
+                }
                 case 3 -> manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
                 case 4 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
                 case 5 -> context.obtencaoListaAlunos();
@@ -455,6 +462,7 @@ public class ApoioUIText {
             }
         }catch (ConflitoAtribuicaoAutomaticaException e){
             context.conflitoAtribuicaoCandidatura();
+            exception = e;
         }
     }
 
@@ -517,13 +525,13 @@ public class ApoioUIText {
 
     }
 
-    private void UIConflito_Atribuicao_Candidatura() {
+    private void UIConflito_Atribuicao_Candidatura(){
         System.out.println(context.getConflitoToString());
         if(context.existConflict()){
             UIConflito_Atribuicao_Candidatura_Exist_Conflict();
         }else {
             context.recuarFase();
-            flag = 2;
+
         }
 
     }
