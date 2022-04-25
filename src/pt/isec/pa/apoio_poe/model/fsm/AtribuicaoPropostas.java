@@ -123,7 +123,7 @@ public class AtribuicaoPropostas extends StateAdapter{
      */
 
     @Override
-    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
+    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() throws ConflitoAtribuicaoAutomaticaException {
 
         List<Aluno> al = new ArrayList<>();
         List<Aluno> alunosComMesmaMedia;
@@ -164,7 +164,7 @@ public class AtribuicaoPropostas extends StateAdapter{
 
 
 
-    private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) {
+    private void atribuiPropostaAAlunosComMesmaMedia(List<Aluno> alunosComMesmaMedia) throws ConflitoAtribuicaoAutomaticaException {
         List<Proposta> proposta = new ArrayList<>();
         ConflitoAtribuicaoAutomaticaException e = null;
         int i; boolean sair = true;

@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
@@ -161,7 +162,7 @@ public class ApoioContext {
         state.atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
     }
 
-    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {
+    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() throws ConflitoAtribuicaoAutomaticaException {
         state.atribuicaoAutomaticaSemAtribuicoesDefinidas();
     }
 

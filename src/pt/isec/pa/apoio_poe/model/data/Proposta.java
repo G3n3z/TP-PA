@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Proposta implements Serializable {
+public class    Proposta implements Serializable {
     private String id;
     private String tipo;
     private List<String> ramos;

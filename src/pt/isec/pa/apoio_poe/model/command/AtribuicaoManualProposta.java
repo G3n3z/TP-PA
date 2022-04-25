@@ -1,7 +1,13 @@
 package pt.isec.pa.apoio_poe.model.command;
 
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class AtribuicaoManualProposta extends CommandAdapter{
     private long nAluno;
@@ -16,27 +22,27 @@ public class AtribuicaoManualProposta extends CommandAdapter{
 
     @Override
     public boolean execute() {
-         if(data.existePropostaSemAluno(idProposta)){
-             if(!data.verificaNumAluno(nAluno)){
-                 Log.getInstance().putMessage("Número de aluno " + nAluno + " incorreto.\n");
-                 return false;
-             }
-             if(data.verificaElegibilidade(nAluno, idProposta)){
-                 Log.getInstance().putMessage("Aluno " + nAluno + " não pode aceder a estágio.\n");
-                 return false;
-             }
-             if(!data.atribuicaoManual(nAluno, idProposta)){
-                 Log.getInstance().putMessage("Algo correu mal\n");
-                 return false;
-             }
-             return true;
-         }
-         Log.getInstance().putMessage("Proposta " + idProposta + " com id incorreto.\n");
-         return false;
+         
+        Aluno a = data.getAluno(nAluno);
+        if(a == null) {
+           Log.getInstance().putMessage("Número de aluno " + nAluno + " incorreto.\n");
+           return false;
+        }
+        Proposta p = data.getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
+        if(p instanceof Estagio && !a.isPossibilidade()) {
+           Log.getInstance().putMessage("Aluno " + nAluno + " não pode aceder a estágio.\n");
+           return false;
+        }
+        if(p.isAtribuida()){
+           Log.getInstance().putMessage("Proposta já atribuida\n");
+           return false;
+        }
+        a.setProposta(p);
+        return true;
     }
 
     @Override
     public boolean undo() {
-        return data.remocaoManual(nAluno, idProposta);
+        return new RemocaoManualProposta(data, nAluno, idProposta).execute();
     }
 }

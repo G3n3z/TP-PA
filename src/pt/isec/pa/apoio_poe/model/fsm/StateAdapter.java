@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 import java.io.*;
@@ -152,7 +153,7 @@ abstract class StateAdapter implements IState{
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {}
 
     @Override
-    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() {}
+    public void atribuicaoAutomaticaSemAtribuicoesDefinidas() throws ConflitoAtribuicaoAutomaticaException {}
 
     @Override
     public boolean existConflict() {

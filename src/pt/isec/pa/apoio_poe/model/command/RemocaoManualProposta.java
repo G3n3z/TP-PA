@@ -1,6 +1,8 @@
 package pt.isec.pa.apoio_poe.model.command;
 
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 
 public class RemocaoManualProposta extends CommandAdapter{
 
@@ -15,14 +17,17 @@ public class RemocaoManualProposta extends CommandAdapter{
 
     @Override
     public boolean execute() {
-        return data.remocaoManual(nAluno, idProposta);
+        Aluno a = data.getAluno(nAluno);
+        if(a == null)
+            return false;
+        if(a.getProposta() instanceof Projeto_Estagio)
+            return false;
+        a.removeProposta();
+        return true;
     }
 
     @Override
     public boolean undo() {
-        if(data.existePropostaSemAluno(idProposta)){
-            return data.atribuicaoManual(nAluno, idProposta);
-        }
-        return false;
+        return new AtribuicaoManualProposta(data, nAluno,idProposta).execute();
     }
 }

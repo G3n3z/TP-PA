@@ -108,6 +108,7 @@ public class ApoioUIText {
                 case 1 -> {
                     try {
                         context.load();
+                        manager = context.getManager();
                     }catch (Exception e){
                         System.out.println(e);
                     }

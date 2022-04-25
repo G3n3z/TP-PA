@@ -5,6 +5,7 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 public class Projeto_Estagio extends Proposta {
     public Projeto_Estagio(String id, String tipo, String titulo, Long numAluno) {
         super(id, tipo, titulo, numAluno);
+        setAtribuida(true);
     }
 
     @Override

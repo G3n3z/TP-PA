@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 
 import java.io.IOException;
 
@@ -44,7 +45,7 @@ public interface IState {
     void changeNameDocente(String novo_nome, String email);
     void addPropostaACandidatura(long nAluno, String idProposta);
 
-    void atribuicaoAutomaticaSemAtribuicoesDefinidas();
+    void atribuicaoAutomaticaSemAtribuicoesDefinidas() throws ConflitoAtribuicaoAutomaticaException;
 
     boolean existConflict();
 

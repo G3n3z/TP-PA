@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.data;
 
+import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
@@ -449,7 +450,9 @@ public class Data implements Serializable {
     public boolean verificaElegibilidade(long nAluno, String idProposta) {
         Aluno a = getAluno(nAluno);
         Proposta p = getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
-        return p.getTipo().equals("T1") && a.isPossibilidade();
+        if(p instanceof Estagio)
+            return a.isPossibilidade();
+        return true;
     }
 
 
