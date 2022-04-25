@@ -20,8 +20,8 @@ public class EditarAlunos extends StateAdapter{
         return true;
     }
     @Override
-    public void changeName(String novo_nome, long naluno) {
-        data.changeNameAluno(naluno, novo_nome);
+    public boolean changeName(String novo_nome, long naluno) {
+        return data.changeNameAluno(naluno, novo_nome);
     }
 
     @Override

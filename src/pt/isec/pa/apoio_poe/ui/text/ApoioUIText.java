@@ -76,7 +76,7 @@ public class ApoioUIText {
                 case OBTENCAO_DADOS_ORIENTADORES -> UIObtencaoDadosOrientadores();
                 case OBTENCAO_LISTA_PROPOSTA_ATRIBUICAO -> UIObtencaoDeListaDePropostaAtribuida();
                 case OBTENCAO_LISTA_ALUNOS_PROPOSTAS -> UIObtencaoDeListaDeAlunoAtribuicao();
-                case EDITAR_ALUNOS -> UIEditarAlunos(PAInput.readLong("Numero de Aluno"));
+                case EDITAR_ALUNOS -> UIEditarAlunos();
                 case EDITAR_CANDIDATURAS -> UIEditarCandidaturas();
                 case EDITAR_DOCENTES -> UIEditarDocentes();
                 case EDITAR_PROPOSTAS -> UIEditarPropostas();
@@ -181,17 +181,18 @@ public class ApoioUIText {
     }
 
 
-    private void UIEditarAlunos(long nAluno) {
-
+    private void UIEditarAlunos() {
         switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Curso",
                     "Ramo", "Classificacao", "Voltar", "Exit")){
-            case 1 -> context.changeNameAluno(PAInput.readString("Novo nome", false), nAluno);
-            case 2 -> context.changeCursoAluno(PAInput.readString("Novo curso", true), nAluno);
-            case 3 -> context.changeRamoAluno(PAInput.readString("Novo ramo", true), nAluno);
-            case 4 -> context.changeClassAluno(PAInput.readNumber("Nova classificaçao"), nAluno);
+            case 1 -> {
+                if(!context.changeNameAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo nome: ", false)))
+                    System.out.println("Numero de aluno invalido");
+            }
+            case 2 -> context.changeCursoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo curso: ", true));
+            case 3 -> context.changeRamoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo ramo: ", true));
+            case 4 -> context.changeClassAluno( PAInput.readLong("Numero de Aluno: "), PAInput.readNumber("Nova classificaçao: "));
             case 5 -> context.recuarFase();
             case 6 -> context.sair();
-
         }
     }
 
@@ -230,18 +231,11 @@ public class ApoioUIText {
     }
 
     private void UIEditarDocentes() {
-        String email = PAInput.readString("Email do docente: ", true);
-        boolean sair = false;
-        while (!sair) {
-            switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar", "Exit")) {
-                case 1 -> context.changeNomeDocente(PAInput.readString("Novo nome: ", false), email);
-                case 2 -> context.recuarFase();
-                case 3 -> {
-                    context.sair();
-                    sair = true;
-                }
-            }
 
+        switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar", "Exit")) {
+            case 1 -> context.changeNomeDocente(PAInput.readString("Novo nome: ", false),  PAInput.readString("Email do docente: ", true));
+            case 2 -> context.recuarFase();
+            case 3 -> context.sair();
         }
     }
 

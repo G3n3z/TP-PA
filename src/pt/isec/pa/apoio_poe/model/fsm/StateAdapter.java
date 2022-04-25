@@ -126,7 +126,7 @@ abstract class StateAdapter implements IState{
     public boolean addCandidatura(String file) throws CollectionBaseException {return false;}
 
     @Override
-    public void changeName(String novo_nome, long nAluno) {}
+    public boolean changeName(String novo_nome, long nAluno) {return false;}
 
     @Override
     public void removeAluno(long numero_de_aluno) {}

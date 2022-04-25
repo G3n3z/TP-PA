@@ -219,12 +219,13 @@ public class Data implements Serializable {
         return sb.toString();
     }
 
-    public void changeNameAluno(long naluno,String novo_nome) {
+    public boolean changeNameAluno(long naluno,String novo_nome) {
         Aluno a = getAluno(naluno);
         if(a == null){
-            return;
+            return false;
         }
         a.setNome(novo_nome);
+        return true;
     }
 
     public void removeAluno(Aluno a) {

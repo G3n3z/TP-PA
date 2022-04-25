@@ -102,23 +102,23 @@ public class ApoioContext {
         state.addCandidatura(file);
     }
 
-    public void changeNameAluno(String novo_nome, long nAluno) {
-        state.changeName(novo_nome, nAluno);
+    public boolean changeNameAluno(long nAluno, String novo_nome) {
+        return state.changeName(novo_nome, nAluno);
     }
 
     public void removeAluno(long numero_de_aluno) {
         state.removeAluno(numero_de_aluno);
     }
 
-    public void changeCursoAluno(String novo_curso, long nAluno) {
+    public void changeCursoAluno(long nAluno, String novo_curso) {
         state.changeCursoAluno(novo_curso, nAluno);
     }
 
-    public void changeRamoAluno(String novo_ramo, long nAluno) {
+    public void changeRamoAluno(long nAluno,String novo_ramo) {
         state.changeRamoAluno(novo_ramo, nAluno);
     }
 
-    public void changeClassAluno(double nova_classificacao, long nAluno) {
+    public void changeClassAluno(long nAluno, double nova_classificacao) {
         state.changeClassAluno(nova_classificacao, nAluno);
     }
 

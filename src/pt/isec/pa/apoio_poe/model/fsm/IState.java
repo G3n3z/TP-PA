@@ -31,7 +31,7 @@ public interface IState {
 
     void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
 
-    void changeName(String novo_nome, long nAluno);
+    boolean changeName(String novo_nome, long nAluno);
 
     void removeAluno(long numero_de_aluno);
 
