@@ -137,9 +137,12 @@ public class GestaoAlunos extends StateAdapter{
 
     @Override
     public void removeAluno(long numero_de_aluno) {
-        if(data.removeAluno(numero_de_aluno)){
+        Aluno a = data.getAluno(numero_de_aluno);
+        if(a == null){
             Log.getInstance().putMessage("Numero de Aluno inexistente");
+            return;
         }
+        data.removeAluno(a);
     }
 
 
@@ -162,5 +165,13 @@ public class GestaoAlunos extends StateAdapter{
     @Override
     public String getAlunosToString() {
         return data.getAlunosToString();
+    }
+
+    @Override
+    public boolean removeAll(){
+        for (Aluno a : data.getAlunos()){
+            data.removeAluno(a);
+        }
+        return true;
     }
 }

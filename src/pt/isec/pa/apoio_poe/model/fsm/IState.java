@@ -104,4 +104,6 @@ public interface IState {
     String getPropostasAtribuidasToString();
 
     String getConflitoToString();
+
+    boolean removeAll();
 }

@@ -1,6 +1,8 @@
 package pt.isec.pa.apoio_poe.model.command;
 
+import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 
 public class RemoverOrientadorProposta extends CommandAdapter{
     private String emailDocente;
@@ -14,11 +16,23 @@ public class RemoverOrientadorProposta extends CommandAdapter{
 
     @Override
     public boolean undo() {
-        return data.setOrientador(emailDocente, id);
+        return new AtribuicaoOrientadorProposta(data, emailDocente, id).execute();
     }
 
     @Override
     public boolean execute() {
-        return data.removerOrientador(emailDocente, id);
+        for (Proposta p : data.getProposta()){
+            if(p.getId().equalsIgnoreCase(id)){
+                if(!p.temDocenteOrientador())
+                    Log.getInstance().putMessage("Proposta sem docente orientador");
+                else {
+                    emailDocente = p.getEmailOrientador();
+                    p.removeOrientador();
+                }
+                return true;
+            }
+        }
+        Log.getInstance().putMessage("Proposta inexistente");
+        return false;
     }
 }

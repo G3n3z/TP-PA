@@ -284,4 +284,12 @@ public class GestaoPropostas extends StateAdapter{
     public String getPropostasToString() {
         return data.getPropostasToString();
     }
+
+    @Override
+    public boolean removeAll() {
+        for (Proposta p : data.getProposta()){
+            data.removeProposta(p.getId());
+        }
+        return true;
+    }
 }

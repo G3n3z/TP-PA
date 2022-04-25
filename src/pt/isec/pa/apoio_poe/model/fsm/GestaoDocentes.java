@@ -91,9 +91,12 @@ public class GestaoDocentes extends StateAdapter{
 
     @Override
     public void removeDocente(String email) {
-        if(data.removeDocente(email)){
+        Docente d = data.getDocente(email);
+        if(d == null){
             Log.getInstance().putMessage("Email não registado em nenhum docente");
+            return;
         }
+        data.removeDocente(d);
     }
 
 
@@ -103,7 +106,7 @@ public class GestaoDocentes extends StateAdapter{
         if(!CSVWriter.startWriter(file)){
             return false;
         }
-        List<Docente> docentes = data.getDocente();
+        List<Docente> docentes = data.getDocentes();
         for (Docente d: docentes){
             CSVWriter.writeLine(",",true,false, d.getExportDocente());
         }
@@ -114,5 +117,13 @@ public class GestaoDocentes extends StateAdapter{
     @Override
     public String getDocentesToString() {
         return data.getDocentesToString();
+    }
+
+    @Override
+    public boolean removeAll() {
+        for (Docente d : data.getDocentes()){
+            data.removeDocente(d);
+        }
+        return true;
     }
 }

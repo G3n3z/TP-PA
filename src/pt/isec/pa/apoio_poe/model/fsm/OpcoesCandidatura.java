@@ -218,5 +218,11 @@ public class OpcoesCandidatura extends StateAdapter{
 
     }
 
-
+    @Override
+    public boolean removeAll() {
+        for (Candidatura c : data.getCandidaturas()){
+            data.removeCandidatura(c.getNumAluno());
+        }
+        return true;
+    }
 }

@@ -278,4 +278,9 @@ abstract class StateAdapter implements IState{
     public String getPropostasAtribuidasToString() {
         return null;
     }
+
+    @Override
+    public boolean removeAll() {
+        return false;
+    }
 }

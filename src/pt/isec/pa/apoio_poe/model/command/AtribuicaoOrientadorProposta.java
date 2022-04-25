@@ -2,6 +2,8 @@ package pt.isec.pa.apoio_poe.model.command;
 
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 
 public class AtribuicaoOrientadorProposta extends CommandAdapter {
     private String emailDocente;
@@ -14,21 +16,29 @@ public class AtribuicaoOrientadorProposta extends CommandAdapter {
 
     @Override
     public boolean execute() {
-        if(data.verificaDocente(emailDocente)){
-            if (!data.setOrientador(emailDocente, idProposta)) {
-                Log.getInstance().putMessage("Nao existe a proposta");
-            }else {
-                return true;
+        Docente d = data.getDocente(emailDocente);
+
+        if(d == null){
+            Log.getInstance().putMessage("Nao existe o docente");
+            return false;
+        }
+        for (Proposta p : data.getProposta()){
+            if(p.getId().equalsIgnoreCase(idProposta) ){
+                if(!p.temDocenteOrientador()) {
+                    p.setDocenteOrientador(d);
+                    return true;
+                }else {
+                    Log.getInstance().putMessage("Proposta com docente Orientador");
+                    return false;
+                }
             }
         }
-        else {
-            Log.getInstance().putMessage("Nao existe o docente");
-        }
+        Log.getInstance().putMessage("Id de proposta inexistente");
         return false;
     }
 
     @Override
     public boolean undo() {
-        return data.removerOrientador(emailDocente, idProposta);
+        return new RemoverOrientadorProposta(data,emailDocente,idProposta).execute();
     }
 }

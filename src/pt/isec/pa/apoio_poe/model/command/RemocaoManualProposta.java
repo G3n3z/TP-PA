@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.command;
 
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 
 public class RemocaoManualProposta extends CommandAdapter{
@@ -20,7 +21,7 @@ public class RemocaoManualProposta extends CommandAdapter{
         Aluno a = data.getAluno(nAluno);
         if(a == null)
             return false;
-        if(a.getProposta() instanceof Projeto_Estagio)
+        if(a.getProposta() instanceof Projeto_Estagio || a.getProposta().getNumAluno() != null)
             return false;
         a.removeProposta();
         return true;

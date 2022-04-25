@@ -4,7 +4,6 @@ import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.utils.CSVWriter;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.io.Serializable;
@@ -96,7 +95,7 @@ public class Data implements Serializable {
         }
         return pr;
     }
-    private Docente getDocente(String email){
+    public Docente getDocente(String email){
         for(Docente d : docentes){
             if(d.getEmail().equalsIgnoreCase(email))
                 return d;
@@ -228,10 +227,9 @@ public class Data implements Serializable {
         a.setNome(novo_nome);
     }
 
-    public boolean removeAluno(long numero_de_aluno) {
-        Aluno a = getAluno(numero_de_aluno);
+    public void removeAluno(Aluno a) {
         if(a == null){
-            return false;
+            return;
         }
         if(a.temCandidatura()){
             candidaturas.remove(a.getCandidatura());
@@ -255,7 +253,7 @@ public class Data implements Serializable {
                 a.getProposta().setNumAluno(null);
             }
         }
-        return alunos.remove(a);
+        alunos.remove(a);
 
     }
 
@@ -287,25 +285,25 @@ public class Data implements Serializable {
         return true;
     }
 
-    public boolean removeDocente(String email) {
-        Docente d = getDocente(email);
+    public boolean removeDocente(Docente d) {
+
         if(d == null){
             return false;
         }
         for (Proposta p : propostas){
             if(p instanceof Projeto projeto){
-                if(projeto.getEmailDocente().equalsIgnoreCase(email)){
+                if(projeto.getEmailDocente().equalsIgnoreCase(d.getEmail())){
                     projeto.setEmailDocente(null);
                 }
-                if (p.getOrientador() != null && p.getOrientador().getEmail().equalsIgnoreCase(email)){
-                    p.setDocenteOrientador(null);
-                }
-                if(p.getProponente() != null && p.getProponente().getEmail().equalsIgnoreCase(email)){
-                    p.setDocenteProponente(null);
-                }
+            }
+            if (p.getOrientador() != null && p.getOrientador().getEmail().equalsIgnoreCase(d.getEmail())){
+                p.setDocenteOrientador(null);
+            }
+            if(p.getProponente() != null && p.getProponente().getEmail().equalsIgnoreCase(d.getEmail())){
+                p.setDocenteProponente(null);
             }
         }
-        return docentes.remove(Docente.getDummyDocente(email));
+        return docentes.remove(d);
     }
 
     public boolean changeNameDocente(String novo_nome, String email) {
@@ -315,6 +313,37 @@ public class Data implements Serializable {
         }
         d.setNome(novo_nome);
         return true;
+    }
+
+    public void removeProposta(String id){
+        if(!propostas.contains(Proposta.getDummy(id)))
+            return;
+
+        for (Aluno a : alunos){
+            if(a.temPropostaNaoConfirmada() && a.getPropostaNaoConfirmada().getId().equals(id)){
+                a.setPropostaNaoConfirmada(null);
+            }
+            if(a.temPropostaConfirmada() && a.getProposta().getId().equals(id)){
+                a.setProposta(null);
+            }
+        }
+        for (Candidatura c : candidaturas){
+            if(c.containsPropostaById(id)){
+                c.getIdProposta().remove(id);
+            }
+        }
+        propostas.removeIf(p -> p.getId().equals(id));
+    }
+
+    public boolean removeCandidatura(long naluno){
+        Aluno a = getAluno(naluno);
+        Candidatura c;
+        if(a == null){
+            return false;
+        }
+        c = a.getCandidatura();
+        a.limpaCandidatura();
+        return candidaturas.remove(c);
     }
 
     public HashSet<Proposta> getAutoPropostas() {
