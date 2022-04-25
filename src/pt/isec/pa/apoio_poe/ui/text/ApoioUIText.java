@@ -96,7 +96,7 @@ public class ApoioUIText {
                 try{
                     context.save();
                 }catch (Exception e){
-                    System.out.println(e.toString());
+                    System.out.println(e);
                 }
             }
             case 2 -> {}
@@ -164,7 +164,7 @@ public class ApoioUIText {
                 case 3 -> System.out.println(context.getAlunosToString());
                 case 4 -> context.editarAlunos();
                 case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno"));
-                case 6 -> {} //TODO: Remover todos alunos
+                case 6 -> context.removeAll();
                 case 7 -> context.recuarFase();
                 case 8 -> context.sair();
 
@@ -200,7 +200,7 @@ public class ApoioUIText {
         int option;
         if(!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Importar Docentes por CSV", "Exportar Docentes para CSV",
-                    "Consultar Docentes", "Editar Docente", "Remover Docente", "Voltar", "Exit");
+                    "Consultar Docentes", "Editar Docente", "Remover Docente","Remover todos os Docentes", "Voltar", "Exit");
             switch (option) {
                 case 1 -> {
                     try{
@@ -214,8 +214,9 @@ public class ApoioUIText {
                 case 3 -> System.out.println(context.getDocentesToString());
                 case 4 -> context.editarDocentes();
                 case 5 -> context.removeDocente(PAInput.readString("Email do docente: ", true));
-                case 6 -> context.recuarFase();
-                case 7 -> context.sair();
+                case 6 -> context.removeAll();
+                case 7 -> context.recuarFase();
+                case 8 -> context.sair();
             }
         }else {
             option = PAInput.chooseOption(context.getName(), "Exportar Docentes para CSV", "Consultar Docentes", "Voltar","Exit");
@@ -230,11 +231,15 @@ public class ApoioUIText {
 
     private void UIEditarDocentes() {
         String email = PAInput.readString("Email do docente: ", true);
-        while (true) {
+        boolean sair = false;
+        while (!sair) {
             switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar", "Exit")) {
                 case 1 -> context.changeNomeDocente(PAInput.readString("Novo nome: ", false), email);
                 case 2 -> context.recuarFase();
-                case 3 -> context.sair();
+                case 3 -> {
+                    context.sair();
+                    sair = true;
+                }
             }
 
         }
@@ -244,7 +249,7 @@ public class ApoioUIText {
         int option;
         if(!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos","Exportar para CSV", "Consultar Estágio/Projeto", "Editar Estágio/Projeto",
-                    "Remover Estágio/Projeto", "Voltar", "Exit");
+                    "Remover Estágio/Projeto", "Remover todos Estágios/Projetos", "Voltar", "Exit");
             switch (option) {
                 case 1 -> {
                     context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
@@ -256,8 +261,9 @@ public class ApoioUIText {
                 case 3 -> System.out.println(context.getPropostasToString());
                 case 4 -> context.editarPropostas();
                 case 5 -> context.removerProposta(PAInput.readString("Id Propostas: ",true));
-                case 6 -> context.recuarFase();
-                case 7 -> context.sair();
+                case 6 -> context.removeAll();
+                case 7 -> context.recuarFase();
+                case 8 -> context.sair();
             }
         }else {
             option = PAInput.chooseOption(context.getName(), "Consultar Estágio/Projeto", "Exportar para CSV", "Voltar", "Exit");
@@ -282,7 +288,7 @@ public class ApoioUIText {
     private void UIOpcoes_Candidatura() {
         if(!context.isClosed()) { //Se nao esta fechado
             switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
-                    "Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
+                    "Remover todas as candidaturas","Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
 
                 case 1 -> {
                     try {
@@ -294,12 +300,13 @@ public class ApoioUIText {
                 case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getCandidaturas());
                 case 4 -> context.editarCandidaturas();
-                case 5 -> context.obtencaoListaAlunos();
-                case 6 -> context.obtencaoListaProposta();
-                case 7 -> context.closeFase();
-                case 8 -> context.recuarFase();
-                case 9 -> context.avancarFase();
-                case 10 -> context.sair();
+                case 5 -> context.removeAll();
+                case 6 -> context.obtencaoListaAlunos();
+                case 7 -> context.obtencaoListaProposta();
+                case 8 -> context.closeFase();
+                case 9 -> context.recuarFase();
+                case 10 -> context.avancarFase();
+                case 11 -> context.sair();
             }
         }
         else{

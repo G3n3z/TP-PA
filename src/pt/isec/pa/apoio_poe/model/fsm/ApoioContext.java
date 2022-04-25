@@ -118,8 +118,8 @@ public class ApoioContext {
         state.changeRamoAluno(novo_ramo, nAluno);
     }
 
-    public void changeClassAluno(double nova_classificaçao, long nAluno) {
-        state.changeClassAluno(nova_classificaçao, nAluno);
+    public void changeClassAluno(double nova_classificacao, long nAluno) {
+        state.changeClassAluno(nova_classificacao, nAluno);
     }
 
     public void removeDocente(String emailDocente) {
@@ -292,6 +292,10 @@ public class ApoioContext {
 
     public void gestaoManualAtribuicoes() {
         state.gestaoManualAtribuicoes();
+    }
+
+    public boolean removeAll() {
+        return state.removeAll();
     }
 }
 
