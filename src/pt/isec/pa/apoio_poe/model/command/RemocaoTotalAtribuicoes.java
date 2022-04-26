@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.command;
 
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,24 +14,23 @@ public class RemocaoTotalAtribuicoes extends CommandAdapter {
     public RemocaoTotalAtribuicoes(Data data) {
         super(data);
         aluno_proposta = new HashMap<>();
-        for (Aluno a : data.getAlunos()){
-            if(a.getProposta() != null) {
-                aluno_proposta.put(a.getNumeroAluno(), a.getProposta().getId());
-            }
-        }
     }
 
     @Override
     public boolean execute(){
         for(Aluno a : data.getAlunos()){
-            a.removeProposta();
+            if(a.getProposta() != null && !(a.getProposta() instanceof Projeto_Estagio || a.getProposta().getNumAluno() != null)) {
+                aluno_proposta.put(a.getNumeroAluno(), a.getProposta().getId());
+                a.removeProposta();
+            }
         }
         return true;
     }
 
     @Override
     public boolean undo(){
-        aluno_proposta.forEach((nAluno, idProposta) -> new AtribuicaoManualProposta(data, nAluno, idProposta));
+        aluno_proposta.forEach((nAluno, idProposta) -> new AtribuicaoManualProposta(data, nAluno, idProposta).execute());
+        aluno_proposta.clear();
         return true;
     }
 
