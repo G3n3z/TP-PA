@@ -85,8 +85,9 @@ public class Aluno extends Pessoa implements Cloneable{
     */
 
     public void setPropostaNaoConfirmada(Proposta p) {
-        if (propostaNaoConfirmada == null)
+        if (propostaNaoConfirmada == null) {
             propostaNaoConfirmada = p;
+        }
     }
 
     public void setProposta(Proposta proposta) {
@@ -131,6 +132,10 @@ public class Aluno extends Pessoa implements Cloneable{
 
     public void setOrdem(Integer ordem) {
         this.ordem = ordem;
+    }
+
+    public void removeNaoConfirmada() {
+        this.propostaNaoConfirmada = null;
     }
 
     public void removeProposta(){

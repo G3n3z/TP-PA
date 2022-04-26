@@ -322,10 +322,10 @@ public class Data implements Serializable {
 
         for (Aluno a : alunos){
             if(a.temPropostaNaoConfirmada() && a.getPropostaNaoConfirmada().getId().equals(id)){
-                a.setPropostaNaoConfirmada(null);
+                a.removeNaoConfirmada();
             }
             if(a.temPropostaConfirmada() && a.getProposta().getId().equals(id)){
-                a.setProposta(null);
+                a.removeProposta();
             }
         }
         for (Candidatura c : candidaturas){
