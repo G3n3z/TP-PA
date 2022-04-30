@@ -221,7 +221,6 @@ public class Aluno extends Pessoa implements Cloneable{
         classificacao,possibilidade};
     }
 
-
     public void limpaCandidatura() {
         candidatura = null;
     }

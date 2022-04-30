@@ -255,24 +255,9 @@ public class GestaoPropostas extends StateAdapter{
         if(!data.verificaProposta(id)){
             MessageCenter.getInstance().putMessage("Nao existe o id inserido");
         }
-        for (Candidatura c : data.getCandidaturas()){
-            if(c.containsPropostaById(id)){
-                c.removeProposta(id);
-            }
-        }
-        for (Aluno a : data.getAlunos()){
-            if(a.temPropostaNaoConfirmada()){
-                if(a.getPropostaNaoConfirmada().getId().equals(id)){
-                    a.setPropostaNaoConfirmada(null);
-                }
-            }
-            if (a.temPropostaConfirmada()){
-                if (a.getProposta().getId().equals(id)){
-                    a.setProposta(null);
-                }
-            }
-        }
-        data.getProposta().removeIf(p -> p.getId().equals(id));
+
+        data.removeProposta(id);
+
     }
 
     @Override

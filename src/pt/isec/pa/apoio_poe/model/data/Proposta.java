@@ -105,9 +105,8 @@ public class Proposta implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Proposta))
+        if (!(o instanceof Proposta proposta))
             return false;
-        Proposta proposta = (Proposta) o;
         return getId().equals(proposta.getId());
     }
 
