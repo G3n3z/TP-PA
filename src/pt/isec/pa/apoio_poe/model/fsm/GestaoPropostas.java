@@ -168,7 +168,7 @@ public class GestaoPropostas extends StateAdapter{
     private boolean checkRamos(int index, List<String> ramos) {
         for(String ramo : ramos) {
             if (!data.existeRamos(ramo)) {
-                MessageCenter.getInstance().putMessage("Na linha " + index + " -> está a tentar inserir uma proposta com um ramo inexistente");
+                MessageCenter.getInstance().putMessage("Linha " + index + " -> está a tentar inserir uma proposta com um ramo inexistente");
                 return false;
             }
         }
@@ -178,19 +178,19 @@ public class GestaoPropostas extends StateAdapter{
     private boolean checkT1(int index, List<String> ramos, long numAluno) {
         boolean ok = checkRamos(index, ramos);
         if(!data.verificaNumAluno(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> aluno atribuído inexistente");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
             ok = false;
         }
         if(!data.verificaRamoAluno(numAluno, ramos)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
             ok = false;
         }
         if(!data.verificaPossibilidade(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> atribuição de proposta a aluno não elegível");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno não elegível");
             ok = false;
         }
         if(data.verificaJaAtribuido(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
             ok = false;
         }
         return ok;
@@ -199,7 +199,7 @@ public class GestaoPropostas extends StateAdapter{
     private boolean checkT2(int index, List<String> ramos, String docente) {
         boolean ok = checkRamos(index, ramos);
         if(!data.existeDocenteComEmail(docente)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> está a tentar inserir um docente não registado");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> está a tentar inserir um docente não registado");
             ok = false;
         }
         return ok;
@@ -208,19 +208,19 @@ public class GestaoPropostas extends StateAdapter{
     private boolean checkT2Aluno(int index, List<String> ramos, String docente, long numAluno) {
         boolean ok = checkRamos(index, ramos);
         if(!data.existeDocenteComEmail(docente)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> está a tentar inserir um docente não registado");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> está a tentar inserir um docente não registado");
             ok = false;
         }
         if(!data.verificaNumAluno(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> aluno atribuído inexistente");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
             ok = false;
         }
         if(!data.verificaRamoAluno(numAluno, ramos)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
             ok = false;
         }
         if(data.verificaJaAtribuido(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
             ok = false;
         }
         return ok;
@@ -229,11 +229,11 @@ public class GestaoPropostas extends StateAdapter{
     private boolean checkT3(int index, long numAluno) {
         boolean ok = true;
         if(!data.verificaNumAluno(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> aluno atribuído inexistente");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
             ok = false;
         }
         if(data.verificaJaAtribuido(numAluno)){
-            MessageCenter.getInstance().putMessage("Na linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
+            MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
             ok = false;
         }
         return ok;

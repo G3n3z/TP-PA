@@ -409,7 +409,7 @@ public class Data implements Serializable {
     public HashSet<Proposta> getPropostasSemAluno() { //Devolve "lista" de propostas não atribuídas a alunos
         HashSet<Proposta> propostaReturn = new HashSet<>();
         for (Proposta p : propostas){
-            if(p.getNumAluno() == null && !p.isAtribuida()){
+            if(!p.isAtribuida()){
                 propostaReturn.add(p);
             }
         }
@@ -419,7 +419,7 @@ public class Data implements Serializable {
     public HashSet<Proposta> getPropostasAtribuidas() { //Devolve "lista" de propostas atribuídas a alunos
         HashSet<Proposta> propostaReturn = new HashSet<>();
         for (Proposta p : propostas){
-            if(p.getNumAluno() != null && p.isAtribuida()){
+            if(p.isAtribuida()){
                 propostaReturn.add(p);
             }
         }
