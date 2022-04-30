@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.ExceptionsCode;
 import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
@@ -35,7 +36,7 @@ public class AtribuicaoOrientadores extends StateAdapter {
             changeState(EnumState.CONSULTA);
             return true;
         }
-        throw new StateNotClosed("Fase anterior aberta");
+        throw new StateNotClosed(ExceptionsCode.S1, "");
     }
 
     @Override

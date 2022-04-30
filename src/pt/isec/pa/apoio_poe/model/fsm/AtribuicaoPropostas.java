@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.ExceptionsCode;
 import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
@@ -70,7 +71,7 @@ public class AtribuicaoPropostas extends StateAdapter{
             return true;
         }
 
-        throw new StateNotClosed(qualAlunoComCandidaturaSemPropostaAssocaida());
+        throw new StateNotClosed(ExceptionsCode.S2,qualAlunoComCandidaturaSemPropostaAssocaida());
 
     }
 

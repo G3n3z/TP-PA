@@ -23,7 +23,7 @@ public class Editar_Docentes extends StateAdapter{
     @Override
     public void changeNameDocente(String novo_nome, String email) {
         if(!data.changeNameDocente(novo_nome, email)){
-            Log.getInstance().putMessage("Nao existe docente com este email");
+            Log.getInstance().putMessage("Nao existe docente com este email"); //TODO
         }
     }
 }

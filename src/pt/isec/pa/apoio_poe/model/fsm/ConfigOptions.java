@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.ExceptionsCode;
 import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
@@ -24,8 +25,7 @@ public class ConfigOptions extends  StateAdapter{
             Log.getInstance().putMessage("Fase fechada corretamente\n");
             return true;
         }
-        throw new StateNotClosed("Por favor verifique se o numero total de propostas é igual ou superior ao número total de alunos e se,\n" +
-                "para cada ramo, o número total de propostas é igual ou superior ao número de alunos.\n");
+        throw new StateNotClosed(ExceptionsCode.S3,"");
 
     }
 

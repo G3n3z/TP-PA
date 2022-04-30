@@ -12,10 +12,12 @@ public class CollectionBaseException extends ApoioException{
     public void putException(BaseException e){
         list.add(e);
     }
-
+/*
     public String getMessageOfExceptions() {
         StringBuilder sb = new StringBuilder();
         list.forEach(e -> sb.append(e.getExcepMessage()).append("\n"));
         return sb.toString();
     }
+
+ */
 }

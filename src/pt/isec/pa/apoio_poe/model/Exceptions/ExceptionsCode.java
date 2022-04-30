@@ -34,7 +34,19 @@ public enum ExceptionsCode {
     /**
      *
      */
-    E8
-
+    E8,
+    /**
+     * Fase anterior Aberta
+     */
+    S1,
+    /**
+     * Atribuicao de propostas nao fechada
+     */
+    S2,
+    /**
+     *  numero total de propostas é igual ou superior ao número total de alunos e se,
+     *  para cada ramo, o número total de propostas é igual ou superior ao número de alunos
+     */
+    S3
 
 }
