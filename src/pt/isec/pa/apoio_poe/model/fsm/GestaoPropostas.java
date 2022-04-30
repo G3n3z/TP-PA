@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
@@ -251,9 +252,9 @@ public class GestaoPropostas extends StateAdapter{
     }
 
     @Override
-    public void removeProposta(String id) {
+    public void removeProposta(String id) throws InvalidArguments {
         if(!data.verificaProposta(id)){
-            Log.getInstance().putMessage("Nao existe o id inserido");
+            throw new InvalidArguments("Não existe o id: " + id );
         }
         for (Candidatura c : data.getCandidaturas()){
             if(c.containsPropostaById(id)){

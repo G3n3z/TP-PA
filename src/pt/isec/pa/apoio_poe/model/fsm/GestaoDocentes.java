@@ -2,7 +2,8 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
-import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
@@ -47,10 +48,10 @@ public class GestaoDocentes extends StateAdapter{
             try {
                 index++;
                 if (!data.addDocente(readDocente(index))) {
-                    throw new InvalidField("Linha " + index + " -> Email já registado num docente");
+                    throw new InvalidCSVField("Linha " + index + " -> Email já registado num docente");
                 }
             }
-            catch (InvalidField | IncompleteCSVLine e){
+            catch (InvalidCSVField | IncompleteCSVLine e){
                 if(col == null){
                     col = new CollectionBaseException();
                 }
@@ -67,7 +68,7 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     // Le um docente numa linha de csv
-    private Docente readDocente(int index) throws IncompleteCSVLine, InvalidField {
+    private Docente readDocente(int index) throws IncompleteCSVLine, InvalidCSVField {
         String email, nome;
 
         try {
@@ -82,19 +83,18 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     // Verifica se o email esta ja atribuido a um aluno
-    private boolean checkDocente(int index, String email) throws InvalidField {
+    private boolean checkDocente(int index, String email) throws InvalidCSVField {
         if(data.existeAlunoComEmail(email)){
-            throw new InvalidField("Linha " + index + " -> Email já registado num aluno.");
+            throw new InvalidCSVField("Linha " + index + " -> Email já registado num aluno.");
         }
         return true;
     }
 
     @Override
-    public void removeDocente(String email) {
+    public void removeDocente(String email) throws InvalidArguments {
         Docente d = data.getDocente(email);
         if(d == null){
-            Log.getInstance().putMessage("Email não registado em nenhum docente");
-            return;
+            throw new InvalidArguments("Email não registado em nenhum docente");
         }
         data.removeDocente(d);
     }
