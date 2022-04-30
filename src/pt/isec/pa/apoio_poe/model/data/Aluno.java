@@ -158,13 +158,16 @@ public class Aluno extends Pessoa implements Cloneable{
                 .append("; Classificação: ").append(classificacao).append("; Possibilidade de fazer Estágio: ")
                 .append(possibilidade).append(";\n");
         if(proposta != null){
-            sb.append("Proposta: ").append(proposta);
+            sb.append("Proposta: ").append(proposta).append("Ordem: ").append(ordem).append(" ");
         }else if(propostaNaoConfirmada != null){
             sb.append("Proposta Nao Confirmada: ").append(propostaNaoConfirmada);
         }else if(candidatura != null){
             sb.append("Ainda sem proposta, mas com candidatura: ").append(candidatura).append("\n");
         }else{
             sb.append("Ainda sem proposta e sem candidatura.").append("\n");
+        }
+        if(proposta != null &&  candidatura!= null){
+            sb.append(candidatura).append("\n");
         }
 
         return sb.append("\n").toString();
