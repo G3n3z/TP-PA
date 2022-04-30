@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class    Proposta implements Serializable {
+public class Proposta implements Serializable {
     private String id;
     private String tipo;
     private List<String> ramos;
@@ -118,9 +118,11 @@ public class    Proposta implements Serializable {
     public void setDocenteOrientador(Docente d) {
         orientador = d;
     }
+
     public void setDocenteProponente(Docente d) {
         proponente = d;
     }
+
     public boolean temDocenteOrientador(){
         return orientador != null;
     }

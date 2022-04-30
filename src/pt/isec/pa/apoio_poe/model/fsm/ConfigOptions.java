@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
+import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
@@ -52,15 +52,14 @@ public class ConfigOptions extends  StateAdapter{
         changeState(EnumState.OPCOES_CANDIDATURA);
         return true;
     }
+
     public boolean verificaCondicaoFechoF1() {
         int pDA = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA")).count();
         int pRAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null  && proposta.getRamos().contains("RAS")).count();
         int pSI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("SI")).count();
-        int pDA_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA") && proposta.getRamos().contains("SI")).count();
-        int pDA_RAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA") && proposta.getRamos().contains("RAS")).count();
-        int pRAS_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("RAS") && proposta.getRamos().contains("SI")).count();
-
-        //5da 5si 2dasi -> 7ada 6asi -> da+si+dasi 12 TODO: remocao dos alunos que ja estao atribuidos e remocao das propostas ja atribuidas
+        int pDA_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && (proposta.getRamos().contains("DA") || proposta.getRamos().contains("SI"))).count();
+        int pDA_RAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && (proposta.getRamos().contains("DA") || proposta.getRamos().contains("RAS"))).count();
+        int pRAS_SI = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && (proposta.getRamos().contains("RAS") || proposta.getRamos().contains("SI"))).count();
 
         int totDA = 0, totRAS = 0, totSI = 0;
         for(Aluno a : data.getAlunos()){
@@ -71,8 +70,10 @@ public class ConfigOptions extends  StateAdapter{
             if(a.getSiglaRamo().equals("SI") && !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())
                 totSI++;
         }
-        //return (propostas.size() >= alunos.size()) && (pDA_SI >= (totDA + totSI)) && (pDA_RAS >= (totDA + totRAS)) && (pRAS_SI >= (totRAS + totSI)) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
-        return true;
+        System.out.println("pDA "+pDA+", pSI "+pSI+", pRAS "+pRAS+", pDASI "+pDA_SI+", pDARAS "+pDA_RAS+", pRASSI "+pRAS_SI);
+        System.out.println("DA "+totDA+", SI "+totSI+", RAS "+totRAS+", propostas "+data.getProposta().size()+", alunos "+data.getAlunos().size());
+        return (data.getProposta().size() >= data.getAlunos().size()) && (pDA_SI >= (totDA + totSI)) && (pDA_RAS >= (totDA + totRAS)) && (pRAS_SI >= (totRAS + totSI)) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
+        //return true;
     }
 
 }

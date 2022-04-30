@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
+import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class EditarAlunos extends StateAdapter{
@@ -30,7 +30,7 @@ public class EditarAlunos extends StateAdapter{
             MessageCenter.getInstance().putMessage("Nao existe o curso inserido");
             return;
         }
-        if(data.changeCursoAluno(novo_curso, nAluno)){
+        if(!data.changeCursoAluno(novo_curso, nAluno)){
             MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
         }
 
@@ -42,7 +42,7 @@ public class EditarAlunos extends StateAdapter{
             MessageCenter.getInstance().putMessage("Nao existe o ramo inserido");
             return;
         }
-        if(data.changeRamoAluno(novo_ramo, nAluno)){
+        if(!data.changeRamoAluno(novo_ramo, nAluno)){
             MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
         }
     }
@@ -52,7 +52,7 @@ public class EditarAlunos extends StateAdapter{
         if (nova_classificacao < 0.0 || nova_classificacao > 1.0){
             MessageCenter.getInstance().putMessage("Classificação nao se encontra entre 0.0 e 1.0");
         }
-        if(data.changeClassAluno(nova_classificacao, nAluno)){
+        if(!data.changeClassAluno(nova_classificacao, nAluno)){
             MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
         }
     }

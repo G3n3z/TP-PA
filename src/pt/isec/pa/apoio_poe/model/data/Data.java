@@ -273,7 +273,7 @@ public class Data implements Serializable {
         if(a == null){
             return false;
         }
-        a.setSiglaCurso(novo_ramo);
+        a.setSiglaRamo(novo_ramo);
         return true;
     }
 
@@ -320,6 +320,12 @@ public class Data implements Serializable {
         if(!propostas.contains(Proposta.getDummy(id)))
             return;
 
+        for (Candidatura c : candidaturas){
+            if(c.containsPropostaById(id)){
+                c.getIdProposta().remove(id);
+            }
+        }
+
         for (Aluno a : alunos){
             if(a.temPropostaNaoConfirmada() && a.getPropostaNaoConfirmada().getId().equals(id)){
                 a.removeNaoConfirmada();
@@ -327,12 +333,11 @@ public class Data implements Serializable {
             if(a.temPropostaConfirmada() && a.getProposta().getId().equals(id)){
                 a.removeProposta();
             }
-        }
-        for (Candidatura c : candidaturas){
-            if(c.containsPropostaById(id)){
-                c.getIdProposta().remove(id);
+            if(a.temCandidatura() && a.getCandidatura().getIdProposta().size() == 0){
+                this.removeCandidatura(a.getNumeroAluno());
             }
         }
+
         propostas.removeIf(p -> p.getId().equals(id));
     }
 

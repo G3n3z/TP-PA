@@ -57,13 +57,16 @@ public class AtribuicaoOrientadores extends StateAdapter {
             CSVWriter.writeLine(",", false, false, a.getExportAluno());
             if(a.temCandidatura())
                 CSVWriter.writeLine(",", false, true,a.getCandidatura().getExportCandidatura());
+
             if(a.temPropostaConfirmada()) {
                 CSVWriter.writeLine(",", false, true, a.getProposta().exportProposta());
                 CSVWriter.writeLine(",", false, true, a.getOrdem());
+
+                if (a.getProposta().temDocenteOrientador()) {
+                    CSVWriter.writeLine(",", false, true, a.getProposta().getOrientador().getExportDocente());
+                }
             }
-            if(a.getProposta().temDocenteOrientador()){
-                CSVWriter.writeLine(",",false,true,a.getProposta().getOrientador().getExportDocente());
-            }
+
             CSVWriter.writeLine(",", true,false);
         }
 

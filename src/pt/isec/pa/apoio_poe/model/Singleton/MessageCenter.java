@@ -1,4 +1,4 @@
-package pt.isec.pa.apoio_poe.model.LogSingleton;
+package pt.isec.pa.apoio_poe.model.Singleton;
 
 import java.util.ArrayList;
 

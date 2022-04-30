@@ -3,7 +3,7 @@ package pt.isec.pa.apoio_poe.ui.text;
 import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
-import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
+import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
@@ -194,6 +194,7 @@ public class ApoioUIText {
             case 2 -> context.changeCursoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo curso: ", true));
             case 3 -> context.changeRamoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo ramo: ", true));
             case 4 -> context.changeClassAluno( PAInput.readLong("Numero de Aluno: "), PAInput.readNumber("Nova classificaçao: "));
+                // TODO: changePossibilidade
             case 5 -> context.recuarFase();
             case 6 -> context.sair();
         }
@@ -236,7 +237,7 @@ public class ApoioUIText {
     private void UIEditarDocentes() {
 
         switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar", "Exit")) {
-            case 1 -> context.changeNomeDocente(PAInput.readString("Novo nome: ", false),  PAInput.readString("Email do docente: ", true));
+            case 1 -> context.changeNomeDocente(PAInput.readString("Email do docente: ", true), PAInput.readString("Novo nome: ", false));
             case 2 -> context.recuarFase();
             case 3 -> context.sair();
         }
@@ -263,10 +264,10 @@ public class ApoioUIText {
                 case 8 -> context.sair();
             }
         }else {
-            option = PAInput.chooseOption(context.getName(), "Consultar Estágio/Projeto", "Exportar para CSV", "Voltar", "Exit");
+            option = PAInput.chooseOption(context.getName(), "Exportar para CSV", "Consultar Estágio/Projeto", "Voltar", "Exit");
             switch (option) {
-                case 1 -> System.out.println(context.getPropostasToString());
-                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 2 -> System.out.println(context.getPropostasToString());
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
             }

@@ -126,7 +126,7 @@ public class ApoioContext {
         state.removeDocente(emailDocente);
     }
 
-    public void changeNomeDocente(String novo_nome, String email) {
+    public void changeNomeDocente(String email, String novo_nome) {
         state.changeNameDocente(novo_nome, email);
     }
 
