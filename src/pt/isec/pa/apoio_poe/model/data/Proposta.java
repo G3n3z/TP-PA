@@ -56,9 +56,9 @@ public class Proposta implements Serializable {
     public String toString() {
         return "Id: " + id +
                 "; Tipo: " + tipo +
-                "; Ramos: " + ramos +
+                "; Ramos: " + (ramos == null ? "n/a" : ramos) +
                 "; Titulo: " + titulo +
-                "; Aluno associado: " + numAluno;
+                "; Aluno associado: " + (numAluno == null ? "n/a" :  numAluno);
     }
     public String getId() {
         return id;

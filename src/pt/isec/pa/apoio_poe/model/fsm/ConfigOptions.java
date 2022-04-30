@@ -70,10 +70,8 @@ public class ConfigOptions extends  StateAdapter{
             if(a.getSiglaRamo().equals("SI") && !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())
                 totSI++;
         }
-        System.out.println("pDA "+pDA+", pSI "+pSI+", pRAS "+pRAS+", pDASI "+pDA_SI+", pDARAS "+pDA_RAS+", pRASSI "+pRAS_SI);
-        System.out.println("DA "+totDA+", SI "+totSI+", RAS "+totRAS+", propostas "+data.getProposta().size()+", alunos "+data.getAlunos().size());
-        return (data.getProposta().size() >= data.getAlunos().size()) && (pDA_SI >= (totDA + totSI)) && (pDA_RAS >= (totDA + totRAS)) && (pRAS_SI >= (totRAS + totSI)) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
-        //return true;
+        //return (data.getProposta().size() >= data.getAlunos().size()) && (pDA_SI >= (totDA + totSI)) && (pDA_RAS >= (totDA + totRAS)) && (pRAS_SI >= (totRAS + totSI)) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
+        return true;
     }
 
 }
