@@ -2,47 +2,85 @@ package pt.isec.pa.apoio_poe.model.Exceptions;
 
 public enum ExceptionsCode {
     /**
-     * Erro de numero de aluno inexistente
+     * Campo incorreto
      */
-    E1,
+    E0,
 
     /**
-     * Erro de email de docente inexistente
+     * Numero de aluno inexistente
      */
-    E2,
+    I1,
 
     /**
-     *
+     * Email de docente inexistente
      */
-    E3,
+    I2,
+
     /**
-     *
+     * Curso insexistente
      */
-    E4,
+    I3,
+
     /**
-     *
+     * Classificação não comprendida entre 0.0 e 1.0
      */
-    E5,
+    I4,
+
     /**
-     *
+     * Ramo inexistente
      */
-    E6,
+    I5,
+
     /**
-     *
+     * Tentativa de introdução de uma entidade em proposta não estágio
      */
-    E7,
+    I6,
+
     /**
-     *
+     * Proposta inexistente
      */
-    E8,
+    I7,
+
+    /**
+     * Proposta ja contém ramo inserido
+     */
+    I8,
+
+    /**
+     * Numero de aluno já registado
+     */
+    I9,
+
+    /**
+     * Email já registado
+     */
+    I10,
+
+    /**
+     * Linha incompleta
+     */
+    I11,
+
+    /**
+     * Candidatura inexistente
+     */
+    O1,
+
+    /**
+     * Proposta inexistente em candidatura
+     */
+    O2,
+
     /**
      * Fase anterior Aberta
      */
     S1,
+
     /**
      * Atribuicao de propostas nao fechada
      */
     S2,
+
     /**
      *  numero total de propostas é igual ou superior ao número total de alunos e se,
      *  para cada ramo, o número total de propostas é igual ou superior ao número de alunos
