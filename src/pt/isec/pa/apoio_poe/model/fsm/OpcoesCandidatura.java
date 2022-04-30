@@ -3,7 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
@@ -55,10 +55,10 @@ public class OpcoesCandidatura extends StateAdapter{
     public boolean close() {
         if(data.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
-            Log.getInstance().putMessage("Fase fechada corretamente\n");
+            MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
             return true;
         }
-        Log.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +
+        MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +
                 "Fase anterior ainda aberta.");
         return false;
     }
@@ -169,11 +169,11 @@ public class OpcoesCandidatura extends StateAdapter{
     public void addPropostaACandidatura(long nAluno, String idProposta) {
         Aluno a = data.getAluno(nAluno);
         if(a == null){
-            Log.getInstance().putMessage("Numero de aluno não existente");
+            MessageCenter.getInstance().putMessage("Numero de aluno não existente");
             return;
         }
         if(!a.temCandidatura()){
-            Log.getInstance().putMessage("O aluno não tem candidatura");
+            MessageCenter.getInstance().putMessage("O aluno não tem candidatura");
             return;
         }
         if(data.existePropostaSemAluno(idProposta)){
@@ -197,23 +197,23 @@ public class OpcoesCandidatura extends StateAdapter{
     @Override
     public void removePropostaACandidatura(String id, long naluno) {
         if(!data.verificaProposta(id)){
-            Log.getInstance().putMessage("Nao existe o id inserido");
+            MessageCenter.getInstance().putMessage("Nao existe o id inserido");
             return;
         }
         Aluno a = data.getAluno(naluno);
         if(a == null){
-            Log.getInstance().putMessage("Nao existe nenhum aluno com este numero inserido");
+            MessageCenter.getInstance().putMessage("Nao existe nenhum aluno com este numero inserido");
             return;
         }
         if(!a.temCandidatura()){
-            Log.getInstance().putMessage("O aluno " + naluno + " nao tem candidatura");
+            MessageCenter.getInstance().putMessage("O aluno " + naluno + " nao tem candidatura");
             return;
         }
         if(a.getCandidatura().containsPropostaById(id)){
             a.getCandidatura().removeProposta(id);
         }
         else{
-            Log.getInstance().putMessage("O aluno " + naluno + " nao tem essa proposta na sua candidatura");
+            MessageCenter.getInstance().putMessage("O aluno " + naluno + " nao tem essa proposta na sua candidatura");
         }
 
     }

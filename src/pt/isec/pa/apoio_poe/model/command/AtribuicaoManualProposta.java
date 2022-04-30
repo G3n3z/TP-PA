@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.command;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
@@ -25,16 +25,16 @@ public class AtribuicaoManualProposta extends CommandAdapter{
          
         Aluno a = data.getAluno(nAluno);
         if(a == null) {
-           Log.getInstance().putMessage("Número de aluno " + nAluno + " incorreto.\n");
+           MessageCenter.getInstance().putMessage("Número de aluno " + nAluno + " incorreto.\n");
            return false;
         }
         Proposta p = data.getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(idProposta)).get(0);
         if(p instanceof Estagio && !a.isPossibilidade()) {
-           Log.getInstance().putMessage("Aluno " + nAluno + " não pode aceder a estágio.\n");
+           MessageCenter.getInstance().putMessage("Aluno " + nAluno + " não pode aceder a estágio.\n");
            return false;
         }
         if(p.isAtribuida()){
-           Log.getInstance().putMessage("Proposta já atribuida\n");
+           MessageCenter.getInstance().putMessage("Proposta já atribuida\n");
            return false;
         }
         a.setProposta(p);

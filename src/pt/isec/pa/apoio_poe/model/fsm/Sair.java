@@ -16,6 +16,7 @@ public class Sair extends StateAdapter{
     public EnumState getState() {
         return EnumState.SAIR;
     }
+
     @Override
     public boolean save() throws IOException {
         try {
@@ -25,6 +26,12 @@ public class Sair extends StateAdapter{
         }catch (Exception e){
             throw e;
         }
+        return true;
+    }
+
+    @Override
+    public boolean recuarFase() {
+        changeState(EnumState.LOAD_STATE);
         return true;
     }
 }

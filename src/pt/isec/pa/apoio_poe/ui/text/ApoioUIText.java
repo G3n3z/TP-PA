@@ -4,7 +4,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
@@ -21,46 +21,10 @@ public class ApoioUIText {
     }
 
     public void start(String[] args){
-        if(!context.existsFileBin())
-            if(args.length != 0){
-                context.begin();
-                context.gerirAlunos();
-                System.out.println("Modo Debug");
-                try {
-                    context.addAluno("teste.csv");
-                }catch (CollectionBaseException c){
-                    System.out.println(c.getMessageOfExceptions());
-                }
-                context.recuarFase();
-
-                context.gerirDocentes();
-
-                try{
-                    context.importDocentes("testeD.csv");
-                }
-                catch (CollectionBaseException c){
-                    System.out.println(c.getMessageOfExceptions());
-                }
-
-                context.recuarFase();
-
-                context.gerirEstagios();
-                context.importPropostas("testeP.csv");
-                context.recuarFase();
-
-                context.avancarFase();
-                try {
-                    context.addCandidatura("cand.csv");
-                }catch (CollectionBaseException c){
-                    System.out.println(c.getMessageOfExceptions());
-                }
-                context.recuarFase();
-            }
-
 
 
         while (!isfinished) {
-            System.out.println(Log.getInstance().getAllMessage());
+            System.out.println(MessageCenter.getInstance().getAllMessage());
 
             switch (context.getState()) {
                 case CONFIG_OPTIONS -> UIConfig_Options();
@@ -107,19 +71,57 @@ public class ApoioUIText {
 
     private void UILoadState() {
         if(context.existsFileBin()) {
-            switch (PAInput.chooseOption("Pretende carregar o ultimo estado da Aplicação?", "Sim", "Nao")) {
-                case 1 -> {
+            switch (PAInput.chooseOption("Menu", "Começar", "Carregar Ficheiro em Memoria", "Sair")) {
+                case 1 -> context.begin();
+                case 2 -> {
                     try {
                         context.load();
                         manager = context.getManager();
                     }catch (Exception e){
-                        System.out.println(e);
+                        System.out.println("Nao foi possivel carregar o ficheiro");
                     }
+                    context.begin();
                 }
-                case 2 -> context.begin();
+                case 3 -> isfinished = true;
             }
         }
-        context.begin();
+        else {
+            switch (PAInput.chooseOption("Menu", "Começar", "Sair", "Modo Debug")) {
+                case 1 -> context.begin();
+                case 2 -> isfinished = true;
+                case 3 -> {
+                    context.begin();
+                    context.gerirAlunos();
+                    System.out.println("Modo Debug");
+                    try {
+                        context.addAluno("teste.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+                    context.recuarFase();
+
+                    context.gerirDocentes();
+
+                    try {
+                        context.importDocentes("testeD.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+
+                    context.recuarFase();
+                    context.gerirEstagios();
+                    context.importPropostas("testeP.csv");
+                    context.recuarFase();
+                    context.avancarFase();
+                    try {
+                        context.addCandidatura("testeC.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+                    context.recuarFase();
+                }
+            }
+        }
     }
 
 
@@ -248,8 +250,8 @@ public class ApoioUIText {
             switch (option) {
                 case 1 -> {
                     context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
-                    while(Log.getInstance().hasNext()){
-                        System.out.println(Log.getInstance().getMessage());
+                    while(MessageCenter.getInstance().hasNext()){
+                        System.out.println(MessageCenter.getInstance().getMessage());
                     }
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));
@@ -544,10 +546,11 @@ public class ApoioUIText {
 
     private void UIConflito_Atribuicao_Candidatura_Exist_Conflict() {
         switch (PAInput.chooseOption("Conflito na Atribuição de Candidatuas","Consultar Dados de Alunos em conflito",
-                "Consultar Dados da Proposta", "Atribuir a Aluno")){
+                "Consultar Dados da Proposta", "Atribuir a Aluno", "Exit")){
             case 1 -> System.out.println(context.consultaAlunosConflito());
             case 2 -> System.out.println(context.consultaPropostaConflito());
-            case 3 ->context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
+            case 3 -> context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
+            case 4 -> context.sair();
         }
     }
 

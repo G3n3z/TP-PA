@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class Editar_Docentes extends StateAdapter{
@@ -23,7 +23,7 @@ public class Editar_Docentes extends StateAdapter{
     @Override
     public void changeNameDocente(String novo_nome, String email) {
         if(!data.changeNameDocente(novo_nome, email)){
-            Log.getInstance().putMessage("Nao existe docente com este email");
+            MessageCenter.getInstance().putMessage("Nao existe docente com este email");
         }
     }
 }

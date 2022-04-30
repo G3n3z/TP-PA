@@ -3,7 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
@@ -38,7 +38,7 @@ public class GestaoDocentes extends StateAdapter{
     public boolean importDocentes(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
         if(!CSVReader.startScanner(file,",")){
-            Log.getInstance().putMessage("O ficheiro não existe");
+            MessageCenter.getInstance().putMessage("O ficheiro não existe");
             return false;
         }
         Docente docente;
@@ -93,7 +93,7 @@ public class GestaoDocentes extends StateAdapter{
     public void removeDocente(String email) {
         Docente d = data.getDocente(email);
         if(d == null){
-            Log.getInstance().putMessage("Email não registado em nenhum docente");
+            MessageCenter.getInstance().putMessage("Email não registado em nenhum docente");
             return;
         }
         data.removeDocente(d);

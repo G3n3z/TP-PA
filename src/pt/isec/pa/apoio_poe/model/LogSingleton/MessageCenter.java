@@ -2,17 +2,17 @@ package pt.isec.pa.apoio_poe.model.LogSingleton;
 
 import java.util.ArrayList;
 
-public class Log {
-    private static Log instance;
+public class MessageCenter {
+    private static MessageCenter instance;
     ArrayList<String> messages;
 
-    private Log() {
+    private MessageCenter() {
         messages = new ArrayList<>();
     }
 
-    public static Log getInstance() {
+    public static MessageCenter getInstance() {
         if (instance == null) {
-            instance = new Log();
+            instance = new MessageCenter();
             return instance;
         }
         return instance;

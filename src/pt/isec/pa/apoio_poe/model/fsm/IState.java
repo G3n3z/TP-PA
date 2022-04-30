@@ -68,7 +68,18 @@ public interface IState {
     boolean save() throws IOException;
 
     void sair();
+
     boolean existFileBin();
+
+    boolean removeAll();
+
+    void changeTitulo(String id, String novo_titulo) throws InvalidArguments;
+
+    void changeEntidade(String id, String nova_entidade) throws InvalidArguments;
+
+    void addRamo(String id, String ramo) throws InvalidArguments;
+
+    void removeRamo(String id, String ramo) throws InvalidArguments;
 
     String getAlunosToString();
 
@@ -106,13 +117,5 @@ public interface IState {
 
     String getConflitoToString();
 
-    boolean removeAll();
 
-    void changeTitulo(String id, String novo_titulo) throws InvalidArguments;
-
-    void changeEntidade(String id, String nova_entidade) throws InvalidArguments;
-
-    void addRamo(String id, String ramo) throws InvalidArguments;
-
-    void removeRamo(String id, String ramo) throws InvalidArguments;
 }

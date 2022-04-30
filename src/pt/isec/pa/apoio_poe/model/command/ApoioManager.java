@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.command;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 public class ApoioManager {
@@ -18,7 +18,7 @@ public class ApoioManager {
     public boolean undo() {
         if(hasUndo())
             return cm.undo();
-        Log.getInstance().putMessage("Não é possivel fazer undo");
+        MessageCenter.getInstance().putMessage("Não é possivel fazer undo");
         return false;
     }
 
@@ -28,7 +28,7 @@ public class ApoioManager {
     public boolean redo() {
         if (hasRedo())
             return cm.redo();
-        Log.getInstance().putMessage("Não é possivel fazer redo");
+        MessageCenter.getInstance().putMessage("Não é possivel fazer redo");
         return false;
     }
 

@@ -3,7 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
@@ -38,7 +38,7 @@ public class GestaoAlunos extends StateAdapter{
     @Override
     public boolean addAluno(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file, ",")){
-            Log.getInstance().putMessage("O ficheiro não existe\n");
+            MessageCenter.getInstance().putMessage("O ficheiro não existe\n");
             return false;
         }
         CollectionBaseException col = null;
@@ -102,27 +102,27 @@ public class GestaoAlunos extends StateAdapter{
         boolean ok = true;
         StringBuilder sb = new StringBuilder();
         if(data.existeDocenteComEmail(email)){
-            //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um docente registado");
+            //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um docente registado");
             sb.append("Email já registado num docente. ");
             ok = false;
         }
         if(data.existeAlunoComEmail(email)){
-            //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um aluno registado");
+            //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um aluno registado");
             sb.append("Email já registado num aluno. ");
             ok = false;
         }
         if (!data.existeCursos(curso)){
-            //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um curso inexistente");
+            //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um curso inexistente");
             ok = false;
             sb.append("O curso não existe. ");
         }
         if (!data.existeRamos(ramo)){
-            //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um ramo inexistente");
+            //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um ramo inexistente");
             ok =  false;
             sb.append("O ramo não existe. ");
         }
         if(classificacao < 0 || classificacao > 1.0){
-            //Log.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com uma classificação nao compreendidada" +
+            //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com uma classificação nao compreendidada" +
             //        "entre 0.0 e 1.0");
             ok =  false;
             sb.append("Classificação nao compreendidada entre 0.0 e 1.0.");
@@ -139,7 +139,7 @@ public class GestaoAlunos extends StateAdapter{
     public void removeAluno(long numero_de_aluno) {
         Aluno a = data.getAluno(numero_de_aluno);
         if(a == null){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
+            MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
             return;
         }
         data.removeAluno(a);

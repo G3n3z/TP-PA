@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.command;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 
@@ -24,7 +24,7 @@ public class RemoverOrientadorProposta extends CommandAdapter{
         for (Proposta p : data.getProposta()){
             if(p.getId().equalsIgnoreCase(id)){
                 if(!p.temDocenteOrientador())
-                    Log.getInstance().putMessage("Proposta sem docente orientador");
+                    MessageCenter.getInstance().putMessage("Proposta sem docente orientador");
                 else {
                     emailDocente = p.getEmailOrientador();
                     p.removeOrientador();
@@ -32,7 +32,7 @@ public class RemoverOrientadorProposta extends CommandAdapter{
                 return true;
             }
         }
-        Log.getInstance().putMessage("Proposta inexistente");
+        MessageCenter.getInstance().putMessage("Proposta inexistente");
         return false;
     }
 }

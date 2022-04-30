@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.command;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
@@ -19,7 +19,7 @@ public class AtribuicaoOrientadorProposta extends CommandAdapter {
         Docente d = data.getDocente(emailDocente);
 
         if(d == null){
-            Log.getInstance().putMessage("Nao existe o docente");
+            MessageCenter.getInstance().putMessage("Nao existe o docente");
             return false;
         }
         for (Proposta p : data.getProposta()){
@@ -28,12 +28,12 @@ public class AtribuicaoOrientadorProposta extends CommandAdapter {
                     p.setDocenteOrientador(d);
                     return true;
                 }else {
-                    Log.getInstance().putMessage("Proposta com docente Orientador");
+                    MessageCenter.getInstance().putMessage("Proposta com docente Orientador");
                     return false;
                 }
             }
         }
-        Log.getInstance().putMessage("Id de proposta inexistente");
+        MessageCenter.getInstance().putMessage("Id de proposta inexistente");
         return false;
     }
 

@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
@@ -43,7 +43,7 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
             }
         }
         if(!exists){
-            Log.getInstance().putMessage("Não existe o numero de aluno indicado");
+            MessageCenter.getInstance().putMessage("Não existe o numero de aluno indicado");
             return false;
         }
         return true;
