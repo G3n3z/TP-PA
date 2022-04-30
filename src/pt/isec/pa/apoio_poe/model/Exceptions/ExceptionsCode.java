@@ -2,7 +2,7 @@ package pt.isec.pa.apoio_poe.model.Exceptions;
 
 public enum ExceptionsCode {
     /**
-     * Campo incorreto
+     * Leitura de campo incorreto
      */
     E0,
 
@@ -10,8 +10,6 @@ public enum ExceptionsCode {
      * Nome de ficheiro incorreto
      */
     E2,
-
-
 
     /**
      * Numero de aluno inexistente
@@ -67,6 +65,21 @@ public enum ExceptionsCode {
      * Linha incompleta
      */
     I11,
+
+    /**
+     * Aluno não pode aceder a estágio
+     */
+    I12,
+
+    /**
+     * Proposta já atribuída
+     */
+    I13,
+
+    /**
+     * Proposta sem Docente Orientador
+     */
+    I14,
 
     /**
      * Candidatura inexistente
