@@ -23,7 +23,9 @@ public class Obtencao_Lista_Alunos_Propostas extends StateAdapter{
     @Override
     public String obtencaoAlunosComAutoPropostaAtribuida() {
         StringBuilder sb = new StringBuilder();
-        data.getAlunos().stream().filter(a -> a.getProposta() instanceof Projeto_Estagio).forEach(sb::append);
+        data.getAlunos().stream().filter(a -> a.getProposta() instanceof Projeto_Estagio)
+                .forEach(aluno -> sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" - ").append(aluno.getNome())
+                        .append(" tem atirbuida a autoproposta: ").append(aluno.getProposta().getId()).append("\n"));
         return sb.toString();
     }
 
@@ -41,14 +43,17 @@ public class Obtencao_Lista_Alunos_Propostas extends StateAdapter{
     @Override
     public String obtencaoAlunosComCandidatura() {
         StringBuilder sb = new StringBuilder();
-        data.getAlunos().stream().filter(a -> a.getCandidatura() != null).forEach(sb::append);
+        data.getAlunos().stream().filter(a -> a.getCandidatura() != null).forEach(a -> sb.append(a.getNumeroAluno())
+                .append(" - ").append(a.getNome()).append(" está a candidatar-se às propostas ").append(a.getCandidatura().getIdProposta()).append("\n"));
         return sb.toString();
     }
 
     @Override
     public String obtencaoAlunosSemProposta() {
         StringBuilder sb = new StringBuilder();
-        data.getAlunos().stream().filter(a -> !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada()).forEach(sb::append);
+        data.getAlunos().stream().filter(a -> !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())
+                .forEach(a-> sb.append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" não tem proposta")
+                        .append("\n"));
         return sb.toString();
     }
 }
