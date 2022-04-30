@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.LogSingleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
@@ -26,52 +26,67 @@ public class EditarPropostas extends StateAdapter{
     }
 
     @Override
-    public void changeTitulo(String id, String novo_titulo) throws InvalidArguments {
+    public boolean changeTitulo(String id, String novo_titulo){
         Proposta p = getPropostaById(id);
         if (p == null)
-            return;
+            return false;
         p.setTitulo(novo_titulo);
+        return true;
     }
 
     @Override
-    public void changeEntidade(String id, String nova_entidade) throws InvalidArguments {
+    public boolean changeEntidade(String id, String nova_entidade) {
         Proposta p = getPropostaById(id);
         if(p instanceof Estagio e){
            e.changeEntidade(nova_entidade);
         }else {
-            throw new InvalidArguments("Apenas existe entidade nos estágios");
+            MessageCenter.getInstance().putMessage("Apenas existe entidade nos estágios");
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void addRamo(String id, String ramo) throws InvalidArguments {
+    public boolean addRamo(String id, String ramo)  {
         if(!data.existeRamos(ramo)){
-            throw new InvalidArguments("Ramo inexistente");
+            MessageCenter.getInstance().putMessage("Ramo inexistente");
         }
         Proposta p = getPropostaById(id);
+        if(p == null){
+            return false;
+        }
         if(p.getRamos()!= null && p.getRamos().contains(ramo)){
-            throw new InvalidArguments("A proposta já contem o ramo inserido");
+            MessageCenter.getInstance().putMessage("A proposta já contem o ramo inserido");
+            return false;
         }
         p.addRamo(ramo);
+        return true;
     }
 
-    private Proposta getPropostaById(String id) throws InvalidArguments {
+    private Proposta getPropostaById(String id) {
         List<Proposta> propostas = data.getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(id));
         if(propostas.size() == 0){
-            throw new InvalidArguments("Nao existe a proposta com o id " + id);
+            MessageCenter.getInstance().putMessage("Nao existe a proposta com o id " + id);
+            return null;
         }
         return propostas.get(0);
     }
 
     @Override
-    public void removeRamo(String id, String ramo) throws InvalidArguments {
+    public boolean removeRamo(String id, String ramo) {
         if(!data.existeRamos(ramo)){
-            throw new InvalidArguments("Ramo inexistente");
+            MessageCenter.getInstance().putMessage("Ramo inexistente");
+            return false;
         }
         Proposta p = getPropostaById(id);
+        if(p == null){
+            return false;
+        }
         if(p.getRamos()!= null && !p.getRamos().contains(ramo)){
-            throw new InvalidArguments("A proposta já não contem o ramo inserido");
+            MessageCenter.getInstance().putMessage("A proposta já não contem o ramo inserido");
+            return false;
         }
         p.removeRamo(ramo);
+        return true;
     }
 }

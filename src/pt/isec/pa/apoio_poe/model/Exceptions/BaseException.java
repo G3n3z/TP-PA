@@ -1,7 +1,7 @@
 package pt.isec.pa.apoio_poe.model.Exceptions;
 
 
-public class BaseException extends Exception{
+public class BaseException extends ApoioException{
     String message;
     int index;
     public BaseException(String message) {
