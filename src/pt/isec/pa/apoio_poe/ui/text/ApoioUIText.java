@@ -24,6 +24,7 @@ public class ApoioUIText {
 
 
         while (!isfinished) {
+
             System.out.println(MessageCenter.getInstance().getAllMessage());
 
             switch (context.getState()) {
@@ -274,7 +275,6 @@ public class ApoioUIText {
     }
 
     private void UIEditarPropostas() {
-        //TODO
         try {
             switch (PAInput.chooseOption(context.getName(), "Titulo", "Entidade", "Acrescentar Ramo", "Retirar Ramo", "Recuar Fase", "Exit")) {
                 case 1 -> {

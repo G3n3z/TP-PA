@@ -143,7 +143,6 @@ public class AtribuicaoPropostas extends StateAdapter{
             alunosComMesmaMedia.clear();
         }
 
-        al.forEach(System.out::println); //TODO
     }
 
 
