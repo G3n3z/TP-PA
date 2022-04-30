@@ -1,9 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
-import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
-import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
-import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
-import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.Exceptions.*;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
@@ -132,17 +129,23 @@ public class ApoioUIText {
         else{
             opcoes = new String[]{"Gestao de Alunos", "Gestão de Docentes", "Gestão de Propostas", "Avançar Fase","Exit"};
         }
-        switch (PAInput.chooseOption(context.getName(), opcoes)) {
-            case 1 -> context.gerirAlunos();
-            case 2 -> context.gerirDocentes();
-            case 3 -> context.gerirEstagios();
-            case 4 -> {
-                if (context.isClosed()) {context.avancarFase();}
-                else  {context.closeFase();}
+        try{
+            switch (PAInput.chooseOption(context.getName(), opcoes)) {
+                case 1 -> context.gerirAlunos();
+                case 2 -> context.gerirDocentes();
+                case 3 -> context.gerirEstagios();
+                case 4 -> {
+                    if (context.isClosed()) {context.avancarFase();}
+                    else  {context.closeFase();}
+                }
+                case 5 -> {if (!context.isClosed()) context.avancarFase();
+                            else context.sair();}
+                case 6 -> context.sair();
             }
-            case 5 -> {if (!context.isClosed()) context.avancarFase();
-                        else context.sair();}
-            case 6 -> context.sair();
+        }catch (StateNotClosed e) {
+            System.out.println(e.getExcepMessage());
+            System.out.println("Por favor verifique se o numero total de propostas é igual ou superior ao número total de alunos e se,\n" +
+                    "para cada ramo, o número total de propostas é igual ou superior ao número de alunos.");
         }
     }
 
@@ -245,20 +248,24 @@ public class ApoioUIText {
         if(!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos","Exportar para CSV", "Consultar Estágio/Projeto", "Editar Estágio/Projeto",
                     "Remover Estágio/Projeto", "Remover todos Estágios/Projetos", "Voltar", "Exit");
-            switch (option) {
-                case 1 -> {
-                    context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
-                    while(Log.getInstance().hasNext()){
-                        System.out.println(Log.getInstance().getMessage());
+            try {
+                switch (option) {
+                    case 1 -> {
+                        context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
+                        while (Log.getInstance().hasNext()) {
+                            System.out.println(Log.getInstance().getMessage());
+                        }
                     }
+                    case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));
+                    case 3 -> System.out.println(context.getPropostasToString());
+                    case 4 -> context.editarPropostas();
+                    case 5 -> context.removerProposta(PAInput.readString("Id Propostas: ", true));
+                    case 6 -> context.removeAll();
+                    case 7 -> context.recuarFase();
+                    case 8 -> context.sair();
                 }
-                case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));
-                case 3 -> System.out.println(context.getPropostasToString());
-                case 4 -> context.editarPropostas();
-                case 5 -> context.removerProposta(PAInput.readString("Id Propostas: ",true));
-                case 6 -> context.removeAll();
-                case 7 -> context.recuarFase();
-                case 8 -> context.sair();
+            }catch (InvalidArguments e){
+                System.out.println(e.getExcepMessage());
             }
         }else {
             option = PAInput.chooseOption(context.getName(), "Consultar Estágio/Projeto", "Exportar para CSV", "Voltar", "Exit");
@@ -272,7 +279,6 @@ public class ApoioUIText {
     }
 
     private void UIEditarPropostas() {
-        //TODO
         try {
             switch (PAInput.chooseOption(context.getName(), "Titulo", "Entidade", "Acrescentar Ramo", "Retirar Ramo", "Recuar Fase", "Exit")) {
                 case 1 -> {
@@ -291,26 +297,30 @@ public class ApoioUIText {
 
     private void UIOpcoes_Candidatura() {
         if(!context.isClosed()) { //Se nao esta fechado
-            switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
-                    "Remover todas as candidaturas","Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
+            try{
+                switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
+                        "Remover todas as candidaturas","Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
 
-                case 1 -> {
-                    try {
-                        context.addCandidatura(PAInput.readString("Ficheiro: ", true));
-                    }catch (CollectionBaseException c){
-                        System.out.println(c.getMessageOfExceptions());
+                    case 1 -> {
+                        try {
+                            context.addCandidatura(PAInput.readString("Ficheiro: ", true));
+                        }catch (CollectionBaseException c){
+                            System.out.println(c.getMessageOfExceptions());
+                        }
                     }
+                    case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                    case 3 -> System.out.println(context.getCandidaturas());
+                    case 4 -> context.editarCandidaturas();
+                    case 5 -> context.removeAll();
+                    case 6 -> context.obtencaoListaAlunos();
+                    case 7 -> context.obtencaoListaProposta();
+                    case 8 -> context.closeFase();
+                    case 9 -> context.recuarFase();
+                    case 10 -> context.avancarFase();
+                    case 11 -> context.sair();
                 }
-                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 3 -> System.out.println(context.getCandidaturas());
-                case 4 -> context.editarCandidaturas();
-                case 5 -> context.removeAll();
-                case 6 -> context.obtencaoListaAlunos();
-                case 7 -> context.obtencaoListaProposta();
-                case 8 -> context.closeFase();
-                case 9 -> context.recuarFase();
-                case 10 -> context.avancarFase();
-                case 11 -> context.sair();
+            }catch (StateNotClosed e){
+                System.out.println(e.getExcepMessage());
             }
         }
         else{
@@ -417,19 +427,24 @@ public class ApoioUIText {
     }
 
     private void UIAtribuicao_PropostasSemAnteriorFechada() {
-        switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
-                "Obtenção de listas de alunos ",
-                "Obtenção de listas de propostas de projecto estágio",
-                "Exportar para ficheiro CSV os dados referentes aos alunos inscritos",
-                "Fechar", "Recuar Fase", "Avançar Fase", "Exit")){
-            case 1 -> context.atribuicaoAutomatica();
-            case 2 -> context.obtencaoListaAlunos();
-            case 3 -> context.obtencaoListaProposta();
-            case 4 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-            case 5 -> context.closeFase();
-            case 6 -> context.recuarFase();
-            case 7 -> context.avancarFase();
-            case 8 -> context.sair();
+        try {
+            switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
+                    "Obtenção de listas de alunos ",
+                    "Obtenção de listas de propostas de projecto estágio",
+                    "Exportar para ficheiro CSV os dados referentes aos alunos inscritos",
+                    "Fechar", "Recuar Fase", "Avançar Fase", "Exit")) {
+                case 1 -> context.atribuicaoAutomatica();
+                case 2 -> context.obtencaoListaAlunos();
+                case 3 -> context.obtencaoListaProposta();
+                case 4 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 5 -> context.closeFase();
+                case 6 -> context.recuarFase();
+                case 7 -> context.avancarFase();
+                case 8 -> context.sair();
+            }
+        }
+        catch(StateNotClosed e){
+            System.out.println(e.getExcepMessage());
         }
     }
 
@@ -465,7 +480,10 @@ public class ApoioUIText {
                 case 9 -> context.avancarFase();
                 case 10 -> context.sair();
             }
-        }catch (ConflitoAtribuicaoAutomaticaException e){
+        }catch (StateNotClosed e){
+            System.out.println(e.getExcepMessage());
+        }
+        catch (ConflitoAtribuicaoAutomaticaException e){
             context.conflitoAtribuicaoCandidatura();
             exception = e;
         }
@@ -569,15 +587,19 @@ public class ApoioUIText {
     }
 
     private void UIAtribuicao_Orientadores() {
-        switch (PAInput.chooseOption(context.getName(),"Associação automática dos docentes proponentes de projetos como orientador dos mesmos",
-                "Exportar para CSV","Gestao de Orientadores", "Obtenção de dados de Orientadores", "Recuar Fase" ,"Fechar Fase e Avançar", "Exit")){
-            case 1 -> context.associacaoAutomaticaDeDocentesAPropostas();
-            case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-            case 3 -> context.gerirOrientadores();
-            case 4 -> context.obtencaoDadosOrientador();
-            case 5 -> context.recuarFase();
-            case 6 -> context.closeFase();
-            case 7 -> context.sair();
+        try{
+            switch (PAInput.chooseOption(context.getName(),"Associação automática dos docentes proponentes de projetos como orientador dos mesmos",
+                    "Exportar para CSV","Gestao de Orientadores", "Obtenção de dados de Orientadores", "Recuar Fase" ,"Fechar Fase e Avançar", "Exit")){
+                case 1 -> context.associacaoAutomaticaDeDocentesAPropostas();
+                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 3 -> context.gerirOrientadores();
+                case 4 -> context.obtencaoDadosOrientador();
+                case 5 -> context.recuarFase();
+                case 6 -> context.closeFase();
+                case 7 -> context.sair();
+            }
+        }catch (StateNotClosed e){
+            System.out.println(e.getExcepMessage());
         }
     }
 

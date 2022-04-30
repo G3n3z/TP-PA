@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
@@ -62,15 +63,15 @@ public class AtribuicaoPropostas extends StateAdapter{
      */
 
     @Override
-    public boolean close() {
+    public boolean close() throws StateNotClosed {
         if((data.getAlunos().stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada)){
             setClose(true);
             Log.getInstance().putMessage("Fase fechada corretamente\n");
             return true;
         }
-        Log.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");
-        Log.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
-        return false;
+
+        throw new StateNotClosed(qualAlunoComCandidaturaSemPropostaAssocaida());
+
     }
 
     /**
@@ -149,9 +150,10 @@ public class AtribuicaoPropostas extends StateAdapter{
 
     /**
      *
-     * @param classificacao     Classificação com a qual queremos obter todos os alunos
-     * @param al                Lista de alunos a returnar com a mesma media. Podem ser 0 ou mais
-     * @return                  Retorna lista com os alunos com a mesma media
+     *
+     * @param classificacao Classificação com a qual queremos obter todos os alunos
+     * @param al Lista de alunos a returnar com a mesma media. Podem ser 0 ou mais
+     * @return Retorna lista com os alunos com a mesma media
      */
 
     public List<Aluno> obtemAlunosComMedia(double classificacao, List<Aluno> al) {

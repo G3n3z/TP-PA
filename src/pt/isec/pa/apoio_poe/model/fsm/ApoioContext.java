@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
@@ -57,7 +58,7 @@ public class ApoioContext {
         return state.gerirEstagios();
     }
 
-    public boolean closeFase(){
+    public boolean closeFase() throws StateNotClosed {
         if(state.close())
             data.closeState(state.getState());
         return true;
@@ -107,7 +108,7 @@ public class ApoioContext {
         return state.changeName(novo_nome, nAluno);
     }
 
-    public void removeAluno(long numero_de_aluno) {
+    public void removeAluno(long numero_de_aluno) throws InvalidArguments {
         state.removeAluno(numero_de_aluno);
     }
 
@@ -235,7 +236,7 @@ public class ApoioContext {
         return state.getPropostasAtribuidasToString();
     }
 
-    public void removerProposta(String id) {
+    public void removerProposta(String id) throws InvalidArguments {
         state.removeProposta(id);
     }
 

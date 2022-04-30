@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
@@ -25,35 +26,34 @@ public class EditarAlunos extends StateAdapter{
     }
 
     @Override
-    public void changeCursoAluno(String novo_curso, long nAluno) {
+    public void changeCursoAluno(String novo_curso, long nAluno) throws InvalidArguments {
         if(!data.existeCursos(novo_curso)){
-            Log.getInstance().putMessage("Nao existe o curso inserido");
-            return;
+            throw new InvalidArguments("Nao existe o curso inserido");
         }
         if(data.changeCursoAluno(novo_curso, nAluno)){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
+            throw new InvalidArguments("Numero de Aluno inexistente");
         }
 
     }
 
     @Override
-    public void changeRamoAluno(String novo_ramo, long nAluno) {
+    public void changeRamoAluno(String novo_ramo, long nAluno) throws InvalidArguments {
         if(!data.existeRamos(novo_ramo)){
-            Log.getInstance().putMessage("Nao existe o ramo inserido");
-            return;
+            throw new InvalidArguments("Nao existe o ramo inserido");
+
         }
         if(data.changeRamoAluno(novo_ramo, nAluno)){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
+            throw new InvalidArguments("Numero de Aluno inexistente");
         }
     }
 
     @Override
-    public void changeClassAluno(double nova_classificacao, long nAluno) {
+    public void changeClassAluno(double nova_classificacao, long nAluno) throws InvalidArguments {
         if (nova_classificacao < 0.0 || nova_classificacao > 1.0){
-            Log.getInstance().putMessage("Classificação nao se encontra entre 0.0 e 1.0");
+            throw new InvalidArguments("Classificação nao se encontra entre 0.0 e 1.0");
         }
         if(data.changeClassAluno(nova_classificacao, nAluno)){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
+            throw new InvalidArguments("Numero de Aluno inexistente");
         }
     }
 }

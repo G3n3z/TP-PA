@@ -3,7 +3,7 @@ package pt.isec.pa.apoio_poe.model.Exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollectionBaseException extends Exception{
+public class CollectionBaseException extends ApoioException{
     List<BaseException> list;
 
     public CollectionBaseException() {
