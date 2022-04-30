@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 
 import java.io.IOException;
 
@@ -10,7 +11,7 @@ public interface IState {
     boolean avancarFase();
     boolean recuarFase();
     EnumState getState();
-    boolean close();
+    boolean close() throws StateNotClosed;
     boolean gerirAlunos();
     boolean gerirDocentes();
     boolean gerirEstagios();
@@ -34,18 +35,18 @@ public interface IState {
 
     boolean changeName(String novo_nome, long nAluno);
 
-    void removeAluno(long numero_de_aluno);
+    void removeAluno(long numero_de_aluno) throws InvalidArguments;
 
-    void changeCursoAluno(String novo_curso, long nAluno);
+    void changeCursoAluno(String novo_curso, long nAluno) throws InvalidArguments;
 
-    void changeRamoAluno(String novo_ramo, long nAluno);
+    void changeRamoAluno(String novo_ramo, long nAluno) throws InvalidArguments;
 
-    void changeClassAluno(double nova_classificaçao, long nAluno);
+    void changeClassAluno(double nova_classificaçao, long nAluno) throws InvalidArguments;
 
-    void removeDocente(String numero_de_aluno);
+    void removeDocente(String numero_de_aluno) throws InvalidArguments;
 
     void changeNameDocente(String novo_nome, String email);
-    void addPropostaACandidatura(long nAluno, String idProposta);
+    void addPropostaACandidatura(long nAluno, String idProposta) throws InvalidArguments;
 
     void atribuicaoAutomaticaSemAtribuicoesDefinidas() throws ConflitoAtribuicaoAutomaticaException;
 
@@ -57,9 +58,9 @@ public interface IState {
 
     boolean exportarCSV(String file);
 
-    void removeProposta(String id);
+    void removeProposta(String id) throws InvalidArguments;
 
-    void removePropostaACandidatura(String id, long naluno);
+    void removePropostaACandidatura(String id, long naluno) throws InvalidArguments;
 
     boolean load() throws IOException, ClassNotFoundException;
 

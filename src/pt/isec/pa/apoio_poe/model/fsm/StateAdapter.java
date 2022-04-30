@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.Exceptions.StateNotClosed;
 import pt.isec.pa.apoio_poe.model.data.Data;
 
 import java.io.*;
@@ -27,7 +28,7 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public boolean close() {
+    public boolean close() throws StateNotClosed {
         close = true;
         return true;
     }
@@ -130,25 +131,25 @@ abstract class StateAdapter implements IState{
     public boolean changeName(String novo_nome, long nAluno) {return false;}
 
     @Override
-    public void removeAluno(long numero_de_aluno) {}
+    public void removeAluno(long numero_de_aluno) throws InvalidArguments {}
 
     @Override
-    public void changeCursoAluno(String novo_curso, long nAluno) {}
+    public void changeCursoAluno(String novo_curso, long nAluno) throws InvalidArguments {}
 
     @Override
-    public void changeRamoAluno(String novo_ramo, long nAluno) {}
+    public void changeRamoAluno(String novo_ramo, long nAluno) throws InvalidArguments {}
 
     @Override
-    public void changeClassAluno(double nova_classificaçao, long nAluno) {}
+    public void changeClassAluno(double nova_classificaçao, long nAluno) throws InvalidArguments {}
 
     @Override
-    public void removeDocente(String numero_de_aluno){}
+    public void removeDocente(String numero_de_aluno) throws InvalidArguments {}
 
     @Override
     public void changeNameDocente(String novo_nome, String email) {}
 
     @Override
-    public void addPropostaACandidatura(long nAluno, String idProposta) {}
+    public void addPropostaACandidatura(long nAluno, String idProposta) throws InvalidArguments {}
 
     @Override
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {}
@@ -183,10 +184,10 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public void removeProposta(String id) {}
+    public void removeProposta(String id) throws InvalidArguments {}
 
     @Override
-    public void removePropostaACandidatura(String id, long naluno) {
+    public void removePropostaACandidatura(String id, long naluno) throws InvalidArguments {
 
     }
 

@@ -2,7 +2,8 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
-import pt.isec.pa.apoio_poe.model.Exceptions.InvalidField;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidArguments;
+import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
 import pt.isec.pa.apoio_poe.model.LogSingleton.Log;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
@@ -49,9 +50,9 @@ public class GestaoAlunos extends StateAdapter{
                 index++;
                 a = readAluno(index);
                 if(!data.addAluno(a)){
-                   throw new InvalidField("Na linha " + index + " -> Numero de aluno já registado");
+                   throw new InvalidCSVField("Na linha " + index + " -> Numero de aluno já registado");
                 }
-            }catch (InvalidField | IncompleteCSVLine e){
+            }catch (InvalidCSVField | IncompleteCSVLine e){
                 if(col == null){
                     col = new CollectionBaseException();
                 }
@@ -67,7 +68,7 @@ public class GestaoAlunos extends StateAdapter{
     }
 
     // le um aluno de uma linha do ficheiro CSV
-    private Aluno readAluno(int index) throws InvalidField, IncompleteCSVLine {
+    private Aluno readAluno(int index) throws InvalidCSVField, IncompleteCSVLine {
         String email, nome, ramo, curso;
         Long numAluno;
         Double classificacao;
@@ -80,7 +81,7 @@ public class GestaoAlunos extends StateAdapter{
             ramo = CSVReader.readString();
             classificacao = CSVReader.readDouble2();
             possibilidade = CSVReader.readBoolean2();
-        } catch (InvalidField e){
+        } catch (InvalidCSVField e){
             e.addToBeginMessage("Na linha " + index + " -> ");
             e.putLine(index);
             //e.putAluno(new Aluno(email, nome, numAluno,curso,ramo, classificacao, possibilidade));
@@ -98,7 +99,7 @@ public class GestaoAlunos extends StateAdapter{
     }
 
     // verifica se campos corretos
-    private void fieldsCorrect(int index, String email, String curso, String ramo, double classificacao) throws InvalidField {
+    private void fieldsCorrect(int index, String email, String curso, String ramo, double classificacao) throws InvalidCSVField {
         boolean ok = true;
         StringBuilder sb = new StringBuilder();
         if(data.existeDocenteComEmail(email)){
@@ -128,7 +129,7 @@ public class GestaoAlunos extends StateAdapter{
             sb.append("Classificação nao compreendidada entre 0.0 e 1.0.");
         }
         if(!ok){
-            throw new InvalidField("Na linha " + index + " -> " + sb);
+            throw new InvalidCSVField("Na linha " + index + " -> " + sb);
         }
     }
 
@@ -136,11 +137,10 @@ public class GestaoAlunos extends StateAdapter{
 
 
     @Override
-    public void removeAluno(long numero_de_aluno) {
+    public void removeAluno(long numero_de_aluno) throws InvalidArguments {
         Aluno a = data.getAluno(numero_de_aluno);
         if(a == null){
-            Log.getInstance().putMessage("Numero de Aluno inexistente");
-            return;
+            throw new InvalidArguments("Numero de Aluno inexistente");
         }
         data.removeAluno(a);
     }

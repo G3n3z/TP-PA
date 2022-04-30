@@ -1,8 +1,8 @@
 package pt.isec.pa.apoio_poe.model.Exceptions;
 
-public class InvalidArguments extends BaseException{
+public class InvalidArguments extends BaseException {
 
-    public InvalidArguments(String message) {
-        super(message);
+    public InvalidArguments(ExceptionsCode code, String atribute) {
+        super(code, atribute);
     }
 }
