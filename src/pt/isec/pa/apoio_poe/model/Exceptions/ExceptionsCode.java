@@ -7,6 +7,13 @@ public enum ExceptionsCode {
     E0,
 
     /**
+     * Nome de ficheiro incorreto
+     */
+    E2,
+
+
+
+    /**
      * Numero de aluno inexistente
      */
     I1,
@@ -72,17 +79,32 @@ public enum ExceptionsCode {
     O2,
 
     /**
+     * Candidatura já existe
+     */
+    O3,
+
+    /**
+     * Tentativa de registar candidatura em aluno já com proposta
+     */
+    O4,
+
+    /**
+     * Inserção de candidatura a proposta com aluno já associado
+     */
+    O5,
+
+    /**
      * Fase anterior Aberta
      */
     S1,
 
     /**
-     * Atribuicao de propostas nao fechada
+     * Atribuicao de propostas nao fechada //TODO: modificar texto
      */
     S2,
 
     /**
-     *  numero total de propostas é igual ou superior ao número total de alunos e se,
+     *  numero total de propostas é igual ou superior ao número total de alunos e se, //TODO: modificar texto
      *  para cada ramo, o número total de propostas é igual ou superior ao número de alunos
      */
     S3
