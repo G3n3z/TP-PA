@@ -25,15 +25,23 @@ public class CSVWriter {
 
 
     public static boolean writeLine(String delimiter, Boolean breakLine, Boolean usePreviousDelimiter, Object... args){
+        if(delimiter == null)
+            return false;
         if(pw == null)
             return false;
         int index = 0;
-        String line = "";
+        String line = "", parse;
         for (Object o : args){
             index++;
-            line = line.concat(CSVWriter.parseObject(o,delimiter));
-            if(delimiter != null && index < args.length)
-                line = line.concat(delimiter);
+            parse = CSVWriter.parseObject(o,delimiter);
+            if(parse.length()>0) {
+                line = line.concat(parse);
+                if (index < args.length)
+                    line = line.concat(delimiter);
+            }
+        }
+        if(line.length() > 0  && line.lastIndexOf(delimiter) == line.length()-1){
+            line = line.substring(0, line.length()-1);
         }
 
         if (usePreviousDelimiter){

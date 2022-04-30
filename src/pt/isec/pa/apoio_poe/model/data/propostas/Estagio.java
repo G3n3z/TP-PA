@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.data.propostas;
 
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Estagio extends Proposta {
@@ -37,7 +38,12 @@ public class Estagio extends Proposta {
 
     @Override
     public Object[] exportProposta() {
-        return new Object[]{getTipo(),getId(),getRamosToExport(),getTitulo(),entidade,getNumAluno()};
+        //return new Object[]{getTipo(),getId(),getRamosToExport(),getTitulo(),entidade,getNumAluno()};
+        List<Object> objetos = new ArrayList<>(List.of(getTipo(),getId(), getRamosToExport(),getTitulo(),entidade));
+        if (getNumAluno() != null){
+            objetos.add(getNumAluno());
+        }
+        return objetos.toArray();
     }
 
     public void changeEntidade(String nova_entidade) {

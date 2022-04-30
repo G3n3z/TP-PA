@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.model.data.propostas;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pt.isec.pa.apoio_poe.model.data.Docente;
@@ -48,7 +49,13 @@ public class Projeto extends Proposta {
 
     @Override
     public Object[] exportProposta() {
-        return new Object[]{getTipo(),getId(), getRamosToExport(),getTitulo(),docente,getNumAluno()};
+        List<Object> objetos = new ArrayList<>(List.of(getTipo(),getId(), getRamosToExport(),getTitulo()));
+        if(docente != null)
+            objetos.add(docente);
+        if (getNumAluno() != null){
+            objetos.add(getNumAluno());
+        }
+        return objetos.toArray();
     }
 
 }
