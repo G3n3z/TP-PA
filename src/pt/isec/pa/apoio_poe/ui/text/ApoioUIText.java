@@ -26,7 +26,7 @@ public class ApoioUIText {
 
             System.out.println(MessageCenter.getInstance().getAllMessage());
 
-            switch (context.getState()) {
+                switch (context.getState()) {
                 case CONFIG_OPTIONS -> UIConfig_Options();
                 case GESTAO_ALUNOS -> UIGestao_Alunos();
                 case GESTAO_DOCENTES -> UIGestao_Docentes();
@@ -535,7 +535,7 @@ public class ApoioUIText {
             UIConflito_Atribuicao_Candidatura_Exist_Conflict();
         }else {
             context.recuarFase();
-
+            exception = new ConflitoAtribuicaoAutomaticaException();
         }
 
     }

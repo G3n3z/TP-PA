@@ -13,7 +13,12 @@ public class CSVReader {
     private static BufferedReader br;
 
 
-
+    /**
+     *
+     * @param file Nome do ficheiro para abrir para leitura
+     * @param delimiter delimitador a ser usado no scanner
+     * @return retorna true or false caso corra bem ou nao
+     */
     public static boolean startScanner(String file, String delimiter){
 
         try {
@@ -32,10 +37,20 @@ public class CSVReader {
         return true;
     }
 
+    /**
+     *
+     * @return retorna a leitura de booleano a partir do ficheiro
+     */
     public static Boolean readBoolean(){
 
         return sc.nextBoolean();
     }
+
+    /**
+     *
+     * @return retorna booleano lido do ficheiro aberto
+     * @throws InvalidCSVField lança a exceção de campo invalido
+     */
     public static Boolean readBoolean2() throws InvalidCSVField {
 
         try{
@@ -48,6 +63,10 @@ public class CSVReader {
         return sc.next();
     }
 
+    /**
+     *
+     * @return retorna os ramos separados por um limitador
+     */
     public static List<String> readRamos(){
         String [] tokens = sc.next().split("\\|");
         List<String> ramos = new ArrayList<>();
@@ -55,13 +74,27 @@ public class CSVReader {
         return ramos;
     }
 
+    /**
+     *
+     * @return retorna um inteiro lido do ficheiro aberto
+     */
     public static int readInt(){
         return sc.nextInt();
     }
+
+    /**
+     *
+     * @return retorna um double lido do ficheiro aberto
+     */
     public static Double readDouble(){
         return sc.nextDouble();
     }
 
+    /**
+     *
+     * @return retorna um double lido do ficheiro
+     * @throws InvalidCSVField lança a exceção de campo invalido
+     */
     public static Double readDouble2() throws InvalidCSVField {
         try{
             return sc.nextDouble();
@@ -70,6 +103,10 @@ public class CSVReader {
         }
     }
 
+    /**
+     *
+     * @return retorna um booleano a dizer se conseguiu mudar de linha ou nao. Caso chega ao fim do ficheiro retorna falso
+     */
     public static boolean nextLine(){
         String line;
         try {
@@ -89,10 +126,19 @@ public class CSVReader {
         return true;
     }
 
+    /**
+     *
+     * @return retorna um long lido do ficheiro aberto
+     */
     public static long readLong(){
         return sc.nextLong();
     }
 
+    /**
+     *
+     * @return retorna um long lido do ficheiro
+     * @throws InvalidCSVField lança a exceção de campo invalido
+     */
     public static long readLong2() throws InvalidCSVField {
         try {
             return sc.nextLong();
@@ -101,8 +147,15 @@ public class CSVReader {
         }
     }
 
+    /**
+     *
+     * @return retorna se existe proximo elemento
+     */
     public static boolean hasNext(){return sc.hasNext();}
 
+    /**
+     * Funcao que fecha o ficheiro aberto
+     */
     public static void closeReaders(){
        try {
            br.close();
@@ -113,8 +166,5 @@ public class CSVReader {
        }
     }
 
-
-    //read parameters
-    //passar um array de elementos genericos e fazer um ciclo com switch
 
 }

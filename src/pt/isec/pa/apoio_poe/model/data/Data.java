@@ -122,7 +122,7 @@ public class Data implements Serializable {
     }
 
     public boolean existeDocenteComEmail(String email){
-        return docentes.stream().anyMatch(d -> d.getEmail().equals(email));
+        return docentes.stream().anyMatch(d -> d.getEmail().equalsIgnoreCase(email));
     }
     public boolean existeCursos(String siglaCurso){
         return Constantes.getCursos().stream().anyMatch(curso -> curso.equals(siglaCurso));
@@ -297,10 +297,10 @@ public class Data implements Serializable {
                     projeto.setEmailDocente(null);
                 }
             }
-            if (p.getOrientador() != null && p.getOrientador().getEmail().equalsIgnoreCase(d.getEmail())){
+            if (p.getOrientador() != null && p.getOrientador().getEmail().equals(d.getEmail())){
                 p.setDocenteOrientador(null);
             }
-            if(p.getProponente() != null && p.getProponente().getEmail().equalsIgnoreCase(d.getEmail())){
+            if(p.getProponente() != null && p.getProponente().getEmail().equals(d.getEmail())){
                 p.setDocenteProponente(null);
             }
         }
@@ -398,7 +398,7 @@ public class Data implements Serializable {
     }
 
     public boolean existeAlunoComEmail(String email) {
-        return alunos.stream().anyMatch(a -> a.getEmail().equals(email));
+        return alunos.stream().anyMatch(a -> a.getEmail().equalsIgnoreCase(email));
     }
 
     public boolean existePropostaSemAluno(String proposta){ //Verifica se nas propostas
