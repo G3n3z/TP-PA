@@ -71,7 +71,7 @@ public class ApoioUIText {
 
     private void UILoadState() {
         if(context.existsFileBin()) {
-            switch (PAInput.chooseOption("Menu", "Começar", "Carregar Ficheiro em Memoria", "Sair")) {
+            switch (PAInput.chooseOption("Menu", "Começar", "Carregar Ultimo Ficheiro Guardado", "Sair")) {
                 case 1 -> context.begin();
                 case 2 -> {
                     try {
