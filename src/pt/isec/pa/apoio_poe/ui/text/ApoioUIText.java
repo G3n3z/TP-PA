@@ -86,40 +86,9 @@ public class ApoioUIText {
             }
         }
         else {
-            switch (PAInput.chooseOption("Menu", "Começar", "Sair", "Modo Debug")) {
+            switch (PAInput.chooseOption("Menu", "Começar", "Sair")) {
                 case 1 -> context.begin();
                 case 2 -> isfinished = true;
-                case 3 -> {
-                    context.begin();
-                    context.gerirAlunos();
-                    System.out.println("Modo Debug");
-                    try {
-                        context.addAluno("teste.csv");
-                    } catch (CollectionBaseException c) {
-                        System.out.println(c.getMessageOfExceptions());
-                    }
-                    context.recuarFase();
-
-                    context.gerirDocentes();
-
-                    try {
-                        context.importDocentes("testeD.csv");
-                    } catch (CollectionBaseException c) {
-                        System.out.println(c.getMessageOfExceptions());
-                    }
-
-                    context.recuarFase();
-                    context.gerirEstagios();
-                    context.importPropostas("testeP.csv");
-                    context.recuarFase();
-                    context.avancarFase();
-                    try {
-                        context.addCandidatura("testeC.csv");
-                    } catch (CollectionBaseException c) {
-                        System.out.println(c.getMessageOfExceptions());
-                    }
-                    context.recuarFase();
-                }
             }
         }
     }
