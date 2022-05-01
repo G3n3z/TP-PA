@@ -70,8 +70,7 @@ public class ConfigOptions extends  StateAdapter{
             if(a.getSiglaRamo().equals("SI") && !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())
                 totSI++;
         }
-        //return (data.getProposta().size() >= data.getAlunos().size()) && (pDA_SI >= (totDA + totSI)) && (pDA_RAS >= (totDA + totRAS)) && (pRAS_SI >= (totRAS + totSI)) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
-        return true;
+        return (data.getProposta().size() >= data.getAlunos().size()) && (pDA_SI >= (totDA + totSI)) && (pDA_RAS >= (totDA + totRAS)) && (pRAS_SI >= (totRAS + totSI)) && (pDA >= totDA) && (pRAS >= totRAS) && (pSI >= totSI);
     }
 
 }

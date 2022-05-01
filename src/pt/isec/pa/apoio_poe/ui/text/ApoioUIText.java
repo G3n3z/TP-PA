@@ -586,7 +586,7 @@ public class ApoioUIText {
                 "Eliminar Orientador", "Undo", "Redo", "Voltar", "Exit")){
             case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 2 -> System.out.println(context.getAlunosComPropostaEOrientador());
-            case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true)); //TODO: ver metodo
+            case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 4 -> manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 5 -> manager.undo();
             case 6 -> manager.redo();
