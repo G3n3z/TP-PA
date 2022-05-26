@@ -80,12 +80,6 @@ public interface IState {
 
     ErrorCode removeRamo(String id, String ramo) ;
 
-    String getAlunosToString();
-
-    String getDocentesToString();
-
-    String getPropostasToString();
-
     String getPropostasWithFiltersToString(int[] filters);
 
     String obtencaoAlunosComAutoProposta();

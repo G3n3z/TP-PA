@@ -125,12 +125,13 @@ public class ApoioUIText {
 
 
     private void UIConfig_Options() {
+        ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) { //Se nao esta fechado
             switch(PAInput.chooseOption(context.getName(),"Gestao de Alunos", "Gestão de Docentes", "Gestão de Propostas", "Fechar Fase", "Avançar Fase","Exit")){
                 case 1 -> context.gerirAlunos();
                 case 2 -> context.gerirDocentes();
                 case 3 -> context.gerirEstagios();
-                case 4 -> context.closeFase();
+                case 4 -> error = context.closeFase();
                 case 5 -> context.avancarFase();
                 case 6 -> context.sair();
             }
@@ -144,6 +145,7 @@ public class ApoioUIText {
                 case 5 -> context.sair();
             }
         }
+        System.out.println(errorReport(error));
     }
 
 
@@ -361,9 +363,9 @@ public class ApoioUIText {
             switch (PAInput.chooseOption("Editar Candidatura", "Adicionar Propostas a candidatura", "Remover Propostas a candidatura",
                     "Voltar", "Exit")) {
                 case 1 -> error = context.addPropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
-                        PAInput.readString("Nome da Proposta: ", true));
+                        PAInput.readString("ID da Proposta: ", true));
                 case 2 -> error = context.removePropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
-                        PAInput.readString("Nome da Proposta: ", true));
+                        PAInput.readString("ID da Proposta: ", true));
                 case 3 -> sair = true;
                 case 4 -> {
                     sair = true;
@@ -504,7 +506,7 @@ public class ApoioUIText {
             context.conflitoAtribuicaoCandidatura();
             exception = e;
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
     private void UIAtribuicao_PropostasClosed() {
@@ -519,7 +521,7 @@ public class ApoioUIText {
             case 5 -> context.avancarFase();
             case 6 -> context.sair();
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
     private void UIObtencaoDeListaDeAlunoAtribuicao() {
@@ -590,7 +592,7 @@ public class ApoioUIText {
             case 3 -> error = context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
             case 4 -> context.sair();
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
 
@@ -608,7 +610,7 @@ public class ApoioUIText {
             case 6 -> context.recuarFase();
             case 7 -> context.sair();
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
     private void UIAtribuicao_Orientadores() {
@@ -623,7 +625,7 @@ public class ApoioUIText {
             case 6 -> error = context.closeFase();
             case 7 -> context.sair();
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
     private void UIGestao_Orientadores() {
@@ -639,7 +641,7 @@ public class ApoioUIText {
             case 7 -> context.recuarFase();
             case 8 -> context.sair();
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
     private void UIObtencaoDadosOrientadores() {
@@ -673,7 +675,7 @@ public class ApoioUIText {
             case 6 -> System.out.println(context.getEstatisticasPorDocente());
             case 7 -> context.sair();
         }
-        System.out.println(error);
+        System.out.println(errorReport(error));
     }
 
     private String errorReport(ErrorCode error){

@@ -160,11 +160,6 @@ public class GestaoAlunos extends StateAdapter{
     }
 
     @Override
-    public String getAlunosToString() {
-        return data.getAlunosToString();
-    }
-
-    @Override
     public boolean removeAll(){
         for (Aluno a : data.getAlunos()){
             data.removeAluno(a);
