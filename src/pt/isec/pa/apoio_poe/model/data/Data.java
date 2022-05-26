@@ -286,6 +286,15 @@ public class Data implements Serializable {
         return true;
     }
 
+    public boolean changePossibilidadeAluno(long nAluno) {
+        Aluno a = getAluno(nAluno);
+        if(a == null){
+            return false;
+        }
+        a.setPossibilidade();
+        return true;
+    }
+
     public boolean removeDocente(Docente d) {
 
         if(d == null){
@@ -522,6 +531,5 @@ public class Data implements Serializable {
     public boolean verificaProposta(String id) {
         return propostas.stream().anyMatch(p -> p.getId().equals(id));
     }
-
 
 }

@@ -121,6 +121,10 @@ public class ApoioContext {
         return state.changeClassAluno(nova_classificacao, nAluno);
     }
 
+    public ErrorCode changePossibilidadeAluno(long nAluno) {
+        return state.changePossibilidadeAluno(nAluno);
+    }
+
     public ErrorCode removeDocente(String emailDocente) {
         return state.removeDocente(emailDocente);
     }
@@ -233,8 +237,8 @@ public class ApoioContext {
         return state.getPropostasAtribuidasToString();
     }
 
-    public void removerProposta(String id) {
-        state.removeProposta(id);
+    public ErrorCode removerProposta(String id) {
+        return state.removeProposta(id);
     }
 
     public void obtencaoDadosOrientador() {

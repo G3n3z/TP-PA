@@ -173,7 +173,7 @@ public class ApoioUIText {
                 case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getAlunosToString());
                 case 4 -> context.editarAlunos();
-                case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno: "));
+                case 5 -> error = context.removeAluno(PAInput.readLong("Numero de Aluno: "));
                 case 6 -> context.removeAll();
                 case 7 -> context.recuarFase();
                 case 8 -> context.sair();
@@ -181,7 +181,7 @@ public class ApoioUIText {
         } else {
             option = PAInput.chooseOption(context.getName(), "Exportar Alunos para CSV", "Consultar Alunos", "Voltar","Exit");
             switch (option) {
-                case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 1 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 2 -> System.out.println(context.getAlunosToString());
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
@@ -192,22 +192,24 @@ public class ApoioUIText {
 
 
     private void UIEditarAlunos() {
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Curso",
-                    "Ramo", "Classificacao", "Voltar", "Exit")){
-            case 1 -> {context.changeNameAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo nome: ", false));
-            }
-            case 2 -> context.changeCursoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo curso: ", true));
-            case 3 -> context.changeRamoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo ramo: ", true));
-            case 4 -> context.changeClassAluno( PAInput.readLong("Numero de Aluno: "), PAInput.readNumber("Nova classificaçao: "));
-                // TODO: changePossibilidade
-            case 5 -> context.recuarFase();
-            case 6 -> context.sair();
+                    "Ramo", "Classificacao", "Possibilidade ","Voltar", "Exit")){
+            case 1 -> error = context.changeNameAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo nome: ", false));
+            case 2 -> error = context.changeCursoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo curso: ", true));
+            case 3 -> error = context.changeRamoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo ramo: ", true));
+            case 4 -> error = context.changeClassAluno( PAInput.readLong("Numero de Aluno: "), PAInput.readNumber("Nova classificaçao: "));
+            case 5 -> error = context.changePossibilidadeAluno( PAInput.readLong("Numero de Aluno: "));   // TODO: changePossibilidade
+            case 6 -> context.recuarFase();
+            case 7 -> context.sair();
         }
+        System.out.println(errorReport(error));
     }
 
 
     private void UIGestao_Docentes() {
         int option;
+        ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Importar Docentes por CSV", "Exportar Docentes para CSV",
                     "Consultar Docentes", "Editar Docente", "Remover Docente","Remover todos os Docentes", "Voltar", "Exit");
@@ -220,10 +222,10 @@ public class ApoioUIText {
                     }
 
                 }
-                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getDocentesToString());
                 case 4 -> context.editarDocentes();
-                case 5 -> context.removeDocente(PAInput.readString("Email do docente: ", true));
+                case 5 -> error = context.removeDocente(PAInput.readString("Email do docente: ", true));
                 case 6 -> context.removeAll();
                 case 7 -> context.recuarFase();
                 case 8 -> context.sair();
@@ -231,25 +233,28 @@ public class ApoioUIText {
         }else {
             option = PAInput.chooseOption(context.getName(), "Exportar Docentes para CSV", "Consultar Docentes", "Voltar","Exit");
             switch (option) {
-                case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 1 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 2 -> System.out.println(context.getDocentesToString());
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
             }
         }
+        System.out.println(errorReport(error));
     }
 
     private void UIEditarDocentes() {
-
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar", "Exit")) {
-            case 1 -> context.changeNomeDocente(PAInput.readString("Email do docente: ", true), PAInput.readString("Novo nome: ", false));
+            case 1 -> error = context.changeNomeDocente(PAInput.readString("Email do docente: ", true), PAInput.readString("Novo nome: ", false));
             case 2 -> context.recuarFase();
             case 3 -> context.sair();
         }
+        System.out.println(errorReport(error));
     }
 
     private void UIGestao_Estagios() {
         int option;
+        ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos","Exportar para CSV", "Consultar Estágio/Projeto", "Editar Estágio/Projeto",
                     "Remover Estágio/Projeto", "Remover todos Estágios/Projetos", "Voltar", "Exit");
@@ -262,10 +267,10 @@ public class ApoioUIText {
                         System.out.println(e.getMessageOfExceptions());
                     }
                 }
-                case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));
+                case 2 -> error = context.exportaCSV(PAInput.readString("Ficheiro: ", true));
                 case 3 -> System.out.println(context.getPropostasToString());
                 case 4 -> context.editarPropostas();
-                case 5 -> context.removerProposta(PAInput.readString("Id Propostas: ",true));
+                case 5 -> error = context.removerProposta(PAInput.readString("Id Propostas: ",true));
                 case 6 -> context.removeAll();
                 case 7 -> context.recuarFase();
                 case 8 -> context.sair();
@@ -273,33 +278,33 @@ public class ApoioUIText {
         }else {
             option = PAInput.chooseOption(context.getName(), "Exportar para CSV", "Consultar Estágio/Projeto", "Voltar", "Exit");
             switch (option) {
-                case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 1 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 2 -> System.out.println(context.getPropostasToString());
                 case 3 -> context.recuarFase();
                 case 4 -> context.sair();
             }
         }
+        System.out.println(errorReport(error));
     }
 
     private void UIEditarPropostas() {
-
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(), "Titulo", "Entidade", "Acrescentar Ramo", "Retirar Ramo", "Recuar Fase", "Exit")) {
-            case 1 -> {
-                context.changeTitulo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Novo titulo: ", false));
-            }
-            case 2 -> context.changeEntidade(PAInput.readString("Id Proposta: ", true), PAInput.readString("Noa entidade: ", false));
-            case 3 -> context.addRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
-            case 4 -> context.removeRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
+            case 1 -> error = context.changeTitulo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Novo titulo: ", false));
+            case 2 -> error = context.changeEntidade(PAInput.readString("Id Proposta: ", true), PAInput.readString("Noa entidade: ", false));
+            case 3 -> error = context.addRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
+            case 4 -> error = context.removeRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
             case 5 -> context.recuarFase();
             case 6 -> context.sair();
         }
+        System.out.println(errorReport(error));
     }
 
     private void UIOpcoes_Candidatura() {
+        ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) { //Se nao esta fechado
             switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
                     "Remover todas as candidaturas","Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
-
                 case 1 -> {
                     try {
                         context.addCandidatura(PAInput.readString("Ficheiro: ", true));
@@ -307,13 +312,13 @@ public class ApoioUIText {
                         System.out.println(c.getMessageOfExceptions());
                     }
                 }
-                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getCandidaturas());
                 case 4 -> context.editarCandidaturas();
                 case 5 -> context.removeAll();
                 case 6 -> context.obtencaoListaAlunos();
                 case 7 -> context.obtencaoListaProposta();
-                case 8 -> context.closeFase();
+                case 8 -> error = context.closeFase();
                 case 9 -> context.recuarFase();
                 case 10 -> context.avancarFase();
                 case 11 -> context.sair();
@@ -322,7 +327,7 @@ public class ApoioUIText {
         else{
             switch  (PAInput.chooseOption(context.getName(), "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Obtencao de Listas de alunos",
                     "Obtenção de listas de propostas de projecto/estágio", "Recuar Fase", "Avançar Fase", "Exit")) {
-                case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 1 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 2 -> System.out.println(context.getCandidaturas());
                 case 3 -> context.obtencaoListaAlunos();
                 case 4 -> context.obtencaoListaProposta();
@@ -331,20 +336,21 @@ public class ApoioUIText {
                 case 7 -> context.sair();
             }
         }
+        System.out.println(errorReport(error));
     }
 
     private void UIEditarCandidaturas() {
-
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption("Editar Candidatura", "Adicionar Propostas a candidatura", "Remover Propostas a candidatura",
                     "Voltar", "Exit")){
-            case 1 ->context.addPropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
+            case 1 -> error = context.addPropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
                         PAInput.readString("Nome da Proposta: ", true));
-            case 2 ->context.removePropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
+            case 2 -> error = context.removePropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
                         PAInput.readString("Nome da Proposta: ", true));
             case 3 -> context.recuarFase();
             case 4 -> context.sair();
         }
-
+        System.out.println(errorReport(error));
     }
 
     private void UIObtencaoDeListaDeProposta() {
@@ -373,7 +379,6 @@ public class ApoioUIText {
 
             }
             selecionaFiltros(opcoes, num, filters, options);
-
         }
     }
 
@@ -386,14 +391,11 @@ public class ApoioUIText {
                 opcoes[num - 1] = 0;
                 options[num - 1] = filters[num - 1].concat(" [ ]");
             }
-
         }
     }
 
 
     private void UIObtencaoDeListaDeAluno() {
-
-
         switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada",
                 "Sem candidatura regista", "Voltar", "Exit")){
             case 1 -> System.out.println(context.obtencaoAlunosComAutoProposta());
@@ -401,8 +403,6 @@ public class ApoioUIText {
             case 3 -> System.out.println(context.obtencaoAlunosSemCandidatura());
             case 4 -> context.recuarFase();
             case 5 -> context.sair();
-
-
         }
     }
 
@@ -423,6 +423,7 @@ public class ApoioUIText {
     }
 
     private void UIAtribuicao_PropostasSemAnteriorFechada() {
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(), "Atribuição automática das autopropostas ou propostas de docentes",
                 "Obtenção de listas de alunos ",
                 "Obtenção de listas de propostas de projecto estágio",
@@ -431,17 +432,19 @@ public class ApoioUIText {
             case 1 -> context.atribuicaoAutomatica();
             case 2 -> context.obtencaoListaAlunos();
             case 3 -> context.obtencaoListaProposta();
-            case 4 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-            case 5 -> context.closeFase();
+            case 4 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+            case 5 -> error = context.closeFase();
             case 6 -> context.recuarFase();
             case 7 -> context.avancarFase();
             case 8 -> context.sair();
         }
+        System.out.println(errorReport(error));
     }
 
     private void UIAtribuicao_PropostasComAnteriorFechada() {
         //Flag para voltar a executar
         int option;
+        ErrorCode error = ErrorCode.E0;
         String []options = new String[]{"Atribuição automática das autopropostas ou propostas de docentes",
                 "Atribuição automática de uma proposta disponível aos alunos ainda sem atribuições definidas",
                 "Gestão manual de atribuições",
@@ -465,8 +468,8 @@ public class ApoioUIText {
                 case 3 -> context.gestaoManualAtribuicoes();
                 case 4 -> context.obtencaoListaAlunos();
                 case 5 -> context.obtencaoListaProposta();
-                case 6 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 7 -> context.closeFase();
+                case 6 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 7 -> error = context.closeFase();
                 case 8 -> context.recuarFase();
                 case 9 -> context.avancarFase();
                 case 10 -> context.sair();
@@ -475,19 +478,22 @@ public class ApoioUIText {
             context.conflitoAtribuicaoCandidatura();
             exception = e;
         }
+        System.out.println(error);
     }
 
     private void UIAtribuicao_PropostasClosed() {
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(),"Obtenção de listas de alunos",
                 "Obtenção de listas de propostas de projecto estágio",
                 "Exportar para ficheiro CSV os dados referentes aos alunos inscritos", "Recuar Fase", "Avançar Fase", "Exit")){
             case 1 -> context.obtencaoListaAlunos();
             case 2 -> context.obtencaoListaProposta();
-            case 3 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+            case 3 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
             case 4 -> context.recuarFase();
             case 5 -> context.avancarFase();
             case 6 -> context.sair();
         }
+        System.out.println(error);
     }
 
     private void UIObtencaoDeListaDeAlunoAtribuicao() {
@@ -528,12 +534,9 @@ public class ApoioUIText {
                      context.sair();
                      sair = true;
                 }
-
             }
             selecionaFiltros(opcoes, num, filters, options);
         }
-
-
     }
 
     private void UIConflito_Atribuicao_Candidatura(){
@@ -549,63 +552,67 @@ public class ApoioUIText {
 
 
     private void UIConflito_Atribuicao_Candidatura_Exist_Conflict() {
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption("Conflito na Atribuição de Candidatuas","Consultar Dados de Alunos em conflito",
                 "Consultar Dados da Proposta", "Atribuir a Aluno", "Exit")){
             case 1 -> System.out.println(context.consultaAlunosConflito());
             case 2 -> System.out.println(context.consultaPropostaConflito());
-            case 3 -> context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
+            case 3 -> error = context.resolveConflito(PAInput.readLong("Numero do Aluno:"));
             case 4 -> context.sair();
         }
+        System.out.println(error);
     }
 
 
     private void UIAtribuicaoManualPropostas(){
-
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(), "Atribuição manual de propostas disponíveis aos alunos",
                 "Remoção manual de uma atribuição previamente realizada",
                 "Remoção manual de todas as atribuições",
                 "Undo", "Redo", "Voltar", "Exit")) {
-            case 1 -> manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
-            case 2 -> manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
-            case 3 -> manager.removerTodasAtribuicoes();
+            case 1 -> error = manager.atribuicaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+            case 2 -> error = manager.remocaoManual(PAInput.readLong("Num Aluno:"), PAInput.readString("Id. Proposta: ", true));
+            case 3 -> error = manager.removerTodasAtribuicoes();
             case 4 -> manager.undo();
             case 5 -> manager.redo();
             case 6 -> context.recuarFase();
             case 7 -> context.sair();
         }
+        System.out.println(error);
     }
 
     private void UIAtribuicao_Orientadores() {
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(),"Associação automática dos docentes proponentes de projetos como orientador dos mesmos",
                 "Exportar para CSV","Gestao de Orientadores", "Obtenção de dados de Orientadores", "Recuar Fase" ,"Fechar Fase e Avançar", "Exit")){
             case 1 -> context.associacaoAutomaticaDeDocentesAPropostas();
-            case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+            case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
             case 3 -> context.gerirOrientadores();
             case 4 -> context.obtencaoDadosOrientador();
             case 5 -> context.recuarFase();
-            case 6 -> context.closeFase();
+            case 6 -> error = context.closeFase();
             case 7 -> context.sair();
         }
+        System.out.println(error);
     }
 
     private void UIGestao_Orientadores() {
-        ErrorCode error;
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(),"Atribuir Orientador", "Consultar Orientadores", "Alterar Docente",
                 "Eliminar Orientador", "Undo", "Redo", "Voltar", "Exit")){
-            case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 1 -> error = manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 2 -> System.out.println(context.getAlunosComPropostaEOrientador());
-            case 3 -> manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
-            case 4 -> manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 3 -> error = manager.alterarDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
+            case 4 -> error = manager.removerDocente(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
             case 5 -> manager.undo();
             case 6 -> manager.redo();
             case 7 -> context.recuarFase();
             case 8 -> context.sair();
         }
+        System.out.println(error);
     }
 
     private void UIObtencaoDadosOrientadores() {
-
-
         switch (PAInput.chooseOption("Obtenção de dados diversos sobre atribuição de orientadores",
                     "Lista de estudantes com proposta atribuída e com orientador associado",
                     "Lista de estudantes com proposta atribuída mas sem orientador associado",
@@ -616,8 +623,6 @@ public class ApoioUIText {
             case 3 -> System.out.println(context.getEstatisticasPorDocente());
             case 4 -> context.recuarFase();
             case 5 -> context.sair();
-
-
         }
     }
 
@@ -635,7 +640,7 @@ public class ApoioUIText {
             case 6 -> System.out.println(context.getEstatisticasPorDocente());
             case 7 -> context.sair();
         }
-        System.out.println(ErrorCode.E0);
+        System.out.println(error);
     }
 
     private String errorReport(ErrorCode error){
@@ -654,7 +659,7 @@ public class ApoioUIText {
             case E12 -> {return "Email já registado";}
             case E13 -> {return "Linha incompleta";}
             case E14 -> {return "Aluno não pode aceder a estágio";}
-            case E15 -> {return "Proposta já atribuída";}
+            case E15 -> {return "Proposta já atribuída a um aluno";}
             case E16 -> {return "Proposta sem Docente Orientador";}
             case E17 -> {return "Candidatura inexistente";}
             case E18 -> {return "Proposta inexistente em candidatura";}
@@ -668,8 +673,10 @@ public class ApoioUIText {
                                 "é igual ou superior ao número de alunos";}
             case E25 -> {return "A operação não é válida no estado atual";}
             case E26 -> {return "Condições de fecho não alcançadas";}
-            case E27 -> {return "Proposta não contém ramo inserido";}
-            case E28 -> {return "Erro ao exportar para .csv";}
+            case E27 -> {return "Proposta não contem ramo inserido";}
+            case E28 -> {return "Aluno não tem candidatura";}
+            case E29 -> {return "Proposta contem aluno previamente attribuído";}
+            case E30 -> {return "Proposta já contem docente orientador";}
             default -> {return "";}
         }
     }

@@ -121,6 +121,10 @@ public class Aluno extends Pessoa implements Cloneable{
         this.classificacao = classificacao;
     }
 
+    public void setPossibilidade(){
+        this.possibilidade = !isPossibilidade();
+    }
+
     public void addCandidatura(Candidatura candidatura) {
         this.candidatura = candidatura;
     }

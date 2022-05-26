@@ -42,6 +42,8 @@ public interface IState {
 
     ErrorCode changeClassAluno(double nova_classificaçao, long nAluno);
 
+    ErrorCode changePossibilidadeAluno(long nAluno);
+
     ErrorCode removeDocente(String numero_de_aluno);
 
     ErrorCode changeNameDocente(String novo_nome, String email);

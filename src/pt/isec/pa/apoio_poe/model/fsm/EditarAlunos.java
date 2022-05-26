@@ -62,4 +62,13 @@ public class EditarAlunos extends StateAdapter{
         }
         return ErrorCode.E0;
     }
+
+    @Override
+    public ErrorCode changePossibilidadeAluno(long nAluno){
+        if(!data.changePossibilidadeAluno(nAluno)){
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            return ErrorCode.E3;
+        }
+        return ErrorCode.E0;
+    }
 }
