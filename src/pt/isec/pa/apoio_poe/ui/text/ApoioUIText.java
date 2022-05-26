@@ -5,6 +5,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.utils.PAInput;
@@ -95,32 +96,31 @@ public class ApoioUIText {
 
 
     private void UIConfig_Options() {
-        String [] opcoes;
         if(!context.isClosed()) { //Se nao esta fechado
-            opcoes = new String[]{"Gestao de Alunos", "Gestão de Docentes", "Gestão de Propostas", "Fechar Fase", "Avançar Fase","Exit"};
-
+            switch(PAInput.chooseOption(context.getName(),"Gestao de Alunos", "Gestão de Docentes", "Gestão de Propostas", "Fechar Fase", "Avançar Fase","Exit")){
+                case 1 -> context.gerirAlunos();
+                case 2 -> context.gerirDocentes();
+                case 3 -> context.gerirEstagios();
+                case 4 -> context.closeFase();
+                case 5 -> context.avancarFase();
+                case 6 -> context.sair();
+            }
         }
         else{
-            opcoes = new String[]{"Gestao de Alunos", "Gestão de Docentes", "Gestão de Propostas", "Avançar Fase","Exit"};
-        }
-        switch (PAInput.chooseOption(context.getName(), opcoes)) {
-            case 1 -> context.gerirAlunos();
-            case 2 -> context.gerirDocentes();
-            case 3 -> context.gerirEstagios();
-            case 4 -> {
-                if (context.isClosed()) {context.avancarFase();}
-                else  {context.closeFase();}
+            switch (PAInput.chooseOption(context.getName(), "Gestao de Alunos", "Gestão de Docentes", "Gestão de Propostas", "Avançar Fase","Exit")) {
+                case 1 -> context.gerirAlunos();
+                case 2 -> context.gerirDocentes();
+                case 3 -> context.gerirEstagios();
+                case 4 -> context.avancarFase();
+                case 5 -> context.sair();
             }
-            case 5 -> {if (!context.isClosed()) context.avancarFase();
-                        else context.sair();}
-            case 6 -> context.sair();
         }
     }
 
 
-
     private void UIGestao_Alunos() {
         int option;
+        ErrorCode error = ErrorCode.E0;
         if (!context.isClosed()) {
             option = PAInput.chooseOption(context.getName(), "Inserção Alunos Por Ficheiro CSV", "Exportar Alunos para CSV",
                     "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Remover todos os Alunos", "Voltar","Exit");
@@ -132,14 +132,13 @@ public class ApoioUIText {
                         System.out.println(c.getMessageOfExceptions());
                     }
                 }
-                case 2 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 3 -> System.out.println(context.getAlunosToString());
                 case 4 -> context.editarAlunos();
                 case 5 -> context.removeAluno(PAInput.readLong("Numero de Aluno: "));
                 case 6 -> context.removeAll();
                 case 7 -> context.recuarFase();
                 case 8 -> context.sair();
-
             }
         } else {
             option = PAInput.chooseOption(context.getName(), "Exportar Alunos para CSV", "Consultar Alunos", "Voltar","Exit");
@@ -150,6 +149,7 @@ public class ApoioUIText {
                 case 4 -> context.sair();
             }
         }
+        System.out.println(errorReport(error));
     }
 
 
@@ -549,6 +549,7 @@ public class ApoioUIText {
     }
 
     private void UIGestao_Orientadores() {
+        ErrorCode error;
         switch (PAInput.chooseOption(context.getName(),"Atribuir Orientador", "Consultar Orientadores", "Alterar Docente",
                 "Eliminar Orientador", "Undo", "Redo", "Voltar", "Exit")){
             case 1 -> manager.atribuirOrientador(PAInput.readString("Email do Docente:", true), PAInput.readString("ID Proposta: ", true));
@@ -581,11 +582,12 @@ public class ApoioUIText {
     }
 
     private void UIConsulta() {
+        ErrorCode error = ErrorCode.E0;
         switch (PAInput.chooseOption(context.getName(), "Exportar para CSV","Lista de alunos com propostas atribuídas",
                 "Lista de estudantes sem propostas atribuídas e com opções de candidatura",
                 "Conjunto de propostas disponíveis", "Conjunto de propostas atribuídas",
                 "Número de orientações por docente, em média, mínimo, máximo, e por docente especificado.", "Exit")){
-            case 1 -> context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+            case 1 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
             case 2 -> System.out.println(context.getTodosAlunosComPropostaAtribuida());
             case 3 -> System.out.println(context.obtencaoAlunosSemPropostaComCandidatura());
             case 4 -> System.out.println(context.getPropostasDisponiveis());
@@ -593,8 +595,43 @@ public class ApoioUIText {
             case 6 -> System.out.println(context.getEstatisticasPorDocente());
             case 7 -> context.sair();
         }
+        System.out.println(ErrorCode.E0);
     }
 
-
+    private String errorReport(ErrorCode error){
+        switch(error){
+            case E1 -> {return "Leitura de campo incorreto";}
+            case E2 -> {return "Nome de ficheiro incorreto";}
+            case E3 -> {return "Numero de aluno inexistente";}
+            case E4 -> {return "Email de docente inexistente";}
+            case E5 -> {return "Curso insexistente";}
+            case E6 -> {return "Classificação não comprendida entre 0.0 e 1.0";}
+            case E7 -> {return "Ramo inexistente";}
+            case E8 -> {return "Tentativa de introdução de uma entidade em proposta não estágio";}
+            case E9 -> {return "Proposta inexistente";}
+            case E10 -> {return "Proposta ja contém ramo inserido";}
+            case E11 -> {return "Numero de aluno já registado";}
+            case E12 -> {return "Email já registado";}
+            case E13 -> {return "Linha incompleta";}
+            case E14 -> {return "Aluno não pode aceder a estágio";}
+            case E15 -> {return "Proposta já atribuída";}
+            case E16 -> {return "Proposta sem Docente Orientador";}
+            case E17 -> {return "Candidatura inexistente";}
+            case E18 -> {return "Proposta inexistente em candidatura";}
+            case E19 -> {return "Candidatura já existe";}
+            case E20 -> {return "Tentativa de registar candidatura em aluno já com proposta";}
+            case E21 -> {return "Inserção de candidatura a proposta com aluno já associado";}
+            case E22 -> {return "Fase anterior Aberta";}
+            case E23 -> {return "Atribuicao de propostas nao se encontra fechada";}
+            case E24 -> {return "numero total de propostas é igual ou superior ao número total" +
+                                " de alunos e se, para cada ramo, o número total de propostas " +
+                                "é igual ou superior ao número de alunos";}
+            case E25 -> {return "A operação não é válida no estado atual";}
+            case E26 -> {return "Condições de fecho não alcançadas";}
+            case E27 -> {return "Proposta não contém ramo inserido";}
+            case E28 -> {return "Erro ao exportar para .csv";}
+            default -> {return "";}
+        }
+    }
 
 }

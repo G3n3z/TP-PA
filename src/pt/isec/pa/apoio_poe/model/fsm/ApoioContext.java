@@ -223,8 +223,8 @@ public class ApoioContext {
         return state.obtencaoAlunosSemPropostaComCandidatura();
     }
 
-    public void exportaCSV(String file) {
-        state.exportarCSV(file);
+    public ErrorCode exportaCSV(String file) {
+        return state.exportarCSV(file);
     }
 
     public String getPropostasDisponiveis() {
