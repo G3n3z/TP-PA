@@ -83,7 +83,7 @@ public class ApoioContext {
         return state.getDocentesToString();
     }
 
-    public boolean importPropostas(String file) { return state.importPropostas(file);}
+    public boolean importPropostas(String file) throws CollectionBaseException { return state.importPropostas(file);}
 
     public String getPropostasToString() {
         return state.getPropostasToString();

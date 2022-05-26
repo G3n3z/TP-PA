@@ -38,7 +38,7 @@ public class GestaoPropostas extends StateAdapter{
     }
 
     @Override
-    public boolean importPropostas(String file) {
+    public boolean importPropostas(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file,",")){
             //MessageCenter.getInstance().putMessage("O ficheiro não existe"); TODO
             return false;
@@ -46,9 +46,9 @@ public class GestaoPropostas extends StateAdapter{
 
         String tipo;
         int index = 1;
-
+        CollectionBaseException cb = null;
         while (CSVReader.hasNext()) {
-            CollectionBaseException cb = null;
+
             try {
 
                 tipo = CSVReader.readString();
@@ -82,7 +82,8 @@ public class GestaoPropostas extends StateAdapter{
             index++;
             if(!CSVReader.nextLine()) break;
         }
-
+        if(cb != null)
+            throw cb;
         return index != 1;
     }
 

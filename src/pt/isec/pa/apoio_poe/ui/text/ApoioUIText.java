@@ -217,9 +217,11 @@ public class ApoioUIText {
                     "Remover Estágio/Projeto", "Remover todos Estágios/Projetos", "Voltar", "Exit");
             switch (option) {
                 case 1 -> {
-                    context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
-                    while(MessageCenter.getInstance().hasNext()){
-                        System.out.println(MessageCenter.getInstance().getMessage());
+                    try {
+                        context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
+                    }
+                    catch (CollectionBaseException e){
+                        System.out.println(e.getMessageOfExceptions());
                     }
                 }
                 case 2 -> context.exportaCSV(PAInput.readString("Ficheiro: ", true));

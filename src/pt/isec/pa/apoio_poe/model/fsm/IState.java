@@ -27,7 +27,7 @@ public interface IState {
     boolean fechado();
     boolean addAluno(String file) throws CollectionBaseException;
     boolean importDocentes(String file) throws CollectionBaseException;
-    boolean importPropostas(String file);
+    boolean importPropostas(String file) throws CollectionBaseException;
     boolean addCandidatura(String file) throws CollectionBaseException;
 
     void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();

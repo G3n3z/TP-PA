@@ -121,7 +121,7 @@ abstract class StateAdapter implements IState{
     public boolean importDocentes(String file) throws CollectionBaseException { return false; }
 
     @Override
-    public boolean importPropostas(String file) { return false; }
+    public boolean importPropostas(String file) throws CollectionBaseException { return false; }
 
     @Override
     public boolean addCandidatura(String file) throws CollectionBaseException {return false;}
