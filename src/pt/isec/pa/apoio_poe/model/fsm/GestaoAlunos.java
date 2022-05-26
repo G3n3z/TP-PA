@@ -6,6 +6,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
 import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
@@ -38,7 +39,7 @@ public class GestaoAlunos extends StateAdapter{
     @Override
     public boolean addAluno(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file, ",")){
-            MessageCenter.getInstance().putMessage("O ficheiro não existe\n");
+            //MessageCenter.getInstance().putMessage("O ficheiro não existe\n"); //TODO
             return false;
         }
         CollectionBaseException col = null;
@@ -136,19 +137,20 @@ public class GestaoAlunos extends StateAdapter{
 
 
     @Override
-    public void removeAluno(long numero_de_aluno) {
+    public ErrorCode removeAluno(long numero_de_aluno) {
         Aluno a = data.getAluno(numero_de_aluno);
         if(a == null){
-            MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
-            return;
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            return ErrorCode.E3;
         }
         data.removeAluno(a);
+        return ErrorCode.E0;
     }
 
 
 
     @Override
-    public boolean exportarCSV(String file) {
+    public ErrorCode exportarCSV(String file) {
         List<Aluno> alunos;
         if(CSVWriter.startWriter(file)){
             alunos = data.getAlunos();
@@ -157,9 +159,9 @@ public class GestaoAlunos extends StateAdapter{
             }
 
             CSVWriter.closeFile();
-            return true;
+            return ErrorCode.E0;
         }
-        return false;
+        return ErrorCode.E2;
     }
 
     @Override

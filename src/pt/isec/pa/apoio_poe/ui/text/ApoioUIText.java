@@ -156,9 +156,7 @@ public class ApoioUIText {
     private void UIEditarAlunos() {
         switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Curso",
                     "Ramo", "Classificacao", "Voltar", "Exit")){
-            case 1 -> {
-                if(!context.changeNameAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo nome: ", false)))
-                    System.out.println("Numero de aluno invalido");
+            case 1 -> {context.changeNameAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo nome: ", false));
             }
             case 2 -> context.changeCursoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo curso: ", true));
             case 3 -> context.changeRamoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo ramo: ", true));

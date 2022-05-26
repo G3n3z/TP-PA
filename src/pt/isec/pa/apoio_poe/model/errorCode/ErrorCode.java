@@ -126,8 +126,28 @@ public enum ErrorCode {
      *  numero total de propostas é igual ou superior ao número total de alunos e se, //TODO: modificar texto
      *  para cada ramo, o número total de propostas é igual ou superior ao número de alunos
      */
-    E24
+    E24,
 
+    /***
+     * A operaçao não é valida no estado atual
+     */
+    E25, 
+
+
+    /**
+     * Condicoes de fecho nao alcançadas //TODO
+     */
+    E26,
+
+    /**
+     * Proposta nao contem o ramo inserido
+     */
+    E27, 
+
+    /**
+     * Aluno nao tem candidatura
+     */
+    E28
 
 
 }

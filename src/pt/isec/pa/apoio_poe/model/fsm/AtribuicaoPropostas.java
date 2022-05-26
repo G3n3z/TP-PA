@@ -7,6 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.ArrayList;
@@ -58,19 +59,19 @@ public class AtribuicaoPropostas extends StateAdapter{
 
     /**
      *
-     * @return Booleano para dizer se correu bem o fecho ou nao
+     * @return Errorcode para dizer se correu bem o fecho ou nao
      */
 
     @Override
-    public boolean close() {
+    public ErrorCode close() {
         if((data.getAlunos().stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada)){
             setClose(true);
-            MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
-            return true;
+            //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            return ErrorCode.E0;
         }
-        MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");
-        MessageCenter.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
-        return false;
+        //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");
+        //MessageCenter.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
+        return ErrorCode.E26;
     }
 
     /**
@@ -99,9 +100,9 @@ public class AtribuicaoPropostas extends StateAdapter{
      */
 
     @Override
-    public boolean exportarCSV(String file) {
+    public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
-            return false;
+            return ErrorCode.E2;
         }
 
         for(Aluno a : data.getAlunos()) {
@@ -117,7 +118,7 @@ public class AtribuicaoPropostas extends StateAdapter{
         //data.exportAlunosCandidaturaProposta();
         CSVWriter.closeFile();
 
-        return true;
+        return ErrorCode.E0;
     }
 
     /**

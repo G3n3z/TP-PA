@@ -5,6 +5,7 @@ import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 import java.util.ArrayList;
@@ -25,9 +26,9 @@ public class Consulta extends StateAdapter{
     }
 
     @Override
-    public boolean exportarCSV(String file) {
+    public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
-            return false;
+            return ErrorCode.E2;
         }
         for(Aluno a : data.getAlunos()) {
             CSVWriter.writeLine(",", false, false, a.getExportAluno());
@@ -45,7 +46,7 @@ public class Consulta extends StateAdapter{
 
         CSVWriter.closeFile();
 
-        return true;
+        return ErrorCode.E0;
 
     }
     @Override

@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,67 +27,71 @@ public class EditarPropostas extends StateAdapter{
     }
 
     @Override
-    public boolean changeTitulo(String id, String novo_titulo){
+    public ErrorCode changeTitulo(String id, String novo_titulo){
         Proposta p = getPropostaById(id);
         if (p == null)
-            return false;
+            return ErrorCode.E9;
         p.setTitulo(novo_titulo);
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override
-    public boolean changeEntidade(String id, String nova_entidade) {
+    public ErrorCode changeEntidade(String id, String nova_entidade) {
         Proposta p = getPropostaById(id);
+        if(p == null){
+            return ErrorCode.E9;
+        }
         if(p instanceof Estagio e){
            e.changeEntidade(nova_entidade);
         }else {
-            MessageCenter.getInstance().putMessage("Apenas existe entidade nos estágios");
-            return false;
+            //MessageCenter.getInstance().putMessage("Apenas existe entidade nos estágios");
+            return ErrorCode.E8;
         }
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override
-    public boolean addRamo(String id, String ramo)  {
+    public ErrorCode addRamo(String id, String ramo)  {
         if(!data.existeRamos(ramo)){
-            MessageCenter.getInstance().putMessage("Ramo inexistente");
+            //MessageCenter.getInstance().putMessage("Ramo inexistente");
+            return ErrorCode.E7;
         }
         Proposta p = getPropostaById(id);
         if(p == null){
-            return false;
+            return ErrorCode.E9;
         }
         if(p.getRamos()!= null && p.getRamos().contains(ramo)){
-            MessageCenter.getInstance().putMessage("A proposta já contem o ramo inserido");
-            return false;
+            //MessageCenter.getInstance().putMessage("A proposta já contem o ramo inserido");
+            return ErrorCode.E10;
         }
         p.addRamo(ramo);
-        return true;
+        return ErrorCode.E0;
     }
 
     private Proposta getPropostaById(String id) {
         List<Proposta> propostas = data.getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(id));
         if(propostas.size() == 0){
-            MessageCenter.getInstance().putMessage("Nao existe a proposta com o id " + id);
+            //MessageCenter.getInstance().putMessage("Nao existe a proposta com o id " + id);
             return null;
         }
         return propostas.get(0);
     }
 
     @Override
-    public boolean removeRamo(String id, String ramo) {
+    public ErrorCode removeRamo(String id, String ramo) {
         if(!data.existeRamos(ramo)){
-            MessageCenter.getInstance().putMessage("Ramo inexistente");
-            return false;
+            //MessageCenter.getInstance().putMessage("Ramo inexistente");
+            return ErrorCode.E7;
         }
         Proposta p = getPropostaById(id);
         if(p == null){
-            return false;
+            return ErrorCode.E9;
         }
         if(p.getRamos()!= null && !p.getRamos().contains(ramo)){
-            MessageCenter.getInstance().putMessage("A proposta já não contem o ramo inserido");
-            return false;
+            //MessageCenter.getInstance().putMessage("A proposta já não contem o ramo inserido");
+            return ErrorCode.E27;
         }
         p.removeRamo(ramo);
-        return true;
+        return ErrorCode.E0;
     }
 }

@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
 public class AtribuicaoOrientadores extends StateAdapter {
@@ -28,10 +29,10 @@ public class AtribuicaoOrientadores extends StateAdapter {
     }
 
     @Override
-    public boolean close() {
+    public ErrorCode close() {
         setClose(true);
         changeState(EnumState.CONSULTA);
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override
@@ -49,9 +50,9 @@ public class AtribuicaoOrientadores extends StateAdapter {
         return true;
     }
     @Override
-    public boolean exportarCSV(String file) {
+    public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
-            return false;
+            return ErrorCode.E2;
         }
         for(Aluno a : data.getAlunos()) {
             CSVWriter.writeLine(",", false, false, a.getExportAluno());
@@ -72,7 +73,7 @@ public class AtribuicaoOrientadores extends StateAdapter {
 
         CSVWriter.closeFile();
 
-        return true;
+        return ErrorCode.E0;
     }
     @Override
     public void obtencaoDadosOrientador() {

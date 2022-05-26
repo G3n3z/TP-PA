@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
 
@@ -9,7 +10,7 @@ public interface IState {
     boolean avancarFase();
     boolean recuarFase();
     EnumState getState();
-    boolean close();
+    ErrorCode close();
     boolean gerirAlunos();
     boolean gerirDocentes();
     boolean gerirEstagios();
@@ -31,34 +32,34 @@ public interface IState {
 
     void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno();
 
-    boolean changeName(String novo_nome, long nAluno);
+    ErrorCode changeName(String novo_nome, long nAluno);
 
-    void removeAluno(long numero_de_aluno);
+    ErrorCode removeAluno(long numero_de_aluno);
 
-    void changeCursoAluno(String novo_curso, long nAluno);
+    ErrorCode changeCursoAluno(String novo_curso, long nAluno);
 
-    void changeRamoAluno(String novo_ramo, long nAluno);
+    ErrorCode changeRamoAluno(String novo_ramo, long nAluno);
 
-    void changeClassAluno(double nova_classificaçao, long nAluno);
+    ErrorCode changeClassAluno(double nova_classificaçao, long nAluno);
 
-    void removeDocente(String numero_de_aluno);
+    ErrorCode removeDocente(String numero_de_aluno);
 
-    void changeNameDocente(String novo_nome, String email);
-    void addPropostaACandidatura(long nAluno, String idProposta);
+    ErrorCode changeNameDocente(String novo_nome, String email);
+    ErrorCode addPropostaACandidatura(long nAluno, String idProposta);
 
     void atribuicaoAutomaticaSemAtribuicoesDefinidas() throws ConflitoAtribuicaoAutomaticaException;
 
     boolean existConflict();
 
-    boolean resolveConflito(long numAluno);
+    ErrorCode resolveConflito(long numAluno);
 
     void associacaoAutomaticaDeDocentesAPropostas();
 
-    boolean exportarCSV(String file);
+    ErrorCode exportarCSV(String file);
 
-    void removeProposta(String id);
+    ErrorCode removeProposta(String id);
 
-    void removePropostaACandidatura(String id, long naluno);
+    ErrorCode removePropostaACandidatura(String id, long naluno);
 
     boolean load() throws IOException, ClassNotFoundException;
 
@@ -72,13 +73,13 @@ public interface IState {
 
     boolean removeAll();
 
-    boolean changeTitulo(String id, String novo_titulo);
+    ErrorCode changeTitulo(String id, String novo_titulo);
 
-    boolean changeEntidade(String id, String nova_entidade) ;
+    ErrorCode changeEntidade(String id, String nova_entidade) ;
 
-    boolean addRamo(String id, String ramo) ;
+    ErrorCode addRamo(String id, String ramo) ;
 
-    boolean removeRamo(String id, String ramo) ;
+    ErrorCode removeRamo(String id, String ramo) ;
 
     String getAlunosToString();
 

@@ -8,6 +8,7 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
@@ -52,15 +53,15 @@ public class OpcoesCandidatura extends StateAdapter{
     }
 
     @Override
-    public boolean close() {
+    public ErrorCode close() {
         if(data.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
-            MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
-            return true;
+            //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            return ErrorCode.E0;
         }
-        MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +
-                "Fase anterior ainda aberta.");
-        return false;
+        //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +
+        //        "Fase anterior ainda aberta.");
+        return ErrorCode.E22;
     }
 
     @Override
@@ -166,56 +167,58 @@ public class OpcoesCandidatura extends StateAdapter{
     }
 
     @Override
-    public void addPropostaACandidatura(long nAluno, String idProposta) {
+    public ErrorCode addPropostaACandidatura(long nAluno, String idProposta) {
         Aluno a = data.getAluno(nAluno);
         if(a == null){
-            MessageCenter.getInstance().putMessage("Numero de aluno não existente");
-            return;
+            //MessageCenter.getInstance().putMessage("Numero de aluno não existente");
+            return ErrorCode.E3;
         }
         if(!a.temCandidatura()){
-            MessageCenter.getInstance().putMessage("O aluno não tem candidatura");
-            return;
+            //MessageCenter.getInstance().putMessage("O aluno não tem candidatura");
+            return ErrorCode.E28;
         }
-        if(data.existePropostaSemAluno(idProposta)){
-           a.addCandidatura(idProposta);
+        if(!data.existePropostaSemAluno(idProposta)){
+            return ErrorCode.E15;
         }
-
+        a.addPropostaACandidatura(idProposta);
+        return ErrorCode.E0;
     }
 
     @Override
-    public boolean exportarCSV(String file) {
+    public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
-            return false;
+            return ErrorCode.E2;
         }
         for(Candidatura c : data.getCandidaturas()){
             CSVWriter.writeLine(",",true,false, c.getExportCandidatura());
         }
         CSVWriter.closeFile();
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override
-    public void removePropostaACandidatura(String id, long naluno) {
+    public ErrorCode removePropostaACandidatura(String id, long naluno) {
         if(!data.verificaProposta(id)){
-            MessageCenter.getInstance().putMessage("Nao existe o id inserido");
-            return;
+            //MessageCenter.getInstance().putMessage("Nao existe o id inserido");
+            return ErrorCode.E9;
         }
         Aluno a = data.getAluno(naluno);
         if(a == null){
-            MessageCenter.getInstance().putMessage("Nao existe nenhum aluno com este numero inserido");
-            return;
+            //MessageCenter.getInstance().putMessage("Nao existe nenhum aluno com este numero inserido");
+            return ErrorCode.E3;
         }
         if(!a.temCandidatura()){
-            MessageCenter.getInstance().putMessage("O aluno " + naluno + " nao tem candidatura");
-            return;
+            //MessageCenter.getInstance().putMessage("O aluno " + naluno + " nao tem candidatura");
+            return ErrorCode.E28;
         }
         if(a.getCandidatura().containsPropostaById(id)){
             a.getCandidatura().removeProposta(id);
         }
         else{
-            MessageCenter.getInstance().putMessage("O aluno " + naluno + " nao tem essa proposta na sua candidatura");
+            //MessageCenter.getInstance().putMessage("O aluno " + naluno + " nao tem essa proposta na sua candidatura");
+            return ErrorCode.E18;
         }
-
+        return ErrorCode.E0;
     }
 
     @Override

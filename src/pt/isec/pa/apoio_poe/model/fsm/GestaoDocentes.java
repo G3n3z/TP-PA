@@ -6,6 +6,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
 import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
@@ -38,7 +39,7 @@ public class GestaoDocentes extends StateAdapter{
     public boolean importDocentes(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
         if(!CSVReader.startScanner(file,",")){
-            MessageCenter.getInstance().putMessage("O ficheiro não existe");
+            //MessageCenter.getInstance().putMessage("O ficheiro não existe"); TODO
             return false;
         }
         Docente docente;
@@ -90,28 +91,29 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     @Override
-    public void removeDocente(String email) {
+    public ErrorCode removeDocente(String email) {
         Docente d = data.getDocente(email);
         if(d == null){
-            MessageCenter.getInstance().putMessage("Email não registado em nenhum docente");
-            return;
+            //MessageCenter.getInstance().putMessage("Email não registado em nenhum docente");
+            return ErrorCode.E4;
         }
         data.removeDocente(d);
+        return ErrorCode.E0;
     }
 
 
 
     @Override
-    public boolean exportarCSV(String file) {
+    public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
-            return false;
+            return ErrorCode.E2;
         }
         List<Docente> docentes = data.getDocentes();
         for (Docente d: docentes){
             CSVWriter.writeLine(",",true,false, d.getExportDocente());
         }
         CSVWriter.closeFile();
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override

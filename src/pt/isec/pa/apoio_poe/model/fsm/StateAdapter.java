@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.*;
 
@@ -26,9 +27,9 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public boolean close() {
+    public ErrorCode close() {
         close = true;
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override
@@ -126,28 +127,28 @@ abstract class StateAdapter implements IState{
     public boolean addCandidatura(String file) throws CollectionBaseException {return false;}
 
     @Override
-    public boolean changeName(String novo_nome, long nAluno) {return false;}
+    public ErrorCode changeName(String novo_nome, long nAluno) {return ErrorCode.E25;}
 
     @Override
-    public void removeAluno(long numero_de_aluno) {}
+    public ErrorCode removeAluno(long numero_de_aluno) {return ErrorCode.E25;}
 
     @Override
-    public void changeCursoAluno(String novo_curso, long nAluno) {}
+    public ErrorCode changeCursoAluno(String novo_curso, long nAluno) {return ErrorCode.E25;}
 
     @Override
-    public void changeRamoAluno(String novo_ramo, long nAluno) {}
+    public ErrorCode changeRamoAluno(String novo_ramo, long nAluno) {return ErrorCode.E25;}
 
     @Override
-    public void changeClassAluno(double nova_classificaçao, long nAluno) {}
+    public ErrorCode changeClassAluno(double nova_classificaçao, long nAluno) { return ErrorCode.E25;}
 
     @Override
-    public void removeDocente(String numero_de_aluno){}
+    public ErrorCode removeDocente(String numero_de_aluno){return ErrorCode.E25;}
 
     @Override
-    public void changeNameDocente(String novo_nome, String email) {}
+    public ErrorCode changeNameDocente(String novo_nome, String email) {return ErrorCode.E25;}
 
     @Override
-    public void addPropostaACandidatura(long nAluno, String idProposta) {}
+    public ErrorCode addPropostaACandidatura(long nAluno, String idProposta) {return ErrorCode.E25;}
 
     @Override
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {}
@@ -161,8 +162,8 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public boolean resolveConflito(long numAluno) {
-        return false;
+    public ErrorCode resolveConflito(long numAluno) {
+        return ErrorCode.E25;
     }
 
     @Override
@@ -177,16 +178,16 @@ abstract class StateAdapter implements IState{
     public void gestaoManualAtribuicoes() {}
 
     @Override
-    public boolean exportarCSV(String file) {
-        return false;
+    public ErrorCode exportarCSV(String file) {
+        return ErrorCode.E25;
     }
 
     @Override
-    public void removeProposta(String id) {}
+    public ErrorCode removeProposta(String id) {return ErrorCode.E25;}
 
     @Override
-    public void removePropostaACandidatura(String id, long naluno) {
-
+    public ErrorCode removePropostaACandidatura(String id, long naluno) {
+        return ErrorCode.E25;
     }
 
     @Override
@@ -285,16 +286,16 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public boolean changeTitulo(String id, String novo_titulo) {
-        return false;
+    public ErrorCode changeTitulo(String id, String novo_titulo) {
+        return ErrorCode.E25;
     }
 
     @Override
-    public boolean changeEntidade(String id, String nova_entidade){return false;}
+    public ErrorCode changeEntidade(String id, String nova_entidade){return ErrorCode.E25;}
 
     @Override
-    public boolean addRamo(String id, String ramo){return false;}
+    public ErrorCode addRamo(String id, String ramo){return ErrorCode.E25;}
 
     @Override
-    public boolean removeRamo(String id, String ramo){return false;}
+    public ErrorCode removeRamo(String id, String ramo){return ErrorCode.E25;}
 }

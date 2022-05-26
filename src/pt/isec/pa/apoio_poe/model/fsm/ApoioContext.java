@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class ApoioContext {
     }
 
     public boolean closeFase(){
-        if(state.close())
+        if(state.close() == ErrorCode.E0)
             data.closeState(state.getState());
         return true;
     }
@@ -102,32 +103,32 @@ public class ApoioContext {
         state.addCandidatura(file);
     }
 
-    public boolean changeNameAluno(long nAluno, String novo_nome) {
+    public ErrorCode changeNameAluno(long nAluno, String novo_nome) {
         return state.changeName(novo_nome, nAluno);
     }
 
-    public void removeAluno(long numero_de_aluno) {
-        state.removeAluno(numero_de_aluno);
+    public ErrorCode removeAluno(long numero_de_aluno) {
+        return state.removeAluno(numero_de_aluno);
     }
 
-    public void changeCursoAluno(long nAluno, String novo_curso) {
-        state.changeCursoAluno(novo_curso, nAluno);
+    public ErrorCode changeCursoAluno(long nAluno, String novo_curso) {
+        return state.changeCursoAluno(novo_curso, nAluno);
     }
 
-    public void changeRamoAluno(long nAluno,String novo_ramo) {
-        state.changeRamoAluno(novo_ramo, nAluno);
+    public ErrorCode changeRamoAluno(long nAluno,String novo_ramo) {
+        return state.changeRamoAluno(novo_ramo, nAluno);
     }
 
-    public void changeClassAluno(long nAluno, double nova_classificacao) {
-        state.changeClassAluno(nova_classificacao, nAluno);
+    public ErrorCode changeClassAluno(long nAluno, double nova_classificacao) {
+        return state.changeClassAluno(nova_classificacao, nAluno);
     }
 
-    public void removeDocente(String emailDocente) {
-        state.removeDocente(emailDocente);
+    public ErrorCode removeDocente(String emailDocente) {
+        return state.removeDocente(emailDocente);
     }
 
-    public void changeNomeDocente(String email, String novo_nome) {
-        state.changeNameDocente(novo_nome, email);
+    public ErrorCode changeNomeDocente(String email, String novo_nome) {
+        return state.changeNameDocente(novo_nome, email);
     }
 
     public String obtencaoAlunosComAutoProposta(){
@@ -150,12 +151,12 @@ public class ApoioContext {
         return state.obtencaoAlunosSemProposta();
     }
 
-    public void addPropostaACandidatura(long nAluno, String idProposta) {
-        state.addPropostaACandidatura(nAluno, idProposta);
+    public ErrorCode addPropostaACandidatura(long nAluno, String idProposta) {
+        return state.addPropostaACandidatura(nAluno, idProposta);
     }
 
-    public void removePropostaACandidatura(long nAluno, String id) {
-        state.removePropostaACandidatura(id, nAluno);
+    public ErrorCode removePropostaACandidatura(long nAluno, String id) {
+        return state.removePropostaACandidatura(id, nAluno);
     }
 
     public void atribuicaoAutomatica() {
@@ -186,7 +187,7 @@ public class ApoioContext {
         return data.consultaPropostaConflito();
     }
 
-    public boolean resolveConflito(long numAluno) {
+    public ErrorCode resolveConflito(long numAluno) {
         return state.resolveConflito(numAluno);
     }
 
@@ -298,19 +299,19 @@ public class ApoioContext {
         return state.removeAll();
     }
 
-    public boolean changeTitulo(String id, String novo_titulo) {
+    public ErrorCode changeTitulo(String id, String novo_titulo) {
         return state.changeTitulo(id, novo_titulo);
     }
 
-    public boolean changeEntidade(String id, String nova_entidade){
+    public ErrorCode changeEntidade(String id, String nova_entidade){
         return state.changeEntidade(id, nova_entidade);
     }
 
-    public boolean addRamo(String id, String ramo) {
+    public ErrorCode addRamo(String id, String ramo) {
         return state.addRamo(id, ramo);
     }
 
-    public boolean removeRamo(String id, String ramo) {
+    public ErrorCode removeRamo(String id, String ramo) {
         return state.removeRamo(id, ramo);
     }
 }

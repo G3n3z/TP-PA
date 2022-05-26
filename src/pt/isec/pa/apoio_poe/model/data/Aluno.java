@@ -1,6 +1,5 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Aluno extends Pessoa implements Cloneable{
@@ -126,7 +125,7 @@ public class Aluno extends Pessoa implements Cloneable{
         this.candidatura = candidatura;
     }
 
-    public void addCandidatura(String candidatura) {
+    public void addPropostaACandidatura(String candidatura) {
         this.candidatura.getIdProposta().add(candidatura);
     }
 

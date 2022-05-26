@@ -18,4 +18,12 @@ public class CollectionBaseException extends ApoioException{
         list.forEach(e -> sb.append(e.getExcepMessage()).append("\n"));
         return sb.toString();
     }
+
+    public int getQuantidadeExceptions(){
+        return list.size();
+    }
+
+    public List<BaseException> getListException(){
+        return list;
+    }
 }
