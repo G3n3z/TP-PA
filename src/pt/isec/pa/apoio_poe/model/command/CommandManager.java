@@ -1,5 +1,7 @@
 package pt.isec.pa.apoio_poe.model.command;
 
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -13,14 +15,15 @@ public class CommandManager {
     }
 
 
-    public boolean invokeCommand(ICommand cmd) {
+    public ErrorCode invokeCommand(ICommand cmd) {
         redoCmds.clear();
-        if (cmd.execute()) {
+        ErrorCode errorCode = cmd.execute();
+        if (errorCode == ErrorCode.E0) {
             history.push(cmd);
-            return true;
+            return errorCode;
         }
         history.clear();
-        return false;
+        return errorCode;
     }
 
     public boolean undo() {

@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model.command;
 import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 public class RemoverOrientadorProposta extends CommandAdapter{
     private String emailDocente;
@@ -15,24 +16,25 @@ public class RemoverOrientadorProposta extends CommandAdapter{
     }
 
     @Override
-    public boolean undo() {
+    public ErrorCode undo() {
         return new AtribuicaoOrientadorProposta(data, emailDocente, id).execute();
     }
 
     @Override
-    public boolean execute() {
+    public ErrorCode execute() {
         for (Proposta p : data.getProposta()){
             if(p.getId().equalsIgnoreCase(id)){
                 if(!p.temDocenteOrientador())
-                    MessageCenter.getInstance().putMessage("Proposta sem docente orientador");
+                    //MessageCenter.getInstance().putMessage("Proposta sem docente orientador");
+                    return ErrorCode.E16;
                 else {
                     emailDocente = p.getEmailOrientador();
                     p.removeOrientador();
                 }
-                return true;
+                return ErrorCode.E0;
             }
         }
-        MessageCenter.getInstance().putMessage("Proposta inexistente");
-        return false;
+        //MessageCenter.getInstance().putMessage("Proposta inexistente");
+        return ErrorCode.E9;
     }
 }

@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.command;
 
 import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 public class ApoioManager {
     private Data data;
@@ -32,26 +33,26 @@ public class ApoioManager {
         return false;
     }
 
-    public boolean atribuicaoManual(long nAluno, String idProposta){
+    public ErrorCode atribuicaoManual(long nAluno, String idProposta){
         return cm.invokeCommand(new AtribuicaoManualProposta(data, nAluno, idProposta));
     }
-    public boolean remocaoManual(long nAluno, String idProposta){
+    public ErrorCode remocaoManual(long nAluno, String idProposta){
         return cm.invokeCommand(new RemocaoManualProposta(data, nAluno, idProposta));
     }
 
-    public boolean atribuirOrientador(String emailDocente, String idProposta) {
+    public ErrorCode atribuirOrientador(String emailDocente, String idProposta) {
         return cm.invokeCommand(new AtribuicaoOrientadorProposta(data, emailDocente, idProposta));
     }
 
-    public boolean alterarDocente(String emailDocente, String idProposta) {
+    public ErrorCode alterarDocente(String emailDocente, String idProposta) {
         return cm.invokeCommand(new AlteracaoOrientador(data, emailDocente, idProposta));
     }
 
-    public boolean removerDocente(String emailDocente, String idProposta) {
+    public ErrorCode removerDocente(String emailDocente, String idProposta) {
         return cm.invokeCommand(new RemoverOrientadorProposta(data, emailDocente, idProposta));
     }
 
-    public boolean removerTodasAtribuicoes() {
+    public ErrorCode removerTodasAtribuicoes() {
         return cm.invokeCommand(new RemocaoTotalAtribuicoes(data));
     }
 }

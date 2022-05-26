@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.model.command;
 
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 abstract class CommandAdapter implements ICommand{
     protected Data data;
@@ -10,12 +11,12 @@ abstract class CommandAdapter implements ICommand{
     }
 
     @Override
-    public boolean undo() {
-        return false;
+    public ErrorCode undo() {
+        return ErrorCode.E25;
     }
 
     @Override
-    public boolean execute() {
-        return false;
+    public ErrorCode execute() {
+        return ErrorCode.E25;
     }
 }

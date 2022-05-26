@@ -147,7 +147,15 @@ public enum ErrorCode {
     /**
      * Aluno nao tem candidatura
      */
-    E28
+    E28,
 
+    /**
+     * Proposta tem aluno previamente atibuido
+     */
+    E29,
 
+    /**
+     * Porposta ja contem docente Orientador
+     */
+    E30
 }

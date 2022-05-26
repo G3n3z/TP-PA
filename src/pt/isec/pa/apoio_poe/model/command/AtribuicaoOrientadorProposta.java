@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 public class AtribuicaoOrientadorProposta extends CommandAdapter {
     private String emailDocente;
@@ -15,30 +16,30 @@ public class AtribuicaoOrientadorProposta extends CommandAdapter {
     }
 
     @Override
-    public boolean execute() {
+    public ErrorCode execute() {
         Docente d = data.getDocente(emailDocente);
 
         if(d == null){
-            MessageCenter.getInstance().putMessage("Nao existe o docente");
-            return false;
+            //MessageCenter.getInstance().putMessage("Nao existe o docente");
+            return ErrorCode.E4;
         }
         for (Proposta p : data.getProposta()){
             if(p.getId().equalsIgnoreCase(idProposta) ){
                 if(!p.temDocenteOrientador()) {
                     p.setDocenteOrientador(d);
-                    return true;
+                    return ErrorCode.E0;
                 }else {
-                    MessageCenter.getInstance().putMessage("Proposta com docente Orientador");
-                    return false;
+                    //MessageCenter.getInstance().putMessage("Proposta com docente Orientador");
+                    return ErrorCode.E30;
                 }
             }
         }
-        MessageCenter.getInstance().putMessage("Id de proposta inexistente");
-        return false;
+        //MessageCenter.getInstance().putMessage("Id de proposta inexistente");
+        return ErrorCode.E9;
     }
 
     @Override
-    public boolean undo() {
+    public ErrorCode undo() {
         return new RemoverOrientadorProposta(data,emailDocente,idProposta).execute();
     }
 }

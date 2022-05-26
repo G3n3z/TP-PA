@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 public class RemocaoManualProposta extends CommandAdapter{
 
@@ -17,18 +18,18 @@ public class RemocaoManualProposta extends CommandAdapter{
     }
 
     @Override
-    public boolean execute() {
+    public ErrorCode execute() {
         Aluno a = data.getAluno(nAluno);
         if(a == null)
-            return false;
+            return ErrorCode.E3;
         if(a.getProposta() instanceof Projeto_Estagio || a.getProposta().getNumAluno() != null)
-            return false;
+            return ErrorCode.E29;
         a.removeProposta();
-        return true;
+        return ErrorCode.E0;
     }
 
     @Override
-    public boolean undo() {
+    public ErrorCode undo() {
         return new AtribuicaoManualProposta(data, nAluno,idProposta).execute();
     }
 }
