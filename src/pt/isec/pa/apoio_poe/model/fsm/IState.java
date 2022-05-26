@@ -20,10 +20,7 @@ public interface IState {
     void obtencaoDadosOrientador();
     void obtencaoListaProposta();
     void obtencaoListaAlunos();
-    void editarCandidaturas();
-    void editarDocentes();
-    void editarAlunos();
-    void editarPropostas();
+
     boolean fechado();
     boolean addAluno(String file) throws CollectionBaseException;
     boolean importDocentes(String file) throws CollectionBaseException;

@@ -253,22 +253,6 @@ public class ApoioContext {
         state.obtencaoListaAlunos();
     }
 
-    public void editarAlunos() {
-        state.editarAlunos();
-    }
-
-    public void editarCandidaturas() {
-        state.editarCandidaturas();
-    }
-
-    public void editarDocentes() {
-        state.editarDocentes();
-    }
-
-    public void editarPropostas() {
-        state.editarPropostas();
-    }
-
     public void load() throws IOException, ClassNotFoundException {
         state.load();
     }

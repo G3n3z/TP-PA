@@ -6,12 +6,11 @@ import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AtribuicaoPropostas extends StateAdapter{
 
@@ -41,15 +40,6 @@ public class AtribuicaoPropostas extends StateAdapter{
     @Override
     public void gestaoManualAtribuicoes() { changeState(EnumState.ATRIBUICAO_MANUAL_PROPOSTAS);}
 
-    @Override
-    public void obtencaoListaProposta() {
-        changeState(EnumState.OBTENCAO_LISTA_PROPOSTA_ATRIBUICAO);
-    }
-
-    @Override
-    public void obtencaoListaAlunos() {
-        changeState(EnumState.OBTENCAO_LISTA_ALUNOS_PROPOSTAS);
-    }
 
     @Override
     public EnumState getState() {
@@ -234,6 +224,61 @@ public class AtribuicaoPropostas extends StateAdapter{
                     append("\nMas não tem proposta associada \n");
         });
         return sb.toString();
+    }
+    @Override
+    public String obtencaoAlunosComAutoPropostaAtribuida() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(a -> a.getProposta() instanceof Projeto_Estagio)
+                .forEach(aluno -> sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" - ").append(aluno.getNome())
+                        .append(" tem atirbuida a autoproposta: ").append(aluno.getProposta().getId()).append("\n"));
+        return sb.toString();
+    }
+
+    @Override
+    public String getTodosAlunosComPropostaAtribuida() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(Aluno::temPropostaConfirmada).forEach(aluno -> {
+            sb.append("Aluno: ").append(aluno.getNumeroAluno()).append(" ").append(aluno.getNome())
+                    .append(" tem a proposta ").append(aluno.getProposta().getId()).append(" Ordem: ")
+                    .append(aluno.getOrdem()).append("\n");
+        });
+
+        return sb.toString();
+    }
+    @Override
+    public String obtencaoAlunosComCandidatura() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(a -> a.getCandidatura() != null).forEach(a -> sb.append(a.getNumeroAluno())
+                .append(" - ").append(a.getNome()).append(" está a candidatar-se às propostas ").append(a.getCandidatura().getIdProposta()).append("\n"));
+        return sb.toString();
+    }
+
+    @Override
+    public String obtencaoAlunosSemProposta() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(a -> !a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())
+                .forEach(a-> sb.append(a.getNumeroAluno()).append(" - ").append(a.getNome()).append(" não tem proposta")
+                        .append("\n"));
+        return sb.toString();
+    }
+    @Override
+    public String getPropostasWithFiltersToStringAtribuicao(int[] filters) {
+        StringBuilder sb = new StringBuilder();
+        getPropostasWithFiltersAtribuicao(filters).forEach( p -> sb.append(p).append("\n"));
+        return sb.toString();
+    }
+
+    public Set<Proposta> getPropostasWithFiltersAtribuicao(int ...filters){
+        Set<Proposta> propostas = new HashSet<>();
+        for (int i : filters){
+            switch (i){
+                case 1 -> propostas.addAll(data.getAutoPropostas());
+                case 2 -> propostas.addAll(data.getProjetos());
+                case 3 -> propostas.addAll(data.getPropostasSemAluno());
+                case 4 -> propostas.addAll(data.getPropostasAtribuidas());
+            }
+        }
+        return propostas;
     }
 
 }

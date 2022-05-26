@@ -7,6 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
@@ -31,20 +32,6 @@ public class OpcoesCandidatura extends StateAdapter{
         return true;
     }
 
-    @Override
-    public void editarCandidaturas() {
-        changeState(EnumState.EDITAR_CANDIDATURAS);
-    }
-
-    @Override
-    public void obtencaoListaAlunos() {
-        changeState(EnumState.OBTENCAO_LISTA_ALUNOS);
-    }
-
-    @Override
-    public void obtencaoListaProposta() {
-        changeState(EnumState.OBTENCAO_LISTA_PROPOSTAS);
-    }
 
     @Override
     public EnumState getState() {
@@ -228,4 +215,46 @@ public class OpcoesCandidatura extends StateAdapter{
         }
         return true;
     }
+    @Override
+    public String obtencaoAlunosComAutoProposta() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(a -> a.getPropostaNaoConfirmada() instanceof Projeto_Estagio).forEach(sb::append);
+        return sb.toString();
+    }
+
+    @Override
+    public String obtencaoAlunosComCandidatura() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(a -> a.getCandidatura() != null).forEach(sb::append);
+        return sb.toString();
+    }
+
+    @Override
+    public String obtencaoAlunosSemCandidatura() {
+        StringBuilder sb = new StringBuilder();
+        data.getAlunos().stream().filter(a -> a.getCandidatura() == null && (!a.temPropostaNaoConfirmada() && !a.temPropostaConfirmada())).forEach(sb::append);
+        return sb.toString();
+    }
+
+    public Set<Proposta> getPropostasWithFilters(int ...filters){
+        Set<Proposta> propostas = new HashSet<>();
+        for (int i : filters){
+            switch (i){
+                case 1 -> propostas.addAll(data.getAutoPropostas());
+                case 2 -> propostas.addAll(data.getProjetos());
+                case 3 -> propostas.addAll(data.getPropostasComCandidatura());
+                case 4 -> propostas.addAll(data.getPropostasSemCandidatura());
+            }
+        }
+        return propostas;
+    }
+
+    @Override
+    public String getPropostasWithFiltersToString(int[] filters) {
+        StringBuilder sb = new StringBuilder();
+        getPropostasWithFilters(filters).forEach( p -> sb.append(p).append("\n"));
+        return sb.toString();
+    }
+
+
 }

@@ -29,10 +29,6 @@ public class GestaoAlunos extends StateAdapter{
         return true;
     }
 
-    @Override
-    public void editarAlunos() {
-        changeState(EnumState.EDITAR_ALUNOS);
-    }
 
 
     @Override
@@ -175,4 +171,61 @@ public class GestaoAlunos extends StateAdapter{
         }
         return true;
     }
+
+    @Override
+    public ErrorCode changeName(String novo_nome, long naluno) {
+        return data.changeNameAluno(naluno, novo_nome) ? ErrorCode.E0 : ErrorCode.E3;
+    }
+
+    @Override
+    public ErrorCode changeCursoAluno(String novo_curso, long nAluno) {
+        if(!data.existeCursos(novo_curso)){
+            //MessageCenter.getInstance().putMessage("Nao existe o curso inserido");
+            return ErrorCode.E5;
+        }
+        if(!data.changeCursoAluno(novo_curso, nAluno)){
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            return ErrorCode.E3;
+        }
+        return ErrorCode.E0;
+    }
+
+    @Override
+    public ErrorCode changeRamoAluno(String novo_ramo, long nAluno) {
+        if(!data.existeRamos(novo_ramo)){
+            //MessageCenter.getInstance().putMessage("Nao existe o ramo inserido");
+            return ErrorCode.E7;
+        }
+        if(!data.changeRamoAluno(novo_ramo, nAluno)){
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            return ErrorCode.E3;
+        }
+        return ErrorCode.E0;
+    }
+
+    @Override
+    public ErrorCode changeClassAluno(double nova_classificacao, long nAluno) {
+        if (nova_classificacao < 0.0 || nova_classificacao > 1.0){
+            //MessageCenter.getInstance().putMessage("Classificação nao se encontra entre 0.0 e 1.0");
+            return ErrorCode.E6;
+        }
+        if(!data.changeClassAluno(nova_classificacao, nAluno)){
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            return ErrorCode.E3;
+        }
+        return ErrorCode.E0;
+    }
+
+    @Override
+    public ErrorCode changePossibilidadeAluno(long nAluno){
+        if(!data.changePossibilidadeAluno(nAluno)){
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            return ErrorCode.E3;
+        }
+        return ErrorCode.E0;
+    }
+
+
+
+
 }

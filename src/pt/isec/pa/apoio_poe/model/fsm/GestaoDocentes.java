@@ -30,11 +30,6 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     @Override
-    public void editarDocentes() {
-        changeState(EnumState.EDITAR_DOCENTES);
-    }
-
-    @Override
     public boolean importDocentes(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
         if(!CSVReader.startScanner(file,",")){
@@ -126,5 +121,14 @@ public class GestaoDocentes extends StateAdapter{
             data.removeDocente(d);
         }
         return true;
+    }
+
+    @Override
+    public ErrorCode changeNameDocente(String novo_nome, String email) {
+        if(!data.changeNameDocente(novo_nome, email)){
+            //MessageCenter.getInstance().putMessage("Nao existe docente com este email");
+            return ErrorCode.E4;
+        }
+        return ErrorCode.E0;
     }
 }

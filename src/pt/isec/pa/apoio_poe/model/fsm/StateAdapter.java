@@ -69,17 +69,9 @@ abstract class StateAdapter implements IState{
     public void obtencaoDadosOrientador() {}
     public void obtencaoListaProposta(){}
 
-    @Override
-    public void editarCandidaturas() {}
 
-    @Override
-    public void editarDocentes() {}
 
-    @Override
-    public void editarAlunos() {}
 
-    @Override
-    public void editarPropostas() {}
 
     @Override
     public boolean load() throws IOException, ClassNotFoundException {return false;}
