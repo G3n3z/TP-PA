@@ -65,26 +65,24 @@ public class ApoioContext {
         return state.fechado();
     }
 
-
-
     public boolean addAluno(String file) throws CollectionBaseException {
         return state.addAluno(file);
     }
 
     public String getAlunosToString() {
-        return state.getAlunosToString();
+        return data.getAlunosToString();
     }
 
     public boolean importDocentes(String file) throws CollectionBaseException { return state.importDocentes(file);}
 
     public String getDocentesToString(){
-        return state.getDocentesToString();
+        return data.getDocentesToString();
     }
 
     public boolean importPropostas(String file) throws CollectionBaseException { return state.importPropostas(file);}
 
     public String getPropostasToString() {
-        return state.getPropostasToString();
+        return data.getPropostasToString();
     }
 
     public String getPropostasWithFiltersToString(int ...filters){

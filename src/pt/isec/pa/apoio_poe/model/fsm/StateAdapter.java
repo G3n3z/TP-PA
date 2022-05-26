@@ -186,21 +186,6 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public String getAlunosToString() {
-        return null;
-    }
-
-    @Override
-    public String getDocentesToString() {
-        return null;
-    }
-
-    @Override
-    public String getPropostasToString() {
-        return null;
-    }
-
-    @Override
     public String getPropostasWithFiltersToString(int[] filters) {
         return null;
     }

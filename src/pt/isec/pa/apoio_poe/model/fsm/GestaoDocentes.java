@@ -111,11 +111,6 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     @Override
-    public String getDocentesToString() {
-        return data.getDocentesToString();
-    }
-
-    @Override
     public boolean removeAll() {
         for (Docente d : data.getDocentes()){
             data.removeDocente(d);

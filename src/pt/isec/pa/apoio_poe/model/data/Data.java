@@ -81,7 +81,7 @@ public class Data implements Serializable {
         al.addAll(alunos);
         return al;
     }
-    public List<Docente> getDocente(){
+    public List<Docente> getDocente(){ //TODO mesmo metodo que em cima?
         List<Docente> dc = new ArrayList<>();
         for (Docente d : docentes){
             dc.add(d);
@@ -183,8 +183,6 @@ public class Data implements Serializable {
         propostas.forEach(sb::append);
         return sb.toString();
     }
-
-
 
     public Boolean addCandidatura(Candidatura candidatura) {
          if(!candidaturas.add(candidatura)){
