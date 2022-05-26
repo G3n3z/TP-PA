@@ -315,13 +315,6 @@ public class GestaoPropostas extends StateAdapter{
         return ErrorCode.E0;
     }
 
-
-
-    @Override
-    public String getPropostasToString() {
-        return data.getPropostasToString();
-    }
-
     @Override
     public boolean removeAll() {
         for (Proposta p : data.getProposta()){

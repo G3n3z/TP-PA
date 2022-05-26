@@ -190,17 +190,13 @@ public class ApoioUIText {
         while(!sair) {
             error = ErrorCode.E0;
             switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Curso",
-                    "Ramo", "Classificacao", "Possibilidade ", "Voltar", "Exit")) {
+                    "Ramo", "Classificacao", "Possibilidade ", "Voltar")) {
                 case 1 -> error = context.changeNameAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo nome: ", false));
                 case 2 -> error = context.changeCursoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo curso: ", true));
                 case 3 -> error = context.changeRamoAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readString("Novo ramo: ", true));
                 case 4 -> error = context.changeClassAluno(PAInput.readLong("Numero de Aluno: "), PAInput.readNumber("Nova classificaçao: "));
                 case 5 -> error = context.changePossibilidadeAluno(PAInput.readLong("Numero de Aluno: "));   // TODO: changePossibilidade
                 case 6 -> sair = true;
-                case 7 -> {
-                    sair = true;
-                    context.sair();
-                }
             }
             System.out.println(errorReport(error));
         }
@@ -247,14 +243,10 @@ public class ApoioUIText {
         boolean sair = false;
         while (!sair) {
             error = ErrorCode.E0;
-            switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar", "Exit")) {
+            switch (PAInput.chooseOption("Qual o campo a alterar", "Nome", "Voltar")) {
                 case 1 ->
                         error = context.changeNomeDocente(PAInput.readString("Email do docente: ", true), PAInput.readString("Novo nome: ", false));
                 case 2 -> sair = true;
-                case 3 -> {
-                    sair = true;
-                    context.sair();
-                }
             }
             System.out.println(errorReport(error));
         }
@@ -301,16 +293,12 @@ public class ApoioUIText {
         boolean sair = false;
         while (!sair) {
             error = ErrorCode.E0;
-            switch (PAInput.chooseOption(context.getName(), "Titulo", "Entidade", "Acrescentar Ramo", "Retirar Ramo", "Recuar Fase", "Exit")) {
+            switch (PAInput.chooseOption(context.getName(), "Titulo", "Entidade", "Acrescentar Ramo", "Retirar Ramo", "Voltar")) {
                 case 1 -> error = context.changeTitulo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Novo titulo: ", false));
                 case 2 -> error = context.changeEntidade(PAInput.readString("Id Proposta: ", true), PAInput.readString("Noa entidade: ", false));
                 case 3 -> error = context.addRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
                 case 4 -> error = context.removeRamo(PAInput.readString("Id Proposta: ", true), PAInput.readString("Ramo: ", true));
                 case 5 -> sair = true;
-                case 6 -> {
-                    sair = true;
-                    context.sair();
-                }
             }
             System.out.println(errorReport(error));
         }
@@ -361,16 +349,12 @@ public class ApoioUIText {
         while(!sair){
             error = ErrorCode.E0;
             switch (PAInput.chooseOption("Editar Candidatura", "Adicionar Propostas a candidatura", "Remover Propostas a candidatura",
-                    "Voltar", "Exit")) {
+                    "Voltar")) {
                 case 1 -> error = context.addPropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
                         PAInput.readString("ID da Proposta: ", true));
                 case 2 -> error = context.removePropostaACandidatura(PAInput.readLong("Numero do Aluno: "),
                         PAInput.readString("ID da Proposta: ", true));
                 case 3 -> sair = true;
-                case 4 -> {
-                    sair = true;
-                    context.sair();
-                }
             }
             System.out.println(errorReport(error));
         }
@@ -380,9 +364,9 @@ public class ApoioUIText {
         boolean sair = false;
         int []opcoes = new int[]{0,0,0,0};
         int num;
-        String []filters = new String[] {"Autopropostas de alunos","Propostas de docentes","Propostas com candidaturas","Propostas sem candidatura", "Exit"};
+        String []filters = new String[] {"Autopropostas de alunos","Propostas de docentes","Propostas com candidaturas","Propostas sem candidatura", "Mostrar", "Voltar"};
         String []options = new String[]{"Autopropostas de alunos [ ]","Propostas de docentes [ ]","Propostas com candidaturas [ ]",
-                "Propostas sem candidatura [ ]", "Mostrar", "Voltar", "Exit"};
+                "Propostas sem candidatura [ ]", "Mostrar", "Voltar"};
         while (!sair){
             num = 0;
             switch (PAInput.chooseOption("Filtros para obtenção de lista de proposta de projecto/estágio", options)){
@@ -394,11 +378,6 @@ public class ApoioUIText {
                 case 6 -> {
                     sair = true;
                 }
-                case 7 -> {
-                    context.sair();
-                    sair = true;
-                }
-
             }
             selecionaFiltros(opcoes, num, filters, options);
         }
@@ -421,15 +400,11 @@ public class ApoioUIText {
         boolean sair = false;
         while(!sair){
             switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Com autoProposta", "Com candidatura já Registada",
-                    "Sem candidatura regista", "Voltar", "Exit")) {
+                    "Sem candidatura regista", "Voltar")) {
                 case 1 -> System.out.println(context.obtencaoAlunosComAutoProposta());
                 case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
                 case 3 -> System.out.println(context.obtencaoAlunosSemCandidatura());
                 case 4 -> sair = true;
-                case 5 -> {
-                    sair = true;
-                    context.sair();
-                }
             }
         }
     }
@@ -494,7 +469,7 @@ public class ApoioUIText {
                     exception = null;
                 }
                 case 3 -> context.gestaoManualAtribuicoes();
-                case 4 ->  UIObtencaoDeListaDeAlunoAtribuicao();
+                case 4 -> UIObtencaoDeListaDeAlunoAtribuicao();
                 case 5 -> UIObtencaoDeListaDePropostaAtribuida();
                 case 6 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
                 case 7 -> error = context.closeFase();
@@ -528,16 +503,12 @@ public class ApoioUIText {
         boolean sair = false;
         while(!sair) {
             switch (PAInput.chooseOption("Obtenção de Lista de Aluno", "Têm autoproposta associada", "Têm candidatura já registada", "Têm proposta atribuída",
-                    "Não têm qualquer proposta atribuída", "Voltar", "Exit")) {
+                    "Não têm qualquer proposta atribuída", "Voltar")) {
                 case 1 -> System.out.println(context.obtencaoAlunosComAutoPropostaAtribuida());
                 case 2 -> System.out.println(context.obtencaoAlunosComCandidatura());
                 case 3 -> System.out.println(context.getTodosAlunosComPropostaAtribuida());
                 case 4 -> System.out.println(context.obtencaoAlunosSemProposta());
                 case 5 -> sair = true;
-                case 6 -> {
-                    sair = true;
-                    context.sair();
-                }
             }
         }
 
@@ -548,7 +519,7 @@ public class ApoioUIText {
         int []opcoes = new int[]{0,0,0,0};
         int num;
         String []filters = new String[] {"Autopropostas de alunos","Propostas de docentes","Propostas não atribuídas","Propostas atribuídas"};
-        String []options = new String[]{"Autopropostas de alunos [ ]","Propostas de docentes [ ]","Propostas não atribuídas [ ]","Propostas atribuídas [ ]", "Mostrar", "Voltar", "Exit"};
+        String []options = new String[]{"Autopropostas de alunos [ ]","Propostas de docentes [ ]","Propostas não atribuídas [ ]","Propostas atribuídas [ ]", "Mostrar", "Voltar"};
 
         while(!sair) {
             num = 0;
@@ -558,14 +529,7 @@ public class ApoioUIText {
                 case 3 -> num = 3;
                 case 4 -> num = 4;
                 case 5 -> System.out.println(context.getPropostasWithFiltersToStringAtribuicao(opcoes));
-                case 6 -> {
-
-                    sair = true;
-                }
-                case 7 ->{
-                     context.sair();
-                     sair = true;
-                }
+                case 6 -> sair = true;
             }
             selecionaFiltros(opcoes, num, filters, options);
         }
@@ -651,12 +615,11 @@ public class ApoioUIText {
                     "Lista de estudantes com proposta atribuída e com orientador associado",
                     "Lista de estudantes com proposta atribuída mas sem orientador associado",
                     "Número de orientações por docente, em média, mínimo, máximo, e por docente especificado",
-                    "Voltar", "Exit")) {
+                    "Voltar")) {
                 case 1 -> System.out.println(context.getAlunosComPropostaEOrientador());
                 case 2 -> System.out.println(context.getAlunosComPropostaESemOrientador());
                 case 3 -> System.out.println(context.getEstatisticasPorDocente());
                 case 4 -> sair = true;
-                case 5 -> context.sair();
             }
         }
     }
