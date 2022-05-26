@@ -3,7 +3,6 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;

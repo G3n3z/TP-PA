@@ -1,6 +1,5 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
@@ -54,11 +53,11 @@ public class EditarAlunos extends StateAdapter{
     @Override
     public ErrorCode changeClassAluno(double nova_classificacao, long nAluno) {
         if (nova_classificacao < 0.0 || nova_classificacao > 1.0){
-            MessageCenter.getInstance().putMessage("Classificação nao se encontra entre 0.0 e 1.0");
+            //MessageCenter.getInstance().putMessage("Classificação nao se encontra entre 0.0 e 1.0");
             return ErrorCode.E6;
         }
         if(!data.changeClassAluno(nova_classificacao, nAluno)){
-            MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
+            //MessageCenter.getInstance().putMessage("Numero de Aluno inexistente");
             return ErrorCode.E3;
         }
         return ErrorCode.E0;

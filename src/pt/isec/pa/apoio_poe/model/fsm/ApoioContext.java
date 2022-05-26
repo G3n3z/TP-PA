@@ -57,10 +57,8 @@ public class ApoioContext {
         return state.gerirEstagios();
     }
 
-    public boolean closeFase(){
-        if(state.close() == ErrorCode.E0)
-            data.closeState(state.getState());
-        return true;
+    public ErrorCode closeFase(){
+        return state.close();
     }
 
     public boolean isClosed(){

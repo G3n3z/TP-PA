@@ -1,7 +1,6 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Comparator.AlunoComparator;
 import pt.isec.pa.apoio_poe.model.data.Data;
@@ -67,6 +66,7 @@ public class AtribuicaoPropostas extends StateAdapter{
         if((data.getAlunos().stream().filter(Aluno::temCandidatura)).allMatch(Aluno::temPropostaConfirmada)){
             setClose(true);
             //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            data.closeState(getState());
             return ErrorCode.E0;
         }
         //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");

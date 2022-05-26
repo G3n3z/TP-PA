@@ -1,6 +1,5 @@
 package pt.isec.pa.apoio_poe.model.command;
 
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
@@ -19,7 +18,7 @@ public class ApoioManager {
     public boolean undo() {
         if(hasUndo())
             return cm.undo();
-        MessageCenter.getInstance().putMessage("Não é possivel fazer undo");
+        //MessageCenter.getInstance().putMessage("Não é possivel fazer undo");
         return false;
     }
 
@@ -29,7 +28,7 @@ public class ApoioManager {
     public boolean redo() {
         if (hasRedo())
             return cm.redo();
-        MessageCenter.getInstance().putMessage("Não é possivel fazer redo");
+        //MessageCenter.getInstance().putMessage("Não é possivel fazer redo");
         return false;
     }
 

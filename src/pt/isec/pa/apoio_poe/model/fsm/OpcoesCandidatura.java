@@ -3,7 +3,6 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.data.Data;
@@ -57,6 +56,7 @@ public class OpcoesCandidatura extends StateAdapter{
         if(data.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
             //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            data.closeState(getState());
             return ErrorCode.E0;
         }
         //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +

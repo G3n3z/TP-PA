@@ -3,7 +3,6 @@ package pt.isec.pa.apoio_poe.ui.text;
 import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
@@ -25,7 +24,7 @@ public class ApoioUIText {
 
         while (!isfinished) {
 
-            System.out.println(MessageCenter.getInstance().getAllMessage());
+            //System.out.println(MessageCenter.getInstance().getAllMessage());
 
                 switch (context.getState()) {
                 case CONFIG_OPTIONS -> UIConfig_Options();
@@ -87,9 +86,48 @@ public class ApoioUIText {
             }
         }
         else {
-            switch (PAInput.chooseOption("Menu", "Começar", "Sair")) {
+/*            switch (PAInput.chooseOption("Menu", "Começar", "Sair")) {
                 case 1 -> context.begin();
                 case 2 -> isfinished = true;
+            }*/
+            switch (PAInput.chooseOption("Menu", "Começar", "Sair", "Modo Debug")) {
+                case 1 -> context.begin();
+                case 2 -> isfinished = true;
+                case 3 -> {
+                    context.begin();
+                    context.gerirAlunos();
+                    System.out.println("Modo Debug");
+                    try {
+                        context.addAluno("teste.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+                    context.recuarFase();
+
+                    context.gerirDocentes();
+
+                    try {
+                        context.importDocentes("testeD.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+
+                    context.recuarFase();
+                    context.gerirEstagios();
+                    try {
+                        context.importPropostas("testeP.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+                    context.recuarFase();
+                    context.avancarFase();
+                    try {
+                        context.addCandidatura("testeC.csv");
+                    } catch (CollectionBaseException c) {
+                        System.out.println(c.getMessageOfExceptions());
+                    }
+                    context.recuarFase();
+                }
             }
         }
     }

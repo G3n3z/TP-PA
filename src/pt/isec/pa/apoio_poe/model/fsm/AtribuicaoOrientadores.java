@@ -30,8 +30,10 @@ public class AtribuicaoOrientadores extends StateAdapter {
 
     @Override
     public ErrorCode close() {
+        //TODO Verificar se a anterior esta fechada
         setClose(true);
         changeState(EnumState.CONSULTA);
+        data.closeState(getState());
         return ErrorCode.E0;
     }
 

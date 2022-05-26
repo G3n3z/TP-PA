@@ -1,6 +1,5 @@
 package pt.isec.pa.apoio_poe.model.fsm;
 
-import pt.isec.pa.apoio_poe.model.Singleton.MessageCenter;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
@@ -21,12 +20,13 @@ public class ConfigOptions extends  StateAdapter{
     public ErrorCode close() {
         if(verificaCondicaoFechoF1()) {
             setClose(true);
-            MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            data.closeState(getState());
             return ErrorCode.E0;
         }
-        MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas\n" +
-                "Por favor verifique se o numero total de propostas é igual ou superior ao número total de alunos e se,\n" +
-                "para cada ramo, o número total de propostas é igual ou superior ao número de alunos.\n");
+        //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas\n" +
+        //        "Por favor verifique se o numero total de propostas é igual ou superior ao número total de alunos e se,\n" +
+        //        "para cada ramo, o número total de propostas é igual ou superior ao número de alunos.\n");
         return ErrorCode.E24;
     }
 
