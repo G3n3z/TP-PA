@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-sdk-18.0.1/lib" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.base" />
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.controls" />
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.fxml" />
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.graphics" />
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.media" />
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.swing" />
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-18.0.1-javadoc/javafx.web" />
+    </JAVADOC>
+    <NATIVE>
+      <root url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-sdk-18.0.1/lib" />
+    </NATIVE>
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Library/Java/JavaVirtualMachines/javafx-sdk-18.0.1/lib" recursive="false" />
+  </library>
+</component>

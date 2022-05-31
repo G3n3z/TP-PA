@@ -220,7 +220,16 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E0;
     }
 
-
-
-
+    @Override
+    public ErrorCode insereAluno(Aluno a) {
+        try {
+            fieldsCorrect(0,a.getEmail(),a.getSiglaCurso(), a.getSiglaRamo(), a.getClassificacao());
+        } catch (InvalidCSVField e) {
+            return ErrorCode.E3;
+        }
+        if(!data.addAluno(a)){
+            return ErrorCode.E3;
+        }
+        return ErrorCode.E0;
+    }
 }

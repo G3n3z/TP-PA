@@ -28,6 +28,10 @@ public class Aluno extends Pessoa implements Cloneable{
         this.possibilidade = possibilidade;
     }
 
+    public Long getNumeroEstudante() {
+        return numeroEstudante;
+    }
+
     public static Aluno getDummyAluno(Aluno aluno){
         return new Aluno(aluno.getEmail(), aluno.getNome(), aluno.numeroEstudante, aluno.siglaCurso, aluno.siglaRamo, aluno.classificacao, aluno.possibilidade);
     }

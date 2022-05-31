@@ -81,6 +81,14 @@ public class Data implements Serializable {
         al.addAll(alunos);
         return al;
     }
+    public List<Aluno> getCopiaAlunos(){
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno a : alunos){
+            al.add(a.getClone());
+        }
+        return al;
+    }
+
     public List<Docente> getDocente(){ //TODO mesmo metodo que em cima?
         List<Docente> dc = new ArrayList<>();
         for (Docente d : docentes){

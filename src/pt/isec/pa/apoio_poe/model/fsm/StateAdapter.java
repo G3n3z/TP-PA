@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
@@ -278,4 +279,9 @@ abstract class StateAdapter implements IState{
 
     @Override
     public ErrorCode removeRamo(String id, String ramo){return ErrorCode.E25;}
+
+    @Override
+    public ErrorCode insereAluno(Aluno a) {
+        return ErrorCode.E25;
+    }
 }

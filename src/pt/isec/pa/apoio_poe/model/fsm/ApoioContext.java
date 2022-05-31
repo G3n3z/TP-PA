@@ -3,11 +3,13 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ApoioContext {
@@ -297,6 +299,14 @@ public class ApoioContext {
 
     public ErrorCode removeRamo(String id, String ramo) {
         return state.removeRamo(id, ramo);
+    }
+
+    public List<Aluno> getAlunos() {
+        return data.getCopiaAlunos();
+    }
+
+    public ErrorCode insereAluno(Aluno a) {
+        return state.insereAluno(a);
     }
 }
 
