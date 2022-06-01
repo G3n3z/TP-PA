@@ -24,6 +24,7 @@ import pt.isec.pa.apoio_poe.utils.Constantes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class GestaoAlunosUI extends BorderPane {
@@ -35,7 +36,7 @@ public class GestaoAlunosUI extends BorderPane {
     Aluno a;
     PieChart graphPie;
     Pane insereAluno;
-    VBox vbox; HBox vboxInsereAluno; VBox hboxInsereCSV;
+ HBox vboxInsereAluno; VBox hboxInsereCSV;
     Button btnExeInsereAluno, btnExeInsereCSV, btnExeExportCSV,  btnInsereCSV;
     TextField txNumero, tfNome,tfEmail, tfClass;
     ChoiceBox<String> curso, ramo;
@@ -217,14 +218,11 @@ public class GestaoAlunosUI extends BorderPane {
 
     private void createMenu() {
         btnGestaoAlunos = new ButtonMenu("Gestão de Alunos");
-
         btnInsereManual= new ButtonMenu("Insere Aluno");
         btnExport= new ButtonMenu("Exportar Alunos Para CSV");
-        btnEdit= new ButtonMenu("Editar Alunos");
-        btnRemove= new ButtonMenu("Remover Alunos");
         btnRemoveAll= new ButtonMenu("Remover Todos");
         btnRecuar= new ButtonMenu("Voltar");
-        MenuVertical menu = new MenuVertical(btnGestaoAlunos, btnInsereManual, btnExport, btnEdit, btnRemove, btnRemoveAll, btnRecuar);
+        MenuVertical menu = new MenuVertical(btnGestaoAlunos, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
         setLeft(menu);
     }
 
@@ -301,6 +299,9 @@ public class GestaoAlunosUI extends BorderPane {
             }
 
         });
+        btnGestaoAlunos.setOnAction(actionEvent -> {
+            nodeShow.forEach(n -> n.setVisible(false));
+        });
     }
 
     private void update() {
@@ -310,8 +311,17 @@ public class GestaoAlunosUI extends BorderPane {
 
 
     private void preparaTable() {
-        tableView = new TableAlunos(model);
-
+        Consumer<Aluno> edit = (a) -> {
+          txNumero.setText(Long.toString(a.getNumeroAluno()));
+          tfNome.setText(a.getNome());
+          tfEmail.setText(a.getEmail());
+          tfClass.setText(Double.toString(a.getClassificacao()));
+          curso.setValue(a.getSiglaCurso());
+          ramo.setValue(a.getSiglaRamo());
+          possibilidade.setSelected(a.isPossibilidade());
+          vboxInsereAluno.setVisible(true);
+        };
+        tableView = new TableAlunos(model, edit);
 //        TableColumn<Aluno, Long> colnumEstudante = new TableColumn<>("Num.Aluno");
 //        colnumEstudante.setCellValueFactory(new PropertyValueFactory<>("numeroEstudante"));
 //        TableColumn<Aluno, String> colNome = new TableColumn<>("Nome");

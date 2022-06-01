@@ -538,4 +538,11 @@ public class Data implements Serializable {
         return propostas.stream().anyMatch(p -> p.getId().equals(id));
     }
 
+    public List<Docente> getDocentesCopia() {
+        List<Docente> dc = new ArrayList<>();
+        for (Docente d : docentes){
+            dc.add(d.getClone());
+        }
+        return dc;
+    }
 }
