@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.*;
@@ -282,6 +283,11 @@ abstract class StateAdapter implements IState{
 
     @Override
     public ErrorCode insereAluno(Aluno a) {
+        return ErrorCode.E25;
+    }
+
+    @Override
+    public ErrorCode insereDocente(Docente d) {
         return ErrorCode.E25;
     }
 }

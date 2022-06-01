@@ -126,4 +126,17 @@ public class GestaoDocentes extends StateAdapter{
         }
         return ErrorCode.E0;
     }
+
+    @Override
+    public ErrorCode insereDocente(Docente d) {
+        try {
+            checkDocente(0,d.getEmail());
+        } catch (InvalidCSVField e) {
+            return ErrorCode.E12;
+        }
+        if(!data.addDocente(d)) {
+            return ErrorCode.E12;
+        }
+        return ErrorCode.E0;
+    }
 }

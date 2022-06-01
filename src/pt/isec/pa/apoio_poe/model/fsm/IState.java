@@ -3,9 +3,11 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
+import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface IState {
     boolean avancarFase();
@@ -113,4 +115,7 @@ public interface IState {
 
 
     ErrorCode insereAluno(Aluno a);
+
+
+    ErrorCode insereDocente(Docente d);
 }

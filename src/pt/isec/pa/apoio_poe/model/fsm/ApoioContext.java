@@ -5,6 +5,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaExcepti
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
@@ -307,6 +308,14 @@ public class ApoioContext {
 
     public ErrorCode insereAluno(Aluno a) {
         return state.insereAluno(a);
+    }
+
+    public List<Docente> getDocentes() {
+        return data.getDocentesCopia();
+    }
+
+    public ErrorCode insereDocente(Docente d) {
+        return state.insereDocente(d);
     }
 }
 

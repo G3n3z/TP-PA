@@ -35,8 +35,13 @@ public class ConfigOptionsUI extends BorderPane {
             update();
         });
         bGAlunos.setOnAction(actionEvent -> {
-            System.out.println("Aqui");
+
             model.gerirAlunos();
+        });
+        bGDocentes.setOnAction(actionEvent -> {
+
+            model.gerirDocentes();
+            System.out.println(model.getState().toString());
         });
     }
 
