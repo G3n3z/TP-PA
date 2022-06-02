@@ -6,6 +6,7 @@ import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
@@ -316,6 +317,10 @@ public class ApoioContext {
 
     public ErrorCode insereDocente(Docente d) {
         return state.insereDocente(d);
+    }
+
+    public List<Proposta> getPropostas() {
+        return data.getPropostasCopia();
     }
 }
 

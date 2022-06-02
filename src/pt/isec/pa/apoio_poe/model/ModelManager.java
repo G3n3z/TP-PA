@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
@@ -66,6 +67,7 @@ public class ModelManager {
         pcs.firePropertyChange(PROP_STATE, null, context.getState());
         pcs.firePropertyChange(PROP_ALUNOS, null, context.getState());
         pcs.firePropertyChange(PROP_DOCENTES, null, context.getState());
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
     }
 
     public List<Aluno> getAlunos() {
@@ -131,6 +133,18 @@ public class ModelManager {
 
     public void gerirDocentes() {
         context.gerirDocentes();
+        pcs.firePropertyChange(PROP_STATE, null, context.getState());
+    }
+
+    public void removeProposta(Long numAluno) {
+    }
+
+    public List<Proposta> getPropostas() {
+        return context.getPropostas();
+    }
+
+    public void gerirPropostas() {
+        context.gerirEstagios();
         pcs.firePropertyChange(PROP_STATE, null, context.getState());
     }
 }

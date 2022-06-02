@@ -545,4 +545,12 @@ public class Data implements Serializable {
         }
         return dc;
     }
+
+    public List<Proposta> getPropostasCopia() {
+        List<Proposta> prop = new ArrayList<>();
+        for (Proposta p : propostas){
+            prop.add(p.getClone());
+        }
+        return prop;
+    }
 }
