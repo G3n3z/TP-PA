@@ -43,6 +43,10 @@ public class ConfigOptionsUI extends BorderPane {
             model.gerirDocentes();
             System.out.println(model.getState().toString());
         });
+        bGPropostas.setOnAction(actionEvent -> {
+            model.gerirPropostas();
+            System.out.println(model.getState().toString());
+        });
     }
 
     private void update() {
