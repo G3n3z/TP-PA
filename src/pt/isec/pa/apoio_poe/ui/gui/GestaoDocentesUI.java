@@ -62,7 +62,7 @@ public class GestaoDocentesUI extends BorderPane {
         preparaInsereDocente();
         fileChooser = new FileChooser();
         //graphPie = new PieChart();
-        //container.getChildren().addAll(titulo, tableView, vboxInsereAluno);
+        //container.getChildren().addAll(titulo, tableView, hboxInsereAluno);
         nodeShow = new ArrayList<>();
         nodeShow.add(vboxInsereDocente);
 
@@ -76,7 +76,7 @@ public class GestaoDocentesUI extends BorderPane {
 
     private void preparaInsereDocente() {
 //        insereAluno = new Pane();
-//        vboxInsereAluno = new VBox();
+//        hboxInsereAluno = new VBox();
 //        VBox vbox = new VBox();
 //        Label nAluno = new Label("N.Aluno");
 //        nAluno.setPrefWidth(80);
@@ -121,8 +121,8 @@ public class GestaoDocentesUI extends BorderPane {
 //        HBox hBtn = new HBox();
 //        hBtn.getChildren().add(btnExeInsereAluno);
 //        hBtn.setAlignment(Pos.CENTER);
-//        vboxInsereAluno.getChildren().addAll(fnAluno, fnEmail,fnNome, fnCurso,fnClass, hBtn);
-//        vboxInsereAluno.setSpacing(30);
+//        hboxInsereAluno.getChildren().addAll(fnAluno, fnEmail,fnNome, fnCurso,fnClass, hBtn);
+//        hboxInsereAluno.setSpacing(30);
 //
 //        VBox.setMargin(fnAluno, new Insets(40,0,0,0));
         Label email = new Label("Email:");
