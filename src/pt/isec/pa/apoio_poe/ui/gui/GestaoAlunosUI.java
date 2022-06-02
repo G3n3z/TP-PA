@@ -43,6 +43,8 @@ public class GestaoAlunosUI extends BorderPane {
     CheckBox possibilidade, possibilidadeEdit;
    List<Node> nodeShow;
    FileChooser fileChooser;
+    VBox boxRight;
+    HBox hBtn; HBox hBtnEdit;
     public GestaoAlunosUI(ModelManager model) {
         this.model = model;
         a = new Aluno("asd","Daniel", 123L,"LEI","DA",1.0,true);
@@ -194,8 +196,8 @@ public class GestaoAlunosUI extends BorderPane {
         HBox choices = new HBox();
         choices.getChildren().addAll(lcurso,curso,lRamo, ramo);
         choices.setSpacing(30);
-        VBox boxRight = new VBox();
-        HBox hBtn = new HBox();
+        boxRight = new VBox();
+        hBtn = new HBox();
         hBtn.getChildren().addAll(btnExeInsereAluno, btnInsereCSV);
         hBtn.setAlignment(Pos.CENTER);
         hBtn.setSpacing(30);
@@ -267,7 +269,7 @@ public class GestaoAlunosUI extends BorderPane {
         choicesEdit.getChildren().addAll(lcursoEdit,cursoEdit,lRamoEdit, ramoEdit);
         choicesEdit.setSpacing(30);
         VBox boxRightEdit = new VBox();
-        HBox hBtnEdit = new HBox();
+        hBtnEdit = new HBox();
         hBtnEdit.getChildren().add(btnExeEditAluno);
         hBtnEdit.setAlignment(Pos.CENTER);
         hBtnEdit.setSpacing(30);
@@ -323,6 +325,8 @@ public class GestaoAlunosUI extends BorderPane {
             hboxInsereAluno.setVisible(true);
 
             clearFields();
+            hBtn.getChildren().clear();
+            hBtn.getChildren().addAll(btnExeInsereAluno, btnExeInsereCSV);
             update();
         });
         btnExeInsereCSV.setOnAction(actionEvent -> {
@@ -376,6 +380,10 @@ public class GestaoAlunosUI extends BorderPane {
         btnGestaoAlunos.setOnAction(actionEvent -> {
             nodeShow.forEach(n -> n.setVisible(false));
         });
+
+        btnExeEditAluno.setOnAction(actionEvent -> {
+            hboxInsereAluno.setVisible(false);
+        });
     }
 
     private void update() {
@@ -386,48 +394,29 @@ public class GestaoAlunosUI extends BorderPane {
 
     private void preparaTable() {
         Consumer<Aluno> edit = (a) -> {
-          txNumeroEdit.setText(Long.toString(a.getNumeroAluno()));
-          //txNumeroEdit.setEditable(false);
-          txNumeroEdit.setDisable(true);
-          tfNomeEdit.setText(a.getNome());
-          tfEmailEdit.setText(a.getEmail());
-          tfEmailEdit.setEditable(false);
-          tfClassEdit.setText(Double.toString(a.getClassificacao()));
-          cursoEdit.setValue(a.getSiglaCurso());
-          ramoEdit.setValue(a.getSiglaRamo());
-          possibilidadeEdit.setSelected(a.isPossibilidade());
+          hboxInsereAluno.setVisible(true);
+          txNumero.setText(Long.toString(a.getNumeroAluno()));
+          txNumero.setDisable(true);
+          tfNome.setText(a.getNome());
+          tfEmail.setText(a.getEmail());
+          tfEmail.setDisable(true);
+          tfClass.setText(Double.toString(a.getClassificacao()));
+          curso.setValue(a.getSiglaCurso());
+          ramo.setValue(a.getSiglaRamo());
+          possibilidade.setSelected(a.isPossibilidade());
 
-          hboxInsereAluno.setVisible(false);
-          hboxEditAluno.setVisible(true);
+          hBtn.getChildren().clear();
+          hBtn.getChildren().add(hBtnEdit);
         };
 
         tableView = new TableAlunos(model, edit);
-//        TableColumn<Aluno, Long> colnumEstudante = new TableColumn<>("Num.Aluno");
-//        colnumEstudante.setCellValueFactory(new PropertyValueFactory<>("numeroEstudante"));
-//        TableColumn<Aluno, String> colNome = new TableColumn<>("Nome");
-//        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-//        TableColumn<Aluno, String> colEmail = new TableColumn<>("Email");
-//        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-//        TableColumn<Aluno, String> colCurso = new TableColumn<>("Curso");
-//        colCurso.setCellValueFactory(new PropertyValueFactory<>("siglaCurso"));
-//        TableColumn<Aluno, String> colRamo = new TableColumn<>("Ramo");
-//        colRamo.setCellValueFactory(new PropertyValueFactory<>("siglaRamo"));
-//        TableColumn<Aluno, Double> colClass = new TableColumn<>("Classificacao");
-//        colClass.setCellValueFactory(new PropertyValueFactory<>("classificacao"));
-//        TableColumn<Aluno, Boolean> colPossibilidade = new TableColumn<>("Possibilidade Estagio");
-//        colPossibilidade.setCellValueFactory(new PropertyValueFactory<>("possibilidade"));
-//        colnumEstudante.setPrefWidth(150); colEmail.setPrefWidth(200); colNome.setPrefWidth(200);
-//        colCurso.setPrefWidth(150); colRamo.setPrefWidth(150); colClass.setPrefWidth(150); colPossibilidade.setPrefWidth(150);
-//
-//        tableView.setFixedCellSize(50);
-//        tableView.getStylesheets().add("css/table1.css");
-//        tableView.getColumns().addAll(colnumEstudante,colEmail,colNome, colCurso, colRamo, colClass, colPossibilidade);
-//        tableView.getItems().add(a);
-//        tableView.setPrefHeight(400);
+
 
     }
 
     private void clearFields(){
+        txNumero.setDisable(false);
+        tfEmail.setDisable(false);
         txNumero.clear();
         tfNome.clear();
         tfEmail.clear();
