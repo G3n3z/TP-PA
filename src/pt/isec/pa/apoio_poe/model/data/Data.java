@@ -297,7 +297,7 @@ public class Data implements Serializable {
         if(a == null){
             return false;
         }
-        a.setPossibilidade();
+        a.changePossibilidade();
         return true;
     }
 
@@ -552,5 +552,19 @@ public class Data implements Serializable {
             prop.add(p.getClone());
         }
         return prop;
+    }
+
+    public boolean editAluno(Aluno a) {
+        for (Aluno aluno : alunos){
+            if(aluno.getNumeroEstudante().equals(a.getNumeroEstudante())){
+                aluno.setNome(a.getNome());
+                aluno.setClassificacao(a.getClassificacao());
+                aluno.setSiglaCurso(a.getSiglaCurso());
+                aluno.setSiglaRamo(a.getSiglaRamo());
+                aluno.setPossibilidade(a.isPossibilidade());
+                return true;
+            }
+        }
+        return false;
     }
 }

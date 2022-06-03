@@ -80,6 +80,15 @@ public class ModelManager {
         return erro;
     }
 
+    public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible) {
+        ErrorCode error = context.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
+        if(error != ErrorCode.E0){
+            return error;
+        }
+        pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        return error;
+    }
+
     public void importAlunos(String absolutePath) throws CollectionBaseException {
         try{
             context.addAluno(absolutePath);

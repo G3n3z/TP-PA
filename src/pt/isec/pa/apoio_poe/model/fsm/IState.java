@@ -118,4 +118,6 @@ public interface IState {
 
 
     ErrorCode insereDocente(Docente d);
+
+    ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible);
 }

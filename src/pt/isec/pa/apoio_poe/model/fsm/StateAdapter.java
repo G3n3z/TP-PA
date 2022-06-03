@@ -286,6 +286,10 @@ abstract class StateAdapter implements IState{
         return ErrorCode.E25;
     }
 
+    public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible){
+        return ErrorCode.E25;
+    }
+
     @Override
     public ErrorCode insereDocente(Docente d) {
         return ErrorCode.E25;

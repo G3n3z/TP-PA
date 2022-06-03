@@ -322,5 +322,9 @@ public class ApoioContext {
     public List<Proposta> getPropostas() {
         return data.getPropostasCopia();
     }
+
+    public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible) {
+        return state.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
+    }
 }
 
