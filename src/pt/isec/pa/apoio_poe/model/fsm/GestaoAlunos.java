@@ -232,4 +232,32 @@ public class GestaoAlunos extends StateAdapter{
         }
         return ErrorCode.E0;
     }
+
+    @Override
+    public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible){
+        Aluno a = new Aluno(email, nome, nAluno, curso, ramo, classificacao, isPossible);
+        ErrorCode error = verificaDados(a);
+
+        if(error != ErrorCode.E0){
+            return error;
+        }
+
+        if(!data.editAluno(a)){
+            return ErrorCode.E3;
+        }
+        return error;
+    }
+
+    private ErrorCode verificaDados(Aluno a) {
+        if(!data.existeCursos(a.getSiglaCurso())){
+            return ErrorCode.E5;
+        }
+        if(!data.existeRamos(a.getSiglaRamo())){
+            return ErrorCode.E7;
+        }
+        if(a.getClassificacao() < 0.0 || a.getClassificacao() > 1.0){
+            return ErrorCode.E6;
+        }
+        return ErrorCode.E0;
+    }
 }

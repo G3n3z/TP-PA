@@ -128,4 +128,6 @@ public interface IState {
     ErrorCode insereCandidatura(String nAluno, List<String> ids);
 
     ErrorCode editCandidatura(String text, List<String> ids);
+
+    ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible);
 }

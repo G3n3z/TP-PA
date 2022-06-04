@@ -3,7 +3,10 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
-import pt.isec.pa.apoio_poe.model.data.*;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
+import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
@@ -343,6 +346,10 @@ public class ApoioContext {
 
     public ErrorCode editCandidatura(String text, List<String> ids) {
         return state.editCandidatura(text, ids);
+    }
+
+    public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible) {
+        return state.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
     }
 }
 

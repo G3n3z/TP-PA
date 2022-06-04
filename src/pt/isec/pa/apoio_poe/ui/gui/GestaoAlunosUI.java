@@ -34,17 +34,15 @@ public class GestaoAlunosUI extends BorderPane {
     Label title;
     TableView<Aluno> tableView;
     Aluno a;
-    PieChart graphPie;
-    Pane insereAluno;
-    HBox hboxInsereAluno, hboxEditAluno; VBox hboxInsereCSV;
+    HBox hboxInsereAluno, hBtn, hBtnEdit;
+    VBox hboxInsereCSV,boxRight;
     Button btnExeInsereAluno, btnExeInsereCSV, btnExeEditAluno,  btnInsereCSV;
-    TextField txNumero, tfNome,tfEmail, tfClass, txNumeroEdit, tfNomeEdit,tfEmailEdit, tfClassEdit;
-    ChoiceBox<String> curso, ramo, cursoEdit, ramoEdit;
-    CheckBox possibilidade, possibilidadeEdit;
-   List<Node> nodeShow;
-   FileChooser fileChooser;
-    VBox boxRight;
-    HBox hBtn; HBox hBtnEdit;
+    TextField txNumero, tfNome,tfEmail, tfClass;
+    ChoiceBox<String> curso, ramo;
+    CheckBox possibilidade;
+    List<Node> nodeShow;
+    FileChooser fileChooser;
+
     public GestaoAlunosUI(ModelManager model) {
         this.model = model;
         a = new Aluno("asd","Daniel", 123L,"LEI","DA",1.0,true);
@@ -70,10 +68,9 @@ public class GestaoAlunosUI extends BorderPane {
         //container.getChildren().addAll(titulo, tableView, hboxInsereAluno);
         nodeShow = new ArrayList<>();
         nodeShow.add(hboxInsereAluno);
-        nodeShow.add(hboxEditAluno);
         nodeShow.add(hboxInsereCSV);
         nodeShow.forEach(n -> n.setVisible(false));
-        container.getChildren().addAll(titulo, tableView, hboxInsereAluno, hboxEditAluno, hboxInsereCSV);
+        container.getChildren().addAll(titulo, tableView, hboxInsereAluno, hboxInsereCSV);
 
         setCenter(container);
 
@@ -90,56 +87,7 @@ public class GestaoAlunosUI extends BorderPane {
     }
 
     private void preparaInsereAluno() {
-//        insereAluno = new Pane();
-//        hboxInsereAluno = new VBox();
-//        VBox vbox = new VBox();
-//        Label nAluno = new Label("N.Aluno");
-//        nAluno.setPrefWidth(80);
-//        txNumero = new TextField();
-//        txNumero.setPrefWidth(300);
-//        FieldHBox fnAluno = new FieldHBox(nAluno, txNumero);
-//
-//        Label email = new Label("Email:");
-//        email.setPrefWidth(80);
-//        tfEmail = new TextField();
-//        tfEmail.setPrefWidth(300);
-//        FieldHBox fnEmail = new FieldHBox(email, tfEmail);
-//
-//        Label nome = new Label("Nome:");
-//        nome.setPrefWidth(80);
-//        tfNome = new TextField();
-//        tfNome.setPrefWidth(300);
-//        FieldHBox fnNome = new FieldHBox(nome, tfNome);
-//
-//        Label lcurso = new Label("Curso");
-//        lcurso.setPrefWidth(80);
-//        curso = new ChoiceBox<>();
-//        curso.getItems().addAll(Constantes.getCursos());
-//        curso.setPrefWidth(90);
-//        Label lRamo = new Label("Ramo");
-//        lRamo.setPrefWidth(60);
-//        ramo = new ChoiceBox<>();
-//        ramo.getItems().addAll(Constantes.getRamos());
-//        ramo.setPrefWidth(90);
-//        FieldHBox fnCurso = new FieldHBox(lcurso, curso,lRamo, ramo);
-//
-//        Label lclass = new Label("Classificação");
-//        lclass.setPrefWidth(80);
-//        tfClass = new TextField();
-//        tfClass.setPrefWidth(60);
-//        possibilidade = new CheckBox("Possibilidade de Estágio");
-//
-//        FieldHBox fnClass = new FieldHBox(lclass,tfClass,possibilidade);
-//        fnClass.setMarginField(2, new Insets(0,80,0,0));
-//
-//        btnExeInsereAluno = new Button("Inserir Aluno");
-//        HBox hBtn = new HBox();
-//        hBtn.getChildren().add(btnExeInsereAluno);
-//        hBtn.setAlignment(Pos.CENTER);
-//        hboxInsereAluno.getChildren().addAll(fnAluno, fnEmail,fnNome, fnCurso,fnClass, hBtn);
-//        hboxInsereAluno.setSpacing(30);
-//
-//        VBox.setMargin(fnAluno, new Insets(40,0,0,0));
+
         Label nAluno = new Label("N.Aluno");
         nAluno.setPrefWidth(50);
         txNumero = new TextField();
@@ -148,7 +96,6 @@ public class GestaoAlunosUI extends BorderPane {
         email.setPrefWidth(50);
         tfEmail = new TextField();
         tfEmail.setPrefWidth(300);
-
 
         Label nome = new Label("Nome:");
         nome.setPrefWidth(50);
@@ -172,7 +119,6 @@ public class GestaoAlunosUI extends BorderPane {
         tfClass = new TextField();
         tfClass.setPrefWidth(60);
         possibilidade = new CheckBox("Possibilidade de Estágio");
-
 
         btnExeInsereAluno = new Button("Inserir Aluno");
         btnInsereCSV= new Button("Inserir Por CSV");
@@ -211,82 +157,14 @@ public class GestaoAlunosUI extends BorderPane {
         HBox.setMargin(boxInputText, new Insets(30,0,0,0));
         HBox.setMargin(boxRight, new Insets(30,0,0,0));
 
-        /* EDITAR ALUNO */
-
-        Label nAlunoEdit = new Label("N.Aluno");
-        nAluno.setPrefWidth(50);
-        txNumeroEdit = new TextField();
-        txNumeroEdit.setPrefWidth(300);
-        Label emailEdit = new Label("Email:");
-        emailEdit.setPrefWidth(50);
-        tfEmailEdit = new TextField();
-        tfEmailEdit.setPrefWidth(300);
-
-
-        Label nomeEdit = new Label("Nome:");
-        nomeEdit.setPrefWidth(50);
-        tfNomeEdit = new TextField();
-        tfNomeEdit.setPrefWidth(300);
-
-        Label lcursoEdit = new Label("Curso");
-        lcursoEdit.setPrefWidth(75);
-        cursoEdit = new ChoiceBox<>();
-        cursoEdit.getItems().addAll(Constantes.getCursos());
-        cursoEdit.setPrefWidth(90);
-
-        Label lRamoEdit = new Label("Ramo");
-        lRamoEdit.setPrefWidth(40);
-        ramoEdit = new ChoiceBox<>();
-        ramoEdit.getItems().addAll(Constantes.getRamos());
-        ramoEdit.setPrefWidth(90);
-
-        Label lclassEdit = new Label("Classificação");
-        lclassEdit.setPrefWidth(75);
-        tfClassEdit = new TextField();
-        tfClassEdit.setPrefWidth(60);
-        possibilidadeEdit = new CheckBox("Possibilidade de Estágio");
-
-
         btnExeEditAluno = new Button("Atualizar Aluno");
 
-        HBox boxNumEdit = new HBox();
-        boxNumEdit.getChildren().addAll(nAlunoEdit, txNumeroEdit);
-        boxNumEdit.setSpacing(30);
-        HBox boxEmailEdit = new HBox();
-        boxEmailEdit.getChildren().addAll(emailEdit, tfEmailEdit);
-        boxEmailEdit.setSpacing(30);
-        HBox boxNomeEdit = new HBox();
-        boxNomeEdit.getChildren().addAll(nomeEdit, tfNomeEdit);
-        boxNomeEdit.setSpacing(30);
-        VBox boxInputTextEdit = new VBox();
-        boxInputTextEdit.getChildren().addAll(boxNumEdit,boxEmailEdit, boxNomeEdit);
-        boxInputTextEdit.setSpacing(30);
-
-        HBox boxClassEdit = new HBox();
-        boxClassEdit.getChildren().addAll(lclassEdit,tfClassEdit, possibilidadeEdit);
-        boxClassEdit.setSpacing(30);
-        HBox choicesEdit = new HBox();
-        choicesEdit.getChildren().addAll(lcursoEdit,cursoEdit,lRamoEdit, ramoEdit);
-        choicesEdit.setSpacing(30);
-        VBox boxRightEdit = new VBox();
         hBtnEdit = new HBox();
         hBtnEdit.getChildren().add(btnExeEditAluno);
         hBtnEdit.setAlignment(Pos.CENTER);
         hBtnEdit.setSpacing(30);
-        boxRightEdit.getChildren().addAll(boxClassEdit,choicesEdit,hBtnEdit);
-        boxRightEdit.setSpacing(30);
-
-        hboxEditAluno = new HBox();
-        hboxEditAluno.getChildren().addAll(boxInputTextEdit,boxRightEdit);
-        hboxEditAluno.setSpacing(100);
-        hboxEditAluno.setAlignment(Pos.CENTER);
-        HBox.setMargin(boxInputTextEdit, new Insets(-135,0,0,0));
-        HBox.setMargin(boxRightEdit, new Insets(-135,0,0,0));
 
     }
-
-
-
 
 
     private void createMenu() {
@@ -382,6 +260,28 @@ public class GestaoAlunosUI extends BorderPane {
         });
 
         btnExeEditAluno.setOnAction(actionEvent -> {
+            String nome = tfNome.getText();
+            Long nAluno;
+            Double classificacao;
+            try {
+                nAluno = Long.parseLong(txNumero.getText());
+                classificacao = Double.parseDouble(tfClass.getText());
+
+            }catch (NumberFormatException e){
+                System.out.println("Numero de aluno ou classificacao invalido");
+                return;
+            }
+            String email = tfEmail.getText();
+            Boolean isPossible = possibilidade.isSelected();
+            String curso = this.curso.getValue();
+            String ramo = this.ramo.getValue();
+            if(nome.equals("") || curso.equals("") || ramo.equals("")){
+                return;
+            }
+            if(model.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible) != ErrorCode.E0){
+                System.out.println("Não foi possivel editar");
+
+            }
             hboxInsereAluno.setVisible(false);
         });
     }

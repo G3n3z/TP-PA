@@ -554,6 +554,20 @@ public class Data implements Serializable {
         return prop;
     }
 
+    public boolean editAluno(Aluno a) {
+        for (Aluno aluno : alunos){
+            if(aluno.getNumeroEstudante().equals(a.getNumeroEstudante())){
+                aluno.setNome(a.getNome());
+                aluno.setClassificacao(a.getClassificacao());
+                aluno.setSiglaCurso(a.getSiglaCurso());
+                aluno.setSiglaRamo(a.getSiglaRamo());
+                aluno.setPossibilidade(a.isPossibilidade());
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void alteraProposta(Proposta p) {
 //        for (Proposta proposta : propostas) {
 //            if(p.getId().equals(proposta.getId())){
