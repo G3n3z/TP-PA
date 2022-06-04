@@ -140,13 +140,13 @@ public class OpcoesCandidatura extends StateAdapter{
                     notfind = false;
                     if (p.getNumAluno() != null) {
                         throw new InvalidCSVField("Linha: " + index + " -> A candidatura do aluno: " + candidatura.getNumAluno() +
-                                " está a propor-se ao à proposta " + p.getId() + " que já tem aluno associado");
+                                " está a propor-se ao à proposta " + p.getId() + " que já tem aluno associado", index, ErrorCode.E21);
                     }
                 }
             }
             if(notfind){
                 throw new InvalidCSVField("A candidatura do aluno: " + candidatura.getNumAluno() +
-                    "está a propor-se ao à proposta: " + id + " que não existe");
+                    "está a propor-se ao à proposta: " + id + " que não existe", index, ErrorCode.E9);
 
             }
         }
@@ -256,5 +256,83 @@ public class OpcoesCandidatura extends StateAdapter{
         return sb.toString();
     }
 
+    @Override
+    public ErrorCode removeCandidatura(long numAluno) {
+        data.removeCandidatura(numAluno);
+        return ErrorCode.E0;
+    }
 
+    @Override
+    public ErrorCode insereCandidatura(String nAluno, List<String> ids) {
+        Long numAluno = parseNumAluno(nAluno);
+        if(numAluno == null){
+            return ErrorCode.E3;
+        }
+        Aluno a = data.getAluno(numAluno);
+        if(a == null){
+            return ErrorCode.E3;
+        }
+        if(a.temPropostaNaoConfirmada() || a.temPropostaConfirmada()){
+           return ErrorCode.E21;
+        }
+        if(ids == null || ids.size() == 0){
+            return ErrorCode.E9;
+        }
+
+        Candidatura c = new Candidatura(numAluno, ids);
+        try {
+            candidaturaTemPropostaComAluno(c,0);
+        } catch (InvalidCSVField e) {
+            return e.getErrorCode();
+        }
+
+        data.addCandidatura(c);
+
+        return ErrorCode.E0;
+    }
+
+    @Override
+    public ErrorCode editCandidatura(String nAluno, List<String> ids) {
+        Long numAluno = parseNumAluno(nAluno);
+        if(numAluno == null){
+            return ErrorCode.E3;
+        }
+        Aluno a = data.getAluno(numAluno);
+        if(a == null){
+            return ErrorCode.E3;
+        }
+        Candidatura c = a.getCandidatura();
+        Proposta p;
+        List<String> idsValidos = new ArrayList<>();
+        for (String id : ids) {
+            if(!c.getIdProposta().contains(id)){
+                p = data.getOnePropostaById(id);
+                if(p == null){
+                    return ErrorCode.E9;
+                }
+                if(p.isAtribuida() ){
+                    return ErrorCode.E15;
+                }
+                if(p.getNumAluno() != null && !Objects.equals(p.getNumAluno(), numAluno)){
+                    return ErrorCode.E29;
+                }
+                idsValidos.add(id);
+            }else{
+                idsValidos.add(id);
+            }
+        }
+        c.getIdProposta().clear();
+        c.getIdProposta().addAll(idsValidos);
+        return ErrorCode.E0;
+    }
+
+    private Long parseNumAluno(String nAluno) {
+        long numAluno;
+        try {
+            numAluno = Long.parseLong(nAluno);
+        }catch (NullPointerException | NumberFormatException e){
+            return null;
+        }
+        return numAluno;
+    }
 }

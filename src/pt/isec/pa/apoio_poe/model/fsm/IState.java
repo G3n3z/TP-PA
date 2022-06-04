@@ -118,4 +118,14 @@ public interface IState {
 
 
     ErrorCode insereDocente(Docente d);
+
+    ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno);
+
+    ErrorCode editProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno);
+
+    ErrorCode removeCandidatura(long numAluno);
+
+    ErrorCode insereCandidatura(String nAluno, List<String> ids);
+
+    ErrorCode editCandidatura(String text, List<String> ids);
 }

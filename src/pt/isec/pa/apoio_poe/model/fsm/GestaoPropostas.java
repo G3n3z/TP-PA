@@ -4,6 +4,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.IncompleteCSVLine;
 import pt.isec.pa.apoio_poe.model.Exceptions.InvalidCSVField;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
@@ -12,6 +13,7 @@ import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVReader;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
+import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.util.*;
 
@@ -391,4 +393,266 @@ public class GestaoPropostas extends StateAdapter{
         p.removeRamo(ramo);
         return ErrorCode.E0;
     }
+
+    @Override
+    public ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
+        ErrorCode e;
+        Proposta p;
+        Long numAluno;
+        try {
+            numAluno = Long.parseLong(nAluno);
+        } catch (NumberFormatException | NullPointerException exception) {
+            numAluno = null;
+        }
+        switch (tipo) {
+            case "T1" -> {
+                e = verificaT1(tipo, id, ramos, titulo, entidade, numAluno);
+                if (e != ErrorCode.E0) {
+                    return e;
+                }
+            }
+            case "T2" ->{
+                e = verificaT2(tipo, id, ramos, titulo, docente, numAluno);
+                if (e != ErrorCode.E0) {
+                    return e;
+                }
+            }
+            case "T3" ->{
+                e = verificaT3(tipo, id, titulo, numAluno);
+                if (e != ErrorCode.E0) {
+                    return e;
+                }
+            }
+        }
+        p = Proposta.factory(tipo, id, ramos,titulo,docente,entidade, numAluno) ;
+        if(!data.addProposta(p)){
+            return ErrorCode.E32;
+        }
+        return ErrorCode.E0;
+    }
+
+    private ErrorCode verificaT3(String tipo, String id, String titulo, Long numAluno) {
+        if(!data.verificaNumAluno(numAluno)){
+            //MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
+            return ErrorCode.E3;
+        }
+        if(data.verificaJaAtribuido(numAluno)){
+            //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
+            return ErrorCode.E29;
+        }
+
+
+        return ErrorCode.E0;
+    }
+
+    private ErrorCode verificaT2(String tipo, String id, List<String> ramos, String titulo, String docente, Long nAluno) {
+        if (!checkRamos(0, ramos)) {
+            return ErrorCode.E3;
+        }
+        if(nAluno != null){
+
+            if (!data.verificaNumAluno(nAluno)) {
+                //MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
+                return ErrorCode.E3;
+            }
+            if (!data.verificaRamoAluno(nAluno, ramos)) {
+                //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
+                return ErrorCode.E31;
+            }
+            if (data.verificaJaAtribuido(nAluno)) {
+                //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
+                return ErrorCode.E29;
+            }
+        }
+        if(!data.existeDocenteComEmail(docente)){
+            //MessageCenter.getInstance().putMessage("Linha " + index + " -> está a tentar inserir um docente não registado");
+            return ErrorCode.E4;
+        }
+
+        return ErrorCode.E0;
+    }
+
+    private ErrorCode verificaT1(String tipo, String id, List<String> ramos, String titulo, String entidade, Long numAluno) {
+        if(ramos.size() == 0){
+            return ErrorCode.E7;
+        }
+        if(!verificaExistenciaRamos(ramos)){
+            return ErrorCode.E7;
+        }
+        if(entidade == null){
+
+        }
+
+        if(numAluno !=null) {
+
+            if(!data.verificaNumAluno(numAluno)){
+                //MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
+                return ErrorCode.E3;
+            }
+            if(!data.verificaRamoAluno(numAluno, ramos)){
+                //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
+                return ErrorCode.E31;
+            }
+            if(!data.verificaPossibilidade(numAluno)){
+                //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno não elegível");
+                return ErrorCode.E14;
+            }
+            if(data.verificaJaAtribuido(numAluno)){
+                return ErrorCode.E29;
+            }
+        }
+        if(!checkRamos(0, ramos)){
+            return ErrorCode.E7;
+        }
+
+        return ErrorCode.E0;
+
+    }
+
+    private boolean verificaExistenciaRamos(List<String> ramos) {
+        for (String r: ramos) {
+            if(!Constantes.getRamos().contains(r)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ErrorCode editProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
+        ErrorCode e;
+        Proposta p = getPropostaById(id);
+        Long numAluno = null;
+        if(nAluno != null && !nAluno.equals("")){
+            try {
+                numAluno = Long.parseLong(nAluno);
+            } catch (NullPointerException | NumberFormatException exception) {
+                return ErrorCode.E3;
+            }
+        }
+        if(p == null){
+            return ErrorCode.E9;
+        }
+        p.getClone();
+        switch (tipo){
+            case "T1" -> {
+                e = editEstagio(p, id, titulo, entidade, ramos, nAluno);
+                if(e != ErrorCode.E0)
+                    return e;
+            }
+            case "T2" -> {
+                e = editProjeto(p, id, titulo, docente, ramos, nAluno);
+                if(e != ErrorCode.E0)
+                    return e;
+            }
+            case "T3" -> {}
+        }
+
+        if(!p.getTitulo().equals(titulo)) {
+            p.setTitulo(titulo);
+        }
+        if(!(p instanceof Projeto_Estagio) && (e = alteraRamos(p, ramos)) != ErrorCode.E0){
+            return e;
+        }
+        if(!(p instanceof Projeto_Estagio) && (numAluno != null)){
+            Aluno a = null;
+            if(p.getNumAluno() != null) {
+                a = data.getAluno(p.getNumAluno());
+                if (a == null) {
+                    return ErrorCode.E3;
+                }
+                if(a.temPropostaConfirmada()){
+                    return ErrorCode.E29;
+                }
+            }
+            Aluno novo = data.getAluno(numAluno);
+            if(novo ==null){
+                return ErrorCode.E3;
+            }
+
+            if(novo.temPropostaConfirmada()){
+                return ErrorCode.E29;
+            }
+            if(a != null) {
+                if (a.temPropostaNaoConfirmada()) {
+                    a.setPropostaNaoConfirmada(null);
+                }
+            }
+            novo.setPropostaNaoConfirmada(p);
+            p.setNumAluno(numAluno);
+        }
+
+        data.alteraProposta(p);
+        System.out.println(p);
+        return ErrorCode.E0;
+    }
+
+
+
+    private ErrorCode editProjeto(Proposta p, String id, String titulo, String docente, List<String> ramos, String nAluno) {
+        ErrorCode e = ErrorCode.E0;
+
+        if(p instanceof Projeto projeto && !docente.equals(projeto.getEmailDocente())){
+            e = alteraDocente(projeto, docente);
+        }
+        return e;
+    }
+
+    private ErrorCode alteraDocente(Projeto p, String docente) {
+        if(!data.existeDocenteComEmail(docente)){
+            return ErrorCode.E4;
+        }
+        p.setEmailDocente(docente);
+        p.setDocenteProponente(data.getDocente(docente));
+        if(p.temDocenteOrientador()){
+            p.setDocenteOrientadorDocenteProponente();
+        }
+        return ErrorCode.E0;
+    }
+
+    private ErrorCode editEstagio(Proposta p, String id, String titulo, String entidade, List<String> ramos, String nAluno) {
+        ErrorCode e = ErrorCode.E0;
+
+        if (p instanceof Estagio estagio && !estagio.getEntidade().equals(entidade)){
+            estagio.changeEntidade(entidade);
+        }
+
+
+        return e;
+    }
+
+    private ErrorCode alteraRamos(Proposta p, List<String> ramos) {
+        if(new HashSet<>(ramos).containsAll(p.getRamos())){
+            return ErrorCode.E0;
+        }
+
+        for (String ramo : ramos) {
+            if(!Constantes.getRamos().contains(ramo)){
+                return ErrorCode.E7;
+            }
+        }
+        String ramoAluno = null;
+        if(p.getNumAluno() != null){
+            Aluno a = data.getAluno(p.getNumAluno());
+            if(a != null){
+                ramoAluno = a.getSiglaRamo();
+            }
+        }
+        if(ramoAluno != null) {
+
+            if(!ramos.contains(ramoAluno)){
+                return ErrorCode.E33;
+            }
+            p.getRamos().clear();
+            p.getRamos().addAll(ramos);
+            return ErrorCode.E0;
+        }
+        p.getRamos().clear();
+        p.getRamos().addAll(ramos);
+        return ErrorCode.E0;
+    }
+
+
 }
+
+

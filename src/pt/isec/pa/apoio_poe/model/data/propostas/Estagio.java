@@ -18,6 +18,8 @@ public class Estagio extends Proposta {
         this.entidade = entidade;
     }
 
+
+
     @Override
     public String toString() {
         return "Estagio-> " +
@@ -48,5 +50,9 @@ public class Estagio extends Proposta {
 
     public void changeEntidade(String nova_entidade) {
         entidade = nova_entidade;
+    }
+
+    public String getEntidade() {
+        return entidade;
     }
 }

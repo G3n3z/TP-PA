@@ -553,4 +553,43 @@ public class Data implements Serializable {
         }
         return prop;
     }
+
+    public void alteraProposta(Proposta p) {
+//        for (Proposta proposta : propostas) {
+//            if(p.getId().equals(proposta.getId())){
+//                if(proposta instanceof Estagio e){
+//                    e.changeEntidade(p.getEntidade());
+//                }
+//                proposta.setTitulo(p.getTitulo());
+//                proposta.setRamos(p.getRamos());
+//                if(proposta instanceof Projeto projeto) {
+//                    proposta.setDocenteOrientador(p.getOrientador());
+//                    proposta.setDocenteProponente(p.getProponente());
+//                    projeto.setEmailDocente(p.getEmailDocente());
+//                }
+//
+//            }
+//        }
+        propostas.remove(p);
+        propostas.add(p);
+
+    }
+
+    public List<Candidatura> getCandidaturasCopia() {
+        List<Candidatura> cand = new ArrayList<>();
+
+        for (Candidatura candidatura : candidaturas) {
+            cand.add(candidatura.getClone());
+        }
+        return cand;
+    }
+
+    public Proposta getOnePropostaById(String id) {
+        List<Proposta> prop = new ArrayList<>(propostas);
+        int index = prop.indexOf(Proposta.getDummy(id));
+        if(index == -1){
+            return null;
+        }
+        return prop.get(index);
+    }
 }

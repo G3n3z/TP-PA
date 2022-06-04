@@ -18,10 +18,11 @@ public class RootPane extends BorderPane {
         GestaoAlunosUI gestaoAlunosUI = new GestaoAlunosUI(model);
         GestaoDocentesUI gestaoDocentesUI = new GestaoDocentesUI(model);
         GestaoPropostasUI gestaoPropostasUI = new GestaoPropostasUI(model);
+        OpcoesCandidaturaUI opcoesCandidaturaUI = new OpcoesCandidaturaUI(model);
         //c.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         //stack.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
         stack.getChildren().add(c);
-        stack.getChildren().addAll(load, gestaoAlunosUI, gestaoDocentesUI, gestaoPropostasUI);
+        stack.getChildren().addAll(load, gestaoAlunosUI, gestaoDocentesUI, gestaoPropostasUI, opcoesCandidaturaUI);
         setCenter(stack);
 
     }

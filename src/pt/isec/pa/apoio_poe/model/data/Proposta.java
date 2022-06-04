@@ -1,5 +1,9 @@
 package pt.isec.pa.apoio_poe.model.data;
 
+import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,15 @@ public class Proposta implements Serializable {
 
     public static Proposta getDummy(String proposta) {
         return new Proposta(proposta);
+    }
+
+    public static Proposta factory(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, Long nAluno) {
+        return switch (tipo){
+            case "T1" -> new Estagio(id, tipo, ramos, titulo, entidade, nAluno);
+            case "T2" -> new Projeto(id, tipo,ramos,titulo, docente, nAluno);
+            case "T3" -> new Projeto_Estagio(id, tipo, titulo, nAluno);
+            default -> null;
+        };
     }
 
     public boolean isAtribuida() {
@@ -165,5 +178,17 @@ public class Proposta implements Serializable {
 
     public void removeRamo(String ramo) {
         ramos.remove(ramo);
+    }
+
+    public String getEmailDocente(){
+        return "";
+    }
+
+    public String getEntidade() {
+        return "";
+    }
+
+    public void setRamos(List<String> ramos) {
+        this.ramos = ramos;
     }
 }

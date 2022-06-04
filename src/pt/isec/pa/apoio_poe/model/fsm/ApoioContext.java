@@ -3,10 +3,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
-import pt.isec.pa.apoio_poe.model.data.Aluno;
-import pt.isec.pa.apoio_poe.model.data.Data;
-import pt.isec.pa.apoio_poe.model.data.Docente;
-import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.data.*;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
@@ -321,6 +318,31 @@ public class ApoioContext {
 
     public List<Proposta> getPropostas() {
         return data.getPropostasCopia();
+    }
+
+    public ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
+
+        return state.insereProposta(tipo, id, ramos, titulo, docente, entidade, nAluno);
+    }
+
+    public ErrorCode editProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
+        return state.editProposta(tipo, id, ramos, titulo, docente, entidade, nAluno);
+    }
+
+    public ErrorCode removeCandidatura(long numAluno) {
+        return state.removeCandidatura(numAluno);
+    }
+
+    public List<Candidatura> getCandidaturasList() {
+        return data.getCandidaturasCopia();
+    }
+
+    public ErrorCode insereCandidatura(String nAluno, List<String> ids) {
+        return state.insereCandidatura(nAluno, ids);
+    }
+
+    public ErrorCode editCandidatura(String text, List<String> ids) {
+        return state.editCandidatura(text, ids);
     }
 }
 

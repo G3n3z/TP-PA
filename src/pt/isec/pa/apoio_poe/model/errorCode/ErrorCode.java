@@ -154,8 +154,26 @@ public enum ErrorCode {
      */
     E29,
 
+
     /**
      * Porposta ja contem docente Orientador
      */
-    E30
+    E30,
+
+
+    /**
+     * Aluno com ramo incompativel com proposta
+     */
+    E31,
+
+
+    /**
+     * Proposta já existente
+     */
+    E32,
+
+    /**
+     * Nao pode remover o ramo do aluno associado
+     */
+    E33
 }

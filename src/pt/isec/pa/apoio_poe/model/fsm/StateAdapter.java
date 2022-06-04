@@ -8,6 +8,7 @@ import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.*;
+import java.util.List;
 
 abstract class StateAdapter implements IState{
     ApoioContext context;
@@ -288,6 +289,31 @@ abstract class StateAdapter implements IState{
 
     @Override
     public ErrorCode insereDocente(Docente d) {
+        return ErrorCode.E25;
+    }
+
+    @Override
+    public ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
+        return ErrorCode.E25;
+    }
+
+    @Override
+    public ErrorCode editProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
+        return ErrorCode.E25;
+    }
+
+    @Override
+    public ErrorCode removeCandidatura(long numAluno) {
+        return ErrorCode.E25;
+    }
+
+    @Override
+    public ErrorCode insereCandidatura(String nAluno, List<String> ids) {
+        return ErrorCode.E25;
+    }
+
+    @Override
+    public ErrorCode editCandidatura(String text, List<String> ids) {
         return ErrorCode.E25;
     }
 }

@@ -47,6 +47,12 @@ public class ConfigOptionsUI extends BorderPane {
             model.gerirPropostas();
             System.out.println(model.getState().toString());
         });
+        bAvancar.setOnAction(actionEvent -> {
+            model.avancarFase();
+        });
+        bFechar.setOnAction(actionEvent -> {
+            model.fecharFase();
+        });
     }
 
     private void update() {
