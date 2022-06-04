@@ -10,6 +10,7 @@ import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.ui.gui.GestaoAlunosUI;
 
+import javax.security.auth.callback.Callback;
 import java.util.function.Consumer;
 
 public class TableAlunos extends TableView<Aluno> {
@@ -70,6 +71,15 @@ public class TableAlunos extends TableView<Aluno> {
         model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
             update();
         });
+    }
+    private void removeCols(String ...names){
+        for (String n : names) {
+            getColumns().removeIf(col -> col.getText().equals(n));
+        }
+    }
+    private boolean addCols(TableColumn<Aluno,String> tableCol){
+        getColumns().add(tableCol);
+        return true;
     }
     private void update() {
         System.out.println("Update" + model.getAlunos().size());

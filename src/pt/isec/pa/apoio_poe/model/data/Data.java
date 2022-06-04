@@ -297,7 +297,7 @@ public class Data implements Serializable {
         if(a == null){
             return false;
         }
-        a.setPossibilidade();
+        a.changePossibilidade();
         return true;
     }
 
