@@ -35,7 +35,11 @@ public class GestaoPropostasUI extends BorderPane {
     HBox hRamos, hBoxInput;
     VBox boxLeft;
     VBox boxRight;
-    Button btnInsereProposta, btnInsereCSV, btnEditProposta;
+    Button btnInsereProposta, btnInsereCSV, btnEditProposta, btnCancelEdit;
+    long nPropostas, nT1, nT2, nT3, nDA, nSI, nRAS;
+    List<Long> stats = new ArrayList<>();
+    Label numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS;
+
     boolean visible = false;
 
     public GestaoPropostasUI(ModelManager model) {
@@ -56,9 +60,39 @@ public class GestaoPropostasUI extends BorderPane {
         hBoxInput = new HBox(boxLeft);
         hBoxInput.setAlignment(Pos.CENTER);
 
-        center.getChildren().addAll(tableView, hBoxInput);
+        HBox statsFooter = new HBox();
+        numPropostas = new Label();
+        numT1 = new Label();
+        numT2 = new Label();
+        numT3 = new Label();
+        numDA = new Label();
+        numSI = new Label();
+        numRAS = new Label();
+        statsFooter.getChildren().addAll(numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS);
+        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setSpacing(20.0);
+
+        center.getChildren().addAll(tableView, hBoxInput, statsFooter);
         setCenter(center);
 
+    }
+
+    public void atualizaStats(){
+        stats = model.getStatsPropostas();
+        nPropostas = stats.get(0);
+        nT1 = stats.get(1);
+        nT2 = stats.get(2);
+        nT3 = stats.get(3);
+        nDA = stats.get(4);
+        nSI = stats.get(5);
+        nRAS = stats.get(6);
+        numPropostas.setText("Propostas: "+nPropostas);
+        numT1.setText("Estagios: "+nT1);
+        numT2.setText("Projetos: "+nT2);
+        numT3.setText("Autopropostos: "+nT3);
+        numDA.setText("DA: "+nDA);
+        numSI.setText("SI: "+nSI);
+        numRAS.setText("RAS: "+nRAS);
     }
 
     private void preparaInserir() {
@@ -107,6 +141,7 @@ public class GestaoPropostasUI extends BorderPane {
         btnInsereProposta = new Button("Insere Proposta");
         btnInsereCSV = new Button("Importar CSV");
         btnEditProposta = new Button("Editar Proposta");
+        btnCancelEdit = new Button("Cancelar");
         hBoxBtnInserirProposta = new HBox(btnInsereProposta, btnInsereCSV);
         hBoxBtnInserirProposta.setSpacing(50);
         hBoxBtnInserirProposta.setAlignment(Pos.CENTER);
@@ -132,7 +167,7 @@ public class GestaoPropostasUI extends BorderPane {
         visible = true;
         update();
         hBoxBtnInserirProposta.getChildren().clear();
-        hBoxBtnInserirProposta.getChildren().add(btnEditProposta);
+        hBoxBtnInserirProposta.getChildren().addAll(btnEditProposta,btnCancelEdit);
         tFId.setText(proposta.getId());
         tFId.setDisable(true);
         choiceTipo.setValue(proposta.getTipo());
@@ -197,6 +232,11 @@ public class GestaoPropostasUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+
+        model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS, evt -> {
+            atualizaStats();
+        });
+
         btnRecuar.setOnAction(actionEvent -> {
             visible = false;
             model.recuarFase();
@@ -282,6 +322,11 @@ public class GestaoPropostasUI extends BorderPane {
             }else{
                 System.out.println(e.toString());
             }
+        });
+
+        btnCancelEdit.setOnAction(actionEvent -> {
+            visible = false;
+            update();
         });
 
     }

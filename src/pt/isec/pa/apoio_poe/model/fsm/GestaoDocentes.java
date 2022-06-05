@@ -79,7 +79,7 @@ public class GestaoDocentes extends StateAdapter{
     // Verifica se o email esta ja atribuido a um aluno
     private boolean checkDocente(int index, String email) throws InvalidCSVField {
         if(data.existeAlunoComEmail(email)){
-            throw new InvalidCSVField("Linha " + index + " -> Email já registado num aluno.");
+            throw new InvalidCSVField("Linha " + index + " -> Email já registado num aluno.", index, ErrorCode.E12);
         }
         return true;
     }
@@ -128,7 +128,8 @@ public class GestaoDocentes extends StateAdapter{
     }
 
     @Override
-    public ErrorCode insereDocente(Docente d) {
+    public ErrorCode insereDocente(String email, String nome) {
+        Docente d = new Docente(email, nome);
         try {
             checkDocente(0,d.getEmail());
         } catch (InvalidCSVField e) {
@@ -136,6 +137,14 @@ public class GestaoDocentes extends StateAdapter{
         }
         if(!data.addDocente(d)) {
             return ErrorCode.E12;
+        }
+        return ErrorCode.E0;
+    }
+
+    public ErrorCode editDocente(String email, String nome) {
+        Docente d = new Docente(email, nome);
+        if(!data.editDocente(d)){
+            return ErrorCode.E4;
         }
         return ErrorCode.E0;
     }

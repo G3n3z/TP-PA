@@ -128,6 +128,7 @@ public class ModelManager {
     public void removeAllDocentes() {
         context.removeAll();
         pcs.firePropertyChange(PROP_DOCENTES, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
     }
 
     public boolean importDocentes(String absolutePath) throws CollectionBaseException {
@@ -142,10 +143,24 @@ public class ModelManager {
         return b;
     }
 
-    public ErrorCode insereDocente(Docente d) {
-        ErrorCode e =  context.insereDocente(d);
+    public ErrorCode insereDocente(String email, String nome) {
+        ErrorCode e =  context.insereDocente(email, nome);
         pcs.firePropertyChange(PROP_DOCENTES, null, null);
         return e;
+    }
+
+    public void removeDocente(String email) {
+        context.removeDocente(email);
+        pcs.firePropertyChange(PROP_DOCENTES, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+    }
+
+    public ErrorCode editDocente(String email, String nome) {
+        ErrorCode error = context.editDocente(email, nome);
+        if(error == ErrorCode.E0){
+            pcs.firePropertyChange(PROP_DOCENTES,null ,null);
+        }
+        return error;
     }
 
     public void gerirDocentes() {
@@ -250,5 +265,17 @@ public class ModelManager {
         context.removeAll();
         pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
 
+    }
+
+    public List<Long> getStatsAlunos(){
+        return context.getStatsAlunos();
+    }
+
+    public Double getMediaClassificacao() {
+        return context.getMediaClassificacao();
+    }
+
+    public List<Long> getStatsPropostas() {
+        return context.getStatsPropostas();
     }
 }

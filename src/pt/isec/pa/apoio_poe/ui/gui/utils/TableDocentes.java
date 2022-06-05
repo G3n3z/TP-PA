@@ -46,7 +46,7 @@ public class TableDocentes extends TableView<Docente> {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
                 System.out.println(docenteButtonCellDataFeatures.getValue());
-
+                model.removeDocente(docenteButtonCellDataFeatures.getValue().getEmail());
             });
             return new ReadOnlyObjectWrapper<>(remover);
         });

@@ -117,7 +117,7 @@ public interface IState {
     ErrorCode insereAluno(Aluno a);
 
 
-    ErrorCode insereDocente(Docente d);
+    ErrorCode insereDocente(String email, String nome);
 
     ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno);
 
@@ -130,4 +130,6 @@ public interface IState {
     ErrorCode editCandidatura(String text, List<String> ids);
 
     ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible);
+
+    ErrorCode editDocente(String email, String nome);
 }

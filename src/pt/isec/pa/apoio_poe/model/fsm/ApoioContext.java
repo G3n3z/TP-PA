@@ -312,8 +312,8 @@ public class ApoioContext {
         return data.getDocentesCopia();
     }
 
-    public ErrorCode insereDocente(Docente d) {
-        return state.insereDocente(d);
+    public ErrorCode insereDocente(String email, String nome) {
+        return state.insereDocente(email, nome);
     }
 
     public List<Proposta> getPropostas() {
@@ -347,6 +347,22 @@ public class ApoioContext {
 
     public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible) {
         return state.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
+    }
+
+    public ErrorCode editDocente(String email, String nome) {
+        return state.editDocente(email, nome);
+    }
+
+    public List<Long> getStatsAlunos() {
+        return data.getStatsAlunos();
+    }
+
+    public Double getMediaClassificacao() {
+        return data.mediaClassificacao();
+    }
+
+    public List<Long> getStatsPropostas() {
+        return data.getStatsPropostas();
     }
 }
 

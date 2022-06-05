@@ -32,14 +32,16 @@ public class GestaoDocentesUI extends BorderPane {
     ModelManager model;
     ButtonMenu btnGestaoDocentes, btnInsereManual, btnExport, btnRemoveAll,btnRecuar;
 
-    Label title;
+    Label title, numDocentes;
     TableView<Docente> tableView;
 
-    HBox vboxInsereDocente;
-    Button btnExeInsereDocente,  btnInsereCSV;
+    HBox vboxInsereDocente, hBtn;
+    Button btnExeInsereDocente,  btnInsereCSV, btnExeEditarDocente, btnCancelEdit;
     TextField  tfNome,tfEmail;
     List<Node> nodeShow;
     FileChooser fileChooser;
+    Integer nDocentes;
+
     public GestaoDocentesUI(ModelManager model) {
         this.model = model;
 
@@ -51,7 +53,7 @@ public class GestaoDocentesUI extends BorderPane {
 
     private void createViews() {
         createMenu();
-        title = new Label("Gestao de Alunos");
+        title = new Label("Gestao de Docentes");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
         HBox.setMargin(title, new Insets(30,0,30,0));
@@ -66,11 +68,22 @@ public class GestaoDocentesUI extends BorderPane {
         nodeShow = new ArrayList<>();
         nodeShow.add(vboxInsereDocente);
 
+        numDocentes = new Label("Docentes: ");
+
+        HBox stats = new HBox();
+        stats.getChildren().add(numDocentes);
+        stats.setAlignment(Pos.BASELINE_LEFT);
+
         nodeShow.forEach(n -> n.setVisible(false));
-        container.getChildren().addAll(titulo, tableView,vboxInsereDocente);
+        container.getChildren().addAll(titulo, tableView,vboxInsereDocente, stats);
 
         setCenter(container);
 
+    }
+
+    public void atualizaStats(){
+        nDocentes = model.getDocentes().size();
+        numDocentes.setText("Docentes: "+nDocentes);
     }
 
 
@@ -150,19 +163,21 @@ public class GestaoDocentesUI extends BorderPane {
         boxInputText.setSpacing(30);
 
 
-        HBox hBtn = new HBox();
+        hBtn = new HBox();
         hBtn.getChildren().addAll(btnExeInsereDocente, btnInsereCSV);
         hBtn.setAlignment(Pos.CENTER);
         hBtn.setSpacing(30);
 
-
-
+        btnExeEditarDocente = new Button("Atualizar");
+        btnCancelEdit = new Button("Cancelar");
 
         vboxInsereDocente = new HBox();
         vboxInsereDocente.getChildren().addAll(boxInputText, hBtn);
         vboxInsereDocente.setSpacing(100);
         vboxInsereDocente.setAlignment(Pos.CENTER);
         HBox.setMargin(boxInputText, new Insets(30,0,0,0));
+
+
 
     }
 
@@ -185,6 +200,10 @@ public class GestaoDocentesUI extends BorderPane {
             update();
         });
 
+        model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
+            atualizaStats();
+        });
+
         btnRecuar.setOnAction(actionEvent -> {
             nodeShow.forEach(n -> n.setVisible(false));
             model.recuarFase();
@@ -204,6 +223,9 @@ public class GestaoDocentesUI extends BorderPane {
         btnInsereManual.setOnAction(actionEvent -> {
             nodeShow.forEach(n -> n.setVisible(false));
             vboxInsereDocente.setVisible(true);
+            hBtn.getChildren().clear();
+            hBtn.getChildren().addAll(btnExeInsereDocente,btnInsereCSV);
+            clearFields();
             update();
         });
 
@@ -216,15 +238,33 @@ public class GestaoDocentesUI extends BorderPane {
             String nome = tfNome.getText();
             String email = tfEmail.getText();
 
-            if(nome == null || email == null ){
+            if(nome.equals("") || email.equals("") ){
                 return;
             }
-            Docente d = new Docente(email,nome);
-            if(model.insereDocente(d)!= ErrorCode.E0){
+            if(model.insereDocente(email,nome)!= ErrorCode.E0){
                 System.out.println("Correu algo mal");
             }
-
+            clearFields();
+            atualizaStats();
         });
+
+        btnExeEditarDocente.setOnAction(actionEvent -> {
+            String nome = tfNome.getText();
+            String email = tfEmail.getText();
+
+            if(nome.equals("") || email.equals("") ){
+                return;
+            }
+            if(model.editDocente(email,nome) != ErrorCode.E0){
+                System.out.println("Correu algo mal");
+            }
+            vboxInsereDocente.setVisible(false);
+        });
+
+        btnCancelEdit.setOnAction(actionEvent -> {
+            nodeShow.forEach(n -> n.setVisible(false));
+        });
+
         btnExport.setOnAction(actionEvent -> {
             File f = fileChooser.showSaveDialog(null);
 
@@ -246,12 +286,21 @@ public class GestaoDocentesUI extends BorderPane {
 
     private void preparaTable() {
         Consumer<Docente> edit = (d) -> {
+            tfNome.setText(d.getNome());
+            tfEmail.setText(d.getEmail());
+            tfEmail.setDisable(true);
+            hBtn.getChildren().clear();
+            hBtn.getChildren().addAll(btnExeEditarDocente,btnCancelEdit);
 
-          tfNome.setText(d.getNome());
-          tfEmail.setText(d.getEmail());
-
-          vboxInsereDocente.setVisible(true);
+            vboxInsereDocente.setVisible(true);
         };
         tableView = new TableDocentes(model, edit);
+    }
+
+    private void clearFields(){
+        tfNome.clear();
+        tfEmail.clear();
+        tfEmail.setDisable(false);
+
     }
 }

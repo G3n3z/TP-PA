@@ -140,7 +140,7 @@ abstract class StateAdapter implements IState{
     public ErrorCode changePossibilidadeAluno(long nALuno){ return ErrorCode.E25;}
 
     @Override
-    public ErrorCode removeDocente(String numero_de_aluno){return ErrorCode.E25;}
+    public ErrorCode removeDocente(String email){return ErrorCode.E25;}
 
     @Override
     public ErrorCode changeNameDocente(String novo_nome, String email) {return ErrorCode.E25;}
@@ -292,7 +292,7 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public ErrorCode insereDocente(Docente d) {
+    public ErrorCode insereDocente(String email, String nome) {
         return ErrorCode.E25;
     }
 
@@ -320,4 +320,7 @@ abstract class StateAdapter implements IState{
     public ErrorCode editCandidatura(String text, List<String> ids) {
         return ErrorCode.E25;
     }
+
+    @Override
+    public ErrorCode editDocente(String email, String nome) {return ErrorCode.E25;}
 }

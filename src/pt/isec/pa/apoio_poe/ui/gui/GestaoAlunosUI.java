@@ -31,21 +31,23 @@ public class GestaoAlunosUI extends BorderPane {
     ModelManager model;
     ButtonMenu btnGestaoAlunos, btnInsereManual, btnExport, btnEdit, btnRemove, btnRemoveAll,btnRecuar;
 
-    Label title;
+    Label title, numAlunos, numLEIPL, numLEI, numDA, numSI, numRAS, medClassificacao, numPossibilidade;;
     TableView<Aluno> tableView;
     Aluno a;
     HBox hboxInsereAluno, hBtn, hBtnEdit;
     VBox hboxInsereCSV,boxRight;
-    Button btnExeInsereAluno, btnExeInsereCSV, btnExeEditAluno,  btnInsereCSV;
+    Button btnExeInsereAluno, btnExeInsereCSV, btnExeEditAluno, btnInsereCSV, btnCancelEdit;
     TextField txNumero, tfNome,tfEmail, tfClass;
     ChoiceBox<String> curso, ramo;
     CheckBox possibilidade;
     List<Node> nodeShow;
     FileChooser fileChooser;
+    Long nAlunos, nPL, nLEI, nDA, nSI, nRAS, nPosssibilidade;
+    Double mClassificacao;
+    List<Long> stats = new ArrayList<>();
 
     public GestaoAlunosUI(ModelManager model) {
         this.model = model;
-        a = new Aluno("asd","Daniel", 123L,"LEI","DA",1.0,true);
         createViews();
         registerHandlers();
         update();
@@ -70,10 +72,46 @@ public class GestaoAlunosUI extends BorderPane {
         nodeShow.add(hboxInsereAluno);
         nodeShow.add(hboxInsereCSV);
         nodeShow.forEach(n -> n.setVisible(false));
-        container.getChildren().addAll(titulo, tableView, hboxInsereAluno, hboxInsereCSV);
+
+        numAlunos = new Label();
+        numLEIPL = new Label();
+        numLEI = new Label("LEI: ");
+        numDA = new Label("DA: ");
+        numSI = new Label("SI: ");
+        numRAS = new Label("RAS: ");
+        medClassificacao = new Label("Classificacao media : ");
+        numPossibilidade = new Label("C/ Possibilidade de estagio : ");
+
+        HBox statsFooter = new HBox();
+        statsFooter.getChildren().addAll(numAlunos, numLEIPL, numLEI, numDA, numSI, numRAS, medClassificacao, numPossibilidade);
+        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setSpacing(20.0);
+
+        container.getChildren().addAll(titulo, tableView, hboxInsereAluno, hboxInsereCSV, statsFooter);
+
 
         setCenter(container);
 
+    }
+
+    private void atualizaStats(){
+        stats = model.getStatsAlunos();
+        nAlunos = stats.get(0);
+        numAlunos.setText("Alunos: "+nAlunos);
+        nPL = stats.get(1);
+        numLEIPL.setText("LEI-PL: "+nPL);
+        nLEI = stats.get(2);
+        numLEI.setText("LEI: "+nLEI);
+        nDA = stats.get(3);
+        numDA.setText("DA: "+nDA);
+        nSI = stats.get(4);
+        numSI.setText("SI: "+nSI);
+        nRAS = stats.get(5);
+        numRAS.setText("RAS: "+nRAS);
+        nPosssibilidade = stats.get(6);
+        numPossibilidade.setText("C/ Possibilidade de estagio : "+nPosssibilidade);
+        mClassificacao = model.getMediaClassificacao();
+        medClassificacao.setText("Classificacao media : "+String.format("%.4f",mClassificacao));
     }
 
     private void preparaInsereCSV() {
@@ -157,10 +195,11 @@ public class GestaoAlunosUI extends BorderPane {
         HBox.setMargin(boxInputText, new Insets(30,0,0,0));
         HBox.setMargin(boxRight, new Insets(30,0,0,0));
 
-        btnExeEditAluno = new Button("Atualizar Aluno");
+        btnExeEditAluno = new Button("Atualizar");
+        btnCancelEdit = new Button("Cancelar");
 
         hBtnEdit = new HBox();
-        hBtnEdit.getChildren().add(btnExeEditAluno);
+        hBtnEdit.getChildren().addAll(btnExeEditAluno, btnCancelEdit);
         hBtnEdit.setAlignment(Pos.CENTER);
         hBtnEdit.setSpacing(30);
 
@@ -180,6 +219,10 @@ public class GestaoAlunosUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
+        });
+
+        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
+            atualizaStats();
         });
 
         btnRecuar.setOnAction(actionEvent -> {
@@ -247,6 +290,12 @@ public class GestaoAlunosUI extends BorderPane {
             clearFields();
 
         });
+
+        btnCancelEdit.setOnAction(actionEvent -> {
+            clearFields();
+            nodeShow.forEach(n -> n.setVisible(false));
+        });
+
         btnExport.setOnAction(actionEvent -> {
             File f = fileChooser.showSaveDialog(null);
 
@@ -288,6 +337,7 @@ public class GestaoAlunosUI extends BorderPane {
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_ALUNOS);
+
     }
 
 

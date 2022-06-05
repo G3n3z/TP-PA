@@ -606,4 +606,57 @@ public class Data implements Serializable {
         }
         return prop.get(index);
     }
+
+    public boolean editDocente(Docente d) {
+        for (Docente docente : docentes){
+            if (docente.getEmail().equals(d.getEmail())){
+                docente.setNome(d.getNome());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Long> getStatsAlunos(){
+        List<Long> stats = new ArrayList<>();
+        Long nAlunos, nLEI, nPL, nDA, nSI, nRAS, nPosssibilidade;
+
+        nAlunos = (long) alunos.size();
+        nPL = alunos.stream().filter(aluno -> aluno.getSiglaCurso().equals("LEI-PL")).count();
+        nLEI = alunos.stream().filter(aluno -> aluno.getSiglaCurso().equals("LEI")).count();
+        nDA = alunos.stream().filter(aluno -> aluno.getSiglaRamo().equals("DA")).count();
+        nSI = alunos.stream().filter(aluno -> aluno.getSiglaRamo().equals("SI")).count();
+        nRAS = alunos.stream().filter(aluno -> aluno.getSiglaRamo().equals("RAS")).count();
+        nPosssibilidade = alunos.stream().filter(Aluno::isPossibilidade).count();
+
+        stats.addAll(List.of(nAlunos,nPL,nLEI,nDA,nSI,nRAS,nPosssibilidade));
+
+        return stats;
+    }
+    public Double mediaClassificacao(){
+        Double media = 0.0;
+        for (Aluno aluno : alunos){
+            media += aluno.getClassificacao();
+        }
+        media = media/alunos.size();
+
+        return media;
+    }
+
+    public List<Long> getStatsPropostas() {
+        long nPropostas, nT1, nT2, nT3, nDA, nSI, nRAS;
+        List<Long> stats = new ArrayList<>();
+
+        nPropostas = propostas.size();
+        nT1 = propostas.stream().filter(proposta -> proposta.getTipo().equals("T1")).count();
+        nT2 = propostas.stream().filter(proposta -> proposta.getTipo().equals("T2")).count();
+        nT3 = propostas.stream().filter(proposta -> proposta.getTipo().equals("T3")).count();
+        nDA = propostas.stream().filter(proposta -> proposta.getRamos()!=null && proposta.getRamos().contains("DA")).count();
+        nSI = propostas.stream().filter(proposta -> proposta.getRamos()!=null && proposta.getRamos().contains("SI")).count();
+        nRAS = propostas.stream().filter(proposta -> proposta.getRamos()!=null && proposta.getRamos().contains("RAS")).count();
+
+        stats.addAll(List.of(nPropostas, nT1, nT2, nT3, nDA, nSI, nRAS));
+
+        return stats;
+    }
 }
