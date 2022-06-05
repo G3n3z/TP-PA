@@ -31,8 +31,8 @@ public class TableAlunos extends TableView<Aluno> {
         colClass.setCellValueFactory(new PropertyValueFactory<>("classificacao"));
         TableColumn<Aluno, Boolean> colPossibilidade = new TableColumn<>("Possibilidade Estagio");
         colPossibilidade.setCellValueFactory(new PropertyValueFactory<>("possibilidade"));
-        colnumEstudante.setPrefWidth(120); colEmail.setPrefWidth(200); colNome.setPrefWidth(150);
-        colCurso.setPrefWidth(120); colRamo.setPrefWidth(120); colClass.setPrefWidth(120); colPossibilidade.setPrefWidth(120);
+        colnumEstudante.setPrefWidth(120); colEmail.setPrefWidth(250); colNome.setPrefWidth(250);
+        colCurso.setPrefWidth(120); colRamo.setPrefWidth(120); colClass.setPrefWidth(120); colPossibilidade.setPrefWidth(150);
 
         setFixedCellSize(50);
         getStylesheets().add("css/table1.css");

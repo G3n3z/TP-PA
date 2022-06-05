@@ -1,11 +1,12 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
@@ -32,11 +33,13 @@ public class OpcoesCandidaturaUI extends BorderPane {
     TableCandidatura tableView;
     TextField tfAluno, tfPropostas;
     HBox hBoxInsereCandidaturas, hBoxButtonInsereCand;
-    Label propostasInseridas;
+    Label propostasInseridas, title, numCandidaturas, numAutoProp, numAlunoComCand, numAlunoSemCand;
     VBox vBoxCamposInsercaoPropostas, vBoxInsereCandidaturas, camposCentro;
     Button btnInsereCandManual, btnInsereCandCSV, btnEditCandidatura,btnVoltarEdit;
     Consumer<Candidatura> consumerEdit;
     ObtencaoAlunoFaseCandidatura obtencaoAlunoFaseCandidatura;
+    ObtencaoPropostaFiltrosFaseCandidatura obtencaoPropostaFiltrosFaseCandidatura;
+    Integer nCandidaturas, nAP, nACC, nASC;
     public OpcoesCandidaturaUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -50,13 +53,61 @@ public class OpcoesCandidaturaUI extends BorderPane {
         preparaCamposInserir();
         preparaObtencoes();
 
+        title = new Label("Opções de Candidatura");
+        title.setFont(new Font(26));
+        HBox titulo = new HBox();
+        HBox.setMargin(title, new Insets(25,0,25,0));
+        titulo.setPrefHeight(50);
+        titulo.getChildren().add(title);
+        titulo.setAlignment(Pos.CENTER);
+
         nodesVisibles = new ArrayList<>();
         nodesVisibles.add(tableView);
         //nodesVisibles.add(obtencaoAlunoFaseCandidatura);
         camposCentro = new VBox();
         ScrollPane scrollPane = new ScrollPane(camposCentro);
         scrollPane.setFitToWidth(true);
-        setCenter(scrollPane);
+        scrollPane.setMinHeight(645);
+
+        numCandidaturas = new Label();
+        numAutoProp = new Label();
+        numAlunoComCand = new Label();
+        numAlunoSemCand = new Label();
+
+        HBox statsFooter = new HBox();
+        statsFooter.getChildren().addAll(numCandidaturas,numAutoProp,numAlunoComCand,numAlunoSemCand);
+        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setSpacing(20.0);
+        statsFooter.setPadding(new Insets(25));
+        statsFooter.setPrefHeight(50);
+        statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
+
+        VBox container = new VBox(titulo,scrollPane,statsFooter);
+
+        setCenter(container);
+    }
+
+    private void formatLabelFooter(Label label){
+        label.setFont(new Font(14));
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-weight: bold");
+
+    }
+
+    public void atualizaStats(){
+        nCandidaturas = model.getCandidaturas().size();
+        numCandidaturas.setText("Candidaturas: "+nCandidaturas);
+        nAP = model.getAlunosComAutoProposta().size();
+        numAutoProp.setText("Alunos C/ Autoproposta: "+nAP);
+        nACC = model.getAlunosComCandidatura().size();
+        numAlunoComCand.setText("Alunos C/ Candidatura: "+nACC);
+        nASC = model.getAlunosSemCandidatura().size();
+        numAlunoSemCand.setText("Alunos S/ Candidatura: "+nASC);
+
+        formatLabelFooter(numCandidaturas);
+        formatLabelFooter(numAutoProp);
+        formatLabelFooter(numAlunoComCand);
+        formatLabelFooter(numAlunoSemCand);
     }
 
     private void preparaTabela() {
@@ -86,32 +137,41 @@ public class OpcoesCandidaturaUI extends BorderPane {
     private void preparaObtencoes() {
         Consumer<List<Aluno>> alunos = (a) ->{};
         obtencaoAlunoFaseCandidatura = new ObtencaoAlunoFaseCandidatura(model);
+        obtencaoAlunoFaseCandidatura.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
     }
 
     private void preparaCamposInserir() {
         Label lAluno = new Label("Aluno");
         tfAluno = new TextField();
-
+        tfAluno.setMinWidth(300);
         propostasInseridas = new Label("Propostas: ");
         tfPropostas = new TextField();
+        tfPropostas.setMinWidth(300);
         Label help = new Label("Introduzir propostas separadas por ,");
         btnInsereCandManual = new Button("Insere Candidatura");
         btnInsereCandCSV = new Button("Importar CSV");
+        btnInsereCandManual.setPrefWidth(150);
+        btnInsereCandCSV.setPrefWidth(150);
 
         /*Butoes edicao*/
         btnEditCandidatura = new Button("Atualizar");
         btnVoltarEdit = new Button("Voltar");
+        btnEditCandidatura.setPrefWidth(150);
+        btnVoltarEdit.setPrefWidth(150);
+
 
         hBoxButtonInsereCand = new HBox(btnInsereCandManual, btnInsereCandCSV);
         hBoxButtonInsereCand.setAlignment(Pos.CENTER);
-
+        hBoxButtonInsereCand.setSpacing(40);
         VBox vAluno =new VBox(lAluno, tfAluno);
 
         vBoxCamposInsercaoPropostas = new VBox(propostasInseridas, tfPropostas, help);
         vBoxInsereCandidaturas = new VBox(vAluno,vBoxCamposInsercaoPropostas, hBoxButtonInsereCand);
+        vBoxInsereCandidaturas.setSpacing(20);
 
         hBoxInsereCandidaturas = new HBox(vBoxInsereCandidaturas);
         hBoxInsereCandidaturas.setAlignment(Pos.CENTER);
+        hBoxInsereCandidaturas.setPadding(new Insets(25));
     }
 
     private void preparaMenu() {
@@ -134,6 +194,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         });
         model.addPropertyChangeListener(ModelManager.PROP_CANDIDATURAS, evt -> {
             atualizaTabela();
+            atualizaStats();
         });
         btnAvancar.setOnAction(actionEvent -> {
             model.avancarFase();
@@ -221,8 +282,10 @@ public class OpcoesCandidaturaUI extends BorderPane {
             update();
         });
         btnObtencoesFiltros.setOnAction(actionEvent -> {
+            obtencaoPropostaFiltrosFaseCandidatura = new ObtencaoPropostaFiltrosFaseCandidatura(model);
+            obtencaoPropostaFiltrosFaseCandidatura.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
             nodesVisibles.clear();
-            nodesVisibles.add(new ObtencaoPropostaFiltrosFaseCandidatura(model));
+            nodesVisibles.add(obtencaoPropostaFiltrosFaseCandidatura);
             update();
         });
 

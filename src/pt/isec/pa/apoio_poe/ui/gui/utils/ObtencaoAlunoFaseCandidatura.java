@@ -4,7 +4,11 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
@@ -24,16 +28,15 @@ public class ObtencaoAlunoFaseCandidatura extends VBox {
         createViews();
         registerHandlers();
         update();
-        Label lAutoPropostas = new Label("AutoPropostas");
+        Label lAutoPropostas = new Label("Alunos com Autopropostas");
         lAutoPropostas.setFont(new Font(18));
-        Label lPropostaCandidatura = new Label("Propostas com Candidatura");
+        Label lPropostaCandidatura = new Label("Alunos com Candidatura");
         lPropostaCandidatura.setFont(new Font(18));
-        Label lPropostaSemCandidatura = new Label("Propostas sem Candidatura");
+        Label lPropostaSemCandidatura = new Label("Alunos sem Candidatura");
         lPropostaSemCandidatura.setFont(new Font(18));
-        VBox.setMargin(lAutoPropostas, new Insets(30,0,20,0));
-        VBox.setMargin(lPropostaCandidatura, new Insets(50,0,20,0));
-        VBox.setMargin(lPropostaSemCandidatura, new Insets(50,0,20,0));
-        VBox.setMargin(tableSemCandidatura, new Insets(0,0,50,0));
+        VBox.setMargin(lAutoPropostas, new Insets(30,0,20,20));
+        VBox.setMargin(lPropostaCandidatura, new Insets(30,0,20,20));
+        VBox.setMargin(lPropostaSemCandidatura, new Insets(30,0,20,20));
         getChildren().addAll(lAutoPropostas,tableComAutoproposta, lPropostaCandidatura,tableComCandidatura, lPropostaSemCandidatura,tableSemCandidatura);
     }
     private void createViews() {

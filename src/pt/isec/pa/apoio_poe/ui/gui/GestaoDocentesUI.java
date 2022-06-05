@@ -6,9 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
@@ -23,7 +22,6 @@ import pt.isec.pa.apoio_poe.ui.gui.utils.TableDocentes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 
 public class GestaoDocentesUI extends BorderPane {
@@ -54,26 +52,37 @@ public class GestaoDocentesUI extends BorderPane {
         title = new Label("Gestao de Docentes");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
-        HBox.setMargin(title, new Insets(30,0,30,0));
+        HBox.setMargin(title, new Insets(25,0,25,0));
+        titulo.setPrefHeight(50);
         titulo.getChildren().add(title);
         titulo.setAlignment(Pos.CENTER);
         VBox container = new VBox();
         preparaTable();
         preparaInsereDocente();
         fileChooser = new FileChooser();
-        //graphPie = new PieChart();
-        //container.getChildren().addAll(titulo, tableView, hboxInsereAluno);
         nodeShow = new ArrayList<>();
         nodeShow.add(vboxInsereDocente);
 
         numDocentes = new Label("Docentes: ");
+        numDocentes.setFont(new Font(14));
+        numDocentes.setTextFill(Color.WHITE);
+        numDocentes.setStyle("-fx-font-weight: bold");
 
-        HBox stats = new HBox();
-        stats.getChildren().add(numDocentes);
-        stats.setAlignment(Pos.BASELINE_LEFT);
+        HBox statsFooter = new HBox();
+        statsFooter.getChildren().add(numDocentes);
+        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setSpacing(20.0);
+        statsFooter.setPadding(new Insets(25));
+        statsFooter.setPrefHeight(50);
+        statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
+        tableView.setMaxHeight(400);
+        tableView.setMinHeight(400);
+
+        vboxInsereDocente.setPrefHeight(250);
+        vboxInsereDocente.setPadding(new Insets(25,0,25,0));
 
         nodeShow.forEach(n -> n.setVisible(false));
-        container.getChildren().addAll(titulo, tableView,vboxInsereDocente, stats);
+        container.getChildren().addAll(titulo, tableView,vboxInsereDocente, statsFooter);
 
         setCenter(container);
 
@@ -198,11 +207,12 @@ public class GestaoDocentesUI extends BorderPane {
             update();
         });
         model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
+            atualizaStats();
             updateTable();
         });
 
         model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
-            atualizaStats();
+
         });
 
         btnRecuar.setOnAction(actionEvent -> {
@@ -287,16 +297,7 @@ public class GestaoDocentesUI extends BorderPane {
 
 
     private void preparaTable() {
-        Consumer<Docente> edit = (d) -> {
-            tfNome.setText(d.getNome());
-            tfEmail.setText(d.getEmail());
-            tfEmail.setDisable(true);
-            hBtn.getChildren().clear();
-            hBtn.getChildren().addAll(btnExeEditarDocente,btnCancelEdit);
-
-            vboxInsereDocente.setVisible(true);
-        };
-        tableView = new TableDocentes(model, edit);
+        tableView = new TableDocentes(model);
         TableColumn<Docente, Button> colEditar = new TableColumn<>("Editar");
         colEditar.setCellValueFactory(docenteButtonCellDataFeatures -> {
             Button editar = new Button("Editar");
@@ -304,7 +305,9 @@ public class GestaoDocentesUI extends BorderPane {
                 System.out.println(docenteButtonCellDataFeatures.getValue());
                 tfNome.setText(docenteButtonCellDataFeatures.getValue().getNome());
                 tfEmail.setText(docenteButtonCellDataFeatures.getValue().getEmail());
-
+                tfEmail.setDisable(true);
+                hBtn.getChildren().clear();
+                hBtn.getChildren().addAll(btnExeEditarDocente,btnCancelEdit);
                 vboxInsereDocente.setVisible(true);
                 //TODO editar docente
             });
@@ -315,9 +318,7 @@ public class GestaoDocentesUI extends BorderPane {
         colButton.setCellValueFactory(docenteButtonCellDataFeatures -> {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
-                System.out.println(docenteButtonCellDataFeatures.getValue());
-                //TODO remover docente
-
+                model.removeDocente(docenteButtonCellDataFeatures.getValue().getEmail());
             });
             return new ReadOnlyObjectWrapper<>(remover);
         });

@@ -31,11 +31,11 @@ public class ObtencaoAlunoFaseAtribuicao extends VBox{
         Label lAlunoComProposta = new Label("Alunos com Propostas Atribuidas");
         lAlunoComProposta.setFont(new Font(18));
         Label lAlunoSemProposta = new Label("Alunos sem Propostas Atribuidas");
-        lAlunoComProposta.setFont(new Font(18));
+        lAlunoSemProposta.setFont(new Font(18));
         VBox.setMargin(lAutoPropostas, new Insets(30,0,20,0));
-        VBox.setMargin(lPropostaCandidatura, new Insets(50,0,20,0));
-        VBox.setMargin(lAlunoComProposta, new Insets(50,0,20,0));
-        VBox.setMargin(tableAlunoSemProposta, new Insets(0,0,50,0));
+        VBox.setMargin(lPropostaCandidatura, new Insets(30,0,20,0));
+        VBox.setMargin(lAlunoComProposta, new Insets(30,0,20,0));
+        VBox.setMargin(lAlunoSemProposta, new Insets(30,0,20,0));
         getChildren().addAll(lAutoPropostas,tableComAutoproposta, lPropostaCandidatura,tableComCandidatura, lAlunoComProposta,tableAlunoComProposta, lAlunoSemProposta, tableAlunoSemProposta);
     }
     private void createViews() {

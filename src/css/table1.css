@@ -19,7 +19,7 @@
     -fx-background-color: #37304a;
 
     -fx-background-radius: 7px 7px 0px 0px;
-    -fx-background-insets: 0 11px 0 0;
+    -fx-background-insets: 0 10px 0 0;
     -fx-padding: 0 0 5px 0;
 }
 .table-view .table-cell{
@@ -37,7 +37,7 @@
     -fx-padding: 0.0em;
 }
 .table-row-cell:even{
-    -fx-background-color: rgba(255, 255, 255, 0.45);
+    -fx-background-color: rgba(200, 200, 200, 0.45);
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }

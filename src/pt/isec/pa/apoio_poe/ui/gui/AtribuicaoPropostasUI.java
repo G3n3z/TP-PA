@@ -5,9 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
@@ -24,10 +23,12 @@ public class AtribuicaoPropostasUI extends BorderPane {
     ButtonMenu btnAtribuicaoPropostas, btnAtribuirAutomaticoAuto, btnAtribuirAutomatico, btnGestao,btnExportarCSV, btnObtencoesAlunos, btnObtencoesFiltros, btnFechar, btnRecuar, btnAvancar;
     MenuVertical menu;
     TableAlunoProposta tableAlunoProposta;
-    VBox center, vBoxTableAlunoProposta;
+    VBox center, vBoxTableAlunoProposta, container;
+    Label title, numAlunosComPropAtribuida, numAlunosSemPropAtribuida, numPropNaoAtribuidas;
     List<Node> nodesShow;
     ObtencaoAlunoFaseAtribuicao obtencaoAlunoFaseAtribuicao;
     ObtencaoPropostaFiltrosFaseAtribuicao obtencaoPropostaFiltrosFaseAtribuicao;
+    Integer nACPA = 0, nASPA = 0, nPNA = 0;
     public AtribuicaoPropostasUI(ModelManager model) {
         this.model = model;
 
@@ -41,28 +42,69 @@ public class AtribuicaoPropostasUI extends BorderPane {
         preparaTabela();
         preparaListaAlunos();
         preparaListaPropostas();
+
+        title = new Label("Atribuição de Propostas");
+        title.setFont(new Font(26));
+        HBox titulo = new HBox();
+        HBox.setMargin(title, new Insets(25,0,25,0));
+        titulo.setPrefHeight(50);
+        titulo.getChildren().add(title);
+        titulo.setAlignment(Pos.CENTER);
+
         nodesShow = new ArrayList<>();
         nodesShow.add(vBoxTableAlunoProposta);
 
         center = new VBox();
         ScrollPane scrollPane = new ScrollPane(center);
         scrollPane.setFitToWidth(true);
-        setCenter(scrollPane);
+        scrollPane.setMinHeight(645);
+
+        numAlunosComPropAtribuida = new Label();
+        numAlunosSemPropAtribuida = new Label();
+        numPropNaoAtribuidas = new Label();
+
+        HBox statsFooter = new HBox();
+        statsFooter.getChildren().addAll(numAlunosComPropAtribuida,numAlunosSemPropAtribuida,numPropNaoAtribuidas);
+        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setSpacing(20.0);
+        statsFooter.setPadding(new Insets(25));
+        statsFooter.setPrefHeight(50);
+        statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
+
+
+        container = new VBox(titulo,scrollPane,statsFooter);
+
+        setCenter(container);
+    }
+
+    private void formatLabelFooter(Label label){
+        label.setFont(new Font(14));
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-weight: bold");
+
+    }
+    public void atualizaStats(){
+        //nACPA = model.getAlunosComPropostaConfirmada().size();
+        numAlunosComPropAtribuida.setText("Alunos C/ Propostas Atribuída: "+nACPA);
+        //nASPA = model.getAlunosSemPropostaConfirmada().size();
+        numAlunosSemPropAtribuida.setText("Alunos S/ Propostas Atribuída: "+nASPA);
+        nPNA = model.getPropostasWithFilters(3).size();
+        numPropNaoAtribuidas.setText("Propostas não Atribuídas: "+nPNA);
+
+        formatLabelFooter(numAlunosComPropAtribuida);
+        formatLabelFooter(numAlunosSemPropAtribuida);
+        formatLabelFooter(numPropNaoAtribuidas);
 
     }
 
     private void preparaListaPropostas() {
         obtencaoPropostaFiltrosFaseAtribuicao = new ObtencaoPropostaFiltrosFaseAtribuicao(model);
+        obtencaoPropostaFiltrosFaseAtribuicao.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
     }
 
     private void preparaTabela() {
         tableAlunoProposta = new TableAlunoProposta(model, EnumState.ATRIBUICAO_PROPOSTAS);
-        Label ltitle = new Label("Propostas Atribuidas");
-        ltitle.setFont(new Font(18));
-        HBox title = new HBox(ltitle);
-        title.setAlignment(Pos.CENTER);
-        VBox.setMargin(title, new Insets(30,0,20,0));
-        vBoxTableAlunoProposta = new VBox(title,tableAlunoProposta);
+        vBoxTableAlunoProposta = new VBox(tableAlunoProposta);
 
     }
 
@@ -83,13 +125,23 @@ public class AtribuicaoPropostasUI extends BorderPane {
 
     private void preparaListaAlunos() {
         obtencaoAlunoFaseAtribuicao = new ObtencaoAlunoFaseAtribuicao(model);
+        obtencaoAlunoFaseAtribuicao.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
     }
 
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> update());
-        model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS , evt -> atualizaTabela());
-        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS , evt -> atualizaTabela());
-        model.addPropertyChangeListener(ModelManager.PROP_RESOLVIDO , evt -> atribuicoesAutomaticasSemAtribuicaoDefinida());
+        model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS , evt -> {
+            atualizaTabela();
+            atualizaStats();
+        });
+        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS , evt -> {
+            atualizaTabela();
+            atualizaStats();
+        });
+        model.addPropertyChangeListener(ModelManager.PROP_RESOLVIDO , evt -> {
+            atribuicoesAutomaticasSemAtribuicaoDefinida();
+            atualizaStats();
+        });
         btnAvancar.setOnAction(actionEvent -> {
             model.avancarFase();
         });

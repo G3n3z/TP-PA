@@ -65,6 +65,8 @@ public class TableCandidatura extends TableView<Candidatura> {
         } );
         getStylesheets().add("css/table1.css");
         getColumns().addAll(colAluno,colPropostas, colEdit,colRemove);
+        colAluno.setPrefWidth(150);
+        colPropostas.setPrefWidth(250);
         setFixedCellSize(50);
         setPrefHeight(400);
     }

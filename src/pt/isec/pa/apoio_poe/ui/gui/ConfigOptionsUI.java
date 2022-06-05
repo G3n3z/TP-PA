@@ -1,6 +1,10 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
@@ -11,6 +15,7 @@ public class ConfigOptionsUI extends BorderPane {
     ModelManager model;
     VBox menu;
     ButtonMenu bGAlunos, bGDocentes,bGPropostas, bFechar, bAvancar;
+    Label title;
     public ConfigOptionsUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -18,9 +23,18 @@ public class ConfigOptionsUI extends BorderPane {
         update();
     }
     private void createViews() {
-        bGAlunos = new ButtonMenu("Gestao de Alunos");
-        bGDocentes = new ButtonMenu("Gestao de Docentes");
-        bGPropostas = new ButtonMenu("Gestao de Propostas");
+
+        title = new Label("Opções de Configuração");
+        title.setFont(new Font(26));
+        HBox titulo = new HBox();
+        HBox.setMargin(title, new Insets(25,0,25,0));
+        titulo.setPrefHeight(50);
+        titulo.getChildren().add(title);
+        titulo.setAlignment(Pos.TOP_CENTER);
+
+        bGAlunos = new ButtonMenu("Gestão de Alunos");
+        bGDocentes = new ButtonMenu("Gestão de Docentes");
+        bGPropostas = new ButtonMenu("Gestão de Propostas");
         bFechar = new ButtonMenu("Fechar Fase");
         bAvancar = new ButtonMenu("Avançar Fase");
         menu = new MenuVertical(bGAlunos, bGDocentes, bGPropostas, bFechar, bAvancar);
@@ -29,6 +43,7 @@ public class ConfigOptionsUI extends BorderPane {
         //menu.setPrefWidth(300);
         //menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         setLeft(menu);
+        setCenter(titulo);
     }
     private void registerHandler() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {

@@ -41,11 +41,13 @@ public class ObtencaoPropostaFiltrosFaseAtribuicao extends VBox {
         btnVisualizarComFiltros = new Button("Visualizar");
         HBox hBoxBtnVisualizar = new HBox(btnVisualizarComFiltros);
         hBoxBtnVisualizar.setAlignment(Pos.CENTER);
-        getChildren().addAll(tableView, box1Filtros, box2Filtros, hBoxBtnVisualizar);
-        VBox.setMargin(lP, new Insets(50));
-        VBox.setMargin(tableView, new Insets(20,0,50,0));
+        getChildren().addAll(lP, tableView, box1Filtros, box2Filtros, hBoxBtnVisualizar);
+        VBox.setMargin(lP, new Insets(30,0,20,20));
+        VBox.setMargin(tableView, new Insets(0,0,50,0));
         VBox.setMargin(box1Filtros, new Insets(0,0,20,0));
+        box1Filtros.setSpacing(40);
         VBox.setMargin(box2Filtros, new Insets(0,0,20,0));
+        box2Filtros.setSpacing(40);
         registerHandlers();
     }
 
@@ -53,9 +55,13 @@ public class ObtencaoPropostaFiltrosFaseAtribuicao extends VBox {
 
     private void preparaFiltros() {
         ckAutoProp = new CheckBox("AutoPropostas de Alunos");
+        ckAutoProp.setMinWidth(100);
         ckPropDocentes = new CheckBox("Propostas de Docentes");
+        ckPropDocentes.setMinWidth(100);
         ckPropCandidaturas = new CheckBox("Propostas Disponiveis");
+        ckPropCandidaturas.setMinWidth(100);
         ckPropSemCandidatura = new CheckBox("Propostas Atribuidas");
+        ckPropSemCandidatura.setMinWidth(100);
         box1Filtros = new HBox(ckAutoProp,ckPropDocentes);
         box1Filtros.setAlignment(Pos.CENTER);
         box2Filtros = new HBox(ckPropCandidaturas,ckPropSemCandidatura);

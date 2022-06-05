@@ -13,10 +13,8 @@ import java.util.function.Consumer;
 
 public class TableDocentes extends TableView<Docente> {
     ModelManager model;
-    Consumer<Docente> consumerEdit;
-    public TableDocentes(ModelManager model, Consumer<Docente> consumerEdit) {
+    public TableDocentes(ModelManager model) {
         this.model = model;
-        this.consumerEdit = consumerEdit;
         createViews();
         registerHandler();
         update();

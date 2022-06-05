@@ -1,6 +1,8 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
+import javafx.geometry.Insets;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 
 public class RootPane extends BorderPane {
@@ -25,6 +27,7 @@ public class RootPane extends BorderPane {
         AtribuicaoOrientadoresUI atribuicaoOrientadoresUI = new AtribuicaoOrientadoresUI(model);
         //c.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         //stack.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
+        stack.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
         stack.getChildren().add(c);
         stack.getChildren().addAll(load, gestaoAlunosUI, gestaoDocentesUI, gestaoPropostasUI, opcoesCandidaturaUI, atribuicaoPropostasUI,atribuicaoManualPropostasUI,
                 conflitoAtribuicaoCandidaturaUI,atribuicaoOrientadoresUI);

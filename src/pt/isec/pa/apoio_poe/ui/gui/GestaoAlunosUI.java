@@ -5,11 +5,11 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
@@ -59,42 +59,56 @@ public class GestaoAlunosUI extends BorderPane {
 
     private void createViews() {
         createMenu();
-        title = new Label("Gestao de Alunos");
+        title = new Label("Gestão de Alunos");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
-        HBox.setMargin(title, new Insets(30,0,30,0));
+        HBox.setMargin(title, new Insets(25,0,25,0));
+        titulo.setPrefHeight(50);
         titulo.getChildren().add(title);
         titulo.setAlignment(Pos.CENTER);
         VBox container = new VBox();
         preparaTable();
         preparaInsereAluno();
         preparaInsereCSV();
-        //graphPie = new PieChart();
-        //container.getChildren().addAll(titulo, tableView, hboxInsereAluno);
+
         nodeShow = new ArrayList<>();
         nodeShow.add(hboxInsereAluno);
         nodeShow.add(hboxInsereCSV);
+        hboxInsereAluno.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
+
         nodeShow.forEach(n -> n.setVisible(false));
 
         numAlunos = new Label();
         numLEIPL = new Label();
-        numLEI = new Label("LEI: ");
-        numDA = new Label("DA: ");
-        numSI = new Label("SI: ");
-        numRAS = new Label("RAS: ");
-        medClassificacao = new Label("Classificacao media : ");
-        numPossibilidade = new Label("C/ Possibilidade de estagio : ");
+        numLEI = new Label();
+        numDA = new Label();
+        numSI = new Label();
+        numRAS = new Label();
+        medClassificacao = new Label();
+        numPossibilidade = new Label();
 
         HBox statsFooter = new HBox();
         statsFooter.getChildren().addAll(numAlunos, numLEIPL, numLEI, numDA, numSI, numRAS, medClassificacao, numPossibilidade);
         statsFooter.setAlignment(Pos.BASELINE_CENTER);
         statsFooter.setSpacing(20.0);
+        statsFooter.setPadding(new Insets(25));
+        statsFooter.setPrefHeight(50);
+        statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
+        tableView.setPrefHeight(400);
+        hboxInsereAluno.setPrefHeight(200);
+        hboxInsereAluno.setPadding(new Insets(25,0,25,0));
 
         container.getChildren().addAll(titulo, tableView, hboxInsereAluno, hboxInsereCSV, statsFooter);
 
 
         setCenter(container);
 
+    }
+
+    private void formatLabelFooter(Label label){
+        label.setFont(new Font(14));
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-weight: bold");
     }
 
     private void atualizaStats(){
@@ -115,6 +129,15 @@ public class GestaoAlunosUI extends BorderPane {
         numPossibilidade.setText("C/ Possibilidade de estagio : "+nPosssibilidade);
         mClassificacao = model.getMediaClassificacao();
         medClassificacao.setText("Classificacao media : "+String.format("%.4f",mClassificacao));
+        formatLabelFooter(numAlunos);
+        formatLabelFooter(numLEIPL);
+        formatLabelFooter(numLEI);
+        formatLabelFooter(numDA);
+        formatLabelFooter(numSI);
+        formatLabelFooter(numRAS);
+        formatLabelFooter(numPossibilidade);
+        formatLabelFooter(medClassificacao);
+
     }
 
     private void preparaInsereCSV() {
@@ -195,8 +218,8 @@ public class GestaoAlunosUI extends BorderPane {
         hboxInsereAluno.getChildren().addAll(boxInputText,boxRight);
         hboxInsereAluno.setSpacing(100);
         hboxInsereAluno.setAlignment(Pos.CENTER);
-        HBox.setMargin(boxInputText, new Insets(30,0,0,0));
-        HBox.setMargin(boxRight, new Insets(30,0,0,0));
+        HBox.setMargin(boxInputText, new Insets(30,0,30,0));
+        HBox.setMargin(boxRight, new Insets(30,0,30,0));
 
         btnExeEditAluno = new Button("Atualizar");
         btnCancelEdit = new Button("Cancelar");
@@ -224,11 +247,8 @@ public class GestaoAlunosUI extends BorderPane {
             update();
         });
         model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
-            updateTable();
-        });
-
-        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
             atualizaStats();
+            updateTable();
         });
 
         btnRecuar.setOnAction(actionEvent -> {

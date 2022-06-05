@@ -4,9 +4,9 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
@@ -20,7 +20,6 @@ import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class GestaoPropostasUI extends BorderPane {
     ModelManager model;
@@ -39,7 +38,7 @@ public class GestaoPropostasUI extends BorderPane {
     Button btnInsereProposta, btnInsereCSV, btnEditProposta, btnCancelEdit;
     long nPropostas, nT1, nT2, nT3, nDA, nSI, nRAS;
     List<Long> stats = new ArrayList<>();
-    Label numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS;
+    Label numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS, title;
 
     boolean visible = false;
 
@@ -60,6 +59,13 @@ public class GestaoPropostasUI extends BorderPane {
         center = new VBox();
         hBoxInput = new HBox(boxLeft);
         hBoxInput.setAlignment(Pos.CENTER);
+        title = new Label("Gestão de Propostas");
+        title.setFont(new Font(26));
+        HBox titulo = new HBox();
+        HBox.setMargin(title, new Insets(25,0,25,0));
+        titulo.setPrefHeight(50);
+        titulo.getChildren().add(title);
+        titulo.setAlignment(Pos.CENTER);
 
         HBox statsFooter = new HBox();
         numPropostas = new Label();
@@ -72,10 +78,22 @@ public class GestaoPropostasUI extends BorderPane {
         statsFooter.getChildren().addAll(numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS);
         statsFooter.setAlignment(Pos.BASELINE_CENTER);
         statsFooter.setSpacing(20.0);
+        statsFooter.setPadding(new Insets(25));
+        statsFooter.setPrefHeight(50);
+        statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
+        tableView.setPrefHeight(400);
+        hBoxInput.setPrefHeight(200);
+        hBoxInput.setPadding(new Insets(-20,0,25,0));
 
-        center.getChildren().addAll(tableView, hBoxInput, statsFooter);
+        center.getChildren().addAll(titulo,tableView, hBoxInput, statsFooter);
         setCenter(center);
 
+    }
+
+    private void formatLabelFooter(Label label){
+        label.setFont(new Font(14));
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-weight: bold");
     }
 
     public void atualizaStats(){
@@ -94,6 +112,13 @@ public class GestaoPropostasUI extends BorderPane {
         numDA.setText("DA: "+nDA);
         numSI.setText("SI: "+nSI);
         numRAS.setText("RAS: "+nRAS);
+        formatLabelFooter(numPropostas);
+        formatLabelFooter(numT1);
+        formatLabelFooter(numT2);
+        formatLabelFooter(numT3);
+        formatLabelFooter(numDA);
+        formatLabelFooter(numSI);
+        formatLabelFooter(numRAS);
     }
 
     private void preparaInserir() {
