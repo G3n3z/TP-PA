@@ -372,7 +372,43 @@ public class GestaoAlunosUI extends BorderPane {
 
         tableView = new TableAlunos(model);
 
+        preparaEditarRemover();
 
+    }
+    private void preparaEditarRemover() {
+        TableColumn<Aluno, Button> colEditar = new TableColumn<>("Editar");
+        colEditar.setCellValueFactory(alunoButtonCellDataFeatures -> {
+            Button editar = new Button("Editar");
+            editar.setOnAction(actionEvent -> {
+                hboxInsereAluno.setVisible(true);
+                txNumero.setText(Long.toString(alunoButtonCellDataFeatures.getValue().getNumeroAluno()));
+                txNumero.setDisable(true);
+                tfNome.setText(alunoButtonCellDataFeatures.getValue().getNome());
+                tfEmail.setText(alunoButtonCellDataFeatures.getValue().getEmail());
+                tfEmail.setDisable(true);
+                tfClass.setText(Double.toString(alunoButtonCellDataFeatures.getValue().getClassificacao()));
+                curso.setValue(alunoButtonCellDataFeatures.getValue().getSiglaCurso());
+                ramo.setValue(alunoButtonCellDataFeatures.getValue().getSiglaRamo());
+                possibilidade.setSelected(alunoButtonCellDataFeatures.getValue().isPossibilidade());
+
+                hBtn.getChildren().clear();
+                hBtn.getChildren().add(hBtnEdit);
+            });
+            return new ReadOnlyObjectWrapper<>(editar);
+        });
+        colEditar.setPrefWidth(120);
+        TableColumn<Aluno, Button> colButton = new TableColumn<>("Remove");
+        colButton.setCellValueFactory(alunoButtonCellDataFeatures -> {
+            Button remover = new Button("Remover");
+            remover.setOnAction(actionEvent -> {
+                model.removeAluno(alunoButtonCellDataFeatures.getValue().getNumeroAluno());
+            });
+            return new ReadOnlyObjectWrapper<>(remover);
+        });
+        colButton.setPrefWidth(120);
+
+        tableView.addColButton(colEditar);
+        tableView.addColButton(colButton);
     }
 
     private void clearFields(){
