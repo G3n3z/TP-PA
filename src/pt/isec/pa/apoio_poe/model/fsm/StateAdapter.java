@@ -363,4 +363,8 @@ abstract class StateAdapter implements IState{
         return null;
     }
 
+    @Override
+    public List<Proposta> getPropostasComOrientador() {
+        return null;
+    }
 }

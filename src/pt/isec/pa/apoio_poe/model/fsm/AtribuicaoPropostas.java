@@ -61,7 +61,8 @@ public class AtribuicaoPropostas extends StateAdapter{
         }
         //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");
         //MessageCenter.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
-        return ErrorCode.E26;
+        return ErrorCode.E0;
+        //return ErrorCode.E26; //TODO tirar de comentario
     }
 
     /**

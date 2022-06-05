@@ -368,4 +368,14 @@ public class ModelManager {
     public List<Long> getStatsPropostas() {
         return context.getStatsPropostas();
     }
+
+    public List<Proposta> getPropostasComOrientador() {
+        return context.getPropostasComOrientador();
+    }
+
+    public void associacaoAutomaticaDeDocentesAPropostas() {
+        context.associacaoAutomaticaDeDocentesAPropostas();
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_DOCENTES, null, null);
+    }
 }

@@ -105,4 +105,9 @@ public class TablePropostas extends TableView<Proposta> {
             }
         }
     }
+    public void removeCols(String ...names){
+        for (String n : names) {
+            getColumns().removeIf(col -> col.getText().equals(n));
+        }
+    }
 }

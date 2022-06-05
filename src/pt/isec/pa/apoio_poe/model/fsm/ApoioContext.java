@@ -391,5 +391,9 @@ public class ApoioContext {
     public Map<Proposta, ArrayList<Aluno>> getConflito() {
         return state.getConflito();
     }
+
+    public List<Proposta> getPropostasComOrientador() {
+        return state.getPropostasComOrientador();
+    }
 }
 
