@@ -51,7 +51,7 @@ public class ConfigOptionsUI extends BorderPane {
             model.avancarFase();
         });
         bFechar.setOnAction(actionEvent -> {
-            model.fecharFase();
+            System.out.println(model.fecharFase());
         });
     }
 

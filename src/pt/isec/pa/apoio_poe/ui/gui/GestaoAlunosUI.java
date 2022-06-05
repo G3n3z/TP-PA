@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -32,7 +33,8 @@ public class GestaoAlunosUI extends BorderPane {
     ButtonMenu btnGestaoAlunos, btnInsereManual, btnExport, btnEdit, btnRemove, btnRemoveAll,btnRecuar;
 
     Label title, numAlunos, numLEIPL, numLEI, numDA, numSI, numRAS, medClassificacao, numPossibilidade;;
-    TableView<Aluno> tableView;
+    TableAlunos tableView;
+
     Aluno a;
     HBox hboxInsereAluno, hBtn, hBtnEdit;
     VBox hboxInsereCSV,boxRight;
@@ -48,6 +50,7 @@ public class GestaoAlunosUI extends BorderPane {
 
     public GestaoAlunosUI(ModelManager model) {
         this.model = model;
+        a = new Aluno("asd","Daniel", 123L,"LEI","DA",1.0,true);
         createViews();
         registerHandlers();
         update();
@@ -220,6 +223,9 @@ public class GestaoAlunosUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
+            updateTable();
+        });
 
         model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
             atualizaStats();
@@ -337,7 +343,7 @@ public class GestaoAlunosUI extends BorderPane {
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_ALUNOS);
-
+        updateTable();
     }
 
 

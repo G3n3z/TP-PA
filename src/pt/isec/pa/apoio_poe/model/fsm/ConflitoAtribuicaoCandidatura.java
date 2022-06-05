@@ -6,7 +6,9 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ConflitoAtribuicaoCandidatura extends StateAdapter{
 
@@ -63,5 +65,25 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
             } );
         });
         return sb.toString();
+    }
+
+    @Override
+    public  Map<Proposta, ArrayList<Aluno>> getConflito() {
+        Map<Proposta, ArrayList<Aluno>> proposta_aluno = data.getProposta_aluno();
+        Map<Proposta, ArrayList<Aluno>> copia = new HashMap<>();
+        ArrayList<Aluno> al = new ArrayList<>();
+        int i = 0;
+        for(Map.Entry<Proposta, ArrayList<Aluno>> set : proposta_aluno.entrySet()){
+            if(i == 0){
+                copia.put(set.getKey().getClone(),al);
+            }
+            for (Aluno aluno : set.getValue()) {
+                al.add(aluno.getClone());
+            }
+            i++;
+        }
+
+        return copia;
+
     }
 }

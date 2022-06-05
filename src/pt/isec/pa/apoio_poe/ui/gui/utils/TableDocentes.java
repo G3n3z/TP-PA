@@ -31,40 +31,35 @@ public class TableDocentes extends TableView<Docente> {
 
        colEmail.setPrefWidth(200); colNome.setPrefWidth(150);
 
-        TableColumn<Docente, Button> colEditar = new TableColumn<>("Editar");
-        colEditar.setCellValueFactory(docenteButtonCellDataFeatures -> {
-            Button editar = new Button("Editar");
-            editar.setOnAction(actionEvent -> {
-                System.out.println(docenteButtonCellDataFeatures.getValue());
-                consumerEdit.accept(docenteButtonCellDataFeatures.getValue());
-            });
-            return new ReadOnlyObjectWrapper<>(editar);
-        });
-        colEditar.setPrefWidth(120);
-        TableColumn<Docente, Button> colButton = new TableColumn<>("Remover");
-        colButton.setCellValueFactory(docenteButtonCellDataFeatures -> {
-            Button remover = new Button("Remover");
-            remover.setOnAction(actionEvent -> {
-                System.out.println(docenteButtonCellDataFeatures.getValue());
-                model.removeDocente(docenteButtonCellDataFeatures.getValue().getEmail());
-            });
-            return new ReadOnlyObjectWrapper<>(remover);
-        });
-        colButton.setPrefWidth(120);
+
         setFixedCellSize(50);
         getStylesheets().add("css/table1.css");
-        getColumns().addAll(colEmail,colNome, colEditar,colButton);
+        getColumns().addAll(colEmail,colNome);
         setPrefHeight(400);
     }
-
+    public boolean addCols(TableColumn<Docente,?> tableCol){
+        getColumns().add(tableCol);
+        return true;
+    }
+    public boolean addColButton(TableColumn<Docente,Button> tableCol){
+        getColumns().add(tableCol);
+        return true;
+    }
     private void registerHandler() {
-        model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
-            update();
-        });
+//        model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
+//            update();
+//        });
     }
     private void update() {
-        System.out.println("Update docentes" + model.getDocentes().size());
-        getItems().clear();
-        getItems().addAll(model.getDocentes());
+//        System.out.println("Update docentes" + model.getDocentes().size());
+//        getItems().clear();
+//        getItems().addAll(model.getDocentes());
+    }
+    public void setPrefWidth(String name, int width){
+        for (TableColumn<Docente, ?> column : getColumns()) {
+            if(column.getText().equalsIgnoreCase(name)){
+                column.setPrefWidth(width);
+            }
+        }
     }
 }

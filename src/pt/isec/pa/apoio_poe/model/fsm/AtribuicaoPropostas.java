@@ -281,4 +281,56 @@ public class AtribuicaoPropostas extends StateAdapter{
         return propostas;
     }
 
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmada() {
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno a : data.getAlunos()) {
+            if(a.temPropostaConfirmada()){
+                al.add(a);
+            }
+        }
+        return al;
+    }
+
+    @Override
+    public List<Aluno> getAlunosSemPropostaConfirmada() {
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno a : data.getAlunos()) {
+            if(!a.temPropostaConfirmada()){
+                al.add(a);
+            }
+        }
+        return al;
+    }
+    @Override
+    public List<Aluno> getAlunosComAutoProposta() {
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaNaoConfirmada()){
+                al.add(aluno.getClone());
+            }
+        }
+        return al;
+
+    }
+    @Override
+    public List<Aluno> getAlunosComCandidatura() {
+
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.getCandidatura() != null){
+                al.add(aluno.getClone());
+            }
+        }
+        return al;
+    }
+    public List<Proposta> getPropostasWithFiltersCopia(int ...opcoes) {
+        Set<Proposta> propostas =  getPropostasWithFiltersAtribuicao(opcoes);
+        List<Proposta> copia = new ArrayList<>();
+        for (Proposta proposta : propostas) {
+            copia.add(proposta.getClone());
+        }
+
+        return copia;
+    }
 }

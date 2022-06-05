@@ -19,10 +19,13 @@ public class RootPane extends BorderPane {
         GestaoDocentesUI gestaoDocentesUI = new GestaoDocentesUI(model);
         GestaoPropostasUI gestaoPropostasUI = new GestaoPropostasUI(model);
         OpcoesCandidaturaUI opcoesCandidaturaUI = new OpcoesCandidaturaUI(model);
+        AtribuicaoPropostasUI atribuicaoPropostasUI = new AtribuicaoPropostasUI(model);
+        AtribuicaoManualPropostasUI atribuicaoManualPropostasUI = new AtribuicaoManualPropostasUI(model);
+        ConflitoAtribuicaoCandidaturaUI conflitoAtribuicaoCandidaturaUI = new ConflitoAtribuicaoCandidaturaUI(model);
         //c.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         //stack.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
         stack.getChildren().add(c);
-        stack.getChildren().addAll(load, gestaoAlunosUI, gestaoDocentesUI, gestaoPropostasUI, opcoesCandidaturaUI);
+        stack.getChildren().addAll(load, gestaoAlunosUI, gestaoDocentesUI, gestaoPropostasUI, opcoesCandidaturaUI, atribuicaoPropostasUI,atribuicaoManualPropostasUI, conflitoAtribuicaoCandidaturaUI);
         setCenter(stack);
 
     }

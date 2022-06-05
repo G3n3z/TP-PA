@@ -69,42 +69,40 @@ public class TablePropostas extends TableView<Proposta> {
 
 
 
-        TableColumn<Proposta, Button> colEditar = new TableColumn<>("Editar");
-        colEditar.setCellValueFactory(propostaButtonCellDataFeatures -> {
-            Button editar = new Button("Editar");
-            editar.setOnAction(actionEvent -> {
-                System.out.println(propostaButtonCellDataFeatures.getValue());
-                consumerEdit.accept(propostaButtonCellDataFeatures.getValue());
-            });
-            return new ReadOnlyObjectWrapper<>(editar);
-        });
-        colEditar.setPrefWidth(120);
-        TableColumn<Proposta, Button> colButton = new TableColumn<>("Remover");
-        colButton.setCellValueFactory(propostaButtonCellDataFeatures -> {
-            Button remover = new Button("Remover");
-            remover.setOnAction(actionEvent -> {
-                System.out.println(propostaButtonCellDataFeatures.getValue());
-                model.removeProposta(propostaButtonCellDataFeatures.getValue().getId());
-            });
-            return new ReadOnlyObjectWrapper<>(remover);
-        });
-        colButton.setPrefWidth(120);
+
         setFixedCellSize(50);
         getStylesheets().add("css/table1.css");
         colRamo.setPrefWidth(130);
         coltitulo.setPrefWidth(250); colDocente.setPrefWidth(150); colEntidade.setPrefWidth(200); colAluno.setPrefWidth(100);
-        getColumns().addAll(colId,colTipo,colRamo, coltitulo,colDocente, colEntidade,colAluno,colEditar,colButton);
+        getColumns().addAll(colId,colTipo,colRamo, coltitulo,colDocente, colEntidade,colAluno);
         setPrefHeight(400);
     }
 
     private void registerHandler() {
-        model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS, evt -> {
-            update();
-        });
+//        model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS, evt -> {
+//            update();
+//        });
     }
     private void update() {
-        System.out.println("Update propostas" + model.getPropostas().size());
-        getItems().clear();
-        getItems().addAll(model.getPropostas());
+//        System.out.println("Update propostas" + model.getPropostas().size());
+//        getItems().clear();
+//        getItems().addAll(model.getPropostas());
+    }
+
+    public boolean addCols(TableColumn<Proposta,?> tableCol){
+        getColumns().add(tableCol);
+        return true;
+    }
+    public boolean addColButton(TableColumn<Proposta,Button> tableCol){
+        getColumns().add(tableCol);
+        return true;
+    }
+
+    public void setPrefWidth(String name, int width){
+        for (TableColumn<Proposta, ?> column : getColumns()) {
+            if(column.getText().equalsIgnoreCase(name)){
+                column.setPrefWidth(width);
+            }
+        }
     }
 }

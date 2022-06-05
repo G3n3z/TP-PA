@@ -1,6 +1,7 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,15 +13,12 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
-import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TableAlunos;
 import pt.isec.pa.apoio_poe.ui.gui.utils.TableDocentes;
-import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public class GestaoDocentesUI extends BorderPane {
     ButtonMenu btnGestaoDocentes, btnInsereManual, btnExport, btnRemoveAll,btnRecuar;
 
     Label title, numDocentes;
-    TableView<Docente> tableView;
+    TableDocentes tableView;
 
     HBox vboxInsereDocente, hBtn;
     Button btnExeInsereDocente,  btnInsereCSV, btnExeEditarDocente, btnCancelEdit;
@@ -199,6 +197,9 @@ public class GestaoDocentesUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
+            updateTable();
+        });
 
         model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
             atualizaStats();
@@ -280,6 +281,7 @@ public class GestaoDocentesUI extends BorderPane {
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_DOCENTES);
+        updateTable();
     }
 
 
@@ -295,6 +297,40 @@ public class GestaoDocentesUI extends BorderPane {
             vboxInsereDocente.setVisible(true);
         };
         tableView = new TableDocentes(model, edit);
+        TableColumn<Docente, Button> colEditar = new TableColumn<>("Editar");
+        colEditar.setCellValueFactory(docenteButtonCellDataFeatures -> {
+            Button editar = new Button("Editar");
+            editar.setOnAction(actionEvent -> {
+                System.out.println(docenteButtonCellDataFeatures.getValue());
+                tfNome.setText(docenteButtonCellDataFeatures.getValue().getNome());
+                tfEmail.setText(docenteButtonCellDataFeatures.getValue().getEmail());
+
+                vboxInsereDocente.setVisible(true);
+                //TODO editar docente
+            });
+            return new ReadOnlyObjectWrapper<>(editar);
+        });
+        colEditar.setPrefWidth(120);
+        TableColumn<Docente, Button> colButton = new TableColumn<>("Remover");
+        colButton.setCellValueFactory(docenteButtonCellDataFeatures -> {
+            Button remover = new Button("Remover");
+            remover.setOnAction(actionEvent -> {
+                System.out.println(docenteButtonCellDataFeatures.getValue());
+                //TODO remover docente
+
+            });
+            return new ReadOnlyObjectWrapper<>(remover);
+        });
+        colButton.setPrefWidth(120);
+        tableView.addColButton(colEditar);
+        tableView.addColButton(colButton);
+    }
+    void updateTable(){
+        if(model.getState()!=null && model.getState() == EnumState.GESTAO_DOCENTES){
+            System.out.println("Update docentes" + model.getDocentes().size());
+            tableView.getItems().clear();
+            tableView.getItems().addAll(model.getDocentes());
+        }
     }
 
     private void clearFields(){

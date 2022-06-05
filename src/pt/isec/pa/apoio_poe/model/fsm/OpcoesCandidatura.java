@@ -335,4 +335,50 @@ public class OpcoesCandidatura extends StateAdapter{
         }
         return numAluno;
     }
+
+    @Override
+    public List<Aluno> getAlunosComAutoProposta() {
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaNaoConfirmada()){
+                al.add(aluno.getClone());
+            }
+        }
+        return al;
+
+    }
+
+    @Override
+    public List<Aluno> getAlunosComCandidatura() {
+
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.getCandidatura() != null){
+                al.add(aluno.getClone());
+            }
+        }
+        return al;
+    }
+
+    @Override
+    public List<Aluno> getAlunosSemCandidatura() {
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.getCandidatura() == null){
+                al.add(aluno.getClone());
+            }
+        }
+        return al;
+    }
+
+    @Override
+    public List<Proposta> getPropostasWithFiltersCopia(int ...opcoes) {
+        Set<Proposta> propostas =  getPropostasWithFilters(opcoes);
+        List<Proposta> copia = new ArrayList<>();
+        for (Proposta proposta : propostas) {
+            copia.add(proposta.getClone());
+        }
+
+        return copia;
+    }
 }

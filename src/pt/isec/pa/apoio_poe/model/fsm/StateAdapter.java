@@ -5,10 +5,14 @@ import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaExcepti
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 abstract class StateAdapter implements IState{
     ApoioContext context;
@@ -140,7 +144,7 @@ abstract class StateAdapter implements IState{
     public ErrorCode changePossibilidadeAluno(long nALuno){ return ErrorCode.E25;}
 
     @Override
-    public ErrorCode removeDocente(String email){return ErrorCode.E25;}
+    public ErrorCode removeDocente(String numero_de_aluno){return ErrorCode.E25;}
 
     @Override
     public ErrorCode changeNameDocente(String novo_nome, String email) {return ErrorCode.E25;}
@@ -292,7 +296,7 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public ErrorCode insereDocente(String email, String nome) {
+    public ErrorCode insereDocente(Docente d) {
         return ErrorCode.E25;
     }
 
@@ -323,4 +327,39 @@ abstract class StateAdapter implements IState{
 
     @Override
     public ErrorCode editDocente(String email, String nome) {return ErrorCode.E25;}
+
+    @Override
+    public List<Aluno> getAlunosComAutoProposta() {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosComCandidatura() {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosSemCandidatura() {
+        return null;
+    }
+
+    @Override
+    public List<Proposta> getPropostasWithFiltersCopia(int ...opcoes) {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmada() {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosSemPropostaConfirmada() {
+        return null;
+    }
+
+    @Override
+    public Map<Proposta, ArrayList<Aluno>> getConflito() {
+        return null;
+    }
 }

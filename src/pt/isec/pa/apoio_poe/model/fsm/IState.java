@@ -4,10 +4,14 @@ import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface IState {
     boolean avancarFase();
@@ -117,7 +121,7 @@ public interface IState {
     ErrorCode insereAluno(Aluno a);
 
 
-    ErrorCode insereDocente(String email, String nome);
+    ErrorCode insereDocente(Docente d);
 
     ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno);
 
@@ -132,4 +136,18 @@ public interface IState {
     ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible);
 
     ErrorCode editDocente(String email, String nome);
+
+    List<Aluno> getAlunosComAutoProposta();
+
+    List<Aluno> getAlunosComCandidatura();
+
+    List<Aluno> getAlunosSemCandidatura();
+
+    List<Proposta> getPropostasWithFiltersCopia(int ...opcoes);
+
+    List<Aluno> getAlunosComPropostaConfirmada();
+
+    List<Aluno> getAlunosSemPropostaConfirmada();
+
+    Map<Proposta, ArrayList<Aluno>> getConflito();
 }

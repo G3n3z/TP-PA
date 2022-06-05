@@ -18,7 +18,7 @@ public class ConfigOptions extends  StateAdapter{
 
     @Override
     public ErrorCode close() {
-        if(!verificaCondicaoFechoF1()) {
+        if(verificaCondicaoFechoF1()) {
             setClose(true);
             //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
             data.closeState(getState());

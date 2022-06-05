@@ -7,9 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.*;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ApoioContext {
     private IState state;
@@ -363,6 +361,35 @@ public class ApoioContext {
 
     public List<Long> getStatsPropostas() {
         return data.getStatsPropostas();
+    }
+
+    public List<Aluno> getAlunosComAutoProposta() {
+        return state.getAlunosComAutoProposta();
+    }
+
+    public List<Aluno> getAlunosComCandidatura() {
+        return state.getAlunosComCandidatura();
+
+    }
+
+    public List<Aluno> getAlunosSemCandidatura() {
+        return state.getAlunosSemCandidatura();
+    }
+
+    public List<Proposta> getPropostasWithFilters(int ...filtros) {
+        return state.getPropostasWithFiltersCopia(filtros);
+    }
+
+    public List<Aluno> getAlunosComPropostaConfirmada() {
+        return state.getAlunosComPropostaConfirmada();
+    }
+
+    public List<Aluno> getAlunosSemPropostaConfirmada() {
+        return state.getAlunosSemPropostaConfirmada();
+    }
+
+    public Map<Proposta, ArrayList<Aluno>> getConflito() {
+        return state.getConflito();
     }
 }
 

@@ -2,22 +2,18 @@ package pt.isec.pa.apoio_poe.ui.gui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TableCandidatura;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +26,7 @@ import java.util.function.Consumer;
 public class OpcoesCandidaturaUI extends BorderPane {
 
     ModelManager model;
-    ButtonMenu btnCandidaturas, btnInserirCandidaturas, btnExportarCSV, btnRemoverAll, btnObtencoes, btnFechar, btnRecuar, btnAvancar;
+    ButtonMenu btnCandidaturas, btnInserirCandidaturas, btnExportarCSV, btnRemoverAll, btnObtencoesAlunos, btnObtencoesFiltros, btnFechar, btnRecuar, btnAvancar;
     MenuVertical menu;
     List<Node> nodesVisibles;
     TableCandidatura tableView;
@@ -40,6 +36,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
     VBox vBoxCamposInsercaoPropostas, vBoxInsereCandidaturas, camposCentro;
     Button btnInsereCandManual, btnInsereCandCSV, btnEditCandidatura,btnVoltarEdit;
     Consumer<Candidatura> consumerEdit;
+    ObtencaoAlunoFaseCandidatura obtencaoAlunoFaseCandidatura;
     public OpcoesCandidaturaUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -52,10 +49,14 @@ public class OpcoesCandidaturaUI extends BorderPane {
         preparaTabela();
         preparaCamposInserir();
         preparaObtencoes();
+
         nodesVisibles = new ArrayList<>();
         nodesVisibles.add(tableView);
+        //nodesVisibles.add(obtencaoAlunoFaseCandidatura);
         camposCentro = new VBox();
-        setCenter(camposCentro);
+        ScrollPane scrollPane = new ScrollPane(camposCentro);
+        scrollPane.setFitToWidth(true);
+        setCenter(scrollPane);
     }
 
     private void preparaTabela() {
@@ -83,7 +84,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
     }
 
     private void preparaObtencoes() {
-
+        Consumer<List<Aluno>> alunos = (a) ->{};
+        obtencaoAlunoFaseCandidatura = new ObtencaoAlunoFaseCandidatura(model);
     }
 
     private void preparaCamposInserir() {
@@ -117,11 +119,12 @@ public class OpcoesCandidaturaUI extends BorderPane {
         btnInserirCandidaturas = new ButtonMenu("Inserir Candidaturas");
         btnExportarCSV = new ButtonMenu("Exportar CSV");
         btnRemoverAll= new ButtonMenu("Remover Todas");
-        btnObtencoes = new ButtonMenu("Obter Listas");
+        btnObtencoesAlunos = new ButtonMenu("Listas de Alunos");
+        btnObtencoesFiltros = new ButtonMenu("Lista de Propostas");
         btnFechar = new ButtonMenu("Fechar Fase");
         btnRecuar = new ButtonMenu("Recuar Fase");
         btnAvancar = new ButtonMenu("Avançar Fase");
-        menu = new MenuVertical(btnCandidaturas,btnInserirCandidaturas,btnExportarCSV,btnRemoverAll,btnObtencoes,btnFechar,btnRecuar,btnAvancar);
+        menu = new MenuVertical(btnCandidaturas,btnInserirCandidaturas,btnExportarCSV,btnRemoverAll,btnObtencoesAlunos,btnObtencoesFiltros,btnFechar,btnRecuar,btnAvancar);
         setLeft(menu);
     }
 
@@ -129,11 +132,14 @@ public class OpcoesCandidaturaUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_CANDIDATURAS, evt -> {
+            atualizaTabela();
+        });
         btnAvancar.setOnAction(actionEvent -> {
             model.avancarFase();
         });
         btnFechar.setOnAction(actionEvent -> {
-            model.fecharFase();
+            System.out.println(model.fecharFase());
         });
         btnRecuar.setOnAction(actionEvent -> {
             model.recuarFase();
@@ -142,6 +148,10 @@ public class OpcoesCandidaturaUI extends BorderPane {
             if (!nodesVisibles.contains(hBoxInsereCandidaturas)) {
                 nodesVisibles.add(hBoxInsereCandidaturas);
             }
+            nodesVisibles.clear();
+            nodesVisibles.add(tableView);
+            nodesVisibles.add(hBoxInsereCandidaturas);
+
             update();
         });
         btnCandidaturas.setOnAction(actionEvent -> {
@@ -205,6 +215,16 @@ public class OpcoesCandidaturaUI extends BorderPane {
         btnRemoverAll.setOnAction(actionEvent -> {
             model.removeAllCandidatura();
         });
+        btnObtencoesAlunos.setOnAction(actionEvent -> {
+            nodesVisibles.clear();
+            nodesVisibles.add(obtencaoAlunoFaseCandidatura);
+            update();
+        });
+        btnObtencoesFiltros.setOnAction(actionEvent -> {
+            nodesVisibles.clear();
+            nodesVisibles.add(new ObtencaoPropostaFiltrosFaseCandidatura(model));
+            update();
+        });
 
     }
 
@@ -247,6 +267,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         }
         isClosed();
         this.setVisible(model != null && model.getState() == EnumState.OPCOES_CANDIDATURA);
+        atualizaTabela();
     }
 
     private void isClosed() {
@@ -254,6 +275,15 @@ public class OpcoesCandidaturaUI extends BorderPane {
             menu.getChildren().remove(btnInserirCandidaturas);
             menu.getChildren().remove(btnFechar);
         }
+    }
+
+    private void atualizaTabela(){
+
+        System.out.println("Update Candidatura" + model.getCandidaturas().size());
+        tableView.getItems().clear();
+        tableView.getItems().addAll(model.getCandidaturas());
+        obtencaoAlunoFaseCandidatura.updateTabelas();
+
     }
 
 }

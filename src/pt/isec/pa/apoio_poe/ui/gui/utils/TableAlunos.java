@@ -1,24 +1,16 @@
 package pt.isec.pa.apoio_poe.ui.gui.utils;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
-import pt.isec.pa.apoio_poe.ui.gui.GestaoAlunosUI;
-
-import javax.security.auth.callback.Callback;
-import java.util.function.Consumer;
 
 public class TableAlunos extends TableView<Aluno> {
     ModelManager model;
-    Consumer<Aluno> consumerEdit;
-    public TableAlunos(ModelManager model, Consumer<Aluno> consumerEdit) {
+    public TableAlunos(ModelManager model) {
         this.model = model;
-        this.consumerEdit = consumerEdit;
         createViews();
         registerHandler();
         update();
@@ -41,49 +33,40 @@ public class TableAlunos extends TableView<Aluno> {
         colPossibilidade.setCellValueFactory(new PropertyValueFactory<>("possibilidade"));
         colnumEstudante.setPrefWidth(120); colEmail.setPrefWidth(200); colNome.setPrefWidth(150);
         colCurso.setPrefWidth(120); colRamo.setPrefWidth(120); colClass.setPrefWidth(120); colPossibilidade.setPrefWidth(120);
-        TableColumn<Aluno, Button> colEditar = new TableColumn<>("Editar");
-        colEditar.setCellValueFactory(alunoButtonCellDataFeatures -> {
-            Button editar = new Button("Editar");
-            editar.setOnAction(actionEvent -> {
-                System.out.println(alunoButtonCellDataFeatures.getValue());
-                consumerEdit.accept(alunoButtonCellDataFeatures.getValue());
-            });
-            return new ReadOnlyObjectWrapper<>(editar);
-        });
-        colEditar.setPrefWidth(120);
-        TableColumn<Aluno, Button> colButton = new TableColumn<>("Remover");
-        colButton.setCellValueFactory(alunoButtonCellDataFeatures -> {
-            Button remover = new Button("Remover");
-            remover.setOnAction(actionEvent -> {
-                System.out.println(alunoButtonCellDataFeatures.getValue());
-                model.removeAluno(alunoButtonCellDataFeatures.getValue().getNumeroAluno());
-            });
-            return new ReadOnlyObjectWrapper<>(remover);
-        });
-        colButton.setPrefWidth(120);
+
         setFixedCellSize(50);
         getStylesheets().add("css/table1.css");
-        getColumns().addAll(colnumEstudante,colEmail,colNome, colCurso, colRamo, colClass, colPossibilidade, colEditar,colButton);
-        setPrefHeight(400);
+        getColumns().addAll(colnumEstudante,colEmail,colNome, colCurso, colRamo, colClass, colPossibilidade);
+        setHeight(400);
     }
 
     private void registerHandler() {
-        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
-            update();
-        });
+//        model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
+//            update();
+//        });
     }
-    private void removeCols(String ...names){
+    public void removeCols(String ...names){
         for (String n : names) {
             getColumns().removeIf(col -> col.getText().equals(n));
         }
     }
-    private boolean addCols(TableColumn<Aluno,String> tableCol){
+    public boolean addCols(TableColumn<Aluno,?> tableCol){
+        getColumns().add(tableCol);
+        return true;
+    }
+    public boolean addColButton(TableColumn<Aluno,Button> tableCol){
         getColumns().add(tableCol);
         return true;
     }
     private void update() {
-        System.out.println("Update" + model.getAlunos().size());
-        getItems().clear();
-        getItems().addAll(model.getAlunos());
+
     }
+    public void setPrefWidth(String name, int width){
+        for (TableColumn<Aluno, ?> column : getColumns()) {
+            if(column.getText().equalsIgnoreCase(name)){
+                column.setPrefWidth(width);
+            }
+        }
+    }
+
 }

@@ -1,12 +1,15 @@
 package pt.isec.pa.apoio_poe.ui.gui.utils;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
+import pt.isec.pa.apoio_poe.model.data.Candidatura;
+import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 
 import java.util.List;
 
@@ -21,6 +24,17 @@ public class ObtencaoAlunoFaseCandidatura extends VBox {
         createViews();
         registerHandlers();
         update();
+        Label lAutoPropostas = new Label("AutoPropostas");
+        lAutoPropostas.setFont(new Font(18));
+        Label lPropostaCandidatura = new Label("Propostas com Candidatura");
+        lPropostaCandidatura.setFont(new Font(18));
+        Label lPropostaSemCandidatura = new Label("Propostas sem Candidatura");
+        lPropostaSemCandidatura.setFont(new Font(18));
+        VBox.setMargin(lAutoPropostas, new Insets(30,0,20,0));
+        VBox.setMargin(lPropostaCandidatura, new Insets(50,0,20,0));
+        VBox.setMargin(lPropostaSemCandidatura, new Insets(50,0,20,0));
+        VBox.setMargin(tableSemCandidatura, new Insets(0,0,50,0));
+        getChildren().addAll(lAutoPropostas,tableComAutoproposta, lPropostaCandidatura,tableComCandidatura, lPropostaSemCandidatura,tableSemCandidatura);
     }
     private void createViews() {
         prepararTabelaComAutoproposta();
@@ -29,31 +43,41 @@ public class ObtencaoAlunoFaseCandidatura extends VBox {
     }
     private String getAlunoPropostaString(Aluno a ){
         StringBuilder sb = new StringBuilder();
+        Candidatura c = a.getCandidatura();
+        if(c == null){
+            return "";
+        }
         List<String> id = a.getCandidatura().getIdProposta();
+        if(id == null || id.size() == 0){
+            return "n/a";
+        }
         for (int i = 0; i < id.size(); i++) {
             sb.append(id.get(i));
             if(i < id.size()-1){
                 sb.append(",");
             }
         }
-        if(id.size() == 0){
-            return "n/a";
-        }
+
         return sb.toString();
     }
     private void prepararTabelaComAutoproposta() {
-        tableComAutoproposta = new TableAlunos(model,null);
-
+        tableComAutoproposta = new TableAlunos(model);
+        tableComAutoproposta.removeCols("Editar", "Remover");
         TableColumn<Aluno, String> colPropostas = new TableColumn<>("Propostas");
-
-
+        colPropostas.setCellValueFactory(alunoStringCellDataFeatures -> new ReadOnlyObjectWrapper<>(alunoStringCellDataFeatures.getValue().getPropostaNaoConfirmada().getId()));
+        tableComAutoproposta.addCols(colPropostas);
     }
 
     private void prepararTabelaComCandidatura() {
-
+        tableComCandidatura = new TableAlunos(model);
+        tableComCandidatura.removeCols("Editar", "Remover");
+        TableColumn<Aluno, String> colPropostas = new TableColumn<>("Propostas");
+        colPropostas.setCellValueFactory(alunoStringCellDataFeatures -> new ReadOnlyObjectWrapper<>(getAlunoPropostaString(alunoStringCellDataFeatures.getValue())));
+        tableComCandidatura.addCols(colPropostas);
     }
     private void prepararTabelaSemCandidatura() {
-
+        tableSemCandidatura = new TableAlunos(model);
+        tableSemCandidatura.removeCols("Editar", "Remover");
     }
 
 
@@ -61,10 +85,17 @@ public class ObtencaoAlunoFaseCandidatura extends VBox {
         model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {updateTabelas();});
         model.addPropertyChangeListener(ModelManager.PROP_CANDIDATURAS, evt -> {updateTabelas();});
         model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS, evt -> {updateTabelas();});
-        model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {update();});
     }
 
-    private void updateTabelas() {
+    public void updateTabelas() {
+        if(model.getState() == EnumState.OPCOES_CANDIDATURA) {
+            tableComAutoproposta.getItems().clear();
+            tableComAutoproposta.getItems().addAll(model.getAlunosComAutoProposta());
+            tableComCandidatura.getItems().clear();
+            tableComCandidatura.getItems().addAll(model.getAlunosComCandidatura());
+            tableSemCandidatura.getItems().clear();
+            tableSemCandidatura.getItems().addAll(model.getAlunosSemCandidatura());
+        }
     }
 
     private void update() {

@@ -6,6 +6,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pt.isec.pa.apoio_poe.model.ModelManager;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 
 import java.util.ArrayList;
@@ -69,13 +70,19 @@ public class TableCandidatura extends TableView<Candidatura> {
     }
 
     private void registerHandlers() {
-        modelManager.addPropertyChangeListener(ModelManager.PROP_CANDIDATURAS, evt -> {update();});
+//        modelManager.addPropertyChangeListener(ModelManager.PROP_CANDIDATURAS, evt -> {update();});
 
     }
     private void update() {
-        System.out.println("Update" + modelManager.getCandidaturas().size());
-        getItems().clear();
-        getItems().addAll(modelManager.getCandidaturas());
+//        System.out.println("Update Candidatura" + modelManager.getCandidaturas().size());
+//        getItems().clear();
+//        getItems().addAll(modelManager.getCandidaturas());
     }
-
+    public void setPrefWidth(String name, int width){
+        for (TableColumn<Candidatura, ?> column : getColumns()) {
+            if(column.getText().equalsIgnoreCase(name)){
+                column.setPrefWidth(width);
+            }
+        }
+    }
 }

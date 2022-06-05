@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class GestaoPropostasUI extends BorderPane {
     ModelManager model;
     ButtonMenu btnGestaoPropostas,btnInsereManual,btnExport,btnRemoveAll,btnRecuar;
-    TableView<Proposta> tableView;
+    TablePropostas tableView;
     VBox center;
     FileChooser fileChooser;
     HBox hBoxBtnInserirProposta;
@@ -159,8 +159,31 @@ public class GestaoPropostasUI extends BorderPane {
     }
 
     private void preparaTable() {
-        Consumer<Proposta> consumerEdit = this::updateEditFields;
-        tableView = new TablePropostas(model, consumerEdit);
+
+        tableView = new TablePropostas(model, null);
+        TableColumn<Proposta, Button> colEditar = new TableColumn<>("Editar");
+        colEditar.setCellValueFactory(propostaButtonCellDataFeatures -> {
+            Button editar = new Button("Editar");
+            editar.setOnAction(actionEvent -> {
+                System.out.println(propostaButtonCellDataFeatures.getValue());
+                updateEditFields(propostaButtonCellDataFeatures.getValue());
+            });
+            return new ReadOnlyObjectWrapper<>(editar);
+        });
+        colEditar.setPrefWidth(120);
+        TableColumn<Proposta, Button> colButton = new TableColumn<>("Remover");
+        colButton.setCellValueFactory(propostaButtonCellDataFeatures -> {
+            Button remover = new Button("Remover");
+            remover.setOnAction(actionEvent -> {
+                System.out.println(propostaButtonCellDataFeatures.getValue());
+                model.removeProposta(propostaButtonCellDataFeatures.getValue().getId());
+            });
+            return new ReadOnlyObjectWrapper<>(remover);
+        });
+        colButton.setPrefWidth(120);
+
+        tableView.addColButton(colEditar);
+        tableView.addColButton(colButton);
     }
 
     private void updateEditFields(Proposta proposta) {
@@ -237,6 +260,9 @@ public class GestaoPropostasUI extends BorderPane {
             atualizaStats();
         });
 
+        model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS, evt -> {
+            updateTables();
+        });
         btnRecuar.setOnAction(actionEvent -> {
             visible = false;
             model.recuarFase();
@@ -330,10 +356,18 @@ public class GestaoPropostasUI extends BorderPane {
         });
 
     }
+
+    private void updateTables() {
+        System.out.println("Update propostas" + model.getPropostas().size());
+        tableView.getItems().clear();
+        tableView.getItems().addAll(model.getPropostas());
+    }
+
     private void update() {
         hBoxInput.setVisible(visible);
         clearFieldsInput();
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_PROPOSTAS);
+        updateTables();
     }
 
     private void clearFieldsInput() {

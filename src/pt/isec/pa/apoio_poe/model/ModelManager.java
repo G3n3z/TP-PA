@@ -3,6 +3,7 @@ package pt.isec.pa.apoio_poe.model;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
+import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
@@ -15,8 +16,7 @@ import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ModelManager {
 
@@ -28,6 +28,7 @@ public class ModelManager {
     public static final String PROP_DOCENTES = "docentes";
     public static final String PROP_PROPOSTAS = "propostas";
     public static final String PROP_CANDIDATURAS = "candidaturas";
+    public static final String PROP_RESOLVIDO = "resolvido";
     public ModelManager() {
         this.context = new ApoioContext();
         this.pcs = new PropertyChangeSupport(this);
@@ -65,10 +66,12 @@ public class ModelManager {
     public void recuarFase() {
         context.recuarFase();
         pcs.firePropertyChange(PROP_STATE, null, context.getState());
+
     }
 
     public void load() throws IOException, ClassNotFoundException {
         context.load();
+        manager = context.getManager();
         pcs.firePropertyChange(PROP_STATE, null, context.getState());
         pcs.firePropertyChange(PROP_ALUNOS, null, context.getState());
         pcs.firePropertyChange(PROP_DOCENTES, null, context.getState());
@@ -119,6 +122,8 @@ public class ModelManager {
     public void removeAluno(long numeroAluno) {
         context.removeAluno(numeroAluno);
         pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
     }
 
     public List<Docente> getDocentes() {
@@ -265,6 +270,91 @@ public class ModelManager {
         context.removeAll();
         pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
 
+    }
+
+    public List<Aluno> getAlunosComAutoProposta() {
+        return context.getAlunosComAutoProposta();
+    }
+
+    public List<Aluno> getAlunosComCandidatura() {
+        return context.getAlunosComCandidatura();
+    }
+
+    public List<Aluno> getAlunosSemCandidatura() {
+        return context.getAlunosSemCandidatura();
+    }
+
+    public List<Proposta> getPropostasWithFilters(int ...filtros) {
+        return context.getPropostasWithFilters(filtros);
+    }
+
+    public void gestaoManualAtribuicoes() {
+        context.gestaoManualAtribuicoes();
+        pcs.firePropertyChange(PROP_STATE, null, null);
+    }
+
+    public List<Aluno> getAlunosComPropostaConfirmada() {
+       return context.getAlunosComPropostaConfirmada();
+    }
+
+    public void atribuicoesAutomaticas() {
+        context.atribuicaoAutomatica();
+        pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+    }
+
+    public void atribuicoesAutomaticasSemAtribuicaoDefinida() throws ConflitoAtribuicaoAutomaticaException {
+        try {
+            context.atribuicaoAutomaticaSemAtribuicoesDefinidas();
+        } catch (ConflitoAtribuicaoAutomaticaException e) {
+            throw e;
+        }finally {
+            pcs.firePropertyChange(PROP_ALUNOS, null, null);
+            pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        }
+    }
+
+    public void conflitoAtribuicaoCandidatura() {
+        context.conflitoAtribuicaoCandidatura();
+        pcs.firePropertyChange(PROP_STATE, null, null);
+    }
+
+    public List<Aluno> getAlunosSemPropostaConfirmada() {
+        return context.getAlunosSemPropostaConfirmada();
+    }
+
+    public ErrorCode removeAllAtribuicoes() {
+        ErrorCode e = manager.removerTodasAtribuicoes();
+        pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        return e;
+    }
+
+    public ErrorCode removeAtribuicao(String id, Long nAluno) {
+        ErrorCode e = manager.remocaoManual(nAluno, id);
+        pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        return e;
+    }
+
+    public ErrorCode adicionaAtribuicao(String id, Long nAluno) {
+        ErrorCode e = manager.atribuicaoManual(nAluno, id);
+        pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        return e;
+    }
+
+    public Map<Proposta, ArrayList<Aluno>> getConflito() {
+        return context.getConflito();
+
+    }
+
+    public ErrorCode resolveConflito(long numeroAluno) {
+        return context.resolveConflito(numeroAluno);
+    }
+
+    public void conflitoResolvido() {
+        pcs.firePropertyChange(PROP_RESOLVIDO, null, null);
     }
 
     public List<Long> getStatsAlunos(){
