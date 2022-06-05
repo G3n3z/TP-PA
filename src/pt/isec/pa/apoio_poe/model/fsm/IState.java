@@ -121,7 +121,7 @@ public interface IState {
     ErrorCode insereAluno(Aluno a);
 
 
-    ErrorCode insereDocente(Docente d);
+    ErrorCode insereDocente(String email, String nome);
 
     ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno);
 

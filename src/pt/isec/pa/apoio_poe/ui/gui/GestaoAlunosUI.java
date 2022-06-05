@@ -345,7 +345,12 @@ public class GestaoAlunosUI extends BorderPane {
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_ALUNOS);
         updateTable();
     }
-
+    private void updateTable(){
+        if(model.getState() != null && model.getState() == EnumState.GESTAO_ALUNOS){
+            tableView.getItems().clear();
+            tableView.getItems().addAll(model.getAlunos());
+        }
+    }
 
 
     private void preparaTable() {
@@ -365,7 +370,7 @@ public class GestaoAlunosUI extends BorderPane {
           hBtn.getChildren().add(hBtnEdit);
         };
 
-        tableView = new TableAlunos(model, edit);
+        tableView = new TableAlunos(model);
 
 
     }

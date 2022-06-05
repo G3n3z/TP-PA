@@ -296,7 +296,7 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public ErrorCode insereDocente(Docente d) {
+    public ErrorCode insereDocente(String email, String nome) {
         return ErrorCode.E25;
     }
 
@@ -362,4 +362,5 @@ abstract class StateAdapter implements IState{
     public Map<Proposta, ArrayList<Aluno>> getConflito() {
         return null;
     }
+
 }
