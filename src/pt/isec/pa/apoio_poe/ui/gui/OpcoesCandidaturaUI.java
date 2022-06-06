@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -27,6 +28,7 @@ import java.util.function.Consumer;
 public class OpcoesCandidaturaUI extends BorderPane {
 
     ModelManager model;
+    boolean isClosed = false;
     ButtonMenu btnCandidaturas, btnInserirCandidaturas, btnExportarCSV, btnRemoverAll, btnObtencoesAlunos, btnObtencoesFiltros, btnFechar, btnRecuar, btnAvancar;
     MenuVertical menu;
     List<Node> nodesVisibles;
@@ -95,47 +97,65 @@ public class OpcoesCandidaturaUI extends BorderPane {
     }
 
     public void atualizaStats(){
-        nCandidaturas = model.getCandidaturas().size();
-        numCandidaturas.setText("Candidaturas: "+nCandidaturas);
-        nAP = model.getAlunosComAutoProposta().size();
-        numAutoProp.setText("Alunos C/ Autoproposta: "+nAP);
-        nACC = model.getAlunosComCandidatura().size();
-        numAlunoComCand.setText("Alunos C/ Candidatura: "+nACC);
-        nASC = model.getAlunosSemCandidatura().size();
-        numAlunoSemCand.setText("Alunos S/ Candidatura: "+nASC);
+        if(model.getState() == EnumState.OPCOES_CANDIDATURA){
+            nCandidaturas = model.getCandidaturas().size();
+            numCandidaturas.setText("Candidaturas: " + nCandidaturas);
+            nAP = model.getAlunosComAutoProposta().size();
+            numAutoProp.setText("Alunos C/ Autoproposta: " + nAP);
+            nACC = model.getAlunosComCandidatura().size();
+            numAlunoComCand.setText("Alunos C/ Candidatura: " + nACC);
+            nASC = model.getAlunosSemCandidatura().size();
+            numAlunoSemCand.setText("Alunos S/ Candidatura: " + nASC);
 
-        formatLabelFooter(numCandidaturas);
-        formatLabelFooter(numAutoProp);
-        formatLabelFooter(numAlunoComCand);
-        formatLabelFooter(numAlunoSemCand);
+            formatLabelFooter(numCandidaturas);
+            formatLabelFooter(numAutoProp);
+            formatLabelFooter(numAlunoComCand);
+            formatLabelFooter(numAlunoSemCand);
+        }
     }
 
     private void preparaTabela() {
-        consumerEdit = (c) ->{
 
-          hBoxButtonInsereCand.getChildren().clear();
-          hBoxButtonInsereCand.getChildren().addAll(btnEditCandidatura, btnVoltarEdit);
-          tfAluno.setDisable(true);
-          tfAluno.setText(Long.toString(c.getNumAluno()));
-          List<String> id = c.getIdProposta();
-          StringBuilder sb = new StringBuilder();
-          for (int i = 0; i < id.size(); i++) {
-              sb.append(id.get(i));
-              if(i != id.size()-1){
-                  sb.append(",");
-              }
-          }
-          tfPropostas.setText(sb.toString());
-          if (!nodesVisibles.contains(hBoxInsereCandidaturas)) {
-              nodesVisibles.add(hBoxInsereCandidaturas);
-          }
-          update();
-        };
-        tableView = new TableCandidatura(model, consumerEdit);
+        tableView = new TableCandidatura(model, null);
+        TableColumn<Candidatura, Button> colEdit= new TableColumn<>("Editar");
+        colEdit.setCellValueFactory(candidaturaLongCellDataFeatures -> {
+            Button edit = new Button("Editar");
+            edit.setOnAction(actionEvent -> {
+                hBoxButtonInsereCand.getChildren().clear();
+                hBoxButtonInsereCand.getChildren().addAll(btnEditCandidatura, btnVoltarEdit);
+                tfAluno.setDisable(true);
+                tfAluno.setText(Long.toString(candidaturaLongCellDataFeatures.getValue().getNumAluno()));
+                List<String> id = candidaturaLongCellDataFeatures.getValue().getIdProposta();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < id.size(); i++) {
+                    sb.append(id.get(i));
+                    if(i != id.size()-1){
+                        sb.append(",");
+                    }
+                }
+                tfPropostas.setText(sb.toString());
+                if (!nodesVisibles.contains(hBoxInsereCandidaturas)) {
+                    nodesVisibles.add(hBoxInsereCandidaturas);
+                }
+                update();
+            });
+            return new ReadOnlyObjectWrapper<>(edit);
+        } );
+        TableColumn<Candidatura, Button> colRemove= new TableColumn<>("Remover");
+        colRemove.setCellValueFactory(candidaturaLongCellDataFeatures -> {
+            Button remover = new Button("Remover");
+            remover.setOnAction(actionEvent -> {
+                model.removeCandidatura(candidaturaLongCellDataFeatures);
+            });
+            return new ReadOnlyObjectWrapper<>(remover);
+        } );
+        tableView.addCols(colEdit);
+        tableView.addCols(colRemove);
+
     }
 
     private void preparaObtencoes() {
-        Consumer<List<Aluno>> alunos = (a) ->{};
+
         obtencaoAlunoFaseCandidatura = new ObtencaoAlunoFaseCandidatura(model);
         obtencaoAlunoFaseCandidatura.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
     }
@@ -200,7 +220,9 @@ public class OpcoesCandidaturaUI extends BorderPane {
             model.avancarFase();
         });
         btnFechar.setOnAction(actionEvent -> {
-            System.out.println(model.fecharFase());
+            ErrorCode e = model.fecharFase();
+            System.out.println(e);
+
         });
         btnRecuar.setOnAction(actionEvent -> {
             model.recuarFase();
@@ -325,20 +347,16 @@ public class OpcoesCandidaturaUI extends BorderPane {
 
     private void update() {
         camposCentro.getChildren().clear();
+        closedFase();
         for (Node nodesVisible : nodesVisibles) {
             camposCentro.getChildren().add(nodesVisible);
         }
-        isClosed();
+
         this.setVisible(model != null && model.getState() == EnumState.OPCOES_CANDIDATURA);
         atualizaTabela();
     }
 
-    private void isClosed() {
-        if(model.isClosed()){
-            menu.getChildren().remove(btnInserirCandidaturas);
-            menu.getChildren().remove(btnFechar);
-        }
-    }
+
 
     private void atualizaTabela(){
 
@@ -348,5 +366,27 @@ public class OpcoesCandidaturaUI extends BorderPane {
         obtencaoAlunoFaseCandidatura.updateTabelas();
 
     }
+    private void closedFase() {
+        if(model == null){
+            return;
+        }
+        if(model.getState() != EnumState.OPCOES_CANDIDATURA){
+            return;
+        }
+        if (model.isClosed()){
+            fechaFase();
+        }
+    }
 
+    private void fechaFase() {
+        if(isClosed){
+            return;
+        }
+        isClosed = true;
+        menu.getChildren().remove(btnInserirCandidaturas);
+        menu.getChildren().remove(btnFechar);
+        tableView.removeCols("Editar", "Remover");
+        nodesVisibles.clear();
+        nodesVisibles.add(tableView);
+    }
 }

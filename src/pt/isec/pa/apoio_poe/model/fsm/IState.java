@@ -152,4 +152,8 @@ public interface IState {
     Map<Proposta, ArrayList<Aluno>> getConflito();
 
     List<Proposta> getPropostasComOrientador();
+
+    List<Aluno> getAlunosComPropostaConfirmadaEOrientador();
+
+    List<Aluno> getAlunosComPropostaConfirmadaESemOrientador();
 }

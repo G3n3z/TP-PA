@@ -81,14 +81,34 @@ abstract class StateAdapter implements IState{
 
 
     @Override
-    public boolean load() throws IOException, ClassNotFoundException {return false;}
+    public boolean load() throws IOException, ClassNotFoundException {
+        //return false;
+        try{
+            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(data.getFicheiroBin()));
+            data = (Data) oos.readObject();
+            context.setData(data);
+            changeState(data.getLastState());
+        }catch (Exception e){
+            throw e;
+        }
+        return true;
+    }
 
     @Override
     public void begin() {}
 
     @Override
     public boolean save() throws IOException {
-        return false;
+        if(getState() != EnumState.LOAD_STATE || getState() != EnumState.SAIR)
+            data.setLastState(getState());
+        try {
+            ObjectOutputStream ois = new ObjectOutputStream(new FileOutputStream(data.getFicheiroBin()));
+            ois.writeObject(data);
+
+        }catch (Exception e){
+            throw e;
+        }
+        return true;
     }
 
     @Override
@@ -365,6 +385,16 @@ abstract class StateAdapter implements IState{
 
     @Override
     public List<Proposta> getPropostasComOrientador() {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaEOrientador() {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
         return null;
     }
 }

@@ -29,6 +29,8 @@ public class ModelManager {
     public static final String PROP_PROPOSTAS = "propostas";
     public static final String PROP_CANDIDATURAS = "candidaturas";
     public static final String PROP_RESOLVIDO = "resolvido";
+    public static final String PROP_UNDO = "undo";
+    public static final String PROP_REDO = "redo";
     public ModelManager() {
         this.context = new ApoioContext();
         this.pcs = new PropertyChangeSupport(this);
@@ -327,6 +329,7 @@ public class ModelManager {
         ErrorCode e = manager.removerTodasAtribuicoes();
         pcs.firePropertyChange(PROP_ALUNOS, null, null);
         pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_UNDO, null, null);
         return e;
     }
 
@@ -334,6 +337,7 @@ public class ModelManager {
         ErrorCode e = manager.remocaoManual(nAluno, id);
         pcs.firePropertyChange(PROP_ALUNOS, null, null);
         pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_UNDO, null, null);
         return e;
     }
 
@@ -341,6 +345,7 @@ public class ModelManager {
         ErrorCode e = manager.atribuicaoManual(nAluno, id);
         pcs.firePropertyChange(PROP_ALUNOS, null, null);
         pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_UNDO, null, null);
         return e;
     }
 
@@ -377,5 +382,80 @@ public class ModelManager {
         context.associacaoAutomaticaDeDocentesAPropostas();
         pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
         pcs.firePropertyChange(PROP_DOCENTES, null, null);
+    }
+
+
+    public List<Aluno> getAlunosComPropostaConfirmadaEOrientador() {
+        return context.getAlunosComPropostaConfirmadaEOrientador();
+    }
+
+    public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
+        return context.getAlunosComPropostaConfirmadaESemOrientador();
+    }
+
+    public ErrorCode removerAtribuicaoOrientador(String email, String id) {
+        ErrorCode e =  manager.removerDocente(email,id);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_DOCENTES, null, null);
+        pcs.firePropertyChange(PROP_UNDO, null, null);
+        return e;
+    }
+
+    public ErrorCode insereOrientador(String email, String idProposta) {
+        ErrorCode e = manager.atribuirOrientador(email, idProposta);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_DOCENTES, null, null);
+        pcs.firePropertyChange(PROP_UNDO, null, null);
+        return e;
+    }
+
+    public ErrorCode editOrientador(String email, String idProposta) {
+        ErrorCode e = manager.alterarDocente(email, idProposta);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_DOCENTES, null, null);
+        pcs.firePropertyChange(PROP_UNDO, null, null);
+        return e;
+    }
+
+    public void gerirOrientadores() {
+        context.gerirOrientadores();
+        pcs.firePropertyChange(PROP_STATE, null, null);
+    }
+
+    public boolean getCloseState(EnumState state) {
+        return context.getBooleanState(state);
+    }
+
+    public void sair() {
+        context.sair();
+    }
+
+    public void save() throws IOException {
+        context.save();
+    }
+
+    public void redo() {
+        manager.redo();
+        pcs.firePropertyChange(PROP_UNDO, null, null);
+        pcs.firePropertyChange(PROP_ALUNOS, null,null);
+        pcs.firePropertyChange(PROP_DOCENTES, null,null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
+    }
+    public void undo() {
+        manager.undo();
+        pcs.firePropertyChange(PROP_REDO, null, null);
+        pcs.firePropertyChange(PROP_ALUNOS, null, null);
+        pcs.firePropertyChange(PROP_DOCENTES, null, null);
+        pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
+        pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
+    }
+
+    public boolean hasUndo() {
+        return manager.hasUndo();
+    }
+
+    public boolean hasRedo() {
+        return manager.hasRedo();
     }
 }

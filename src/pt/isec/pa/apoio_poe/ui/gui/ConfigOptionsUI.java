@@ -72,5 +72,22 @@ public class ConfigOptionsUI extends BorderPane {
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.CONFIG_OPTIONS);
+        closedFase();
+    }
+
+    private void closedFase() {
+        if(model == null){
+            return;
+        }
+        if(model.getState() != EnumState.CONFIG_OPTIONS){
+            return;
+        }
+        if (model.isClosed()){
+            fechaFase();
+        }
+    }
+
+    private void fechaFase() {
+        menu.getChildren().remove(bFechar);
     }
 }

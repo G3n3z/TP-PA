@@ -159,4 +159,29 @@ public class AtribuicaoOrientadores extends StateAdapter {
         propostas.removeIf(proposta -> !proposta.temDocenteOrientador());
         return propostas;
     }
+
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaEOrientador() {
+        List<Aluno> alunos = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaConfirmada()){
+                if (aluno.getProposta().temDocenteOrientador()){
+                    alunos.add(aluno.getClone());
+                }
+            }
+        }
+        return alunos;
+    }
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
+        List<Aluno> alunos = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaConfirmada()){
+                if (!aluno.getProposta().temDocenteOrientador()){
+                    alunos.add(aluno.getClone());
+                }
+            }
+        }
+        return alunos;
+    }
 }

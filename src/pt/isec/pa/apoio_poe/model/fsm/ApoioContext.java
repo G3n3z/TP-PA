@@ -395,5 +395,13 @@ public class ApoioContext {
     public List<Proposta> getPropostasComOrientador() {
         return state.getPropostasComOrientador();
     }
+
+    public List<Aluno> getAlunosComPropostaConfirmadaEOrientador() {
+        return state.getAlunosComPropostaConfirmadaEOrientador();
+    }
+
+    public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
+        return state.getAlunosComPropostaConfirmadaESemOrientador();
+    }
 }
 

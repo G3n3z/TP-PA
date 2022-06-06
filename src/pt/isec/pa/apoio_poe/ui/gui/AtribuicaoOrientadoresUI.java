@@ -17,6 +17,7 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
+import pt.isec.pa.apoio_poe.ui.gui.utils.ObtencaoDadosOrientadores;
 import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
 
 import java.io.File;
@@ -30,6 +31,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
     TablePropostas tablePropostas;
     List<Node> nodesShow;
     VBox center, vBoxTable;
+    ObtencaoDadosOrientadores obtencaoDadosOrientadores;
     public AtribuicaoOrientadoresUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -40,6 +42,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
     private void createViews() {
         preparaMenu();
         preparaTabela();
+        obtencaoDadosOrientadores = new ObtencaoDadosOrientadores(model);
         nodesShow = new ArrayList<>();
         nodesShow.add(vBoxTable);
         center = new VBox();
@@ -96,6 +99,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         btnAtribuirOrientadores.setOnAction(actionEvent -> {
             nodesShow.clear();
             nodesShow.add(vBoxTable);
+            update();
         });
         btnExportarCSV.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
@@ -117,21 +121,34 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         btnAtribuirAutomatico.setOnAction(actionEvent -> {
             model.associacaoAutomaticaDeDocentesAPropostas();
         });
+        btnListaDeOrientadores.setOnAction(actionEvent -> {
+            nodesShow.clear();
+            nodesShow.add(new ObtencaoDadosOrientadores(model));
+            update();
+        });
+        btnGestaoOrientadores.setOnAction(actionEvent -> {
+            model.gerirOrientadores();
+        });
     }
 
     private void atualizaTabela() {
         if(model != null && model.getState() == EnumState.ATRIBUICAO_ORIENTADORES){
             tablePropostas.getItems().clear();
             tablePropostas.getItems().addAll(model.getPropostasComOrientador());
+
         }
     }
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.ATRIBUICAO_ORIENTADORES);
         atualizaTabela();
-        center.getChildren().clear();
-        center.getChildren().addAll(nodesShow);
+        if(model != null && model.getState() == EnumState.ATRIBUICAO_ORIENTADORES) {
+            center.getChildren().clear();
+            center.getChildren().addAll(nodesShow);
+            setCenter(center);
+        }
     }
+
 
 
 }

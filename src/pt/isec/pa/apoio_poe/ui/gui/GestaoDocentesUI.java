@@ -27,7 +27,7 @@ import java.util.List;
 public class GestaoDocentesUI extends BorderPane {
     ModelManager model;
     ButtonMenu btnGestaoDocentes, btnInsereManual, btnExport, btnRemoveAll,btnRecuar;
-
+    MenuVertical menu;
     Label title, numDocentes;
     TableDocentes tableView;
 
@@ -198,7 +198,7 @@ public class GestaoDocentesUI extends BorderPane {
         btnExport= new ButtonMenu("Exportar Docentes Para CSV");
         btnRemoveAll= new ButtonMenu("Remover Todos");
         btnRecuar= new ButtonMenu("Voltar");
-        MenuVertical menu = new MenuVertical(btnGestaoDocentes, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
+        menu = new MenuVertical(btnGestaoDocentes, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
         setLeft(menu);
     }
 
@@ -292,6 +292,7 @@ public class GestaoDocentesUI extends BorderPane {
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_DOCENTES);
         updateTable();
+        closedFase();
     }
 
 
@@ -339,5 +340,23 @@ public class GestaoDocentesUI extends BorderPane {
         tfEmail.clear();
         tfEmail.setDisable(false);
 
+    }
+    private void closedFase() {
+        if(model == null){
+            return;
+        }
+        if(model.getState() != EnumState.GESTAO_DOCENTES){
+            return;
+        }
+        if (model.isClosed()){
+            fechaFase();
+        }
+    }
+
+    private void fechaFase() {
+
+        nodeShow.forEach(n -> n.setVisible(false));
+        tableView.removeCols("Editar", "Remover");
+        menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
     }
 }

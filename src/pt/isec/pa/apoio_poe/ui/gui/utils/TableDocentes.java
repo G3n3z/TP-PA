@@ -60,4 +60,9 @@ public class TableDocentes extends TableView<Docente> {
             }
         }
     }
+    public void removeCols(String ...names){
+        for (String n : names) {
+            getColumns().removeIf(col -> col.getText().equals(n));
+        }
+    }
 }

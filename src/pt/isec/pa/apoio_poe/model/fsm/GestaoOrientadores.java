@@ -7,6 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GestaoOrientadores extends StateAdapter{
@@ -38,6 +39,13 @@ public class GestaoOrientadores extends StateAdapter{
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    public List<Proposta> getPropostasComOrientador() {
+        List<Proposta> propostas = data.getPropostasCopia();
+        propostas.removeIf(proposta -> !proposta.temDocenteOrientador());
+        return propostas;
     }
 
 }

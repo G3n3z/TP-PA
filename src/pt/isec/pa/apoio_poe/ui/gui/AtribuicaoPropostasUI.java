@@ -29,6 +29,7 @@ public class AtribuicaoPropostasUI extends BorderPane {
     ObtencaoAlunoFaseAtribuicao obtencaoAlunoFaseAtribuicao;
     ObtencaoPropostaFiltrosFaseAtribuicao obtencaoPropostaFiltrosFaseAtribuicao;
     Integer nACPA = 0, nASPA = 0, nPNA = 0;
+    boolean isClosed = false;
     public AtribuicaoPropostasUI(ModelManager model) {
         this.model = model;
 
@@ -84,6 +85,10 @@ public class AtribuicaoPropostasUI extends BorderPane {
 
     }
     public void atualizaStats(){
+
+        if(model.getState() != EnumState.ATRIBUICAO_PROPOSTAS){
+            return;
+        }
         //nACPA = model.getAlunosComPropostaConfirmada().size();
         numAlunosComPropAtribuida.setText("Alunos C/ Propostas Atribuída: "+nACPA);
         //nASPA = model.getAlunosSemPropostaConfirmada().size();
@@ -119,7 +124,7 @@ public class AtribuicaoPropostasUI extends BorderPane {
         btnFechar = new ButtonMenu("Fechar Fase");
         btnRecuar = new ButtonMenu("Recuar Fase");
         btnAvancar = new ButtonMenu("Avançar Fase");
-        menu = new MenuVertical(btnAtribuicaoPropostas,btnAtribuirAutomaticoAuto,btnAtribuirAutomatico,btnGestao,btnExportarCSV,btnObtencoesAlunos,btnObtencoesFiltros,btnFechar,btnRecuar,btnAvancar);
+        menu = new MenuVertical(btnAtribuicaoPropostas,btnAtribuirAutomaticoAuto,btnExportarCSV,btnObtencoesAlunos,btnObtencoesFiltros,btnRecuar,btnAvancar);
         setLeft(menu);
     }
 
@@ -202,12 +207,17 @@ public class AtribuicaoPropostasUI extends BorderPane {
 
     private void update(){
         center.getChildren().clear();
+        closedFase();
         for (Node node : nodesShow) {
             center.getChildren().add(node);
         }
         this.setVisible(model != null && model.getState() == EnumState.ATRIBUICAO_PROPOSTAS);
         atualizaTabela();
     }
+
+
+
+
 
     private void atualizaTabela() {
         if(model.getState() == EnumState.ATRIBUICAO_PROPOSTAS) {
@@ -216,6 +226,35 @@ public class AtribuicaoPropostasUI extends BorderPane {
             obtencaoAlunoFaseAtribuicao.updateTabelas();
         }
     }
+    private void closedFase() {
+        if(model == null){
+            return;
+        }
+        if(model.getState() != EnumState.ATRIBUICAO_PROPOSTAS){
+            return;
+        }
+        if (model.isClosed()){
+            fechaFase();
+        }else if(model.getCloseState(EnumState.OPCOES_CANDIDATURA)){
+            faseAnteriorFechadaAtualAberta();
+        }
+    }
 
+    private void fechaFase() {
+        if(isClosed){
+            return;
+        }
+        isClosed = true;
+        menu.getChildren().removeAll(btnAtribuirAutomatico, btnGestao, btnFechar, btnAtribuirAutomaticoAuto);
+        tableAlunoProposta.removeCols("Editar", "Remover");
+        nodesShow.clear();
+        nodesShow.add(tableAlunoProposta);
+    }
+    private void faseAnteriorFechadaAtualAberta() {
+        menu = new MenuVertical(btnAtribuicaoPropostas,btnAtribuirAutomaticoAuto,btnAtribuirAutomatico,btnGestao,btnExportarCSV,btnObtencoesAlunos,
+                btnObtencoesFiltros,btnFechar,btnRecuar,btnAvancar);
+        setLeft(menu);
+
+    }
 
 }

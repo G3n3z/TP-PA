@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
@@ -19,6 +20,7 @@ import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
+import pt.isec.pa.apoio_poe.ui.gui.utils.PopUP;
 import pt.isec.pa.apoio_poe.ui.gui.utils.TableAlunos;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
@@ -31,7 +33,7 @@ import java.util.function.Consumer;
 public class GestaoAlunosUI extends BorderPane {
     ModelManager model;
     ButtonMenu btnGestaoAlunos, btnInsereManual, btnExport, btnEdit, btnRemove, btnRemoveAll,btnRecuar;
-
+    MenuVertical menu;
     Label title, numAlunos, numLEIPL, numLEI, numDA, numSI, numRAS, medClassificacao, numPossibilidade;;
     TableAlunos tableView;
 
@@ -47,7 +49,7 @@ public class GestaoAlunosUI extends BorderPane {
     Long nAlunos, nPL, nLEI, nDA, nSI, nRAS, nPosssibilidade;
     Double mClassificacao;
     List<Long> stats = new ArrayList<>();
-
+    Boolean isClosed = false;
     public GestaoAlunosUI(ModelManager model) {
         this.model = model;
         a = new Aluno("asd","Daniel", 123L,"LEI","DA",1.0,true);
@@ -238,7 +240,7 @@ public class GestaoAlunosUI extends BorderPane {
         btnExport= new ButtonMenu("Exportar Alunos Para CSV");
         btnRemoveAll= new ButtonMenu("Remover Todos");
         btnRecuar= new ButtonMenu("Voltar");
-        MenuVertical menu = new MenuVertical(btnGestaoAlunos, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
+        menu = new MenuVertical(btnGestaoAlunos, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
         setLeft(menu);
     }
 
@@ -283,6 +285,12 @@ public class GestaoAlunosUI extends BorderPane {
                 model.importAlunos(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
+
+                PopUP.getInstance().clearPopUp();
+                PopUP.getInstance().setTextTitle("Problemas de Inserção CSV");
+                PopUP.getInstance().addItens(new Label(e.getMessageOfExceptions()));
+                PopUP.getInstance().createButtonOk();
+                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
             }
         });
         btnRemoveAll.setOnAction(actionEvent -> {
@@ -363,8 +371,29 @@ public class GestaoAlunosUI extends BorderPane {
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_ALUNOS);
+        closedFase();
         updateTable();
     }
+
+    private void closedFase() {
+        if(model == null){
+            return;
+        }
+        if(model.getState() != EnumState.GESTAO_ALUNOS){
+            return;
+        }
+        if (model.isClosed()){
+            fechaFase();
+        }
+    }
+
+    private void fechaFase() {
+        isClosed = true;
+        nodeShow.forEach(n -> n.setVisible(false));
+        tableView.removeCols("Editar", "Remove");
+        menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
+    }
+
     private void updateTable(){
         if(model.getState() != null && model.getState() == EnumState.GESTAO_ALUNOS){
             tableView.getItems().clear();

@@ -24,6 +24,7 @@ import java.util.List;
 public class GestaoPropostasUI extends BorderPane {
     ModelManager model;
     ButtonMenu btnGestaoPropostas,btnInsereManual,btnExport,btnRemoveAll,btnRecuar;
+    MenuVertical menu;
     TablePropostas tableView;
     VBox center;
     FileChooser fileChooser;
@@ -274,7 +275,7 @@ public class GestaoPropostasUI extends BorderPane {
         btnExport= new ButtonMenu("Exportar Propostas Para CSV");
         btnRemoveAll= new ButtonMenu("Remover Todos");
         btnRecuar= new ButtonMenu("Voltar");
-        MenuVertical menu = new MenuVertical(btnGestaoPropostas, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
+        menu = new MenuVertical(btnGestaoPropostas, btnInsereManual, btnExport, btnRemoveAll, btnRecuar);
         setLeft(menu);
     }
     private void registerHandlers() {
@@ -394,6 +395,7 @@ public class GestaoPropostasUI extends BorderPane {
         clearFieldsInput();
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_PROPOSTAS);
         updateTables();
+        closedFase();
     }
 
     private void clearFieldsInput() {
@@ -409,5 +411,24 @@ public class GestaoPropostasUI extends BorderPane {
         tfEntidade.setText("");
         hBoxBtnInserirProposta.getChildren().clear();
         hBoxBtnInserirProposta.getChildren().addAll(btnInsereProposta, btnInsereCSV);
+    }
+
+    private void closedFase() {
+        if(model == null){
+            return;
+        }
+        if(model.getState() != EnumState.GESTAO_PROPOSTAS){
+            return;
+        }
+        if (model.isClosed()){
+            fechaFase();
+        }
+    }
+
+    private void fechaFase() {
+
+        visible = false;
+        tableView.removeCols("Editar", "Remover");
+        menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
     }
 }

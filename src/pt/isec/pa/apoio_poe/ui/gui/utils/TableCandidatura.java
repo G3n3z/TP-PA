@@ -47,24 +47,9 @@ public class TableCandidatura extends TableView<Candidatura> {
             }
             return new ReadOnlyObjectWrapper<>(sb.toString());
         } );
-        TableColumn<Candidatura, Button> colEdit= new TableColumn<>("Editar");
-        colEdit.setCellValueFactory(candidaturaLongCellDataFeatures -> {
-            Button edit = new Button("Editar");
-            edit.setOnAction(actionEvent -> {
-                consumerEdit.accept(candidaturaLongCellDataFeatures.getValue());
-            });
-            return new ReadOnlyObjectWrapper<>(edit);
-        } );
-        TableColumn<Candidatura, Button> colRemove= new TableColumn<>("Remover");
-        colRemove.setCellValueFactory(candidaturaLongCellDataFeatures -> {
-            Button remover = new Button("Remover");
-            remover.setOnAction(actionEvent -> {
-                modelManager.removeCandidatura(candidaturaLongCellDataFeatures);
-            });
-            return new ReadOnlyObjectWrapper<>(remover);
-        } );
+
         getStylesheets().add("css/table1.css");
-        getColumns().addAll(colAluno,colPropostas, colEdit,colRemove);
+        getColumns().addAll(colAluno,colPropostas);
         colAluno.setPrefWidth(150);
         colPropostas.setPrefWidth(250);
         setFixedCellSize(50);
@@ -86,5 +71,14 @@ public class TableCandidatura extends TableView<Candidatura> {
                 column.setPrefWidth(width);
             }
         }
+    }
+    public void removeCols(String ...names){
+        for (String n : names) {
+            getColumns().removeIf(col -> col.getText().equals(n));
+        }
+    }
+    public boolean addCols(TableColumn<Candidatura,?> tableCol){
+        getColumns().add(tableCol);
+        return true;
     }
 }
