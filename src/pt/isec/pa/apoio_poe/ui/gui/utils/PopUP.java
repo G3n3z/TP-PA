@@ -26,7 +26,10 @@ public class PopUP extends Popup {
         title = new Label("TITLE");
         hBoxTitle = new HBox(title);
         title.setFont(new Font(18));
+        title.setTextFill(Color.WHITE);
         hBoxTitle.setAlignment(Pos.CENTER);
+        HBox.setMargin(title, new Insets(20));
+        hBoxTitle.setBackground(new Background(new BackgroundFill(Color.web("#37304a"), CornerRadii.EMPTY, Insets.EMPTY)));
         borderPane = new BorderPane();
         borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         borderPane.setTop(hBoxTitle);
@@ -40,11 +43,13 @@ public class PopUP extends Popup {
         hBoxMessage.setAlignment(Pos.CENTER);
         center.getChildren().addAll(hBoxMessage, hBoxButtons);
         center.setAlignment(Pos.CENTER);
-        VBox.setMargin(hBoxMessage, new Insets(50,0,50,0));
+        VBox.setMargin(hBoxMessage, new Insets(30,0,30,0));
+        VBox.setMargin(hBoxButtons, new Insets(0,0,30,0));
         borderPane.setCenter(center);
         //Scene cena = new Scene(borderPane,400,400);
         this.getContent().add(borderPane);
         this.centerOnScreen();
+        setWidth(600);
     }
 
     public static PopUP getInstance(){
@@ -81,6 +86,7 @@ public class PopUP extends Popup {
         hBoxButtons.getChildren().add(ok);
 
     }
+
 
 
 }

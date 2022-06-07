@@ -97,34 +97,40 @@ public class GestaoAlunos extends StateAdapter{
     private void fieldsCorrect(int index, String email, String curso, String ramo, double classificacao) throws InvalidCSVField {
         boolean ok = true;
         StringBuilder sb = new StringBuilder();
+        ErrorCode e = ErrorCode.E0;
         if(data.existeDocenteComEmail(email)){
             //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um docente registado");
             sb.append("Email já registado num docente. ");
             ok = false;
+            e = ErrorCode.E4;
         }
         if(data.existeAlunoComEmail(email)){
             //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um email de um aluno registado");
             sb.append("Email já registado num aluno. ");
             ok = false;
+            e = ErrorCode.E12;
         }
         if (!data.existeCursos(curso)){
             //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um curso inexistente");
             ok = false;
             sb.append("O curso não existe. ");
+            e = ErrorCode.E5;
         }
         if (!data.existeRamos(ramo)){
             //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com um ramo inexistente");
             ok =  false;
             sb.append("O ramo não existe. ");
+            e = ErrorCode.E7;
         }
         if(classificacao < 0 || classificacao > 1.0){
             //MessageCenter.getInstance().putMessage("Na linha " + index + " está a tentar inserir um aluno com uma classificação nao compreendidada" +
             //        "entre 0.0 e 1.0");
             ok =  false;
             sb.append("Classificação nao compreendidada entre 0.0 e 1.0.");
+            e = ErrorCode.E6;
         }
         if(!ok){
-            throw new InvalidCSVField("Na linha " + index + " -> " + sb);
+            throw new InvalidCSVField("Na linha " + index + " -> " + sb,index,e);
         }
     }
 
@@ -225,7 +231,7 @@ public class GestaoAlunos extends StateAdapter{
         try {
             fieldsCorrect(0,a.getEmail(),a.getSiglaCurso(), a.getSiglaRamo(), a.getClassificacao());
         } catch (InvalidCSVField e) {
-            return ErrorCode.E3;
+            return e.getErrorCode();
         }
         if(!data.addAluno(a)){
             return ErrorCode.E3;

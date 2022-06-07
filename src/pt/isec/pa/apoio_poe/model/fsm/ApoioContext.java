@@ -403,5 +403,13 @@ public class ApoioContext {
     public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
         return state.getAlunosComPropostaConfirmadaESemOrientador();
     }
+
+    public Map<String, Integer> getPropostasPorRamos() {
+        return state.getPropostasPorRamos();
+    }
+
+    public List<Double> getDadosAtribuicoes() {
+        return state.getDadosAtribuicoes();
+    }
 }
 

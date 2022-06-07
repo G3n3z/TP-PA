@@ -156,4 +156,8 @@ public interface IState {
     List<Aluno> getAlunosComPropostaConfirmadaEOrientador();
 
     List<Aluno> getAlunosComPropostaConfirmadaESemOrientador();
+
+    Map<String, Integer> getPropostasPorRamos();
+
+    List<Double> getDadosAtribuicoes();
 }

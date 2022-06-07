@@ -458,4 +458,12 @@ public class ModelManager {
     public boolean hasRedo() {
         return manager.hasRedo();
     }
+
+    public Map<String, Integer> getPropostasPorRamos() {
+        return context.getPropostasPorRamos();
+    }
+
+    public List<Double> getDadosAtribuicoes() {
+        return context.getDadosAtribuicoes();
+    }
 }

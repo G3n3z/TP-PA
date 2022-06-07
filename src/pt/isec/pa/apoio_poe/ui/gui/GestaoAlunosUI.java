@@ -18,10 +18,7 @@ import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.PopUP;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TableAlunos;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.io.File;
@@ -258,16 +255,16 @@ public class GestaoAlunosUI extends BorderPane {
             model.recuarFase();
         });
 
-        btnInsereCSV.setOnAction(actionEvent -> {
-//            nodeShow.forEach(n -> n.setVisible(false));
-//            hboxInsereCSV.setVisible(true);
-            File f = fileChooser.showOpenDialog(null);
-            try {
-                model.importAlunos(f.getAbsolutePath());
-            } catch (CollectionBaseException e) {
-                System.out.println(e.getMessageOfExceptions());
-            }
-        });
+//        btnInsereCSV.setOnAction(actionEvent -> {
+////            nodeShow.forEach(n -> n.setVisible(false));
+////            hboxInsereCSV.setVisible(true);
+//            File f = fileChooser.showOpenDialog(null);
+//            try {
+//                model.importAlunos(f.getAbsolutePath());
+//            } catch (CollectionBaseException e) {
+//                System.out.println(e.getMessageOfExceptions());
+//            }
+//        });
 
         btnInsereManual.setOnAction(actionEvent -> {
             nodeShow.forEach(n -> n.setVisible(false));
@@ -308,18 +305,33 @@ public class GestaoAlunosUI extends BorderPane {
 
             }catch (NumberFormatException e){
                 System.out.println("Numero de aluno invalido");
+                PopUP.getInstance().clearPopUp();
+                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
+                PopUP.getInstance().addItens(new Label("Numero de ALuno Invadilo"));
+                PopUP.getInstance().createButtonOk();
+                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
                 return;
             }
             String email = tfEmail.getText();
             Boolean isPossible = possibilidade.isSelected();
             String curso = this.curso.getValue();
             String ramo = this.ramo.getValue();
-            if(nome == null || email == null || curso == null || ramo == null){
+            if(nome.equals("") || email.equals("") || curso == null || ramo == null){
+                PopUP.getInstance().clearPopUp();
+                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
+                PopUP.getInstance().addItens(new Label("Dados Por Preencher"));
+                PopUP.getInstance().createButtonOk();
+                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
                 return;
             }
             Aluno a = new Aluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
-            if(model.insereAluno(a)!= ErrorCode.E0){
-                System.out.println("Correu algo mal");
+            ErrorCode e = model.insereAluno(a);
+            if(e != ErrorCode.E0){
+                PopUP.getInstance().clearPopUp();
+                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
+                PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
+                PopUP.getInstance().createButtonOk();
+                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
             }
             clearFields();
 
@@ -332,9 +344,13 @@ public class GestaoAlunosUI extends BorderPane {
 
         btnExport.setOnAction(actionEvent -> {
             File f = fileChooser.showSaveDialog(null);
-
-            if(model.exportCSV(f.getAbsolutePath())!= ErrorCode.E0){
-                System.out.println("Problema na exportacao");
+            ErrorCode e = model.exportCSV(f.getAbsolutePath());
+            if(e != ErrorCode.E0){
+                PopUP.getInstance().clearPopUp();
+                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
+                PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
+                PopUP.getInstance().createButtonOk();
+                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
             }
 
         });
@@ -361,8 +377,13 @@ public class GestaoAlunosUI extends BorderPane {
             if(nome.equals("") || curso.equals("") || ramo.equals("")){
                 return;
             }
-            if(model.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible) != ErrorCode.E0){
-                System.out.println("Não foi possivel editar");
+            ErrorCode e = model.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
+            if(e != ErrorCode.E0){
+                PopUP.getInstance().clearPopUp();
+                PopUP.getInstance().setTextTitle("Problemas na Edição do Aluno");
+                PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
+                PopUP.getInstance().createButtonOk();
+                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
 
             }
             hboxInsereAluno.setVisible(false);

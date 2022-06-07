@@ -413,7 +413,12 @@ public class Data implements Serializable {
     }
 
     public boolean existeAlunoComEmail(String email) {
-        return alunos.stream().anyMatch(a -> a.getEmail().equalsIgnoreCase(email));
+        for (Aluno aluno : alunos) {
+            if(aluno.getEmail().equalsIgnoreCase(email))
+                return true;
+        }
+        return false;
+        //return alunos.stream().anyMatch(a -> a.getEmail().equalsIgnoreCase(email));
     }
 
     public boolean existePropostaSemAluno(String proposta){ //Verifica se nas propostas

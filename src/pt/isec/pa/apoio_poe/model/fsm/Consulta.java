@@ -7,6 +7,7 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
+import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,4 +137,33 @@ public class Consulta extends StateAdapter{
         return  sb.toString();
     }
 
+    @Override
+    public Map<String, Integer> getPropostasPorRamos() {
+        Map<String, Integer> result = new HashMap<>();
+        for (String ramo : Constantes.getRamos()) {
+            result.put(ramo, (int) data.getProposta().stream().filter(p -> {
+                if (p.getRamos() == null)
+                    return false;
+                for (String pRamo : p.getRamos()) {
+                    if(ramo.equals(pRamo))
+                        return true;
+                }
+                return false;
+            }).count());
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Double> getDadosAtribuicoes() {
+        List<Double> dados = new ArrayList<>();
+        int total = data.getProposta().size();
+        double countAtribuida = (double) (int) data.getProposta().stream().filter(Proposta::isAtribuida).count();
+        double countNotAtribuida = total  - countAtribuida;
+        double percAtribuida = (countAtribuida * 100) / (double)total;
+        double percNotAtribuida = 100 - percAtribuida;
+        dados.addAll(List.of(countAtribuida,countNotAtribuida,percAtribuida,percNotAtribuida));
+        return dados;
+    }
 }

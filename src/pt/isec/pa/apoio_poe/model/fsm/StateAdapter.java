@@ -397,4 +397,14 @@ abstract class StateAdapter implements IState{
     public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
         return null;
     }
+
+    @Override
+    public Map<String, Integer> getPropostasPorRamos() {
+        return null;
+    }
+
+    @Override
+    public List<Double> getDadosAtribuicoes() {
+        return null;
+    }
 }
