@@ -407,4 +407,29 @@ abstract class StateAdapter implements IState{
     public List<Double> getDadosAtribuicoes() {
         return null;
     }
+
+    @Override
+    public Map<String, Integer> getTop5Empresas() {
+        return null;
+    }
+
+    @Override
+    public Map<Docente, Integer> getTop5Orientadores() {
+        return null;
+    }
+
+    @Override
+    public Map<Docente, Integer> getDocentesPorOrientacoes() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Number> getDadosNumeroOrientacoes() {
+        return null;
+    }
+
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
+        return null;
+    }
 }

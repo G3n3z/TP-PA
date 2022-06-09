@@ -42,6 +42,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
     ObtencaoAlunoFaseCandidatura obtencaoAlunoFaseCandidatura;
     ObtencaoPropostaFiltrosFaseCandidatura obtencaoPropostaFiltrosFaseCandidatura;
     Integer nCandidaturas, nAP, nACC, nASC;
+    TableColumn<Candidatura, Button> colRemove, colEdit;
     public OpcoesCandidaturaUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -117,7 +118,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
     private void preparaTabela() {
 
         tableView = new TableCandidatura(model, null);
-        TableColumn<Candidatura, Button> colEdit= new TableColumn<>("Editar");
+        colEdit= new TableColumn<>("Editar");
         colEdit.setCellValueFactory(candidaturaLongCellDataFeatures -> {
             Button edit = new Button("Editar");
             edit.setOnAction(actionEvent -> {
@@ -141,7 +142,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
             });
             return new ReadOnlyObjectWrapper<>(edit);
         } );
-        TableColumn<Candidatura, Button> colRemove= new TableColumn<>("Remover");
+        colRemove= new TableColumn<>("Remover");
         colRemove.setCellValueFactory(candidaturaLongCellDataFeatures -> {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
@@ -216,13 +217,19 @@ public class OpcoesCandidaturaUI extends BorderPane {
             atualizaTabela();
             atualizaStats();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
+            updateClose();
+        });
         btnAvancar.setOnAction(actionEvent -> {
             model.avancarFase();
         });
         btnFechar.setOnAction(actionEvent -> {
             ErrorCode e = model.fecharFase();
             System.out.println(e);
-
+            if(e != ErrorCode.E0) {
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no fecho da fase", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
         btnRecuar.setOnAction(actionEvent -> {
             model.recuarFase();
@@ -254,6 +261,10 @@ public class OpcoesCandidaturaUI extends BorderPane {
                 return;
             }
             ErrorCode error = model.exportCSV(f.getAbsolutePath());
+            if(error != ErrorCode.E0) {
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Exportação dos dados das Candidaturas", MessageTranslate.translateErrorCode(error));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
         btnInsereCandManual.setOnAction(actionEvent -> {
             List<String> ids;
@@ -279,6 +290,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
                 error = model.importCandidaturasCSV(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados das Candidaturas", e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
         btnEditCandidatura.setOnAction(actionEvent -> {
@@ -288,6 +301,11 @@ public class OpcoesCandidaturaUI extends BorderPane {
                 return;
             ids = getTextFields();
             ErrorCode e = model.editCandidatura(tfAluno.getText(), ids);
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Introdução dos dados das Candidaturas", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+                return;
+            }
             repoeBotaoInserir();
             clearFieldsEdit();
         });
@@ -312,6 +330,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
         });
 
     }
+
+
 
     private List<String> getTextFields() {
         List<String> ids ;
@@ -347,7 +367,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
 
     private void update() {
         camposCentro.getChildren().clear();
-        closedFase();
+        //closedFase();
         for (Node nodesVisible : nodesVisibles) {
             camposCentro.getChildren().add(nodesVisible);
         }
@@ -366,27 +386,49 @@ public class OpcoesCandidaturaUI extends BorderPane {
         obtencaoAlunoFaseCandidatura.updateTabelas();
 
     }
-    private void closedFase() {
-        if(model == null){
-            return;
+//    private void closedFase() {
+//        if(model == null){
+//            return;
+//        }
+//        if(model.getState() != EnumState.OPCOES_CANDIDATURA){
+//            return;
+//        }
+//        if (model.isClosed()){
+//            fechaFase();
+//        }
+//    }
+//
+//    private void fechaFase() {
+//        if(isClosed){
+//            return;
+//        }
+//        isClosed = true;
+//        menu.getChildren().remove(btnInserirCandidaturas);
+//        menu.getChildren().remove(btnFechar);
+//        tableView.removeCols("Editar", "Remover");
+//        nodesVisibles.clear();
+//        nodesVisibles.add(tableView);
+//    }
+    private void updateClose() {
+        if(model.getCloseState(EnumState.OPCOES_CANDIDATURA)){
+            menu.getChildren().remove(btnInserirCandidaturas);
+            menu.getChildren().remove(btnFechar);
+            tableView.removeCols("Editar", "Remover");
+            nodesVisibles.clear();
+            nodesVisibles.add(tableView);
+            update();
         }
-        if(model.getState() != EnumState.OPCOES_CANDIDATURA){
-            return;
+        else {
+            if(!menu.getChildren().contains(btnInserirCandidaturas)){
+                menu.getChildren().add(1,btnInserirCandidaturas);
+                menu.getChildren().add(6,btnFechar);
+                tableView.addCols(colEdit);
+                tableView.addCols(colRemove);
+                nodesVisibles.clear();
+                nodesVisibles.add(tableView);
+                update();
+            }
         }
-        if (model.isClosed()){
-            fechaFase();
-        }
-    }
 
-    private void fechaFase() {
-        if(isClosed){
-            return;
-        }
-        isClosed = true;
-        menu.getChildren().remove(btnInserirCandidaturas);
-        menu.getChildren().remove(btnFechar);
-        tableView.removeCols("Editar", "Remover");
-        nodesVisibles.clear();
-        nodesVisibles.add(tableView);
     }
 }

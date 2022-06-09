@@ -14,15 +14,14 @@ import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ObtencaoDadosOrientadores;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AtribuicaoOrientadoresUI extends BorderPane {
     ModelManager model;
@@ -32,6 +31,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
     List<Node> nodesShow;
     VBox center, vBoxTable;
     ObtencaoDadosOrientadores obtencaoDadosOrientadores;
+
     public AtribuicaoOrientadoresUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -48,6 +48,8 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         center = new VBox();
         setCenter(center);
     }
+
+
 
     private void preparaTabela() {
         tablePropostas = new TablePropostas(model, null);
@@ -112,11 +114,20 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
             if(f == null){
                 return;
             }
-            model.exportCSV(f.getAbsolutePath());
+            ErrorCode e = model.exportCSV(f.getAbsolutePath());
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Exportação de CSV", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
         btnRecuar.setOnAction(actionEvent -> model.recuarFase());
         btnFecharEAvancar.setOnAction(actionEvent -> {
-            model.fecharFase();
+           ErrorCode e = model.fecharFase();
+           if(e != ErrorCode.E0){
+               AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no Fecho da Fase", MessageTranslate.translateErrorCode(e));
+               AlertSingleton.getInstanceWarning().showAndWait();
+
+           }
         });
         btnAtribuirAutomatico.setOnAction(actionEvent -> {
             model.associacaoAutomaticaDeDocentesAPropostas();

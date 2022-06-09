@@ -4,15 +4,13 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.data.propostas.Estagio;
 import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.utils.CSVWriter;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Consulta extends StateAdapter{
 
@@ -100,19 +98,8 @@ public class Consulta extends StateAdapter{
     @Override
     public String getEstatisticasPorDocente() {
         StringBuilder sb = new StringBuilder();
-        Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
-        data.getDocentes().forEach(d -> docente_proposta.put(d, new ArrayList<>()));
-        for (Proposta p : data.getProposta()){
-            if(p.temDocenteOrientador()){
-                if(docente_proposta.containsKey(p.getOrientador())){
-                    docente_proposta.get(p.getOrientador()).add(p);
-                }else {
-                    docente_proposta.put(p.getOrientador(),new ArrayList<>());
-                    docente_proposta.get(p.getOrientador()).add(p);
-                }
+        Map<Docente, ArrayList<Proposta>> docente_proposta = getEstatiticasDocente();
 
-            }
-        }
         int min = 0, max = 0, count = 0, index = 0;
         for(Map.Entry<Docente, ArrayList<Proposta>> set: docente_proposta.entrySet()){
             if(index == 0){
@@ -135,6 +122,23 @@ public class Consulta extends StateAdapter{
                     .append(" propostas").append("\n");
         });
         return  sb.toString();
+    }
+    private Map<Docente, ArrayList<Proposta>> getEstatiticasDocente(){
+        Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
+        data.getDocentes().forEach(d -> docente_proposta.put(d, new ArrayList<>()));
+        for (Proposta p : data.getProposta()){
+            if(p.temDocenteOrientador()){
+                if(docente_proposta.containsKey(p.getOrientador())){
+                    docente_proposta.get(p.getOrientador()).add(p);
+                }else {
+                    docente_proposta.put(p.getOrientador(),new ArrayList<>());
+                    docente_proposta.get(p.getOrientador()).add(p);
+                }
+
+            }
+        }
+
+        return docente_proposta;
     }
 
     @Override
@@ -165,5 +169,141 @@ public class Consulta extends StateAdapter{
         double percNotAtribuida = 100 - percAtribuida;
         dados.addAll(List.of(countAtribuida,countNotAtribuida,percAtribuida,percNotAtribuida));
         return dados;
+    }
+
+    @Override
+    public Map<String, Integer> getTop5Empresas() {
+
+        Map<String, Integer> auxTop5 = new HashMap<>();
+        for (Proposta proposta : data.getProposta()) {
+            if(proposta instanceof Estagio e){
+                String s = e.getEntidade();
+                if(!s.equals("")){
+                    if(auxTop5.containsKey(s)){
+                        Integer aux = auxTop5.get(s);
+                        aux++;
+                        auxTop5.put(s, aux);
+                    }
+                    else{
+                        auxTop5.put(s, 1);
+                    }
+                }
+            }
+        }
+
+        Map<String, Integer> top5 = new HashMap<>();
+        int max;
+        String name="";
+        for (int i = 0; i < 5; i++) {
+            max = 0;
+            for(Map.Entry<String,Integer> set : auxTop5.entrySet()){
+                if(set.getValue() > max){
+                    max = set.getValue();
+                    name = set.getKey();
+                }
+            }
+            if(max > 0)
+                top5.put(name, max);
+            auxTop5.remove(name);
+        }
+
+
+        return top5;
+    }
+
+
+    @Override
+    public Map<Docente, Integer> getTop5Orientadores() {
+        Map<Docente, Integer> auxTop5 = new HashMap<>();
+        Integer quant = 0;
+        for (Proposta proposta : data.getProposta()) {
+            if(proposta.temDocenteOrientador()){
+                if(auxTop5.containsKey(proposta.getOrientador())){
+                    quant = auxTop5.get(proposta.getOrientador());
+                    auxTop5.put(proposta.getOrientador(),++quant);
+                }else{
+                    auxTop5.put(proposta.getOrientador().getClone(), 1);
+                }
+            }
+        }
+        Map<Docente, Integer> top5 = new HashMap<>();
+        int max;
+        Docente docente = null;
+        for (int i = 0; i < 5; i++) {
+            max = 0;
+            for(Map.Entry<Docente,Integer> set : auxTop5.entrySet()){
+                if(set.getValue() > max){
+                    max = set.getValue();
+                    docente = set.getKey();
+                }
+            }
+            if(max > 0)
+                top5.put(docente, max);
+            auxTop5.remove(docente);
+        }
+
+
+        return top5;
+
+
+    }
+
+    @Override
+    public Map<Docente, Integer> getDocentesPorOrientacoes() {
+        Map<Docente, ArrayList<Proposta>> docente_proposta= getEstatiticasDocente();
+        Map<Docente, Integer> docente_numOrientacoes = new HashMap<>();
+        for(Map.Entry<Docente,ArrayList<Proposta>> set : docente_proposta.entrySet()){
+            docente_numOrientacoes.put(set.getKey().getClone(), set.getValue().size());
+        }
+        return docente_numOrientacoes;
+    }
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaEOrientador() {
+        List<Aluno> alunos = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaConfirmada()){
+                if (aluno.getProposta().temDocenteOrientador()){
+                    alunos.add(aluno.getClone());
+                }
+            }
+        }
+        return alunos;
+    }
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
+        List<Aluno> alunos = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaConfirmada()){
+                if (!aluno.getProposta().temDocenteOrientador()){
+                    alunos.add(aluno.getClone());
+                }
+            }
+        }
+        return alunos;
+    }
+
+    @Override
+    public Map<String, Number> getDadosNumeroOrientacoes() {
+        int min = 0, max = 0, count = 0, index = 0;
+        for(Map.Entry<Docente, ArrayList<Proposta>> set: getEstatiticasDocente().entrySet()){
+            if(index == 0){
+                max = min = set.getValue().size();
+                index++;
+            }
+            if(set.getValue().size() < min){
+                min = set.getValue().size();
+            }
+            if(set.getValue().size() > max){
+                max = set.getValue().size();
+            }
+            count += set.getValue().size();
+
+        }
+        Map<String, Number> dadosReturn = new HashMap<>();
+        double media = (double) count /  data.getDocentes().size();
+        dadosReturn.put("media", media);
+        dadosReturn.put("max", max);
+        dadosReturn.put("min", min);
+        return dadosReturn;
     }
 }

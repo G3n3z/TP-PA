@@ -245,6 +245,9 @@ public class GestaoAlunosUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
+            updateClose();
+        });
         model.addPropertyChangeListener(ModelManager.PROP_ALUNOS, evt -> {
             atualizaStats();
             updateTable();
@@ -283,33 +286,32 @@ public class GestaoAlunosUI extends BorderPane {
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
 
-                PopUP.getInstance().clearPopUp();
-                PopUP.getInstance().setTextTitle("Problemas de Inserção CSV");
-                PopUP.getInstance().addItens(new Label(e.getMessageOfExceptions()));
-                PopUP.getInstance().createButtonOk();
-                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
+                AlertSingleton.getInstanceWarning().setAlertText("Problemas na Inserção do Aluno","as", e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
         btnRemoveAll.setOnAction(actionEvent -> {
             model.removeAllAlunos();
             update();
-            System.out.println("Aqui");
         });
         btnExeInsereAluno.setOnAction(actionEvent -> {
             String nome = tfNome.getText();
             Long nAluno;
             Double classificacao;
+            if(txNumero.getText().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Aluno", "Numero de Aluno não preenchido");
+                AlertSingleton.getInstanceWarning().showAndWait();
+                return;
+            }
             try {
                 nAluno = Long.parseLong(txNumero.getText());
                 classificacao = Double.parseDouble(tfClass.getText());
 
             }catch (NumberFormatException e){
-                System.out.println("Numero de aluno invalido");
-                PopUP.getInstance().clearPopUp();
-                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
-                PopUP.getInstance().addItens(new Label("Numero de ALuno Invadilo"));
-                PopUP.getInstance().createButtonOk();
-                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
+
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Aluno", "Numero de ALuno/Classificação Inválido\n" +
+                        "O Número de aluno deverá ser um inteiro e a classificação compreendida entre 0.0 e 1.0");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             String email = tfEmail.getText();
@@ -317,21 +319,16 @@ public class GestaoAlunosUI extends BorderPane {
             String curso = this.curso.getValue();
             String ramo = this.ramo.getValue();
             if(nome.equals("") || email.equals("") || curso == null || ramo == null){
-                PopUP.getInstance().clearPopUp();
-                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
-                PopUP.getInstance().addItens(new Label("Dados Por Preencher"));
-                PopUP.getInstance().createButtonOk();
-                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
+
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Aluno", "Dados Por Preencher");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             Aluno a = new Aluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
             ErrorCode e = model.insereAluno(a);
             if(e != ErrorCode.E0){
-                PopUP.getInstance().clearPopUp();
-                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
-                PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
-                PopUP.getInstance().createButtonOk();
-                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
+                AlertSingleton.getInstanceWarning().setAlertText("Problemas na Inserção do Aluno","", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
             clearFields();
 
@@ -351,6 +348,8 @@ public class GestaoAlunosUI extends BorderPane {
                 PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
                 PopUP.getInstance().createButtonOk();
                 PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
+                AlertSingleton.getInstanceWarning().setAlertText("Problemas na Exportação do CSV","as", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
 
         });
@@ -379,66 +378,15 @@ public class GestaoAlunosUI extends BorderPane {
             }
             ErrorCode e = model.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
             if(e != ErrorCode.E0){
-                PopUP.getInstance().clearPopUp();
-                PopUP.getInstance().setTextTitle("Problemas na Edição do Aluno");
-                PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
-                PopUP.getInstance().createButtonOk();
-                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
-
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Edição do Aluno", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
             hboxInsereAluno.setVisible(false);
         });
     }
 
-    private void update() {
-        this.setVisible(model != null && model.getState() == EnumState.GESTAO_ALUNOS);
-        closedFase();
-        updateTable();
-    }
-
-    private void closedFase() {
-        if(model == null){
-            return;
-        }
-        if(model.getState() != EnumState.GESTAO_ALUNOS){
-            return;
-        }
-        if (model.isClosed()){
-            fechaFase();
-        }
-    }
-
-    private void fechaFase() {
-        isClosed = true;
-        nodeShow.forEach(n -> n.setVisible(false));
-        tableView.removeCols("Editar", "Remove");
-        menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
-    }
-
-    private void updateTable(){
-        if(model.getState() != null && model.getState() == EnumState.GESTAO_ALUNOS){
-            tableView.getItems().clear();
-            tableView.getItems().addAll(model.getAlunos());
-        }
-    }
-
-
     private void preparaTable() {
-        Consumer<Aluno> edit = (a) -> {
-          hboxInsereAluno.setVisible(true);
-          txNumero.setText(Long.toString(a.getNumeroAluno()));
-          txNumero.setDisable(true);
-          tfNome.setText(a.getNome());
-          tfEmail.setText(a.getEmail());
-          tfEmail.setDisable(true);
-          tfClass.setText(Double.toString(a.getClassificacao()));
-          curso.setValue(a.getSiglaCurso());
-          ramo.setValue(a.getSiglaRamo());
-          possibilidade.setSelected(a.isPossibilidade());
 
-          hBtn.getChildren().clear();
-          hBtn.getChildren().add(hBtnEdit);
-        };
 
         tableView = new TableAlunos(model);
 
@@ -491,5 +439,30 @@ public class GestaoAlunosUI extends BorderPane {
         curso.setValue("");
         ramo.setValue("");
         possibilidade.setSelected(false);
+    }
+    private void update() {
+        this.setVisible(model != null && model.getState() == EnumState.GESTAO_ALUNOS);
+        updateTable();
+    }
+
+    private void updateTable(){
+        if(model.getState() != null && model.getState() == EnumState.GESTAO_ALUNOS){
+            tableView.getItems().clear();
+            tableView.getItems().addAll(model.getAlunos());
+        }
+    }
+    private void updateClose() {
+        if(model.getCloseState(EnumState.CONFIG_OPTIONS)){
+            nodeShow.forEach(n -> n.setVisible(false));
+            tableView.removeCols("Editar", "Remove");
+            menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
+        }else{
+            if(!menu.getChildren().contains(btnInsereManual)){
+                menu.getChildren().add(1,btnInsereManual);
+                menu.getChildren().add(3,btnRemoveAll);
+                preparaEditarRemover();
+            }
+        }
+        update();
     }
 }

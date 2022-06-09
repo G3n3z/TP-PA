@@ -31,6 +31,7 @@ public class ModelManager {
     public static final String PROP_RESOLVIDO = "resolvido";
     public static final String PROP_UNDO = "undo";
     public static final String PROP_REDO = "redo";
+    public static final String PROP_CLOSE_STATE = "closeState";
     public ModelManager() {
         this.context = new ApoioContext();
         this.pcs = new PropertyChangeSupport(this);
@@ -67,6 +68,7 @@ public class ModelManager {
 
     public void recuarFase() {
         context.recuarFase();
+        manager.clearUndoAndRedo();
         pcs.firePropertyChange(PROP_STATE, null, context.getState());
 
     }
@@ -79,6 +81,7 @@ public class ModelManager {
         pcs.firePropertyChange(PROP_DOCENTES, null, context.getState());
         pcs.firePropertyChange(PROP_PROPOSTAS, null, null);
         pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
+        pcs.firePropertyChange(PROP_CLOSE_STATE, null, null);
     }
 
     public List<Aluno> getAlunos() {
@@ -221,6 +224,7 @@ public class ModelManager {
     public ErrorCode fecharFase() {
         ErrorCode e = context.closeFase();
         if(e== ErrorCode.E0){
+            pcs.firePropertyChange(PROP_CLOSE_STATE, null, null);
             pcs.firePropertyChange(PROP_STATE, null, null);
         }
         return e;
@@ -428,6 +432,7 @@ public class ModelManager {
 
     public void sair() {
         context.sair();
+        pcs.firePropertyChange(PROP_STATE, null, null);
     }
 
     public void save() throws IOException {
@@ -465,5 +470,25 @@ public class ModelManager {
 
     public List<Double> getDadosAtribuicoes() {
         return context.getDadosAtribuicoes();
+    }
+
+    public Map<String, Integer> getTop5Empresas() {
+        return context.getTop5Empresas();
+    }
+
+    public Map<Docente, Integer> getTop5Orientadores() {
+        return context.getTop5Orientadores();
+    }
+
+    public Map<Docente, Integer> getDocentesPorOrientacoes() {
+        return context.getDocentesPorOrientacoes();
+    }
+
+    public Map<String, Number> getDadosNumeroOrientacoes() {
+        return context.getDadosNumeroOrientacoes();
+    }
+
+    public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
+        return context.getAlunosComPropostaConfirmadaEditavel();
     }
 }

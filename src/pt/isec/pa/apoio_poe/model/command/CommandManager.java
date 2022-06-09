@@ -53,4 +53,8 @@ public class CommandManager {
     }
 
 
+    public void clearUndoAndRedo() {
+        history.clear();
+        redoCmds.clear();
+    }
 }

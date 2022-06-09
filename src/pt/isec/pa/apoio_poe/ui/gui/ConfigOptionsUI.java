@@ -6,9 +6,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.utils.AlertSingleton;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
+import pt.isec.pa.apoio_poe.ui.gui.utils.MessageTranslate;
 
 public class ConfigOptionsUI extends BorderPane {
 
@@ -49,6 +52,9 @@ public class ConfigOptionsUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
+            updateClose();
+        });
         bGAlunos.setOnAction(actionEvent -> {
 
             model.gerirAlunos();
@@ -66,28 +72,47 @@ public class ConfigOptionsUI extends BorderPane {
             model.avancarFase();
         });
         bFechar.setOnAction(actionEvent -> {
-            System.out.println(model.fecharFase());
+            ErrorCode e = model.fecharFase();
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas nno Fecho da Fase", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
     }
 
     private void update() {
         this.setVisible(model != null && model.getState() == EnumState.CONFIG_OPTIONS);
-        closedFase();
+        //closedFase();
     }
 
-    private void closedFase() {
-        if(model == null){
-            return;
-        }
-        if(model.getState() != EnumState.CONFIG_OPTIONS){
-            return;
-        }
-        if (model.isClosed()){
-            fechaFase();
-        }
-    }
+//    private void closedFase() {
+//        if(model == null){
+//            return;
+//        }
+//        if(model.getState() != EnumState.CONFIG_OPTIONS){
+//            return;
+//        }
+//        if (model.isClosed()){
+//            fechaFase();
+//        }else {
+//            if(!menu.getChildren().contains(bFechar))
+//                menu.getChildren().add(bFechar);
+//        }
+//    }
+//
+//    private void fechaFase() {
+//        menu.getChildren().remove(bFechar);
+//    }
 
-    private void fechaFase() {
-        menu.getChildren().remove(bFechar);
+    private void updateClose() {
+        if(model.getCloseState(EnumState.CONFIG_OPTIONS)){
+            menu.getChildren().remove(bFechar);
+        }
+        else {
+            if(!menu.getChildren().contains(bFechar)){
+                menu.getChildren().add(3,bFechar);
+            }
+        }
+
     }
 }

@@ -54,4 +54,8 @@ public class ApoioManager {
     public ErrorCode removerTodasAtribuicoes() {
         return cm.invokeCommand(new RemocaoTotalAtribuicoes(data));
     }
+
+    public void clearUndoAndRedo() {
+        cm.clearUndoAndRedo();
+    }
 }

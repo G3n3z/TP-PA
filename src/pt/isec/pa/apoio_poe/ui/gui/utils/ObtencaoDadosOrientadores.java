@@ -11,7 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
+import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+
+import java.util.Map;
 
 public class ObtencaoDadosOrientadores extends VBox {
 
@@ -19,7 +22,8 @@ public class ObtencaoDadosOrientadores extends VBox {
     TableAlunos tableAlunosComOrientador, tableAlunosSemOrientador;
     HBox footer;
     Label lFooter;
-    VBox box;
+    VBox box, vBoxTableOrientacoes;
+    TableDocentes tvDocentes ;
 
     public ObtencaoDadosOrientadores(ModelManager model) {
         this.model = model;
@@ -32,6 +36,7 @@ public class ObtencaoDadosOrientadores extends VBox {
 
         preparaTabelaAtribuidaComOrientador();
         preparaTabelaAtribuidaSemOrientador();
+        preparaTabelaOrientadores();
         preparaLabelDados();
         Label lAlunosComOrientador = new Label("Alunos com Proposta Atribuida e Orientador");
         lAlunosComOrientador.setFont(new Font(18));
@@ -44,7 +49,7 @@ public class ObtencaoDadosOrientadores extends VBox {
         hBoxAlunosSemOrientador.setAlignment(Pos.CENTER);
 
         box = new VBox();
-        box.getChildren().addAll(hBoxAlunosComOrientador,tableAlunosComOrientador, hBoxAlunosSemOrientador, tableAlunosSemOrientador);
+        box.getChildren().addAll(hBoxAlunosComOrientador,tableAlunosComOrientador, hBoxAlunosSemOrientador, tableAlunosSemOrientador, vBoxTableOrientacoes);
         VBox.setMargin(hBoxAlunosComOrientador, new Insets(50,0,30,0));
         VBox.setMargin(hBoxAlunosSemOrientador, new Insets(50,0,30,0));
         VBox.setMargin(tableAlunosSemOrientador, new Insets(0,0,100,0));
@@ -105,6 +110,15 @@ public class ObtencaoDadosOrientadores extends VBox {
 
     }
 
+    private void preparaTabelaOrientadores() {
+        Label lTvDocentes= new Label("Numero de Orientações Por Docentes");
+        lTvDocentes.setFont(new Font(18));
+        tvDocentes = new TableDocentes(model);
+        vBoxTableOrientacoes = new VBox(lTvDocentes,tvDocentes);
+        VBox.setMargin(lTvDocentes, new Insets(20));
+        vBoxTableOrientacoes.setAlignment(Pos.CENTER);
+    }
+
     private void preparaLabelDados() {
         lFooter = new Label();
 
@@ -124,6 +138,12 @@ public class ObtencaoDadosOrientadores extends VBox {
             tableAlunosSemOrientador.getItems().clear();
             tableAlunosSemOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaESemOrientador());
 
+            Map<Docente, Integer> docentes = model.getDocentesPorOrientacoes();
+            tvDocentes.removeCols("Número de Orientações");
+            TableColumn<Docente, Integer> tcOrientacoes = new TableColumn<>("Número de Orientações");
+            tcOrientacoes.setCellValueFactory(d-> new ReadOnlyObjectWrapper<>( docentes.get(d.getValue())));
+            tvDocentes.addCols(tcOrientacoes);
+            tvDocentes.getItems().addAll(docentes.keySet());
         }
     }
 

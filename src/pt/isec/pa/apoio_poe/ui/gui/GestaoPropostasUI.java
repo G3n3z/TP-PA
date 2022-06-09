@@ -13,9 +13,7 @@ import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +40,7 @@ public class GestaoPropostasUI extends BorderPane {
     Label numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS, title;
 
     boolean visible = false;
+    private TableColumn<Proposta, Button> colButton, colEditar;
 
     public GestaoPropostasUI(ModelManager model) {
         this.model = model;
@@ -188,7 +187,7 @@ public class GestaoPropostasUI extends BorderPane {
     private void preparaTable() {
 
         tableView = new TablePropostas(model, null);
-        TableColumn<Proposta, Button> colEditar = new TableColumn<>("Editar");
+        colEditar = new TableColumn<>("Editar");
         colEditar.setCellValueFactory(propostaButtonCellDataFeatures -> {
             Button editar = new Button("Editar");
             editar.setOnAction(actionEvent -> {
@@ -198,7 +197,7 @@ public class GestaoPropostasUI extends BorderPane {
             return new ReadOnlyObjectWrapper<>(editar);
         });
         colEditar.setPrefWidth(120);
-        TableColumn<Proposta, Button> colButton = new TableColumn<>("Remover");
+        colButton = new TableColumn<>("Remover");
         colButton.setCellValueFactory(propostaButtonCellDataFeatures -> {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
@@ -282,6 +281,9 @@ public class GestaoPropostasUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
+            updateClose();
+        });
 
         model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS, evt -> {
             atualizaStats();
@@ -313,6 +315,10 @@ public class GestaoPropostasUI extends BorderPane {
                 return;
             }
             ErrorCode error = model.exportCSV(f.getAbsolutePath());
+            if(error != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Exportação dos dados das Propostas", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
 
         });
         choiceTipo.setOnAction(actionEvent -> {
@@ -338,6 +344,8 @@ public class GestaoPropostasUI extends BorderPane {
                  error = model.importCSV(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados das Propostas", e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
         btnGestaoPropostas.setOnAction(actionEvent -> {
@@ -362,6 +370,8 @@ public class GestaoPropostasUI extends BorderPane {
                 update();
             }else{
                 System.out.println(e.toString());
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Introdução dos dados das Propostas", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
         btnEditProposta.setOnAction(actionEvent -> {
@@ -374,6 +384,8 @@ public class GestaoPropostasUI extends BorderPane {
                 update();
             }else{
                 System.out.println(e.toString());
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas Na edição do aluno", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
 
@@ -382,6 +394,24 @@ public class GestaoPropostasUI extends BorderPane {
             update();
         });
 
+    }
+
+    private void updateClose() {
+        if(model.getCloseState(EnumState.CONFIG_OPTIONS)){
+            visible = false;
+            tableView.removeCols("Editar", "Remover");
+            menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
+            update();
+        }
+        else{
+            if(!menu.getChildren().contains(btnInsereManual)) {
+                tableView.addCols(colEditar);
+                tableView.addCols(colButton);
+                menu.getChildren().add(1,btnInsereManual);
+                menu.getChildren().add(3,btnRemoveAll);
+
+            }
+        }
     }
 
     private void updateTables() {
@@ -395,7 +425,7 @@ public class GestaoPropostasUI extends BorderPane {
         clearFieldsInput();
         this.setVisible(model != null && model.getState() == EnumState.GESTAO_PROPOSTAS);
         updateTables();
-        closedFase();
+
     }
 
     private void clearFieldsInput() {

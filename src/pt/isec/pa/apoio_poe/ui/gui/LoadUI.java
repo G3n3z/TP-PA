@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -45,6 +46,10 @@ public class LoadUI extends BorderPane {
             }
             update();
             System.out.println(model.getState().toString());
+        });
+        sair.setOnAction(actionEvent -> {
+            System.out.println("Sair");
+            Platform.exit();
         });
     }
 

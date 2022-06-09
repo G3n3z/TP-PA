@@ -184,4 +184,55 @@ public class AtribuicaoOrientadores extends StateAdapter {
         }
         return alunos;
     }
+    private Map<Docente, ArrayList<Proposta>> getEstatiticasDocente(){
+        Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
+        data.getDocentes().forEach(d -> docente_proposta.put(d, new ArrayList<>()));
+        for (Proposta p : data.getProposta()){
+            if(p.temDocenteOrientador()){
+                if(docente_proposta.containsKey(p.getOrientador())){
+                    docente_proposta.get(p.getOrientador()).add(p);
+                }else {
+                    docente_proposta.put(p.getOrientador(),new ArrayList<>());
+                    docente_proposta.get(p.getOrientador()).add(p);
+                }
+
+            }
+        }
+
+        return docente_proposta;
+    }
+
+    @Override
+    public Map<String, Number> getDadosNumeroOrientacoes() {
+        int min = 0, max = 0, count = 0, index = 0;
+        for(Map.Entry<Docente, ArrayList<Proposta>> set: getEstatiticasDocente().entrySet()){
+            if(index == 0){
+                max = min = set.getValue().size();
+                index++;
+            }
+            if(set.getValue().size() < min){
+                min = set.getValue().size();
+            }
+            if(set.getValue().size() > max){
+                max = set.getValue().size();
+            }
+            count += set.getValue().size();
+
+        }
+        Map<String, Number> dadosReturn = new HashMap<>();
+        double media = (double) count /  data.getDocentes().size();
+        dadosReturn.put("media", media);
+        dadosReturn.put("max", max);
+        dadosReturn.put("min", min);
+        return dadosReturn;
+    }
+    @Override
+    public Map<Docente, Integer> getDocentesPorOrientacoes() {
+        Map<Docente, ArrayList<Proposta>> docente_proposta= getEstatiticasDocente();
+        Map<Docente, Integer> docente_numOrientacoes = new HashMap<>();
+        for(Map.Entry<Docente,ArrayList<Proposta>> set : docente_proposta.entrySet()){
+            docente_numOrientacoes.put(set.getKey().getClone(), set.getValue().size());
+        }
+        return docente_numOrientacoes;
+    }
 }

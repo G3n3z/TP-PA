@@ -50,8 +50,8 @@ public class TableAlunos extends TableView<Aluno> {
             getColumns().removeIf(col -> col.getText().equals(n));
         }
     }
-    public boolean addCols(TableColumn<Aluno,?> tableCol){
-        getColumns().add(tableCol);
+    public boolean addCols(TableColumn<Aluno,?> ...tableCol){
+        getColumns().addAll(tableCol);
         return true;
     }
     public boolean addColButton(TableColumn<Aluno,Button> tableCol){

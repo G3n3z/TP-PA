@@ -1,10 +1,14 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import pt.isec.pa.apoio_poe.model.ModelManager;
+import pt.isec.pa.apoio_poe.ui.gui.utils.AlertSingleton;
+
+import java.io.IOException;
 
 public class MainJavaFX extends Application {
 
@@ -22,6 +26,29 @@ public class MainJavaFX extends Application {
         System.out.println(cena.getHeight());
         stage.setScene(cena);
         stage.setTitle("Gestao de Projetos e Estágios");
+        stage.setOnCloseRequest(windowEvent -> {
+            AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Pretende Guardar o estado da Aplicação?", "");
+            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
+                if (result.getText().equalsIgnoreCase("YES")){
+                    try {
+                        model.save();
+                    } catch (IOException e) {
+                        AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Nao foi possivel guardar?", "");
+                        AlertSingleton.getInstanceConfirmation().showAndWait();
+                    }
+                }
+            });
+
+            AlertSingleton.getInstanceConfirmation().setAlertText("Sair", "Pretende Sair da Aplicação?", "");
+            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
+                if (result.getText().equalsIgnoreCase("YES")){
+                    Platform.exit();
+                }
+                else{
+                    windowEvent.consume();
+                }
+            });
+        });
 
         stage.show();
 //        Stage stage2 = new Stage();

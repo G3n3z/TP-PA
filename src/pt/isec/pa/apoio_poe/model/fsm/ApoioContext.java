@@ -411,5 +411,25 @@ public class ApoioContext {
     public List<Double> getDadosAtribuicoes() {
         return state.getDadosAtribuicoes();
     }
+
+    public Map<String, Integer> getTop5Empresas() {
+        return state.getTop5Empresas();
+    }
+
+    public Map<Docente, Integer> getTop5Orientadores() {
+        return state.getTop5Orientadores();
+    }
+
+    public Map<Docente, Integer> getDocentesPorOrientacoes() {
+        return state.getDocentesPorOrientacoes();
+    }
+
+    public Map<String, Number> getDadosNumeroOrientacoes() {
+        return state.getDadosNumeroOrientacoes();
+    }
+
+    public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
+        return state.getAlunosComPropostaConfirmadaEditavel();
+    }
 }
 

@@ -160,4 +160,14 @@ public interface IState {
     Map<String, Integer> getPropostasPorRamos();
 
     List<Double> getDadosAtribuicoes();
+
+    Map<String, Integer> getTop5Empresas();
+
+    Map<Docente, Integer> getTop5Orientadores();
+
+    Map<Docente, Integer> getDocentesPorOrientacoes();
+
+    Map<String, Number> getDadosNumeroOrientacoes();
+
+    List<Aluno> getAlunosComPropostaConfirmadaEditavel();
 }

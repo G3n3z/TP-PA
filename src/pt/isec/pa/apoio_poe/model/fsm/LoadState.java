@@ -39,4 +39,9 @@ public class LoadState extends StateAdapter{
     public boolean existFileBin() {
         return Files.exists(Path.of(data.getFicheiroBin()));
     }
+
+    @Override
+    public boolean save() throws IOException {
+        return true;
+    }
 }

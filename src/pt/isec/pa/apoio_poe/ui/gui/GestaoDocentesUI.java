@@ -15,9 +15,7 @@ import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TableDocentes;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +35,7 @@ public class GestaoDocentesUI extends BorderPane {
     List<Node> nodeShow;
     FileChooser fileChooser;
     Integer nDocentes;
+    TableColumn<Docente, Button> colButton, colEditar;
 
     public GestaoDocentesUI(ModelManager model) {
         this.model = model;
@@ -206,6 +205,9 @@ public class GestaoDocentesUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
         });
+        model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
+            updateClose();
+        });
         model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
             atualizaStats();
             updateTable();
@@ -228,6 +230,8 @@ public class GestaoDocentesUI extends BorderPane {
                 model.importDocentes(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados dos Docentes", e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
 
@@ -250,10 +254,14 @@ public class GestaoDocentesUI extends BorderPane {
             String email = tfEmail.getText();
 
             if(nome.equals("") || email.equals("") ){
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Introdução dos dados dos Docente", "Nome / Email por preencher");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
-            if(model.insereDocente(email,nome)!= ErrorCode.E0){
-                System.out.println("Correu algo mal");
+            ErrorCode e = model.insereDocente(email,nome);
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Docente", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
             clearFields();
             atualizaStats();
@@ -264,10 +272,15 @@ public class GestaoDocentesUI extends BorderPane {
             String email = tfEmail.getText();
 
             if(nome.equals("") || email.equals("") ){
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Edição dos dados dos Docente", "Nome / Email por preencher");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
-            if(model.editDocente(email,nome) != ErrorCode.E0){
+            ErrorCode e = model.editDocente(email,nome);
+            if(e != ErrorCode.E0){
                 System.out.println("Correu algo mal");
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Edição do Docente", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
             vboxInsereDocente.setVisible(false);
         });
@@ -278,9 +291,11 @@ public class GestaoDocentesUI extends BorderPane {
 
         btnExport.setOnAction(actionEvent -> {
             File f = fileChooser.showSaveDialog(null);
-
-            if(model.exportCSV(f.getAbsolutePath())!= ErrorCode.E0){
+            ErrorCode e = model.exportCSV(f.getAbsolutePath());
+            if(e!= ErrorCode.E0){
                 System.out.println("Problema na exportacao");
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Exporção do CSV dos Docente", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
 
         });
@@ -289,17 +304,10 @@ public class GestaoDocentesUI extends BorderPane {
         });
     }
 
-    private void update() {
-        this.setVisible(model != null && model.getState() == EnumState.GESTAO_DOCENTES);
-        updateTable();
-        closedFase();
-    }
-
-
 
     private void preparaTable() {
         tableView = new TableDocentes(model);
-        TableColumn<Docente, Button> colEditar = new TableColumn<>("Editar");
+        colEditar = new TableColumn<>("Editar");
         colEditar.setCellValueFactory(docenteButtonCellDataFeatures -> {
             Button editar = new Button("Editar");
             editar.setOnAction(actionEvent -> {
@@ -315,7 +323,7 @@ public class GestaoDocentesUI extends BorderPane {
             return new ReadOnlyObjectWrapper<>(editar);
         });
         colEditar.setPrefWidth(120);
-        TableColumn<Docente, Button> colButton = new TableColumn<>("Remover");
+        colButton = new TableColumn<>("Remover");
         colButton.setCellValueFactory(docenteButtonCellDataFeatures -> {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
@@ -334,29 +342,33 @@ public class GestaoDocentesUI extends BorderPane {
             tableView.getItems().addAll(model.getDocentes());
         }
     }
-
+    private void update() {
+        this.setVisible(model != null && model.getState() == EnumState.GESTAO_DOCENTES);
+        updateTable();
+    }
     private void clearFields(){
         tfNome.clear();
         tfEmail.clear();
         tfEmail.setDisable(false);
 
     }
-    private void closedFase() {
-        if(model == null){
-            return;
-        }
-        if(model.getState() != EnumState.GESTAO_DOCENTES){
-            return;
-        }
-        if (model.isClosed()){
-            fechaFase();
-        }
-    }
 
-    private void fechaFase() {
 
-        nodeShow.forEach(n -> n.setVisible(false));
-        tableView.removeCols("Editar", "Remover");
-        menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
+    private void updateClose() {
+        if(model.getCloseState(EnumState.CONFIG_OPTIONS)){
+            nodeShow.forEach(n -> n.setVisible(false));
+            tableView.removeCols("Editar", "Remover");
+            menu.getChildren().removeAll(btnInsereManual, btnRemoveAll);
+            update();
+        }else{
+            if(!menu.getChildren().contains(btnInsereManual)){
+                menu.getChildren().add(1,btnInsereManual);
+                menu.getChildren().add(3,btnRemoveAll);
+                tableView.addCols(colEditar);
+                tableView.addCols(colButton);
+                update();
+            }
+        }
+
     }
 }

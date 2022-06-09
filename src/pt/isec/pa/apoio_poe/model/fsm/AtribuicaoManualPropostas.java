@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.model.fsm;
 
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Data;
+import pt.isec.pa.apoio_poe.model.data.propostas.Projeto_Estagio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,4 +33,16 @@ public class AtribuicaoManualPropostas extends StateAdapter {
         return al;
     }
 
+    @Override
+    public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
+        List<Aluno> al = new ArrayList<>();
+        for (Aluno a : data.getAlunos()) {
+            if(a.temPropostaConfirmada()){
+                if(!(a.getProposta() instanceof Projeto_Estagio || a.getProposta().getNumAluno()!= null)){
+                    al.add(a.getClone());
+                }
+            }
+        }
+        return al;
+    }
 }

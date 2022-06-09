@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
@@ -135,6 +136,7 @@ public class AtribuicaoPropostasUI extends BorderPane {
 
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> update());
+        model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> updateClose());
         model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS , evt -> {
             atualizaTabela();
             atualizaStats();
@@ -151,7 +153,12 @@ public class AtribuicaoPropostasUI extends BorderPane {
             model.avancarFase();
         });
         btnFechar.setOnAction(actionEvent -> {
-            System.out.println(model.fecharFase());
+            ErrorCode e = model.fecharFase();
+            System.out.println(e);
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no Fecho da Fase", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
         btnRecuar.setOnAction(actionEvent -> {
             model.recuarFase();
@@ -196,6 +203,8 @@ public class AtribuicaoPropostasUI extends BorderPane {
 
     }
 
+
+
     private void atribuicoesAutomaticasSemAtribuicaoDefinida() {
         try {
             model.atribuicoesAutomaticasSemAtribuicaoDefinida();
@@ -207,16 +216,13 @@ public class AtribuicaoPropostasUI extends BorderPane {
 
     private void update(){
         center.getChildren().clear();
-        closedFase();
+        //closedFase();
         for (Node node : nodesShow) {
             center.getChildren().add(node);
         }
         this.setVisible(model != null && model.getState() == EnumState.ATRIBUICAO_PROPOSTAS);
         atualizaTabela();
     }
-
-
-
 
 
     private void atualizaTabela() {
@@ -226,34 +232,26 @@ public class AtribuicaoPropostasUI extends BorderPane {
             obtencaoAlunoFaseAtribuicao.updateTabelas();
         }
     }
-    private void closedFase() {
-        if(model == null){
-            return;
-        }
-        if(model.getState() != EnumState.ATRIBUICAO_PROPOSTAS){
-            return;
-        }
-        if (model.isClosed()){
-            fechaFase();
-        }else if(model.getCloseState(EnumState.OPCOES_CANDIDATURA)){
-            faseAnteriorFechadaAtualAberta();
-        }
-    }
 
-    private void fechaFase() {
-        if(isClosed){
-            return;
+    private void updateClose() {
+        if(model.getState() == EnumState.ATRIBUICAO_PROPOSTAS){
+            System.out.println("");
         }
-        isClosed = true;
-        menu.getChildren().removeAll(btnAtribuirAutomatico, btnGestao, btnFechar, btnAtribuirAutomaticoAuto);
-        tableAlunoProposta.removeCols("Editar", "Remover");
-        nodesShow.clear();
-        nodesShow.add(tableAlunoProposta);
-    }
-    private void faseAnteriorFechadaAtualAberta() {
-        menu = new MenuVertical(btnAtribuicaoPropostas,btnAtribuirAutomaticoAuto,btnAtribuirAutomatico,btnGestao,btnExportarCSV,btnObtencoesAlunos,
-                btnObtencoesFiltros,btnFechar,btnRecuar,btnAvancar);
-        setLeft(menu);
+        if(model.getCloseState(EnumState.ATRIBUICAO_PROPOSTAS)){
+            menu.getChildren().removeAll(btnAtribuirAutomatico, btnGestao, btnFechar, btnAtribuirAutomaticoAuto);
+            tableAlunoProposta.removeCols("Editar", "Remover");
+            nodesShow.clear();
+            nodesShow.add(tableAlunoProposta);
+        } else if (!model.getCloseState(EnumState.OPCOES_CANDIDATURA)) {
+            menu = new MenuVertical(btnAtribuicaoPropostas,btnAtribuirAutomaticoAuto,btnExportarCSV,btnObtencoesAlunos,
+                    btnObtencoesFiltros,btnRecuar,btnAvancar);
+            setLeft(menu);
+        } else if (model.getCloseState(EnumState.OPCOES_CANDIDATURA)) {
+            menu = new MenuVertical(btnAtribuicaoPropostas,btnAtribuirAutomaticoAuto,btnAtribuirAutomatico,btnGestao,btnExportarCSV,btnObtencoesAlunos,
+                    btnObtencoesFiltros,btnFechar,btnRecuar,btnAvancar);
+            setLeft(menu);
+        }
+        update();
 
     }
 

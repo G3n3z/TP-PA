@@ -16,9 +16,7 @@ import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TableAlunoProposta;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 public class AtribuicaoManualPropostasUI extends BorderPane {
     ModelManager model;
@@ -103,37 +101,61 @@ public class AtribuicaoManualPropostasUI extends BorderPane {
         });
         btnRemoverAllAtribuicao.setOnAction(actionEvent -> {
             ErrorCode e = model.removeAllAtribuicoes();
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Remoção das Atribuições", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
 
         });
         btnRemoverAtribuicao.setOnAction(actionEvent -> {
             if(tfProposta.getText() == null || tfProposta.getText().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("", "ID Proposta Por Preencher", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             if(tfAluno.getText() == null || tfAluno.getText().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Numero de Aluno Por Preencher", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             long nAluno;
             try{
                 nAluno = Long.parseLong(tfAluno.getText());
             } catch (NumberFormatException e){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Número de aluno tem de ser um número inteiro", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
-            System.out.println(model.removeAtribuicao(tfProposta.getText(),nAluno));
+            ErrorCode e = model.removeAtribuicao(tfProposta.getText(),nAluno);
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Erro na Remocao Da Atribuição", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
         btnInsere.setOnAction(actionEvent -> {
             if(tfProposta.getText() == null || tfProposta.getText().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("", "ID Proposta Por Preencher", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             if(tfAluno.getText() == null || tfAluno.getText().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Numero de Aluno Por Preencher", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             long nAluno;
             try{
                 nAluno = Long.parseLong(tfAluno.getText());
             } catch (NumberFormatException e){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Número de aluno tem de ser um número inteiro", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
-            System.out.println(model.adicionaAtribuicao(tfProposta.getText(),nAluno));
+            ErrorCode e = model.adicionaAtribuicao(tfProposta.getText(),nAluno);
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problema na Atribuição", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
     }
 
@@ -147,7 +169,7 @@ public class AtribuicaoManualPropostasUI extends BorderPane {
     private void atualizaTabela(){
         if(model.getState() == EnumState.ATRIBUICAO_MANUAL_PROPOSTAS) {
             tableAlunoProposta.getItems().clear();
-            tableAlunoProposta.getItems().addAll(model.getAlunosComPropostaConfirmada());
+            tableAlunoProposta.getItems().addAll(model.getAlunosComPropostaConfirmadaEditavel());
         }
     }
 }
