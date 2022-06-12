@@ -61,11 +61,10 @@ public class GestaoAlunosUI extends BorderPane {
         title = new Label("Gestão de Alunos");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
-        HBox.setMargin(title, new Insets(25,0,25,0));
-        titulo.setPrefHeight(50);
+        titulo.setPadding(new Insets(20,0,20,0));
         titulo.getChildren().add(title);
         titulo.setAlignment(Pos.CENTER);
-        VBox container = new VBox();
+        BorderPane container = new BorderPane();
         preparaTable();
         preparaInsereAluno();
         preparaInsereCSV();
@@ -88,18 +87,23 @@ public class GestaoAlunosUI extends BorderPane {
 
         HBox statsFooter = new HBox();
         statsFooter.getChildren().addAll(numAlunos, numLEIPL, numLEI, numDA, numSI, numRAS, medClassificacao, numPossibilidade);
-        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setAlignment(Pos.CENTER);
         statsFooter.setSpacing(20.0);
         statsFooter.setPadding(new Insets(25));
-        statsFooter.setPrefHeight(50);
+        //statsFooter.setPrefHeight(100);
         statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
-        tableView.setPrefHeight(400);
-        hboxInsereAluno.setPrefHeight(200);
-        hboxInsereAluno.setPadding(new Insets(25,0,25,0));
 
-        container.getChildren().addAll(titulo, tableView, hboxInsereAluno, hboxInsereCSV, statsFooter);
-
-
+        //tableView.setPrefHeight(400);
+        //hboxInsereAluno.setPrefHeight(100);
+        hboxInsereAluno.setPadding(new Insets(10,0,10,0));
+        VBox centro = new VBox(tableView, hboxInsereAluno, hboxInsereCSV);
+        //centro.setPrefHeight(500);
+        centro.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null)));
+        hboxInsereAluno.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+        container.setTop(titulo);
+        container.setCenter(centro);
+        container.setBottom(statsFooter);
+        container.autosize();
         setCenter(container);
 
     }
