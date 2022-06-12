@@ -105,7 +105,7 @@ public class GestaoAlunosUI extends BorderPane {
         container.setBottom(statsFooter);
         container.autosize();
         setCenter(container);
-
+        this.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
     }
 
     private void formatLabelFooter(Label label){

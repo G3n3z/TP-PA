@@ -59,7 +59,7 @@ public class AtribuicaoPropostasUI extends BorderPane {
         center = new VBox();
         ScrollPane scrollPane = new ScrollPane(center);
         scrollPane.setFitToWidth(true);
-        scrollPane.setMinHeight(645);
+        //scrollPane.setMinHeight(645);
 
         numAlunosComPropAtribuida = new Label();
         numAlunosSemPropAtribuida = new Label();

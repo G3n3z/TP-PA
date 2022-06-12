@@ -83,6 +83,7 @@ public class AppBar extends MenuBar {
 
         mnRedo.setOnAction(actionEvent -> model.redo());
         mnUndo.setOnAction(actionEvent -> model.undo());
+
         stage.setOnCloseRequest(windowEvent -> {
             AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Pretende Guardar o estado da Aplicação?", "");
             if(model.getState() != EnumState.LOAD_STATE) {

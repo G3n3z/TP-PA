@@ -70,8 +70,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
         camposCentro = new VBox();
         ScrollPane scrollPane = new ScrollPane(camposCentro);
         scrollPane.setFitToWidth(true);
-        scrollPane.setMinHeight(645);
-
+        //scrollPane.setMinHeight(645);
+        camposCentro.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         numCandidaturas = new Label();
         numAutoProp = new Label();
         numAlunoComCand = new Label();
@@ -86,7 +86,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
         statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
 
         VBox container = new VBox(titulo,scrollPane,statsFooter);
-
+        container.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+        //container.setMaxHeight(500);container.setPrefHeight(400);
         setCenter(container);
     }
 
@@ -152,7 +153,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         } );
         tableView.addCols(colEdit);
         tableView.addCols(colRemove);
-
+        //tableView.setMaxHeight(300);
     }
 
     private void preparaObtencoes() {
@@ -386,29 +387,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         obtencaoAlunoFaseCandidatura.updateTabelas();
 
     }
-//    private void closedFase() {
-//        if(model == null){
-//            return;
-//        }
-//        if(model.getState() != EnumState.OPCOES_CANDIDATURA){
-//            return;
-//        }
-//        if (model.isClosed()){
-//            fechaFase();
-//        }
-//    }
-//
-//    private void fechaFase() {
-//        if(isClosed){
-//            return;
-//        }
-//        isClosed = true;
-//        menu.getChildren().remove(btnInserirCandidaturas);
-//        menu.getChildren().remove(btnFechar);
-//        tableView.removeCols("Editar", "Remover");
-//        nodesVisibles.clear();
-//        nodesVisibles.add(tableView);
-//    }
+
     private void updateClose() {
         if(model.getCloseState(EnumState.OPCOES_CANDIDATURA)){
             menu.getChildren().remove(btnInserirCandidaturas);

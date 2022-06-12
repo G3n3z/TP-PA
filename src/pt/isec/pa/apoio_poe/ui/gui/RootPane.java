@@ -14,6 +14,7 @@ public class RootPane extends BorderPane {
     public RootPane(ModelManager model, Stage stage) {
         this.model = model;
         this.stage = stage;
+        this.setMaxSize(1600,700);
         createViews();
     }
 
@@ -35,13 +36,15 @@ public class RootPane extends BorderPane {
         ConsultaUI consultaUI = new ConsultaUI(model);
         SairUI sairUI = new SairUI(model);
         //c.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
-        //stack.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
+        stack.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, null, null)));
         stack.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
         stack.getChildren().add(c);
         stack.getChildren().addAll(load, gestaoAlunosUI, gestaoDocentesUI, gestaoPropostasUI, opcoesCandidaturaUI, atribuicaoPropostasUI,atribuicaoManualPropostasUI,
                 conflitoAtribuicaoCandidaturaUI,atribuicaoOrientadoresUI, gestaoOrientadoresUI, consultaUI,sairUI);
-        setCenter(stack);
 
+        setCenter(stack);
+//        stack.setMaxSize(1600,500);
+//        stack.setPrefHeight(500);
 
     }
 
