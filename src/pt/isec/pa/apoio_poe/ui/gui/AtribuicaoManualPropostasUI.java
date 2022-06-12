@@ -17,6 +17,7 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
+import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
 public class AtribuicaoManualPropostasUI extends BorderPane {
     ModelManager model;
@@ -70,9 +71,11 @@ public class AtribuicaoManualPropostasUI extends BorderPane {
                 Long nAluno = alunoButtonCellDataFeatures.getValue().getNumeroAluno();
                 System.out.println(model.removeAtribuicao(id, nAluno));
             });
-
+            remover.setId("button_delete");
+            CSSManager.applyCSS(remover,"buttonDelete.css");
             return new ReadOnlyObjectWrapper<>(remover);
         });
+        colRemover.setPrefWidth(120);
         tableAlunoProposta.addColButton(colRemover);
         Label ltitle = new Label("Propostas Atribuidas");
         ltitle.setFont(new Font(18));

@@ -136,7 +136,10 @@ public class AtribuicaoPropostasUI extends BorderPane {
     }
 
     private void registerHandlers() {
-        model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> update());
+        model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
+            update();
+            atualizaStats();
+        });
         model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> updateClose());
         model.addPropertyChangeListener(ModelManager.PROP_PROPOSTAS , evt -> {
             atualizaTabela();
