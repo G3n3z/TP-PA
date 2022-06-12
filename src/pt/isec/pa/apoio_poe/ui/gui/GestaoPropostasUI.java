@@ -431,6 +431,8 @@ public class GestaoPropostasUI extends BorderPane {
     private void clearFieldsInput() {
         changeEditables();
         tFId.setText("");
+        tFId.setDisable(false);
+        choiceTipo.setDisable(false);
         choiceTipo.setValue("");
         ckDA.setSelected(false);
         ckSI.setSelected(false);
