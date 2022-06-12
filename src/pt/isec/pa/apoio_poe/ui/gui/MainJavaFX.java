@@ -20,35 +20,35 @@ public class MainJavaFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ModelManager model = new ModelManager();
-        RootPane root = new RootPane(model);
+        RootPane root = new RootPane(model, stage);
         //Scene cena = new Scene(root, stage.getMaxWidth(), stage.getMaxHeight());
         Scene cena = new Scene(root, 1600,800);
         System.out.println(cena.getHeight());
         stage.setScene(cena);
         stage.setTitle("Gestao de Projetos e Estágios");
-        stage.setOnCloseRequest(windowEvent -> {
-            AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Pretende Guardar o estado da Aplicação?", "");
-            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
-                if (result.getText().equalsIgnoreCase("YES")){
-                    try {
-                        model.save();
-                    } catch (IOException e) {
-                        AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Nao foi possivel guardar?", "");
-                        AlertSingleton.getInstanceConfirmation().showAndWait();
-                    }
-                }
-            });
-
-            AlertSingleton.getInstanceConfirmation().setAlertText("Sair", "Pretende Sair da Aplicação?", "");
-            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
-                if (result.getText().equalsIgnoreCase("YES")){
-                    Platform.exit();
-                }
-                else{
-                    windowEvent.consume();
-                }
-            });
-        });
+//        stage.setOnCloseRequest(windowEvent -> {
+//            AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Pretende Guardar o estado da Aplicação?", "");
+//            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
+//                if (result.getText().equalsIgnoreCase("YES")){
+//                    try {
+//                        model.save();
+//                    } catch (IOException e) {
+//                        AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Nao foi possivel guardar?", "");
+//                        AlertSingleton.getInstanceConfirmation().showAndWait();
+//                    }
+//                }
+//            });
+//
+//            AlertSingleton.getInstanceConfirmation().setAlertText("Sair", "Pretende Sair da Aplicação?", "");
+//            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
+//                if (result.getText().equalsIgnoreCase("YES")){
+//                    Platform.exit();
+//                }
+//                else{
+//                    windowEvent.consume();
+//                }
+//            });
+//        });
 
         stage.show();
 //        Stage stage2 = new Stage();

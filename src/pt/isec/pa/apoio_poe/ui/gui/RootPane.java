@@ -4,19 +4,21 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.ui.gui.utils.AppBar;
 
 public class RootPane extends BorderPane {
     ModelManager model;
-
-    public RootPane(ModelManager model) {
+    Stage stage;
+    public RootPane(ModelManager model, Stage stage) {
         this.model = model;
+        this.stage = stage;
         createViews();
     }
 
     private void createViews() {
-        AppBar menubar = new AppBar(model);
+        AppBar menubar = new AppBar(model, stage);
         setTop(menubar);
         StackPane stack = new StackPane();
         ConfigOptionsUI c = new ConfigOptionsUI(model);

@@ -5,6 +5,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 
@@ -18,9 +19,11 @@ public class AppBar extends MenuBar {
     Menu file, edit;
     MenuItem mnLoad, mnSave, mnUndo, mnRedo, mnExit;
     FileChooser fileChooser;
-    public AppBar(ModelManager model) {
+    Stage stage;
+    public AppBar(ModelManager model, Stage stage) {
         this.model = model;
         fileChooser = new FileChooser();
+        this.stage = stage;
         createViews();
         registerHandlers();
         update();
@@ -75,14 +78,35 @@ public class AppBar extends MenuBar {
             } catch (Exception e) {
                 System.out.println("Nao foi possivel guardar");
             }
-//            this.getScene().getWindow().setOnCloseRequest(windowEvent -> {
-//
-//            });
+
         });
 
         mnRedo.setOnAction(actionEvent -> model.redo());
         mnUndo.setOnAction(actionEvent -> model.undo());
-
+        stage.setOnCloseRequest(windowEvent -> {
+            AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Pretende Guardar o estado da Aplicação?", "");
+            if(model.getState() != EnumState.LOAD_STATE) {
+                AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
+                    if (result.getText().equalsIgnoreCase("YES")) {
+                        try {
+                            model.save();
+                        } catch (IOException e) {
+                            AlertSingleton.getInstanceConfirmation().setAlertText("Guardar", "Nao foi possivel guardar?", "");
+                            AlertSingleton.getInstanceConfirmation().showAndWait();
+                        }
+                    }
+                });
+            }
+            AlertSingleton.getInstanceConfirmation().setAlertText("Sair", "Pretende Sair da Aplicação?", "");
+            AlertSingleton.getInstanceConfirmation().showAndWait().ifPresent(result -> {
+                if (result.getText().equalsIgnoreCase("YES")){
+                    Platform.exit();
+                }
+                else{
+                    windowEvent.consume();
+                }
+            });
+        });
     }
 
     private void update() {
