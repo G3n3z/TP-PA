@@ -90,9 +90,10 @@ public class AtribuicaoPropostasUI extends BorderPane {
         if(model.getState() != EnumState.ATRIBUICAO_PROPOSTAS){
             return;
         }
-        //nACPA = model.getAlunosComPropostaConfirmada().size();
+
+        nACPA = model.getAlunosComPropostaConfirmada().size();
         numAlunosComPropAtribuida.setText("Alunos C/ Propostas Atribuída: "+nACPA);
-        //nASPA = model.getAlunosSemPropostaConfirmada().size();
+        nASPA = model.getAlunosSemPropostaConfirmada().size();
         numAlunosSemPropAtribuida.setText("Alunos S/ Propostas Atribuída: "+nASPA);
         nPNA = model.getPropostasWithFilters(3).size();
         numPropNaoAtribuidas.setText("Propostas não Atribuídas: "+nPNA);
