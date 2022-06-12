@@ -16,6 +16,7 @@ import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
+import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -317,6 +318,8 @@ public class GestaoDocentesUI extends BorderPane {
                 vboxInsereDocente.setVisible(true);
                 //TODO editar docente
             });
+            editar.setId("button_editar");
+            CSSManager.applyCSS(editar,"button_editar.css");
             return new ReadOnlyObjectWrapper<>(editar);
         });
         colEditar.setPrefWidth(120);
@@ -327,7 +330,8 @@ public class GestaoDocentesUI extends BorderPane {
                 model.removeDocente(docenteButtonCellDataFeatures.getValue().getEmail());
                 clearFields();
             });
-
+            remover.setId("button_delete");
+            CSSManager.applyCSS(remover,"buttonDelete.css");
             return new ReadOnlyObjectWrapper<>(remover);
         });
         colButton.setPrefWidth(120);

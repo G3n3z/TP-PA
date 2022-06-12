@@ -19,6 +19,7 @@ import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
+import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 import pt.isec.pa.apoio_poe.utils.Constantes;
 
 import java.io.File;
@@ -262,17 +263,6 @@ public class GestaoAlunosUI extends BorderPane {
             model.recuarFase();
         });
 
-//        btnInsereCSV.setOnAction(actionEvent -> {
-////            nodeShow.forEach(n -> n.setVisible(false));
-////            hboxInsereCSV.setVisible(true);
-//            File f = fileChooser.showOpenDialog(null);
-//            try {
-//                model.importAlunos(f.getAbsolutePath());
-//            } catch (CollectionBaseException e) {
-//                System.out.println(e.getMessageOfExceptions());
-//            }
-//        });
-
         btnInsereManual.setOnAction(actionEvent -> {
             nodeShow.forEach(n -> n.setVisible(false));
             hboxInsereAluno.setVisible(true);
@@ -416,6 +406,8 @@ public class GestaoAlunosUI extends BorderPane {
                 hBtn.getChildren().clear();
                 hBtn.getChildren().add(hBtnEdit);
             });
+            editar.setId("button_editar");
+            CSSManager.applyCSS(editar,"button_editar.css");
             return new ReadOnlyObjectWrapper<>(editar);
         });
         colEditar.setPrefWidth(120);
@@ -425,6 +417,8 @@ public class GestaoAlunosUI extends BorderPane {
             remover.setOnAction(actionEvent -> {
                 model.removeAluno(alunoButtonCellDataFeatures.getValue().getNumeroAluno());
             });
+            remover.setId("button_delete");
+            CSSManager.applyCSS(remover,"buttonDelete.css");
             return new ReadOnlyObjectWrapper<>(remover);
         });
         colButton.setPrefWidth(120);

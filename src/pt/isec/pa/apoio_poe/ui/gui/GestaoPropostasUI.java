@@ -14,6 +14,7 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
+import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -195,6 +196,8 @@ public class GestaoPropostasUI extends BorderPane {
                 System.out.println(propostaButtonCellDataFeatures.getValue());
                 updateEditFields(propostaButtonCellDataFeatures.getValue());
             });
+            editar.setId("button_editar");
+            CSSManager.applyCSS(editar,"button_editar.css");
             return new ReadOnlyObjectWrapper<>(editar);
         });
         colEditar.setPrefWidth(120);
@@ -205,10 +208,12 @@ public class GestaoPropostasUI extends BorderPane {
                 System.out.println(propostaButtonCellDataFeatures.getValue());
                 model.removeProposta(propostaButtonCellDataFeatures.getValue().getId());
             });
+            remover.setId("button_delete");
+            CSSManager.applyCSS(remover,"buttonDelete.css");
             return new ReadOnlyObjectWrapper<>(remover);
         });
         colButton.setPrefWidth(120);
-
+        //tableView.setPrefWidth("Entidade");
         tableView.addColButton(colEditar);
         tableView.addColButton(colButton);
     }

@@ -72,7 +72,7 @@ public class TablePropostas extends TableView<Proposta> {
 
         setFixedCellSize(50);
         getStylesheets().add("css/table1.css");
-        colRamo.setPrefWidth(130);
+        colRamo.setPrefWidth(120);
         coltitulo.setPrefWidth(250); colDocente.setPrefWidth(150); colEntidade.setPrefWidth(200); colAluno.setPrefWidth(100);
         getColumns().addAll(colId,colTipo,colRamo, coltitulo,colDocente, colEntidade,colAluno);
         setPrefHeight(400);

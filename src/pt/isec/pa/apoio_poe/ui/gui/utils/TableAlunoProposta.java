@@ -71,6 +71,11 @@ public class TableAlunoProposta extends TableView<Aluno> {
         getColumns().addAll(colnumEstudante,colNome,colIdProposta, colTipo,colRamo,colTitulo);
         setFixedCellSize(50);
         setPrefHeight(400);
+        colnumEstudante.setPrefWidth(150);
+        colNome.setPrefWidth(150);
+        colRamo.setPrefWidth(150);
+        colTitulo.setPrefWidth(250);
+
     }
 
     private void registerHandlers() {

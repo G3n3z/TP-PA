@@ -18,6 +18,7 @@ import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
 import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
+import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
 public class GestaoOrientadoresUI extends BorderPane {
     ModelManager model;
@@ -66,6 +67,7 @@ public class GestaoOrientadoresUI extends BorderPane {
             }
             return new ReadOnlyObjectWrapper<>(orientador.getEmail());
         });
+        colEmailDocente.setPrefWidth(210);
         TableColumn<Proposta, String> colNome = new TableColumn<>("Nome Orientador");
         colNome.setCellValueFactory(propostaStringCellDataFeatures -> {
             Docente orientador = propostaStringCellDataFeatures.getValue().getOrientador();
@@ -74,6 +76,7 @@ public class GestaoOrientadoresUI extends BorderPane {
             }
             return new ReadOnlyObjectWrapper<>(orientador.getNome());
         });
+        colNome.setPrefWidth(200);
         TableColumn<Proposta, Button> colEditar = new TableColumn<>("Editar");
         colEditar.setCellValueFactory(propostaStringCellDataFeatures -> {
             Button editar = new Button("Editar");
@@ -85,8 +88,11 @@ public class GestaoOrientadoresUI extends BorderPane {
                     vBoxInsercao.getChildren().add(btnAtualizar);
                 }
             });
+            editar.setId("button_editar");
+            CSSManager.applyCSS(editar,"button_editar.css");
             return new ReadOnlyObjectWrapper<>(editar);
         });
+        colEditar.setPrefWidth(140);
         TableColumn<Proposta, Button> colRemover = new TableColumn<>("Remover");
         colRemover.setCellValueFactory(propostaStringCellDataFeatures -> {
            Button remover = new Button("Remover");
@@ -95,8 +101,11 @@ public class GestaoOrientadoresUI extends BorderPane {
                clearFields();
                modoInsercao();
            });
+            remover.setId("button_delete");
+            CSSManager.applyCSS(remover,"buttonDelete.css");
             return new ReadOnlyObjectWrapper<>(remover);
         });
+        colRemover.setPrefWidth(140);
         tablePropostas.addCols(colEmailDocente);
         tablePropostas.addCols(colNome);
         tablePropostas.addCols(colEditar);

@@ -2,6 +2,7 @@ package pt.isec.pa.apoio_poe.ui.gui.utils;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -30,6 +31,7 @@ public class MenuVertical extends VBox {
 
     private void createViews() {
         getChildren().addAll(botoes);
+
         this.setWidth(200);
         for (ButtonMenu b : botoes){
             b.setPrefWidth(this.getWidth());

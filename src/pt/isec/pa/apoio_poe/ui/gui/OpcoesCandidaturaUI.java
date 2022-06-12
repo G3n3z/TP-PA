@@ -16,6 +16,7 @@ import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
+import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -125,7 +126,10 @@ public class OpcoesCandidaturaUI extends BorderPane {
                     nodesVisibles.add(hBoxInsereCandidaturas);
                 }
                 update();
+
             });
+            edit.setId("button_editar");
+            CSSManager.applyCSS(edit,"button_editar.css");
             return new ReadOnlyObjectWrapper<>(edit);
         } );
         colRemove= new TableColumn<>("Remover");
@@ -134,10 +138,14 @@ public class OpcoesCandidaturaUI extends BorderPane {
             remover.setOnAction(actionEvent -> {
                 model.removeCandidatura(candidaturaLongCellDataFeatures);
             });
+            remover.setId("button_delete");
+            CSSManager.applyCSS(remover,"buttonDelete.css");
             return new ReadOnlyObjectWrapper<>(remover);
         } );
         tableView.addCols(colEdit);
         tableView.addCols(colRemove);
+        colEdit.setPrefWidth(150);
+        colRemove.setPrefWidth(150);
         //tableView.setMaxHeight(300);
     }
 
