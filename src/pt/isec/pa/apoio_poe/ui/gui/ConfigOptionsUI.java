@@ -3,6 +3,8 @@ package pt.isec.pa.apoio_poe.ui.gui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
@@ -12,6 +14,7 @@ import pt.isec.pa.apoio_poe.ui.gui.utils.AlertSingleton;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
 import pt.isec.pa.apoio_poe.ui.gui.utils.MessageTranslate;
+import pt.isec.pa.apoio_poe.ui.resource.ImageManager;
 
 public class ConfigOptionsUI extends BorderPane {
 
@@ -19,6 +22,7 @@ public class ConfigOptionsUI extends BorderPane {
     VBox menu;
     ButtonMenu bGAlunos, bGDocentes,bGPropostas, bFechar, bAvancar;
     Label title;
+    ImageView imageView;
     public ConfigOptionsUI(ModelManager model) {
         this.model = model;
         createViews();
@@ -45,8 +49,18 @@ public class ConfigOptionsUI extends BorderPane {
 
         //menu.setPrefWidth(300);
         //menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+        Image image = ImageManager.getImage("logo_isec.png");
+        BorderPane center = new BorderPane();
+        center.setTop(titulo);
+        if(image != null){
+            imageView = new ImageView(image);
+            center.setCenter(imageView);
+        }
+
+
+
         setLeft(menu);
-        setCenter(titulo);
+        setCenter(center);
     }
     private void registerHandler() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {

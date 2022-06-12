@@ -97,6 +97,7 @@ public class GestaoPropostasUI extends BorderPane {
     }
 
     public void atualizaStats(){
+
         stats = model.getStatsPropostas();
         nPropostas = stats.get(0);
         nT1 = stats.get(1);
@@ -280,6 +281,7 @@ public class GestaoPropostasUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
+            atualizaStats();
         });
         model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
             updateClose();

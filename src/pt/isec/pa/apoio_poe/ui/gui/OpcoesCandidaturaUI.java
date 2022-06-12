@@ -38,7 +38,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
     Label propostasInseridas, title, numCandidaturas, numAutoProp, numAlunoComCand, numAlunoSemCand;
     VBox vBoxCamposInsercaoPropostas, vBoxInsereCandidaturas, camposCentro;
     Button btnInsereCandManual, btnInsereCandCSV, btnEditCandidatura,btnVoltarEdit;
-    Consumer<Candidatura> consumerEdit;
+
     ObtencaoAlunoFaseCandidatura obtencaoAlunoFaseCandidatura;
     ObtencaoPropostaFiltrosFaseCandidatura obtencaoPropostaFiltrosFaseCandidatura;
     Integer nCandidaturas, nAP, nACC, nASC;
@@ -85,7 +85,10 @@ public class OpcoesCandidaturaUI extends BorderPane {
         statsFooter.setPrefHeight(50);
         statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
 
-        VBox container = new VBox(titulo,scrollPane,statsFooter);
+        BorderPane container = new BorderPane();
+        container.setTop(titulo);
+        container.setCenter(scrollPane);
+        container.setBottom(statsFooter);
         container.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         //container.setMaxHeight(500);container.setPrefHeight(400);
         setCenter(container);
@@ -96,24 +99,6 @@ public class OpcoesCandidaturaUI extends BorderPane {
         label.setTextFill(Color.WHITE);
         label.setStyle("-fx-font-weight: bold");
 
-    }
-
-    public void atualizaStats(){
-        if(model.getState() == EnumState.OPCOES_CANDIDATURA){
-            nCandidaturas = model.getCandidaturas().size();
-            numCandidaturas.setText("Candidaturas: " + nCandidaturas);
-            nAP = model.getAlunosComAutoProposta().size();
-            numAutoProp.setText("Alunos C/ Autoproposta: " + nAP);
-            nACC = model.getAlunosComCandidatura().size();
-            numAlunoComCand.setText("Alunos C/ Candidatura: " + nACC);
-            nASC = model.getAlunosSemCandidatura().size();
-            numAlunoSemCand.setText("Alunos S/ Candidatura: " + nASC);
-
-            formatLabelFooter(numCandidaturas);
-            formatLabelFooter(numAutoProp);
-            formatLabelFooter(numAlunoComCand);
-            formatLabelFooter(numAlunoSemCand);
-        }
     }
 
     private void preparaTabela() {
@@ -213,6 +198,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
+            atualizaStats();
         });
         model.addPropertyChangeListener(ModelManager.PROP_CANDIDATURAS, evt -> {
             atualizaTabela();
@@ -220,6 +206,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         });
         model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
             updateClose();
+
         });
         btnAvancar.setOnAction(actionEvent -> {
             model.avancarFase();
@@ -410,4 +397,24 @@ public class OpcoesCandidaturaUI extends BorderPane {
         }
 
     }
+
+
+    public void atualizaStats(){
+        if(model.getState() == EnumState.OPCOES_CANDIDATURA){
+            nCandidaturas = model.getCandidaturas().size();
+            numCandidaturas.setText("Candidaturas: " + nCandidaturas);
+            nAP = model.getAlunosComAutoProposta().size();
+            numAutoProp.setText("Alunos C/ Autoproposta: " + nAP);
+            nACC = model.getAlunosComCandidatura().size();
+            numAlunoComCand.setText("Alunos C/ Candidatura: " + nACC);
+            nASC = model.getAlunosSemCandidatura().size();
+            numAlunoSemCand.setText("Alunos S/ Candidatura: " + nASC);
+
+            formatLabelFooter(numCandidaturas);
+            formatLabelFooter(numAutoProp);
+            formatLabelFooter(numAlunoComCand);
+            formatLabelFooter(numAlunoSemCand);
+        }
+    }
+
 }

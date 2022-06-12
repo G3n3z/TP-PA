@@ -204,6 +204,7 @@ public class GestaoDocentesUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
+            atualizaStats();
         });
         model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
             updateClose();
@@ -213,9 +214,6 @@ public class GestaoDocentesUI extends BorderPane {
             updateTable();
         });
 
-        model.addPropertyChangeListener(ModelManager.PROP_DOCENTES, evt -> {
-
-        });
 
         btnRecuar.setOnAction(actionEvent -> {
             nodeShow.forEach(n -> n.setVisible(false));
@@ -223,8 +221,7 @@ public class GestaoDocentesUI extends BorderPane {
         });
 
         btnInsereCSV.setOnAction(actionEvent -> {
-//            nodeShow.forEach(n -> n.setVisible(false));
-//            hboxInsereCSV.setVisible(true);
+
             File f = fileChooser.showOpenDialog(null);
             try {
                 model.importDocentes(f.getAbsolutePath());
@@ -264,7 +261,7 @@ public class GestaoDocentesUI extends BorderPane {
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
             clearFields();
-            atualizaStats();
+
         });
 
         btnExeEditarDocente.setOnAction(actionEvent -> {
@@ -328,7 +325,9 @@ public class GestaoDocentesUI extends BorderPane {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
                 model.removeDocente(docenteButtonCellDataFeatures.getValue().getEmail());
+                clearFields();
             });
+
             return new ReadOnlyObjectWrapper<>(remover);
         });
         colButton.setPrefWidth(120);
