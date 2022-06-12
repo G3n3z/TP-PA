@@ -49,7 +49,11 @@ public class GestaoOrientadoresUI extends BorderPane {
         Label lDocente = new Label("Email do Docente Orientador");
         tfEmailOrientador = new TextField();
         btnInserir = new Button("Inserir Atribuição");
+        btnInserir.setId("button_submit");
+        CSSManager.applyCSS(btnInserir, "button_SUBMIT.css");
         btnAtualizar = new Button("Atualizar Atribuição");
+        btnAtualizar.setId("button_submit");
+        CSSManager.applyCSS(btnAtualizar, "button_SUBMIT.css");
         vBoxInsercao = new VBox(lProposta,tfIdProposta,lDocente,tfEmailOrientador, btnInserir);
         VBox.setMargin(lProposta, new Insets(50,0,20,0));
         VBox.setMargin(lProposta, new Insets(40,0,20,0));

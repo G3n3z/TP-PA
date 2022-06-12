@@ -178,7 +178,14 @@ public class GestaoPropostasUI extends BorderPane {
         boxLeft.setSpacing(30);
         boxLeft.setAlignment(Pos.CENTER);
         VBox.setMargin(hBox1, new Insets(40,0,0,0));
-
+        btnInsereProposta.setId("button_submit");
+        CSSManager.applyCSS(btnInsereProposta, "button_SUBMIT.css");
+        btnInsereCSV.setId("button_submit");
+        CSSManager.applyCSS(btnInsereCSV, "button_SUBMIT.css");
+        btnEditProposta.setId("button_submit");
+        CSSManager.applyCSS(btnEditProposta, "button_SUBMIT.css");
+        btnCancelEdit.setId("button_submit");
+        CSSManager.applyCSS(btnCancelEdit, "button_SUBMIT.css");
 //        boxLeft = new VBox(hBoxID, vRamos,vTitulo);
 //        boxRight = new VBox(vDocente, vEntidade, vAluno);
 //        boxLeft.setSpacing(40);

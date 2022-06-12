@@ -167,13 +167,19 @@ public class OpcoesCandidaturaUI extends BorderPane {
         btnInsereCandCSV = new Button("Importar CSV");
         btnInsereCandManual.setPrefWidth(150);
         btnInsereCandCSV.setPrefWidth(150);
-
+        btnInsereCandManual.setId("button_submit");
+        CSSManager.applyCSS(btnInsereCandManual, "button_SUBMIT.css");
+        btnInsereCandCSV.setId("button_submit");
+        CSSManager.applyCSS(btnInsereCandCSV, "button_SUBMIT.css");
         /*Butoes edicao*/
         btnEditCandidatura = new Button("Atualizar");
         btnVoltarEdit = new Button("Voltar");
         btnEditCandidatura.setPrefWidth(150);
         btnVoltarEdit.setPrefWidth(150);
-
+        btnEditCandidatura.setId("button_submit");
+        CSSManager.applyCSS(btnEditCandidatura, "button_SUBMIT.css");
+        btnVoltarEdit.setId("button_submit");
+        CSSManager.applyCSS(btnVoltarEdit, "button_SUBMIT.css");
 
         hBoxButtonInsereCand = new HBox(btnInsereCandManual, btnInsereCandCSV);
         hBoxButtonInsereCand.setAlignment(Pos.CENTER);

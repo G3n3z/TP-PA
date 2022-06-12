@@ -157,8 +157,11 @@ public class GestaoDocentesUI extends BorderPane {
         tfNome.setPrefWidth(300);
 
         btnExeInsereDocente = new Button("Inserir Docente");
+        btnExeInsereDocente.setId("button_submit");
+        CSSManager.applyCSS(btnExeInsereDocente, "button_SUBMIT.css");
         btnInsereCSV= new Button("Inserir Por CSV");
-
+        btnInsereCSV.setId("button_submit");
+        CSSManager.applyCSS(btnInsereCSV, "button_SUBMIT.css");
         HBox boxEmail = new HBox();
         boxEmail.getChildren().addAll(email, tfEmail);
         boxEmail.setSpacing(30);
@@ -177,7 +180,10 @@ public class GestaoDocentesUI extends BorderPane {
 
         btnExeEditarDocente = new Button("Atualizar");
         btnCancelEdit = new Button("Cancelar");
-
+        btnExeEditarDocente.setId("button_submit");
+        CSSManager.applyCSS(btnExeEditarDocente, "button_SUBMIT.css");
+        btnCancelEdit.setId("button_submit");
+        CSSManager.applyCSS(btnCancelEdit, "button_SUBMIT.css");
         vboxInsereDocente = new HBox();
         vboxInsereDocente.getChildren().addAll(boxInputText, hBtn);
         vboxInsereDocente.setSpacing(100);

@@ -150,6 +150,8 @@ public class GestaoAlunosUI extends BorderPane {
         fileChooser = new FileChooser();
         fileChooser.setTitle("Ficheiro CSV");
         btnExeInsereCSV = new Button("Abrir Ficheiro");
+        btnExeInsereCSV.setId("button_submit");
+        CSSManager.applyCSS(btnExeInsereCSV, "button_SUBMIT.css");
         hboxInsereCSV.getChildren().addAll(btnExeInsereCSV);
 
     }
@@ -190,7 +192,10 @@ public class GestaoAlunosUI extends BorderPane {
 
         btnExeInsereAluno = new Button("Inserir Aluno");
         btnInsereCSV= new Button("Inserir Por CSV");
-
+        btnExeInsereAluno.setId("button_submit");
+        CSSManager.applyCSS(btnExeInsereAluno, "button_SUBMIT.css");
+        btnInsereCSV.setId("button_submit");
+        CSSManager.applyCSS(btnInsereCSV, "button_SUBMIT.css");
         HBox boxNum = new HBox();
         boxNum.getChildren().addAll(nAluno, txNumero);
         boxNum.setSpacing(30);

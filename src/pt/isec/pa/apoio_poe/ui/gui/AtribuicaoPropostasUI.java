@@ -238,9 +238,6 @@ public class AtribuicaoPropostasUI extends BorderPane {
     }
 
     private void updateClose() {
-        if(model.getState() == EnumState.ATRIBUICAO_PROPOSTAS){
-            System.out.println("");
-        }
         if(model.getCloseState(EnumState.ATRIBUICAO_PROPOSTAS)){
             menu.getChildren().removeAll(btnAtribuirAutomatico, btnGestao, btnFechar, btnAtribuirAutomaticoAuto);
             tableAlunoProposta.removeCols("Editar", "Remover");
