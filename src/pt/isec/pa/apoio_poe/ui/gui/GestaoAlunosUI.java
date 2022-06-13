@@ -62,7 +62,7 @@ public class GestaoAlunosUI extends BorderPane {
         title = new Label("Gestão de Alunos");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
-        titulo.setPadding(new Insets(20,0,20,0));
+        titulo.setPadding(new Insets(25,0,25,0));
         titulo.getChildren().add(title);
         titulo.setAlignment(Pos.CENTER);
         BorderPane container = new BorderPane();
@@ -94,19 +94,16 @@ public class GestaoAlunosUI extends BorderPane {
         //statsFooter.setPrefHeight(100);
         statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
 
-        //tableView.setPrefHeight(400);
+        //tableView.setMinHeight(400);
         //hboxInsereAluno.setPrefHeight(100);
         hboxInsereAluno.setPadding(new Insets(10,0,10,0));
         VBox centro = new VBox(tableView, hboxInsereAluno, hboxInsereCSV);
-        //centro.setPrefHeight(500);
-        centro.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null)));
-        hboxInsereAluno.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         container.setTop(titulo);
         container.setCenter(centro);
         container.setBottom(statsFooter);
         container.autosize();
         setCenter(container);
-        this.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+
     }
 
     private void formatLabelFooter(Label label){
@@ -254,6 +251,7 @@ public class GestaoAlunosUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
+            atualizaStats();
         });
         model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
             updateClose();

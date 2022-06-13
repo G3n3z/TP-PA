@@ -42,8 +42,8 @@ public class ObtencaoPropostaFiltrosFaseAtribuicao extends VBox {
         HBox hBoxBtnVisualizar = new HBox(btnVisualizarComFiltros);
         hBoxBtnVisualizar.setAlignment(Pos.CENTER);
         getChildren().addAll(lP, tableView, box1Filtros, box2Filtros, hBoxBtnVisualizar);
-        VBox.setMargin(lP, new Insets(30,0,20,20));
-        VBox.setMargin(tableView, new Insets(0,0,50,0));
+        VBox.setMargin(lP, new Insets(20,0,20,20));
+        VBox.setMargin(tableView, new Insets(0,0,20,0));
         VBox.setMargin(box1Filtros, new Insets(0,0,20,0));
         box1Filtros.setSpacing(40);
         VBox.setMargin(box2Filtros, new Insets(0,0,20,0));

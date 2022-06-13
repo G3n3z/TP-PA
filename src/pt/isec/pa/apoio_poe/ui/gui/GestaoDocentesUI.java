@@ -49,14 +49,14 @@ public class GestaoDocentesUI extends BorderPane {
 
     private void createViews() {
         createMenu();
-        title = new Label("Gestao de Docentes");
+        title = new Label("Gestão de Docentes");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
         HBox.setMargin(title, new Insets(25,0,25,0));
         titulo.setPrefHeight(50);
         titulo.getChildren().add(title);
         titulo.setAlignment(Pos.CENTER);
-        VBox container = new VBox();
+        BorderPane container = new BorderPane();
         preparaTable();
         preparaInsereDocente();
         fileChooser = new FileChooser();
@@ -82,7 +82,11 @@ public class GestaoDocentesUI extends BorderPane {
         vboxInsereDocente.setPadding(new Insets(25,0,25,0));
 
         nodeShow.forEach(n -> n.setVisible(false));
-        container.getChildren().addAll(titulo, tableView,vboxInsereDocente, statsFooter);
+        VBox centro = new VBox(tableView,vboxInsereDocente);
+
+        container.setTop(titulo);
+        container.setCenter(centro);
+        container.setBottom(statsFooter);
 
         setCenter(container);
 

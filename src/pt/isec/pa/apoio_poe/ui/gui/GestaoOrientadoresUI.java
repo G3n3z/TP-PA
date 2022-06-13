@@ -119,12 +119,12 @@ public class GestaoOrientadoresUI extends BorderPane {
         tablePropostas.addCols(colEditar);
         tablePropostas.addCols(colRemover);
 
-        javafx.scene.control.Label lTable = new Label("Propostas com Orientador");
-        lTable.setFont(new Font(18));
+        Label lTable = new Label("Propostas com Orientador");
+        lTable.setFont(new Font(26));
         HBox titleTable = new HBox(lTable);
         titleTable.setAlignment(Pos.CENTER);
         vBoxTable = new VBox(titleTable,tablePropostas);
-        VBox.setMargin(titleTable, new Insets(50,0,30,0));
+        VBox.setMargin(titleTable, new Insets(25,0,25,0));
     }
 
     private void preparaMenu() {

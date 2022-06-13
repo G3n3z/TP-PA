@@ -14,7 +14,7 @@ public class RootPane extends BorderPane {
     public RootPane(ModelManager model, Stage stage) {
         this.model = model;
         this.stage = stage;
-        this.setMaxSize(1600,700);
+        //this.setMaxSize(1600,800);
         createViews();
     }
 

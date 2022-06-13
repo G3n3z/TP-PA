@@ -76,6 +76,7 @@ public class GestaoPropostasUI extends BorderPane {
         numDA = new Label();
         numSI = new Label();
         numRAS = new Label();
+
         statsFooter.getChildren().addAll(numPropostas, numT1, numT2, numT3, numDA, numSI, numRAS);
         statsFooter.setAlignment(Pos.BASELINE_CENTER);
         statsFooter.setSpacing(20.0);
@@ -85,9 +86,14 @@ public class GestaoPropostasUI extends BorderPane {
         tableView.setPrefHeight(400);
         hBoxInput.setPrefHeight(200);
         hBoxInput.setPadding(new Insets(-20,0,25,0));
+        BorderPane container = new BorderPane();
 
         center.getChildren().addAll(titulo,tableView, hBoxInput, statsFooter);
-        setCenter(center);
+        container.setTop(titulo);
+        container.setCenter(center);
+        container.setBottom(statsFooter);
+
+        setCenter(container);
 
     }
 
