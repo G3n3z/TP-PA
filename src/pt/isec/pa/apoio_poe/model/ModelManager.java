@@ -491,4 +491,8 @@ public class ModelManager {
     public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
         return context.getAlunosComPropostaConfirmadaEditavel();
     }
+
+    public void goLoad() {
+        context.goLoad();
+    }
 }

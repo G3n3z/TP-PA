@@ -46,6 +46,7 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
             //MessageCenter.getInstance().putMessage("Não existe o numero de aluno indicado");
             return ErrorCode.E3;
         }
+        
         return ErrorCode.E0;
     }
 

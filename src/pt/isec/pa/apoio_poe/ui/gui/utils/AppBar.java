@@ -56,6 +56,7 @@ public class AppBar extends MenuBar {
                         Platform.exit();
                     }
                 });
+
             }
         });
         mnSave.setOnAction(actionEvent -> {
@@ -66,17 +67,21 @@ public class AppBar extends MenuBar {
                     try {
                         model.save();
                     } catch (IOException e) {
-                        System.out.println("Nao foi possivel guardar");
+                        AlertSingleton.getInstanceWarning().setAlertText("Guardar", "Ocorreu um problema a guardar os dados", "");
+                        AlertSingleton.getInstanceWarning().showAndWait();
                     }
                 }
             });
 
         });
         mnLoad.setOnAction(actionEvent -> {
+            model.goLoad();
+
             try {
                 model.load();
             } catch (Exception e) {
-                System.out.println("Nao foi possivel guardar");
+                AlertSingleton.getInstanceWarning().setAlertText("Carregar Ficheiro", "Ocorreu um problema a carregar os dados", "");
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
 
         });
@@ -127,6 +132,10 @@ public class AppBar extends MenuBar {
         else{
             mnUndo.setDisable(true);
         }
-
+        if(model.existsFileBin()){
+            mnLoad.setDisable(false);
+        }else {
+            mnLoad.setDisable(true);
+        }
     }
 }

@@ -9,6 +9,8 @@ import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,14 +85,14 @@ abstract class StateAdapter implements IState{
     @Override
     public boolean load() throws IOException, ClassNotFoundException {
         //return false;
-        try{
-            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(data.getFicheiroBin()));
-            data = (Data) oos.readObject();
-            context.setData(data);
-            changeState(data.getLastState());
-        }catch (Exception e){
-            throw e;
-        }
+//        try{
+//            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(data.getFicheiroBin()));
+//            data = (Data) oos.readObject();
+//            context.setData(data);
+//            changeState(data.getLastState());
+//        }catch (Exception e){
+//            throw e;
+//        }
         return true;
     }
 
@@ -123,7 +125,7 @@ abstract class StateAdapter implements IState{
 
     @Override
     public boolean existFileBin() {
-        return false;
+        return Files.exists(Path.of(data.getFicheiroBin()));
     }
 
     @Override
@@ -431,5 +433,10 @@ abstract class StateAdapter implements IState{
     @Override
     public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
         return null;
+    }
+
+    @Override
+    public void goLoad() {
+        changeState(EnumState.LOAD_STATE);
     }
 }

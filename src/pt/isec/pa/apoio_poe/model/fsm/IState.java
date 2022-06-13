@@ -170,4 +170,6 @@ public interface IState {
     Map<String, Number> getDadosNumeroOrientacoes();
 
     List<Aluno> getAlunosComPropostaConfirmadaEditavel();
+
+    void goLoad();
 }

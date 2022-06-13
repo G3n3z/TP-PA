@@ -342,11 +342,6 @@ public class GestaoAlunosUI extends BorderPane {
             File f = fileChooser.showSaveDialog(null);
             ErrorCode e = model.exportCSV(f.getAbsolutePath());
             if(e != ErrorCode.E0){
-                PopUP.getInstance().clearPopUp();
-                PopUP.getInstance().setTextTitle("Problemas de Inserção Aluno");
-                PopUP.getInstance().addItens(new Label(MessageTranslate.translateErrorCode(e)));
-                PopUP.getInstance().createButtonOk();
-                PopUP.getInstance().showPopUp((Stage) this.getScene().getWindow());
                 AlertSingleton.getInstanceWarning().setAlertText("Problemas na Exportação do CSV","as", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }

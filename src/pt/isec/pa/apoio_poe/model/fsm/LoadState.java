@@ -35,13 +35,9 @@ public class LoadState extends StateAdapter{
         changeState(EnumState.CONFIG_OPTIONS);
     }
 
-    @Override
-    public boolean existFileBin() {
-        return Files.exists(Path.of(data.getFicheiroBin()));
-    }
 
     @Override
     public boolean save() throws IOException {
-        return true;
+        return false;
     }
 }

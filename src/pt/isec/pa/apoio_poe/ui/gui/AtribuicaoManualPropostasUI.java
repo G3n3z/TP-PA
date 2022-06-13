@@ -59,6 +59,7 @@ public class AtribuicaoManualPropostasUI extends BorderPane {
         this.boxInput = new HBox(boxInput);
         this.boxInput.setAlignment(Pos.CENTER);
 
+
     }
 
     private void preparaTabela() {

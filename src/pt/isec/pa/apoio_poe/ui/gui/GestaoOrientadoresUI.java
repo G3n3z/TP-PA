@@ -46,8 +46,10 @@ public class GestaoOrientadoresUI extends BorderPane {
     private void preparaInsercao() {
         Label lProposta = new Label("ID da Proposta");
         tfIdProposta = new TextField();
+        tfIdProposta.setMaxWidth(400);
         Label lDocente = new Label("Email do Docente Orientador");
         tfEmailOrientador = new TextField();
+        tfEmailOrientador.setMaxWidth(400);
         btnInserir = new Button("Inserir Atribuição");
         btnInserir.setId("button_submit");
         CSSManager.applyCSS(btnInserir, "button_SUBMIT.css");
@@ -55,9 +57,11 @@ public class GestaoOrientadoresUI extends BorderPane {
         btnAtualizar.setId("button_submit");
         CSSManager.applyCSS(btnAtualizar, "button_SUBMIT.css");
         vBoxInsercao = new VBox(lProposta,tfIdProposta,lDocente,tfEmailOrientador, btnInserir);
-        VBox.setMargin(lProposta, new Insets(50,0,20,0));
-        VBox.setMargin(lProposta, new Insets(40,0,20,0));
+        VBox.setMargin(lProposta, new Insets(30,0,20,0));
+        VBox.setMargin(lDocente, new Insets(20,0,20,0));
+        VBox.setMargin(tfEmailOrientador, new Insets(0,0,20,0));
         vBoxInsercao.setAlignment(Pos.CENTER);
+
     }
 
     private void preparaTabela() {

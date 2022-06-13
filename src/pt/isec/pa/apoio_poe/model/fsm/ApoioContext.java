@@ -431,5 +431,9 @@ public class ApoioContext {
     public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
         return state.getAlunosComPropostaConfirmadaEditavel();
     }
+
+    public void goLoad() {
+        state.goLoad();
+    }
 }
 
