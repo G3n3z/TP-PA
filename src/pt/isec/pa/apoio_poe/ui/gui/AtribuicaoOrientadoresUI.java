@@ -19,7 +19,9 @@ import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AtribuicaoOrientadoresUI extends BorderPane {
     ModelManager model;
@@ -29,6 +31,8 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
     List<Node> nodesShow;
     VBox center, vBoxTable;
     BorderPane container;
+    Label media, maximo, minimo;
+    double med,max,min;
     ObtencaoDadosOrientadores obtencaoDadosOrientadores;
 
     public AtribuicaoOrientadoresUI(ModelManager model) {
@@ -46,8 +50,12 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         nodesShow.add(vBoxTable);
         center = new VBox();
 
+        media = new Label();
+        maximo = new Label();
+        minimo = new Label();
+
         HBox statsFooter = new HBox();
-        statsFooter.getChildren().addAll();
+        statsFooter.getChildren().addAll(media,maximo,minimo);
         statsFooter.setAlignment(Pos.BASELINE_CENTER);
         statsFooter.setSpacing(20.0);
         statsFooter.setPadding(new Insets(25));
@@ -59,6 +67,28 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         container.setBottom(statsFooter);
 
         setCenter(container);
+    }
+
+    private void formatLabelFooter(Label label){
+        label.setFont(new Font(14));
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-weight: bold");
+    }
+
+    private void atualizastats(){
+        Map<String, Number> dados = new HashMap<>();
+        dados = model.getDadosNumeroOrientacoes();
+        med = (double)dados.get("media");
+        max = (int)dados.get("max");
+        min = (int)dados.get("min");
+
+        media.setText("Média de orientações p/docente: "+String.format("%.2f",med));
+        maximo.setText("Máximo de orientações: "+max);
+        minimo.setText("Mínimo de orientações: "+min);
+
+        formatLabelFooter(media);
+        formatLabelFooter(maximo);
+        formatLabelFooter(minimo);
     }
 
 
@@ -158,7 +188,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         if(model != null && model.getState() == EnumState.ATRIBUICAO_ORIENTADORES){
             tablePropostas.getItems().clear();
             tablePropostas.getItems().addAll(model.getPropostasComOrientador());
-
+            atualizastats();
         }
     }
 
@@ -169,6 +199,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
             center.getChildren().clear();
             center.getChildren().addAll(nodesShow);
             setCenter(container);
+            atualizastats();
         }
     }
 
