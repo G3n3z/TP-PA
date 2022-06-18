@@ -9,6 +9,13 @@ public class AlteracaoOrientador extends CommandAdapter{
     private String emailDocente;
     private String id;
     private String oldEmailDocente;
+
+    /**
+     *
+     * @param data Classe em que estao armazenados os dados
+     * @param emailDocente Email do docente a alterar
+     * @param id Id da proposta a ser feita a alteracao
+     */
     public AlteracaoOrientador(Data data, String emailDocente, String id) {
         super(data);
         oldEmailDocente = emailDocente;
@@ -16,6 +23,10 @@ public class AlteracaoOrientador extends CommandAdapter{
         this.id = id;
     }
 
+    /**
+     * Funcao que executa o comando de alterar o orientador
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode execute() {
         Docente d = data.getDocente(emailDocente);
@@ -40,6 +51,10 @@ public class AlteracaoOrientador extends CommandAdapter{
         return ErrorCode.E9;
     }
 
+    /**
+     * Operacao de redo, execua uma alteração em que coloca o email antigo do orientador
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode undo() {
         return new AlteracaoOrientador(data, oldEmailDocente, id).execute();

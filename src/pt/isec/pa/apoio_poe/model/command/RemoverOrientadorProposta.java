@@ -7,6 +7,13 @@ import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 public class RemoverOrientadorProposta extends CommandAdapter{
     private String emailDocente;
     private String id;
+
+    /**
+     *
+     * @param data Classe em que estao armazenados os dados
+     * @param emailDocente Email do docente a alterar
+     * @param id Id da proposta a ser feita a alteracao
+     */
     public RemoverOrientadorProposta(Data data, String emailDocente, String id) {
 
         super(data);
@@ -14,11 +21,20 @@ public class RemoverOrientadorProposta extends CommandAdapter{
         this.id = id;
     }
 
+    /**
+     *
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode undo() {
         return new AtribuicaoOrientadorProposta(data, emailDocente, id).execute();
     }
 
+
+    /**
+     *  Remocao do orientador de determinada proposta com @param id
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode execute() {
         for (Proposta p : data.getProposta()){

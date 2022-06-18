@@ -17,6 +17,11 @@ public class RemocaoManualProposta extends CommandAdapter{
         this.idProposta = idProposta;
     }
 
+    /**
+     * Remove uma proposta a um aluno  desde que nao seja um projeto_estagio
+     * ou seja não seja um projeto previamente atribuido
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode execute() {
         Aluno a = data.getAluno(nAluno);
@@ -28,6 +33,10 @@ public class RemocaoManualProposta extends CommandAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Operacao de undo
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode undo() {
         return new AtribuicaoManualProposta(data, nAluno,idProposta).execute();

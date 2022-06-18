@@ -20,6 +20,11 @@ public class AtribuicaoManualProposta extends CommandAdapter{
         this.idProposta = idProposta;
     }
 
+    /**
+     * Atribui uma proposta a um aluno caso nao tenha nenmhuma proposta associada ao mesmo
+     * ou a mesma tambem ainda nao esteja asssociada a nenhuma proposta e o aluno possa aceder a estagio
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode execute() {
          
@@ -41,6 +46,10 @@ public class AtribuicaoManualProposta extends CommandAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Operacao de redo, execua o comando de remocao com os dados armazenados na classe da atribuicao realizada
+     * @return ErrorCode de sucesso ou insucesso da execução do comando
+     */
     @Override
     public ErrorCode undo() {
         return new RemocaoManualProposta(data, nAluno, idProposta).execute();
