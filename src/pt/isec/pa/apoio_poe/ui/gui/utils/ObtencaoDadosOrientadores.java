@@ -13,6 +13,8 @@ import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TableAlunos;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TableDocentes;
 
 import java.util.Map;
 

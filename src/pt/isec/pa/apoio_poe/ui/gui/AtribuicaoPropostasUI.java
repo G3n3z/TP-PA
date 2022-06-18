@@ -13,6 +13,7 @@ import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaExcepti
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TableAlunoProposta;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;

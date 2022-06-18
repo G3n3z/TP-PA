@@ -1,4 +1,4 @@
-package pt.isec.pa.apoio_poe.ui.gui.utils;
+package pt.isec.pa.apoio_poe.ui.gui.tables;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.Button;

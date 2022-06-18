@@ -16,6 +16,7 @@ import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TablePropostas;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 

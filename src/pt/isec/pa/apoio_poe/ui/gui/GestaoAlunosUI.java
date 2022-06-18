@@ -12,12 +12,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TableAlunos;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 import pt.isec.pa.apoio_poe.utils.Constantes;
@@ -25,7 +25,6 @@ import pt.isec.pa.apoio_poe.utils.Constantes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 
 public class GestaoAlunosUI extends BorderPane {

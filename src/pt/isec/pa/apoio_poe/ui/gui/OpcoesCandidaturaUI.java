@@ -11,10 +11,10 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.ModelManager;
-import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Candidatura;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TableCandidatura;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
@@ -22,8 +22,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.function.Consumer;
-
 
 
 public class OpcoesCandidaturaUI extends BorderPane {

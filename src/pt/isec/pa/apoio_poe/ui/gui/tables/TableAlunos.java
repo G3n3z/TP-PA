@@ -1,4 +1,4 @@
-package pt.isec.pa.apoio_poe.ui.gui.utils;
+package pt.isec.pa.apoio_poe.ui.gui.tables;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;

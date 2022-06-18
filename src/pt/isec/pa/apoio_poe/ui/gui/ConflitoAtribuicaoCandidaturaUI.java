@@ -5,15 +5,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TableAlunos;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TableAlunos;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TablePropostas;
 
 import java.util.ArrayList;
 import java.util.List;
