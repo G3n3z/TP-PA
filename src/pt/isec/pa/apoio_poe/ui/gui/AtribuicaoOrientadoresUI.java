@@ -147,12 +147,12 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         });
         btnExportarCSV.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("File open...");
+            fileChooser.setTitle("File save...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Drawing (*.csv)", "*.csv")
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
             );
-            File f = fileChooser.showOpenDialog(this.getScene().getWindow());
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
             if(f == null){
                 return;
             }

@@ -232,13 +232,22 @@ public class GestaoDocentesUI extends BorderPane {
         });
 
         btnInsereCSV.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Abrir ficheiro...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Ficheiro de texto (*.csv)", "*.csv")
+            );
+            File f = fileChooser.showOpenDialog(this.getScene().getWindow());
+            if(f == null){
+                return;
+            }
 
-            File f = fileChooser.showOpenDialog(null);
             try {
                 model.importDocentes(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
-                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados dos Docentes", e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().setAlertText("Informação", "Problemas na Importação dos dados dos Docentes", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
@@ -262,13 +271,13 @@ public class GestaoDocentesUI extends BorderPane {
             String email = tfEmail.getText();
 
             if(nome.equals("") || email.equals("") ){
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Introdução dos dados dos Docente", "Nome / Email por preencher");
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Introdução dos dados dos Docente", "Nome / Email por preencher");
                 AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             ErrorCode e = model.insereDocente(email,nome);
             if(e != ErrorCode.E0){
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Docente", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Docente", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
             clearFields();
@@ -280,14 +289,14 @@ public class GestaoDocentesUI extends BorderPane {
             String email = tfEmail.getText();
 
             if(nome.equals("") || email.equals("") ){
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Edição dos dados dos Docente", "Nome / Email por preencher");
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Edição dos dados dos Docente", "Nome / Email por preencher");
                 AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             ErrorCode e = model.editDocente(email,nome);
             if(e != ErrorCode.E0){
                 System.out.println("Correu algo mal");
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Edição do Docente", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Edição do Docente", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
             vboxInsereDocente.setVisible(false);
@@ -298,11 +307,20 @@ public class GestaoDocentesUI extends BorderPane {
         });
 
         btnExport.setOnAction(actionEvent -> {
-            File f = fileChooser.showSaveDialog(null);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Gravar ficheiro...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
+            );
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
+            if(f == null){
+                return;
+            }
             ErrorCode e = model.exportCSV(f.getAbsolutePath());
             if(e!= ErrorCode.E0){
                 System.out.println("Problema na exportacao");
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Exporção do CSV dos Docente", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Exporção do CSV dos Docente", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
 
@@ -326,7 +344,7 @@ public class GestaoDocentesUI extends BorderPane {
                 hBtn.getChildren().clear();
                 hBtn.getChildren().addAll(btnExeEditarDocente,btnCancelEdit);
                 vboxInsereDocente.setVisible(true);
-                //TODO editar docente
+
             });
             editar.setId("button_editar");
             CSSManager.applyCSS(editar,"button_editar.css");
