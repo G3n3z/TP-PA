@@ -144,16 +144,30 @@ public class Consulta extends StateAdapter{
     @Override
     public Map<String, Integer> getPropostasPorRamos() {
         Map<String, Integer> result = new HashMap<>();
-        for (String ramo : Constantes.getRamos()) {
-            result.put(ramo, (int) data.getProposta().stream().filter(p -> {
-                if (p.getRamos() == null)
-                    return false;
-                for (String pRamo : p.getRamos()) {
-                    if(ramo.equals(pRamo))
-                        return true;
+//        for (String ramo : Constantes.getRamos()) {
+//            result.put(ramo, (int) data.getProposta().stream().filter(p -> {
+//                if (p.getRamos() == null)
+//                    return false;
+//                for (String pRamo : p.getRamos()) {
+//                    if(ramo.equals(pRamo))
+//                        return true;
+//                }
+//                return false;
+//            }).count());
+//        }
+        Integer quant;
+
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaConfirmada()){
+                if(result.containsKey(aluno.getSiglaRamo())){
+                    quant = result.get(aluno.getSiglaRamo());
+                    quant++;
+                    result.put(aluno.getSiglaRamo(), quant);
                 }
-                return false;
-            }).count());
+                else{
+                    result.put(aluno.getSiglaRamo(), 1);
+                }
+            }
         }
 
         return result;

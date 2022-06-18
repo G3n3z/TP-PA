@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -198,6 +199,13 @@ public class ConsultaUI extends BorderPane {
         CategoryAxis xAxisEmpresas = new CategoryAxis();
         NumberAxis yAxisQtdEmpresas = new NumberAxis();
         barChartTop5Empresas = new BarChart<>(xAxisEmpresas, yAxisQtdEmpresas);
+        pieRamos.getData().forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), " ", data.pieValueProperty()
+                        )
+                )
+        );
 
 
         CategoryAxis xAxisOrientadores = new CategoryAxis();
@@ -221,9 +229,11 @@ public class ConsultaUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> update());
         btnConsultaUI.setOnAction(actionEvent -> {
+
             nodesShow.clear();
             nodesShow.addAll(List.of(hBox1, hBox2, hBox3));
             updateViews();
+            update();
         });
         btnListaAlunos.setOnAction(actionEvent -> {
             nodesShow.clear();
@@ -262,7 +272,27 @@ public class ConsultaUI extends BorderPane {
         piePercProp.getData().add(new PieChart.Data("Atribuida", dadosAtribuicoes.get(2)));
         piePercProp.getData().add(new PieChart.Data("Não Atribuida", dadosAtribuicoes.get(3)));
         System.out.println(dadosAtribuicoes);
-
+        pieRamos.getData().forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), " - ", data.pieValueProperty().intValue()
+                        )
+                )
+        );
+        pieAbsProp.getData().forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), " - ",  data.pieValueProperty().intValue()
+                        )
+                )
+        );
+        piePercProp.getData().forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), " - ",  String.format("%.0f", data.getPieValue()), "%"
+                        )
+                )
+        );
     }
     void updateBarChart(){
         CategoryAxis xAxisEmpresas = new CategoryAxis();
@@ -320,7 +350,8 @@ public class ConsultaUI extends BorderPane {
 
 
     private void updateTables() {
-
+        tvAlunosComPropostaComOrientador.getItems().clear();
+        tvAlunosComPropostaSemOrientador.getItems().clear();
         tvAlunosComPropostaComOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaEOrientador());
         tvAlunosComPropostaSemOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaESemOrientador());
 
@@ -342,6 +373,7 @@ public class ConsultaUI extends BorderPane {
         for (Label label : labels) {
             label.setFont(new Font(15));
         }
+        hBoxdadosOrientadoresMedia.getChildren().clear();
         hBoxdadosOrientadoresMedia.getChildren().addAll(labels);
         hBoxdadosOrientadoresMedia.setAlignment(Pos.CENTER);
         hBoxdadosOrientadoresMedia.setSpacing(80);

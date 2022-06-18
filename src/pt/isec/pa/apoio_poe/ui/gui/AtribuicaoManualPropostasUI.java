@@ -70,7 +70,7 @@ public class AtribuicaoManualPropostasUI extends BorderPane {
             remover.setOnAction(actionEvent -> {
                 String id = alunoButtonCellDataFeatures.getValue().getProposta().getId();
                 Long nAluno = alunoButtonCellDataFeatures.getValue().getNumeroAluno();
-                System.out.println(model.removeAtribuicao(id, nAluno));
+                model.removeAtribuicao(id, nAluno);
             });
             remover.setId("button_delete");
             CSSManager.applyCSS(remover,"buttonDelete.css");

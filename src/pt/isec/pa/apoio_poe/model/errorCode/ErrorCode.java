@@ -175,5 +175,12 @@ public enum ErrorCode {
     /**
      * Nao pode remover o ramo do aluno associado
      */
-    E33
+    E33,
+
+    /**
+     *
+     * Aluno já contem proposta
+     */
+    E34
+
 }

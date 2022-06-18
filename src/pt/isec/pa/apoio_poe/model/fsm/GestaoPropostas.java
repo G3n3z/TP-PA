@@ -521,7 +521,7 @@ public class GestaoPropostas extends StateAdapter{
     @Override
     public ErrorCode editProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
         ErrorCode e;
-        Proposta p = getPropostaById(id);
+        Proposta prop = getPropostaById(id), p;
         Long numAluno = null;
         if(nAluno != null && !nAluno.equals("")){
             try {
@@ -530,10 +530,10 @@ public class GestaoPropostas extends StateAdapter{
                 return ErrorCode.E3;
             }
         }
-        if(p == null){
+        if(prop == null){
             return ErrorCode.E9;
         }
-        p.getClone();
+        p = prop.getClone();
         switch (tipo){
             case "T1" -> {
                 e = editEstagio(p, id, titulo, entidade, ramos, nAluno);
@@ -565,13 +565,30 @@ public class GestaoPropostas extends StateAdapter{
                     return ErrorCode.E29;
                 }
             }
+            if(data.getAlunos().stream().anyMatch(al -> {
+                if (al.temPropostaNaoConfirmada()) {
+                    if (al.getPropostaNaoConfirmada().getId().equals(id))
+                        return true;
+                }
+                if (al.temPropostaConfirmada()) {
+                    return al.getProposta().getId().equals(id);
+                }
+                return false;
+            })){
+                return ErrorCode.E34;
+            }
             Aluno novo = data.getAluno(numAluno);
             if(novo ==null){
                 return ErrorCode.E3;
             }
-
-            if(novo.temPropostaConfirmada()){
-                return ErrorCode.E29;
+            if(prop instanceof Estagio && !novo.isPossibilidade()){
+                return ErrorCode.E14;
+            }
+            if(!prop.getRamos().contains(novo.getSiglaRamo())){
+                return ErrorCode.E31;
+            }
+            if(novo.temPropostaConfirmada() || novo.temPropostaNaoConfirmada()){
+                return ErrorCode.E34;
             }
             if(a != null) {
                 if (a.temPropostaNaoConfirmada()) {
@@ -583,7 +600,6 @@ public class GestaoPropostas extends StateAdapter{
         }
 
         data.alteraProposta(p);
-        System.out.println(p);
         return ErrorCode.E0;
     }
 
@@ -622,9 +638,9 @@ public class GestaoPropostas extends StateAdapter{
     }
 
     private ErrorCode alteraRamos(Proposta p, List<String> ramos) {
-        if(new HashSet<>(ramos).containsAll(p.getRamos())){
-            return ErrorCode.E0;
-        }
+        //if(new HashSet<>(ramos).containsAll(p.getRamos())){
+        //    return ErrorCode.E0;
+        //}
 
         for (String ramo : ramos) {
             if(!Constantes.getRamos().contains(ramo)){
@@ -643,12 +659,11 @@ public class GestaoPropostas extends StateAdapter{
             if(!ramos.contains(ramoAluno)){
                 return ErrorCode.E33;
             }
-            p.getRamos().clear();
-            p.getRamos().addAll(ramos);
+            p.setRamos(ramos);
             return ErrorCode.E0;
         }
-        p.getRamos().clear();
-        p.getRamos().addAll(ramos);
+        p.setRamos(ramos);
+        //p.getRamos().addAll(ramos);
         return ErrorCode.E0;
     }
 

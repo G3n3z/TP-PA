@@ -289,8 +289,6 @@ public class GestaoAlunosUI extends BorderPane {
             try {
                 model.importAlunos(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
-                System.out.println(e.getMessageOfExceptions());
-
                 AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
             }

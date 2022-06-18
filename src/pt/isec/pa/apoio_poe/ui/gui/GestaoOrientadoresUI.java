@@ -14,10 +14,9 @@ import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Docente;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
-import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
-import pt.isec.pa.apoio_poe.ui.gui.utils.MenuVertical;
-import pt.isec.pa.apoio_poe.ui.gui.utils.TablePropostas;
+import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 import pt.isec.pa.apoio_poe.ui.resource.CSSManager;
 
 public class GestaoOrientadoresUI extends BorderPane {
@@ -105,7 +104,8 @@ public class GestaoOrientadoresUI extends BorderPane {
         colRemover.setCellValueFactory(propostaStringCellDataFeatures -> {
            Button remover = new Button("Remover");
            remover.setOnAction(actionEvent -> {
-               System.out.println(model.removerAtribuicaoOrientador(propostaStringCellDataFeatures.getValue().getEmailOrientador(), propostaStringCellDataFeatures.getValue().getId()));
+
+               model.removerAtribuicaoOrientador(propostaStringCellDataFeatures.getValue().getEmailOrientador(), propostaStringCellDataFeatures.getValue().getId());
                clearFields();
                modoInsercao();
            });
@@ -161,7 +161,10 @@ public class GestaoOrientadoresUI extends BorderPane {
             if (tfIdProposta.getText() == null || tfIdProposta.getText().equals("")){
                 return;
             }
-            System.out.println(model.insereOrientador(tfEmailOrientador.getText(), tfIdProposta.getText()));
+            ErrorCode e = model.insereOrientador(tfEmailOrientador.getText(), tfIdProposta.getText());
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na inserção", MessageTranslate.translateErrorCode(e));
+            }
             clearFields();
         });
         btnAtualizar.setOnAction(actionEvent -> {
@@ -170,7 +173,10 @@ public class GestaoOrientadoresUI extends BorderPane {
             if (tfIdProposta.getText() == null || tfIdProposta.getText().equals("")){
                 return;
             }
-            System.out.println(model.editOrientador(tfEmailOrientador.getText(), tfIdProposta.getText()));
+            ErrorCode e = model.editOrientador(tfEmailOrientador.getText(), tfIdProposta.getText());
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na inserção", MessageTranslate.translateErrorCode(e));
+            }
             clearFields();
             modoInsercao();
         });

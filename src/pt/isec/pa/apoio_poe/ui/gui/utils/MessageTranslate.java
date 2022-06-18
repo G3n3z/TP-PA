@@ -42,6 +42,7 @@ public class MessageTranslate {
             case E31 -> "Aluno com ramo incompativel com a Proposta";
             case E32 -> "Proposta já existente";
             case E33 -> "Não pode remover o ramo do aluno associado";
+            case E34 -> "Aluno já contem proposta";
             default ->  "";
         };
     }

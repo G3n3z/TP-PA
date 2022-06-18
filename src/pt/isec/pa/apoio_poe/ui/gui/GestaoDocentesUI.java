@@ -246,7 +246,6 @@ public class GestaoDocentesUI extends BorderPane {
             try {
                 model.importDocentes(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
-                System.out.println(e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().setAlertText("Informação", "Problemas na Importação dos dados dos Docentes", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -295,7 +294,6 @@ public class GestaoDocentesUI extends BorderPane {
             }
             ErrorCode e = model.editDocente(email,nome);
             if(e != ErrorCode.E0){
-                System.out.println("Correu algo mal");
                 AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Edição do Docente", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -319,7 +317,6 @@ public class GestaoDocentesUI extends BorderPane {
             }
             ErrorCode e = model.exportCSV(f.getAbsolutePath());
             if(e!= ErrorCode.E0){
-                System.out.println("Problema na exportacao");
                 AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Exporção do CSV dos Docente", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -337,7 +334,6 @@ public class GestaoDocentesUI extends BorderPane {
         colEditar.setCellValueFactory(docenteButtonCellDataFeatures -> {
             Button editar = new Button("Editar");
             editar.setOnAction(actionEvent -> {
-                System.out.println(docenteButtonCellDataFeatures.getValue());
                 tfNome.setText(docenteButtonCellDataFeatures.getValue().getNome());
                 tfEmail.setText(docenteButtonCellDataFeatures.getValue().getEmail());
                 tfEmail.setDisable(true);
@@ -368,7 +364,6 @@ public class GestaoDocentesUI extends BorderPane {
     }
     void updateTable(){
         if(model.getState()!=null && model.getState() == EnumState.GESTAO_DOCENTES){
-            System.out.println("Update docentes" + model.getDocentes().size());
             tableView.getItems().clear();
             tableView.getItems().addAll(model.getDocentes());
         }

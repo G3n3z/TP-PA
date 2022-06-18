@@ -226,7 +226,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         });
         btnFechar.setOnAction(actionEvent -> {
             ErrorCode e = model.fecharFase();
-            System.out.println(e);
+
             if(e != ErrorCode.E0) {
                 AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no fecho da fase", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
@@ -272,8 +272,11 @@ public class OpcoesCandidaturaUI extends BorderPane {
             if (!checkFields())
                 return;
             ids = getTextFields();
-            System.out.println(ids.toString());
-            System.out.println(model.insereCandidatura(tfAluno.getText(), ids));
+            ErrorCode e = model.insereCandidatura(tfAluno.getText(), ids);
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção de Candidaturas", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
         btnInsereCandCSV.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
@@ -290,7 +293,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
             try {
                 error = model.importCandidaturasCSV(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
-                System.out.println(e.getMessageOfExceptions());
+
                 AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados das Candidaturas", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -381,7 +384,6 @@ public class OpcoesCandidaturaUI extends BorderPane {
 
     private void atualizaTabela(){
 
-        System.out.println("Update Candidatura" + model.getCandidaturas().size());
         tableView.getItems().clear();
         tableView.getItems().addAll(model.getCandidaturas());
         obtencaoAlunoFaseCandidatura.updateTabelas();

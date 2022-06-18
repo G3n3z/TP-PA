@@ -161,7 +161,6 @@ public class AtribuicaoPropostasUI extends BorderPane {
         });
         btnFechar.setOnAction(actionEvent -> {
             ErrorCode e = model.fecharFase();
-            System.out.println(e);
             if(e != ErrorCode.E0){
                 AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no Fecho da Fase", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();

@@ -206,7 +206,6 @@ public class GestaoPropostasUI extends BorderPane {
         colEditar.setCellValueFactory(propostaButtonCellDataFeatures -> {
             Button editar = new Button("Editar");
             editar.setOnAction(actionEvent -> {
-                System.out.println(propostaButtonCellDataFeatures.getValue());
                 updateEditFields(propostaButtonCellDataFeatures.getValue());
             });
             editar.setId("button_editar");
@@ -218,7 +217,6 @@ public class GestaoPropostasUI extends BorderPane {
         colButton.setCellValueFactory(propostaButtonCellDataFeatures -> {
             Button remover = new Button("Remover");
             remover.setOnAction(actionEvent -> {
-                System.out.println(propostaButtonCellDataFeatures.getValue());
                 model.removeProposta(propostaButtonCellDataFeatures.getValue().getId());
             });
             remover.setId("button_delete");
@@ -226,7 +224,6 @@ public class GestaoPropostasUI extends BorderPane {
             return new ReadOnlyObjectWrapper<>(remover);
         });
         colButton.setPrefWidth(120);
-        //tableView.setPrefWidth("Entidade");
         tableView.addColButton(colEditar);
         tableView.addColButton(colButton);
     }
@@ -364,7 +361,6 @@ public class GestaoPropostasUI extends BorderPane {
             try {
                  error = model.importCSV(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
-                System.out.println(e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados das Propostas", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -374,23 +370,30 @@ public class GestaoPropostasUI extends BorderPane {
             update();
         });
         btnInsereProposta.setOnAction(actionEvent -> {
-            if(choiceTipo.getValue() == null){
+            if(choiceTipo.getValue().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas de insercao", "Adicione um tipo de proposta");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
-            if(tFId == null || tFId.getText().equals(""))
+            if(tFId == null || tFId.getText().equals("")) {
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas de insercao", "Adicione um id proposta");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
-
+            }
+            if(tfTitulo.getText().equals("")){
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas de insercao", "Adicione um titulo à proposta");
+                AlertSingleton.getInstanceWarning().showAndWait();
+                return;
+            }
             List<String> ramos = new ArrayList<>();
             if(ckDA.isSelected()) ramos.add(ckDA.getText());
             if(ckRas.isSelected()) ramos.add(ckRas.getText());
             if(ckSI.isSelected()) ramos.add(ckSI.getText());
-            System.out.println(ckDA.getText());
 
             ErrorCode e = model.insereProposta(choiceTipo.getValue(), tFId.getText(),ramos, tfTitulo.getText(), tfDocente.getText(), tfEntidade.getText(), tfNAluno.getText());
             if(e == ErrorCode.E0){
                 update();
             }else{
-                System.out.println(e.toString());
                 AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Introdução dos dados das Propostas", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -404,7 +407,7 @@ public class GestaoPropostasUI extends BorderPane {
             if(e == ErrorCode.E0){
                 update();
             }else{
-                System.out.println(e.toString());
+
                 AlertSingleton.getInstanceWarning().setAlertText("","Problemas Na edição do aluno", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
@@ -436,7 +439,6 @@ public class GestaoPropostasUI extends BorderPane {
     }
 
     private void updateTables() {
-        System.out.println("Update propostas" + model.getPropostas().size());
         tableView.getItems().clear();
         tableView.getItems().addAll(model.getPropostas());
     }

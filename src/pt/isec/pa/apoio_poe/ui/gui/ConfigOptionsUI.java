@@ -76,11 +76,9 @@ public class ConfigOptionsUI extends BorderPane {
         bGDocentes.setOnAction(actionEvent -> {
 
             model.gerirDocentes();
-            System.out.println(model.getState().toString());
         });
         bGPropostas.setOnAction(actionEvent -> {
             model.gerirPropostas();
-            System.out.println(model.getState().toString());
         });
         bAvancar.setOnAction(actionEvent -> {
             model.avancarFase();
