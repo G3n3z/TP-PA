@@ -56,7 +56,7 @@ public class LoadUI extends BorderPane {
     private void createViews() {
         //this.setBackground(new Background(new BackgroundFill(Paint.valueOf("white"), CornerRadii.EMPTY, Insets.EMPTY)));
         //this.setWidth(300);
-        this.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+        //this.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         label = new Label("Inicio");
         HBox title = new HBox(label);
         title.setAlignment(Pos.CENTER);
@@ -86,7 +86,7 @@ public class LoadUI extends BorderPane {
         VBox shape = new VBox();
         shape.getChildren().addAll(title, box);
         shape.setAlignment(Pos.TOP_CENTER);
-        shape.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+        //shape.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         setCenter(shape);
 
     }

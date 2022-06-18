@@ -62,7 +62,7 @@ public class GestaoAlunosUI extends BorderPane {
         title = new Label("Gestão de Alunos");
         title.setFont(new Font(26));
         HBox titulo = new HBox();
-        titulo.setPadding(new Insets(20,0,20,0));
+        titulo.setPadding(new Insets(25,0,25,0));
         titulo.getChildren().add(title);
         titulo.setAlignment(Pos.CENTER);
         BorderPane container = new BorderPane();
@@ -94,19 +94,16 @@ public class GestaoAlunosUI extends BorderPane {
         //statsFooter.setPrefHeight(100);
         statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
 
-        //tableView.setPrefHeight(400);
+        //tableView.setMinHeight(400);
         //hboxInsereAluno.setPrefHeight(100);
         hboxInsereAluno.setPadding(new Insets(10,0,10,0));
         VBox centro = new VBox(tableView, hboxInsereAluno, hboxInsereCSV);
-        //centro.setPrefHeight(500);
-        centro.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null)));
-        hboxInsereAluno.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         container.setTop(titulo);
         container.setCenter(centro);
         container.setBottom(statsFooter);
         container.autosize();
         setCenter(container);
-        this.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+
     }
 
     private void formatLabelFooter(Label label){
@@ -254,6 +251,7 @@ public class GestaoAlunosUI extends BorderPane {
     private void registerHandlers() {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> {
             update();
+            atualizaStats();
         });
         model.addPropertyChangeListener(ModelManager.PROP_CLOSE_STATE, evt -> {
             updateClose();
@@ -278,14 +276,22 @@ public class GestaoAlunosUI extends BorderPane {
             update();
         });
         btnExeInsereCSV.setOnAction(actionEvent -> {
-            File f = fileChooser.showOpenDialog(null);
-
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Abrir ficheiro...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Ficheiro de texto (*.csv)", "*.csv")
+            );
+            File f = fileChooser.showOpenDialog(this.getScene().getWindow());
+            if(f == null){
+                return;
+            }
             try {
                 model.importAlunos(f.getAbsolutePath());
             } catch (CollectionBaseException e) {
                 System.out.println(e.getMessageOfExceptions());
 
-                AlertSingleton.getInstanceWarning().setAlertText("Problemas na Inserção do Aluno","as", e.getMessageOfExceptions());
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
@@ -298,7 +304,7 @@ public class GestaoAlunosUI extends BorderPane {
             Long nAluno;
             Double classificacao;
             if(txNumero.getText().equals("")){
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Aluno", "Numero de Aluno não preenchido");
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", "Numero de Aluno não preenchido");
                 AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
@@ -308,7 +314,7 @@ public class GestaoAlunosUI extends BorderPane {
 
             }catch (NumberFormatException e){
 
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Aluno", "Numero de ALuno/Classificação Inválido\n" +
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", "Numero de ALuno/Classificação Inválido\n" +
                         "O Número de aluno deverá ser um inteiro e a classificação compreendida entre 0.0 e 1.0");
                 AlertSingleton.getInstanceWarning().showAndWait();
                 return;
@@ -319,14 +325,14 @@ public class GestaoAlunosUI extends BorderPane {
             String ramo = this.ramo.getValue();
             if(nome.equals("") || email.equals("") || curso == null || ramo == null){
 
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Inserção do Aluno", "Dados Por Preencher");
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", "Dados Por Preencher");
                 AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             Aluno a = new Aluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
             ErrorCode e = model.insereAluno(a);
             if(e != ErrorCode.E0){
-                AlertSingleton.getInstanceWarning().setAlertText("Problemas na Inserção do Aluno","", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
             clearFields();
@@ -339,10 +345,19 @@ public class GestaoAlunosUI extends BorderPane {
         });
 
         btnExport.setOnAction(actionEvent -> {
-            File f = fileChooser.showSaveDialog(null);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Gravar ficheiro...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
+            );
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
+            if(f == null){
+                return;
+            }
             ErrorCode e = model.exportCSV(f.getAbsolutePath());
             if(e != ErrorCode.E0){
-                AlertSingleton.getInstanceWarning().setAlertText("Problemas na Exportação do CSV","as", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Exportação do CSV", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
 
@@ -360,7 +375,9 @@ public class GestaoAlunosUI extends BorderPane {
                 classificacao = Double.parseDouble(tfClass.getText());
 
             }catch (NumberFormatException e){
-                System.out.println("Numero de aluno ou classificacao invalido");
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Edição do Aluno", "Numero de ALuno/Classificação Inválido\n" +
+                        "O Número de aluno deverá ser um inteiro e a classificação compreendida entre 0.0 e 1.0");
+                AlertSingleton.getInstanceWarning().showAndWait();
                 return;
             }
             String email = tfEmail.getText();
@@ -372,7 +389,7 @@ public class GestaoAlunosUI extends BorderPane {
             }
             ErrorCode e = model.editAluno(email,nome, nAluno,curso,ramo,classificacao,isPossible);
             if(e != ErrorCode.E0){
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na Edição do Aluno", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Edição do Aluno", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
             hboxInsereAluno.setVisible(false);

@@ -71,8 +71,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
         camposCentro = new VBox();
         ScrollPane scrollPane = new ScrollPane(camposCentro);
         scrollPane.setFitToWidth(true);
+
         //scrollPane.setMinHeight(645);
-        camposCentro.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
         numCandidaturas = new Label();
         numAutoProp = new Label();
         numAlunoComCand = new Label();
@@ -90,8 +90,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
         container.setTop(titulo);
         container.setCenter(scrollPane);
         container.setBottom(statsFooter);
-        container.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
-        //container.setMaxHeight(500);container.setPrefHeight(400);
+
         setCenter(container);
     }
 

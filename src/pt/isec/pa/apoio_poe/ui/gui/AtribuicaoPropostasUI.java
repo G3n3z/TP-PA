@@ -24,7 +24,7 @@ public class AtribuicaoPropostasUI extends BorderPane {
     ButtonMenu btnAtribuicaoPropostas, btnAtribuirAutomaticoAuto, btnAtribuirAutomatico, btnGestao,btnExportarCSV, btnObtencoesAlunos, btnObtencoesFiltros, btnFechar, btnRecuar, btnAvancar;
     MenuVertical menu;
     TableAlunoProposta tableAlunoProposta;
-    VBox center, vBoxTableAlunoProposta, container;
+    VBox center, vBoxTableAlunoProposta;
     Label title, numAlunosComPropAtribuida, numAlunosSemPropAtribuida, numPropNaoAtribuidas;
     List<Node> nodesShow;
     ObtencaoAlunoFaseAtribuicao obtencaoAlunoFaseAtribuicao;
@@ -74,7 +74,10 @@ public class AtribuicaoPropostasUI extends BorderPane {
         statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
 
 
-        container = new VBox(titulo,scrollPane,statsFooter);
+        BorderPane container = new BorderPane();
+        container.setTop(titulo);
+        container.setCenter(scrollPane);
+        container.setBottom(statsFooter);
 
         setCenter(container);
     }

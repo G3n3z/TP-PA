@@ -6,9 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.ModelManager;
@@ -20,6 +19,7 @@ import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +30,9 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
     TablePropostas tablePropostas;
     List<Node> nodesShow;
     VBox center, vBoxTable;
+    BorderPane container;
+    Label media, maximo, minimo;
+    double med,max,min;
     ObtencaoDadosOrientadores obtencaoDadosOrientadores;
 
     public AtribuicaoOrientadoresUI(ModelManager model) {
@@ -46,7 +49,46 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         nodesShow = new ArrayList<>();
         nodesShow.add(vBoxTable);
         center = new VBox();
-        setCenter(center);
+
+        media = new Label();
+        maximo = new Label();
+        minimo = new Label();
+
+        HBox statsFooter = new HBox();
+        statsFooter.getChildren().addAll(media,maximo,minimo);
+        statsFooter.setAlignment(Pos.BASELINE_CENTER);
+        statsFooter.setSpacing(20.0);
+        statsFooter.setPadding(new Insets(25));
+        statsFooter.setPrefHeight(50);
+        statsFooter.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
+
+        container = new BorderPane();
+        container.setCenter(center);
+        container.setBottom(statsFooter);
+
+        setCenter(container);
+    }
+
+    private void formatLabelFooter(Label label){
+        label.setFont(new Font(14));
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-weight: bold");
+    }
+
+    private void atualizastats(){
+        Map<String, Number> dados = new HashMap<>();
+        dados = model.getDadosNumeroOrientacoes();
+        med = (double)dados.get("media");
+        max = (int)dados.get("max");
+        min = (int)dados.get("min");
+
+        media.setText("Média de orientações p/docente: "+String.format("%.2f",med));
+        maximo.setText("Máximo de orientações: "+max);
+        minimo.setText("Mínimo de orientações: "+min);
+
+        formatLabelFooter(media);
+        formatLabelFooter(maximo);
+        formatLabelFooter(minimo);
     }
 
 
@@ -73,16 +115,16 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         tablePropostas.addCols(colEmailDocente);
         tablePropostas.addCols(colNome);
 
-        Label lTable = new Label("Propostas com Orientador");
+        Label lTable = new Label("Atribuição de Orientadores");
         lTable.setFont(new Font(26));
         HBox titleTable = new HBox(lTable);
         titleTable.setAlignment(Pos.CENTER);
         vBoxTable = new VBox(titleTable,tablePropostas);
-        VBox.setMargin(titleTable, new Insets(25,0,30,0));
+        VBox.setMargin(titleTable, new Insets(25,0,25,0));
     }
 
     private void preparaMenu() {
-        btnAtribuirOrientadores = new ButtonMenu("Orientadores");
+        btnAtribuirOrientadores = new ButtonMenu("Atribuição de Orientadores");
         btnAtribuirAutomatico = new ButtonMenu("Atribuicao Automática");
         btnGestaoOrientadores = new ButtonMenu("Gestão Orientadores");
         btnExportarCSV = new ButtonMenu("Exportar Para CSV");
@@ -105,12 +147,12 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         });
         btnExportarCSV.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("File open...");
+            fileChooser.setTitle("File save...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Drawing (*.csv)", "*.csv")
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
             );
-            File f = fileChooser.showOpenDialog(this.getScene().getWindow());
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
             if(f == null){
                 return;
             }
@@ -146,7 +188,7 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         if(model != null && model.getState() == EnumState.ATRIBUICAO_ORIENTADORES){
             tablePropostas.getItems().clear();
             tablePropostas.getItems().addAll(model.getPropostasComOrientador());
-
+            atualizastats();
         }
     }
 
@@ -156,7 +198,8 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         if(model != null && model.getState() == EnumState.ATRIBUICAO_ORIENTADORES) {
             center.getChildren().clear();
             center.getChildren().addAll(nodesShow);
-            setCenter(center);
+            setCenter(container);
+            atualizastats();
         }
     }
 

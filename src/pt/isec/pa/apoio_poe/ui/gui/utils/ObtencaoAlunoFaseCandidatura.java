@@ -34,9 +34,9 @@ public class ObtencaoAlunoFaseCandidatura extends VBox {
         lPropostaCandidatura.setFont(new Font(18));
         Label lPropostaSemCandidatura = new Label("Alunos sem Candidatura");
         lPropostaSemCandidatura.setFont(new Font(18));
-        VBox.setMargin(lAutoPropostas, new Insets(30,0,20,20));
-        VBox.setMargin(lPropostaCandidatura, new Insets(30,0,20,20));
-        VBox.setMargin(lPropostaSemCandidatura, new Insets(30,0,20,20));
+        VBox.setMargin(lAutoPropostas, new Insets(20,0,20,20));
+        VBox.setMargin(lPropostaCandidatura, new Insets(20,0,20,20));
+        VBox.setMargin(lPropostaSemCandidatura, new Insets(20,0,20,20));
         getChildren().addAll(lAutoPropostas,tableComAutoproposta, lPropostaCandidatura,tableComCandidatura, lPropostaSemCandidatura,tableSemCandidatura);
     }
     private void createViews() {
