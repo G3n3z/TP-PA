@@ -244,7 +244,10 @@ public class GestaoDocentesUI extends BorderPane {
             }
 
             try {
-                model.importDocentes(f.getAbsolutePath());
+                if(!model.importDocentes(f.getAbsolutePath())){
+                    AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Docentes", "Não foi possivel abrir o ficheiro");
+                    AlertSingleton.getInstanceWarning().showAndWait();
+                }
             } catch (CollectionBaseException e) {
                 AlertSingleton.getInstanceWarning().setAlertText("Informação", "Problemas na Importação dos dados dos Docentes", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();

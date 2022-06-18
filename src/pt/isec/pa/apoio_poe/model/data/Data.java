@@ -89,7 +89,7 @@ public class Data implements Serializable {
         return al;
     }
 
-    public List<Docente> getDocente(){ //TODO mesmo metodo que em cima?
+    public List<Docente> getDocente(){
         List<Docente> dc = new ArrayList<>();
         for (Docente d : docentes){
             dc.add(d);

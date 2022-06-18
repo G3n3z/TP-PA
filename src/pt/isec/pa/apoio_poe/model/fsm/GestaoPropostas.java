@@ -37,7 +37,6 @@ public class GestaoPropostas extends StateAdapter{
     @Override
     public boolean importPropostas(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file,",")){
-            //MessageCenter.getInstance().putMessage("O ficheiro não existe"); TODO
             return false;
         }
 

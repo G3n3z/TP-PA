@@ -287,7 +287,10 @@ public class GestaoAlunosUI extends BorderPane {
                 return;
             }
             try {
-                model.importAlunos(f.getAbsolutePath());
+                if(!model.importAlunos(f.getAbsolutePath())){
+                    AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", "Não foi possivel abrir o ficheiro");
+                    AlertSingleton.getInstanceWarning().showAndWait();
+                }
             } catch (CollectionBaseException e) {
                 AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Aluno", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();

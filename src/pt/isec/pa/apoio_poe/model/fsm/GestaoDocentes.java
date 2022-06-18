@@ -33,7 +33,6 @@ public class GestaoDocentes extends StateAdapter{
     public boolean importDocentes(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
         if(!CSVReader.startScanner(file,",")){
-            //MessageCenter.getInstance().putMessage("O ficheiro não existe"); TODO
             return false;
         }
         Docente docente;

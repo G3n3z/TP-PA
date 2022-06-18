@@ -94,8 +94,8 @@ public class ApoioContext {
 
     public String getCandidaturas(){return data.getCandidaturasToString();}
 
-    public void addCandidatura(String file) throws CollectionBaseException {
-        state.addCandidatura(file);
+    public boolean addCandidatura(String file) throws CollectionBaseException {
+        return state.addCandidatura(file);
     }
 
     public ErrorCode changeNameAluno(long nAluno, String novo_nome) {

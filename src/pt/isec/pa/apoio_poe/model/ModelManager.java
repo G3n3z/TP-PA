@@ -103,14 +103,16 @@ public class ModelManager {
         return error;
     }
 
-    public void importAlunos(String absolutePath) throws CollectionBaseException {
+    public boolean importAlunos(String absolutePath) throws CollectionBaseException {
+        boolean b;
         try{
-            context.addAluno(absolutePath);
+            b = context.addAluno(absolutePath);
         }catch (CollectionBaseException e){
             throw e;
         }finally {
             pcs.firePropertyChange(PROP_ALUNOS, null, null);
         }
+        return b;
     }
 
     public void removeAllAlunos() {
@@ -255,13 +257,13 @@ public class ModelManager {
     public boolean importCandidaturasCSV(String absolutePath) throws CollectionBaseException {
         boolean b;
         try {
-            context.addCandidatura(absolutePath);
+            b = context.addCandidatura(absolutePath);
         } catch (CollectionBaseException e) {
             throw e;
         }finally {
             pcs.firePropertyChange(PROP_CANDIDATURAS, null, null);
         }
-        return true;
+        return b;
     }
 
     public ErrorCode editCandidatura(String text, List<String> ids) {

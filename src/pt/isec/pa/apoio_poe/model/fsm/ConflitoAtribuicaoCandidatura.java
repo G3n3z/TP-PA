@@ -32,7 +32,7 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
         boolean exists = false;
         Map<Proposta, ArrayList<Aluno>> proposta_aluno = data.getProposta_aluno();
         if(proposta_aluno.isEmpty())
-            return ErrorCode.E0; //Verificar TODO
+            return ErrorCode.E0;
         int index;
         for(Map.Entry<Proposta, ArrayList<Aluno>> set : proposta_aluno.entrySet()){
             if(set.getValue().contains(Aluno.getDummyAluno(numAluno))){

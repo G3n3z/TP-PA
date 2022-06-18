@@ -292,6 +292,10 @@ public class OpcoesCandidaturaUI extends BorderPane {
             boolean error = true;
             try {
                 error = model.importCandidaturasCSV(f.getAbsolutePath());
+                if(!error){
+                    AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção de Candidaturas", "Não foi possivel abrir o ficheiro");
+                    AlertSingleton.getInstanceWarning().showAndWait();
+                }
             } catch (CollectionBaseException e) {
 
                 AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados das Candidaturas", e.getMessageOfExceptions());

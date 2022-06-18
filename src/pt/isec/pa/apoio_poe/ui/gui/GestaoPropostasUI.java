@@ -360,6 +360,10 @@ public class GestaoPropostasUI extends BorderPane {
             boolean error = true;
             try {
                  error = model.importCSV(f.getAbsolutePath());
+                 if (!error){
+                     AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção do Propostas", "Não foi possivel abrir o ficheiro");
+                     AlertSingleton.getInstanceWarning().showAndWait();
+                 }
             } catch (CollectionBaseException e) {
                 AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na Importação dos dados das Propostas", e.getMessageOfExceptions());
                 AlertSingleton.getInstanceWarning().showAndWait();
