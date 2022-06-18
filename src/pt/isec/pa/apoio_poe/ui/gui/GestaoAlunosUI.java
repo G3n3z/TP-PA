@@ -50,7 +50,6 @@ public class GestaoAlunosUI extends BorderPane {
     Boolean isClosed = false;
     public GestaoAlunosUI(ModelManager model) {
         this.model = model;
-        a = new Aluno("asd","Daniel", 123L,"LEI","DA",1.0,true);
         createViews();
         registerHandlers();
         update();
