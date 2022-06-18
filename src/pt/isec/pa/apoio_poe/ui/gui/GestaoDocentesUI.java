@@ -99,56 +99,6 @@ public class GestaoDocentesUI extends BorderPane {
 
 
     private void preparaInsereDocente() {
-//        insereAluno = new Pane();
-//        hboxInsereAluno = new VBox();
-//        VBox vbox = new VBox();
-//        Label nAluno = new Label("N.Aluno");
-//        nAluno.setPrefWidth(80);
-//        txNumero = new TextField();
-//        txNumero.setPrefWidth(300);
-//        FieldHBox fnAluno = new FieldHBox(nAluno, txNumero);
-//
-//        Label email = new Label("Email:");
-//        email.setPrefWidth(80);
-//        tfEmail = new TextField();
-//        tfEmail.setPrefWidth(300);
-//        FieldHBox fnEmail = new FieldHBox(email, tfEmail);
-//
-//        Label nome = new Label("Nome:");
-//        nome.setPrefWidth(80);
-//        tfNome = new TextField();
-//        tfNome.setPrefWidth(300);
-//        FieldHBox fnNome = new FieldHBox(nome, tfNome);
-//
-//        Label lcurso = new Label("Curso");
-//        lcurso.setPrefWidth(80);
-//        curso = new ChoiceBox<>();
-//        curso.getItems().addAll(Constantes.getCursos());
-//        curso.setPrefWidth(90);
-//        Label lRamo = new Label("Ramo");
-//        lRamo.setPrefWidth(60);
-//        ramo = new ChoiceBox<>();
-//        ramo.getItems().addAll(Constantes.getRamos());
-//        ramo.setPrefWidth(90);
-//        FieldHBox fnCurso = new FieldHBox(lcurso, curso,lRamo, ramo);
-//
-//        Label lclass = new Label("Classificação");
-//        lclass.setPrefWidth(80);
-//        tfClass = new TextField();
-//        tfClass.setPrefWidth(60);
-//        possibilidade = new CheckBox("Possibilidade de Estágio");
-//
-//        FieldHBox fnClass = new FieldHBox(lclass,tfClass,possibilidade);
-//        fnClass.setMarginField(2, new Insets(0,80,0,0));
-//
-//        btnExeInsereAluno = new Button("Inserir Aluno");
-//        HBox hBtn = new HBox();
-//        hBtn.getChildren().add(btnExeInsereAluno);
-//        hBtn.setAlignment(Pos.CENTER);
-//        hboxInsereAluno.getChildren().addAll(fnAluno, fnEmail,fnNome, fnCurso,fnClass, hBtn);
-//        hboxInsereAluno.setSpacing(30);
-//
-//        VBox.setMargin(fnAluno, new Insets(40,0,0,0));
         Label email = new Label("Email:");
         email.setPrefWidth(50);
         tfEmail = new TextField();

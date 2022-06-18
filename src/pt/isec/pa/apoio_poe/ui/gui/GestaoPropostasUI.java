@@ -322,12 +322,12 @@ public class GestaoPropostasUI extends BorderPane {
         btnExport.setOnAction(actionEvent -> {
             visible = false;
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Abrir ficheiro...");
+            fileChooser.setTitle("Gravar ficheiro...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Ficheiro de texto (*.csv)", "*.csv")
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
             );
-            File f = fileChooser.showOpenDialog(this.getScene().getWindow());
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
             if(f == null){
                 return;
             }
@@ -348,10 +348,10 @@ public class GestaoPropostasUI extends BorderPane {
         });
         btnInsereCSV.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("File open...");
+            fileChooser.setTitle("Abrir ficheiro...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Drawing (*.csv)", "*.csv")
+                    new FileChooser.ExtensionFilter("Ficheiro de texto (*.csv)", "*.csv")
             );
             File f = fileChooser.showOpenDialog(this.getScene().getWindow());
             if(f == null){
@@ -412,7 +412,7 @@ public class GestaoPropostasUI extends BorderPane {
                 update();
             }else{
 
-                AlertSingleton.getInstanceWarning().setAlertText("","Problemas Na edição do aluno", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("","Problemas na edição da Proposta", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
