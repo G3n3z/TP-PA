@@ -24,9 +24,9 @@ public class MainJavaFX extends Application {
         Scene cena = new Scene(root, 1600,800);
         stage.setScene(cena);
         stage.setTitle("Gestao de Projetos e Estágios");
+        stage.show();
 
 
-//        stage.show();
 //        Stage stage2 = new Stage();
 //        RootPane root2 = new RootPane(model, stage2);
 //        Scene scene2 = new Scene(root2,600,400);

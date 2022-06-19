@@ -262,7 +262,7 @@ public class ConsultaUI extends BorderPane {
         for(Map.Entry<String, Integer> set : dados.entrySet()){
             pieRamos.getData().add(new PieChart.Data(set.getKey(),set.getValue()));
         }
-        System.out.println(dados);
+
 
         pieAbsProp.getData().clear();
         List<Double> dadosAtribuicoes = model.getDadosAtribuicoes();
@@ -272,7 +272,7 @@ public class ConsultaUI extends BorderPane {
         piePercProp.getData().clear();
         piePercProp.getData().add(new PieChart.Data("Atribuida", dadosAtribuicoes.get(2)));
         piePercProp.getData().add(new PieChart.Data("Não Atribuida", dadosAtribuicoes.get(3)));
-        System.out.println(dadosAtribuicoes);
+
         pieRamos.getData().forEach(data ->
                 data.nameProperty().bind(
                         Bindings.concat(
@@ -325,10 +325,7 @@ public class ConsultaUI extends BorderPane {
         Map<Docente, Integer> dadosOrientadores= model.getTop5Orientadores();
 
         for(Map.Entry<Docente, Integer> set : dadosOrientadores.entrySet()){
-            //XYChart.Series<String, Number> dataOrientadores = new XYChart.Series<>();
             dataOrientadores.getData().add(new XYChart.Data<>(set.getKey().getNome(), set.getValue()));
-            System.out.println(set.getKey().getNome() + " -> " + set.getValue());
-
         }
 
         barChartTop5DocentesOrientadores.getData().clear();
@@ -361,6 +358,7 @@ public class ConsultaUI extends BorderPane {
         tvDocentes.removeCols("Número de Orientações");
         TableColumn<Docente, Integer> tcOrientacoes = new TableColumn<>("Número de Orientações");
         tcOrientacoes.setCellValueFactory(d-> new ReadOnlyObjectWrapper<>( docentes.get(d.getValue())));
+        tvDocentes.getItems().clear();
         tvDocentes.addCols(tcOrientacoes);
         tvDocentes.getItems().addAll(docentes.keySet());
 
@@ -379,8 +377,6 @@ public class ConsultaUI extends BorderPane {
         hBoxdadosOrientadoresMedia.setAlignment(Pos.CENTER);
         hBoxdadosOrientadoresMedia.setSpacing(80);
 
-        TableView<Number> tableViewDadosOrientadoresMedia = new TableView<>();
-        TableColumn<Number, Number> tcMedia = new TableColumn<>("Media");
 
     }
 
