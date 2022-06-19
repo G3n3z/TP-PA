@@ -4,10 +4,15 @@ import pt.isec.pa.apoio_poe.model.Exceptions.BaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.CollectionBaseException;
 import pt.isec.pa.apoio_poe.model.Exceptions.ConflitoAtribuicaoAutomaticaException;
 import pt.isec.pa.apoio_poe.model.command.ApoioManager;
+import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.ApoioContext;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.utils.PAInput;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class ApoioUIText {
     private ApoioContext context;
@@ -153,23 +158,27 @@ public class ApoioUIText {
         int option;
         ErrorCode error = ErrorCode.E0;
         if (!context.isClosed()) {
-            option = PAInput.chooseOption(context.getName(), "Inserção Alunos Por Ficheiro CSV", "Exportar Alunos para CSV",
+            option = PAInput.chooseOption(context.getName(), "Inserir aluno manualmente","Inserção Alunos Por Ficheiro CSV", "Exportar Alunos para CSV",
                     "Consultar Alunos", "Editar Aluno", "Remover Aluno", "Remover todos os Alunos", "Voltar","Exit");
+
             switch (option) {
-                case 1 -> {
+                case 1 -> error = context.insereAluno(new Aluno(PAInput.readString("Email:", true), PAInput.readString("Nome", false), PAInput.readLong("N.Aluno"),
+                        PAInput.readString("Curso", true), PAInput.readString("Ramo", true), PAInput.readNumber("Classificacao"),
+                        PAInput.readString("Possibilidade de Estagio", true).equalsIgnoreCase("true")));
+                case 2 -> {
                     try {
                         context.addAluno(PAInput.readString("Nome do ficheiro: ", true));
                     }catch (CollectionBaseException c){
                         System.out.println(c.getMessageOfExceptions());
                     }
                 }
-                case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 3 -> System.out.println(context.getAlunosToString());
-                case 4 -> UIEditarAlunos();
-                case 5 -> error = context.removeAluno(PAInput.readLong("Numero de Aluno: "));
-                case 6 -> context.removeAll();
-                case 7 -> context.recuarFase();
-                case 8 -> context.sair();
+                case 3 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 4 -> System.out.println(context.getAlunosToString());
+                case 5 -> UIEditarAlunos();
+                case 6 -> error = context.removeAluno(PAInput.readLong("Numero de Aluno: "));
+                case 7 -> context.removeAll();
+                case 8 -> context.recuarFase();
+                case 9 -> context.sair();
             }
         } else {
             option = PAInput.chooseOption(context.getName(), "Exportar Alunos para CSV", "Consultar Alunos", "Voltar","Exit");
@@ -207,10 +216,11 @@ public class ApoioUIText {
         int option;
         ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) {
-            option = PAInput.chooseOption(context.getName(), "Importar Docentes por CSV", "Exportar Docentes para CSV",
+            option = PAInput.chooseOption(context.getName(), "Inserir Docente","Importar Docentes por CSV", "Exportar Docentes para CSV",
                     "Consultar Docentes", "Editar Docente", "Remover Docente","Remover todos os Docentes", "Voltar", "Exit");
             switch (option) {
-                case 1 -> {
+                case 1 -> context.insereDocente(PAInput.readString("Email:", true), PAInput.readString("Nome", false));
+                case 2 -> {
                     try{
                         context.importDocentes(PAInput.readString("Nome do ficheiro: ", true));
                     }catch (CollectionBaseException c){
@@ -218,13 +228,13 @@ public class ApoioUIText {
                     }
 
                 }
-                case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 3 -> System.out.println(context.getDocentesToString());
-                case 4 -> UIEditarDocentes();
-                case 5 -> error = context.removeDocente(PAInput.readString("Email do docente: ", true));
-                case 6 -> context.removeAll();
-                case 7 -> context.recuarFase();
-                case 8 -> context.sair();
+                case 3 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 4 -> System.out.println(context.getDocentesToString());
+                case 5 -> UIEditarDocentes();
+                case 6 -> error = context.removeDocente(PAInput.readString("Email do docente: ", true));
+                case 7 -> context.removeAll();
+                case 8 -> context.recuarFase();
+                case 9 -> context.sair();
             }
         }else {
             option = PAInput.chooseOption(context.getName(), "Exportar Docentes para CSV", "Consultar Docentes", "Voltar","Exit");
@@ -307,25 +317,41 @@ public class ApoioUIText {
     private void UIOpcoes_Candidatura() {
         ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) { //Se nao esta fechado
-            switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
+            switch (PAInput.chooseOption(context.getName(), "Inserção de Candidaturas ","Inserção de Candidaturas por CSV", "Exportar Candidaturas para CSV", "Consulta de Candidaturas", "Edição de Candidaturas",
                     "Remover todas as candidaturas","Obtencao de Listas de alunos", "Obtenção de listas de propostas de projecto/estágio", "Fechar Fase", "Recuar Fase", "Avançar Fase", "Exit")) {
                 case 1 -> {
+                    String num = PAInput.readString("Num.Aluno", true);
+                    Scanner sc = new Scanner(System.in);
+                    String ramo;
+                    List<String> ramos= new ArrayList<>();
+                    System.out.println("Ramo:");
+                    ramo = sc.next();
+                    ramos.add(ramo);
+                    while(!ramo.equals("x") ){
+                        System.out.println("Ramo: - Digite x para terminar de inserir");
+                        ramo = sc.next();
+                        ramos.add(ramo);
+                    }
+                    context.insereCandidatura(num, ramos);
+                    sc.close();
+                }
+                case 2 -> {
                     try {
                         context.addCandidatura(PAInput.readString("Ficheiro: ", true));
                     }catch (CollectionBaseException c){
                         System.out.println(c.getMessageOfExceptions());
                     }
                 }
-                case 2 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
-                case 3 -> System.out.println(context.getCandidaturas());
-                case 4 -> UIEditarCandidaturas();
-                case 5 -> context.removeAll();
-                case 6 -> UIObtencaoDeListaDeAluno();
-                case 7 -> UIObtencaoDeListaDeProposta();
-                case 8 -> error = context.closeFase();
-                case 9 -> context.recuarFase();
-                case 10 -> context.avancarFase();
-                case 11 -> context.sair();
+                case 3 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
+                case 4 -> System.out.println(context.getCandidaturas());
+                case 5 -> UIEditarCandidaturas();
+                case 6 -> context.removeAll();
+                case 7 -> UIObtencaoDeListaDeAluno();
+                case 8 -> UIObtencaoDeListaDeProposta();
+                case 9 -> error = context.closeFase();
+                case 10 -> context.recuarFase();
+                case 11 -> context.avancarFase();
+                case 12 -> context.sair();
             }
         }
         else{
