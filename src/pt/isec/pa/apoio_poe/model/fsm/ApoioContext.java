@@ -226,11 +226,11 @@ public class ApoioContext {
         return state.exportarCSV(file);
     }
 
-    public String getPropostasDisponiveis() {
+    public String getPropostasDisponiveisToString() {
         return state.getPropostasDisponiveisToString();
     }
 
-    public String getPropostasAtribuidas(){
+    public String getPropostasAtribuidasToString(){
         return state.getPropostasAtribuidasToString();
     }
 
@@ -434,6 +434,22 @@ public class ApoioContext {
 
     public void goLoad() {
         state.goLoad();
+    }
+
+    public List<Proposta> getPropostasAtribuidas() {
+        return state.getPropostasAtribuidas();
+    }
+
+    public List<Aluno> getTodosAlunosComPropostaAtribuidaCopia() {
+        return state.getTodosAlunosComPropostaAtribuidaCopia();
+    }
+
+    public List<Aluno> obtencaoAlunosSemPropostaAtribuida() {
+        return state.obtencaoAlunosSemPropostaAtribuida();
+    }
+
+    public List<Proposta> getPropostasDisponiveis() {
+        return state.getPropostasDisponiveis();
     }
 }
 

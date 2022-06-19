@@ -813,4 +813,20 @@ public class ModelManager {
     public void goLoad() {
         context.goLoad();
     }
+
+    public List<Proposta> getPropostasAtribuidas() {
+        return context.getPropostasAtribuidas();
+    }
+
+    public List<Aluno> getTodosAlunosComPropostaAtribuidaCopia() {
+        return context.getTodosAlunosComPropostaAtribuidaCopia();
+    }
+
+    public List<Aluno> obtencaoAlunosSemPropostaAtribuida() {
+        return context.obtencaoAlunosSemPropostaAtribuida();
+    }
+
+    public List<Proposta> getPropostasDisponiveis() {
+        return context.getPropostasDisponiveis();
+    }
 }

@@ -685,8 +685,8 @@ public class ApoioUIText {
             case 1 -> error = context.exportaCSV(PAInput.readString("Nome do ficheiro a exportar: ", true));
             case 2 -> System.out.println(context.getTodosAlunosComPropostaAtribuida());
             case 3 -> System.out.println(context.obtencaoAlunosSemPropostaComCandidatura());
-            case 4 -> System.out.println(context.getPropostasDisponiveis());
-            case 5 -> System.out.println(context.getPropostasAtribuidas());
+            case 4 -> System.out.println(context.getPropostasDisponiveisToString());
+            case 5 -> System.out.println(context.getPropostasAtribuidasToString());
             case 6 -> System.out.println(context.getEstatisticasPorDocente());
             case 7 -> context.sair();
         }

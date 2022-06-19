@@ -16,10 +16,12 @@ import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.data.Proposta;
 import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.tables.TableAlunos;
 import pt.isec.pa.apoio_poe.ui.gui.tables.TableDocentes;
+import pt.isec.pa.apoio_poe.ui.gui.tables.TablePropostas;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
 import java.io.File;
@@ -31,7 +33,7 @@ public class ConsultaUI extends BorderPane {
 
     ModelManager model;
     MenuVertical menu;
-    ButtonMenu btnConsultaUI, btnListaAlunos, btnOrientacoesPorDocentes, btnExportCSV;
+    ButtonMenu btnConsultaUI, btnListaAlunos, btnListaPropostas, btnOrientacoesPorDocentes, btnExportCSV;
     PieChart pieRamos, piePercProp, pieAbsProp;
     BarChart<String, Number> barChartTop5Empresas, barChartTop5DocentesOrientadores;
     BorderPane bp; ScrollPane scrollPane; VBox container;
@@ -39,10 +41,11 @@ public class ConsultaUI extends BorderPane {
     XYChart.Series<String,Number> dataOrientadores;
     HBox hBox3,  hBox2, hBox1, hBoxdadosOrientadoresMedia;
     Label lDadosOrientadoresMedia;
-    TableAlunos tvAlunosComPropostaComOrientador, tvAlunosComPropostaSemOrientador;
+    TableAlunos tvAlunosComPropostaAtribuida, tvAlunosSemPropostaAtribuida;
     TableDocentes tvDocentes;
+    TablePropostas tPropostasDisponiveis, tPropostasAtribuidas;
     List<Node> nodesShow;
-    private VBox boxTvAlunosComOrientador, boxTvAlunosSemOrientador,boxTvDocentes;
+    private VBox boxTvAlunosComOrientador, boxTvAlunosSemOrientador,boxTvDocentes, vBoxPropostas;
 
 
     public ConsultaUI(ModelManager model) {
@@ -103,8 +106,8 @@ public class ConsultaUI extends BorderPane {
     }
 
     private void preparaTabelaOrientadores() {
-        tvAlunosComPropostaComOrientador = new TableAlunos(model);
-        tvAlunosComPropostaComOrientador.removeCols("Possibilidade Estagio", "Classificacao");
+        tvAlunosComPropostaAtribuida = new TableAlunos(model);
+        tvAlunosComPropostaAtribuida.removeCols("Possibilidade Estagio", "Classificacao");
         TableColumn<Aluno, String> colPropId = new TableColumn<>("Proposta");
 
         colPropId.setCellValueFactory(aluno ->{
@@ -127,59 +130,36 @@ public class ConsultaUI extends BorderPane {
             }
             return new ReadOnlyObjectWrapper<>("");
         });
-        TableColumn<Aluno, String> colPropOri = new TableColumn<>("Email Orientador");
-        colPropOri.setCellValueFactory(aluno ->{
-            if (aluno.getValue().temPropostaConfirmada()) {
-                if(aluno.getValue().getProposta().temDocenteOrientador())
-                    return new ReadOnlyObjectWrapper<>(aluno.getValue().getProposta().getEmailOrientador());
-            }
-            return new ReadOnlyObjectWrapper<>("");
-        });
-        TableColumn<Aluno, String> colPropOriNome = new TableColumn<>("Nome Orientador");
-        colPropOriNome.setCellValueFactory(aluno ->{
-            if (aluno.getValue().temPropostaConfirmada()) {
-                if(aluno.getValue().getProposta().temDocenteOrientador())
-                    return new ReadOnlyObjectWrapper<>(aluno.getValue().getProposta().getOrientador().getNome());
-            }
-            return new ReadOnlyObjectWrapper<>("");
-        });
-        tvAlunosComPropostaComOrientador.addCols(colPropId,colPropTipo, colPropTitulo, colPropOri, colPropOriNome);
+        tvAlunosComPropostaAtribuida.addCols(colPropId,colPropTipo, colPropTitulo);
 
-        TableColumn<Aluno, String> colPropId2 = new TableColumn<>("Proposta");
-        colPropId2.setCellValueFactory(aluno ->{
-            if (aluno.getValue().temPropostaConfirmada()) {
-                return new ReadOnlyObjectWrapper<>(aluno.getValue().getProposta().getId());
-            }
-            return new ReadOnlyObjectWrapper<>("");});
-        TableColumn<Aluno, String> colPropTipo2 = new TableColumn<>("Tipo");
-        colPropTipo2.setCellValueFactory(aluno ->{
-            if (aluno.getValue().temPropostaConfirmada()) {
-                return new ReadOnlyObjectWrapper<>(aluno.getValue().getProposta().getTipo());
-            }
-            return new ReadOnlyObjectWrapper<>("");
-        });
-        TableColumn<Aluno, String> colPropTitulo2 = new TableColumn<>("Titulo");
-        colPropTitulo2.setCellValueFactory(aluno ->{
-            if (aluno.getValue().temPropostaConfirmada()) {
-                return new ReadOnlyObjectWrapper<>(aluno.getValue().getProposta().getTitulo());
-            }
-            return new ReadOnlyObjectWrapper<>("");
-        });
 
-        tvAlunosComPropostaSemOrientador = new TableAlunos(model);
-        tvAlunosComPropostaSemOrientador.removeCols("Possibilidade Estagio", "Classificacao");
-        tvAlunosComPropostaSemOrientador.addCols(colPropId2,colPropTipo2,colPropTitulo2);
+        tvAlunosSemPropostaAtribuida = new TableAlunos(model);
 
-        Label lAO = new Label("Alunos com proposta atribuída e com orientador associado");
+
+        Label lAO = new Label("Alunos com proposta atribuída");
         lAO.setFont(new Font(18));
-        Label lASO = new Label("Alunos com proposta atribuída mas sem orientador associado");
-        lASO.setFont(new Font(18));
-        boxTvAlunosComOrientador = new VBox(lAO, tvAlunosComPropostaComOrientador);
+        Label lASP = new Label("Alunos sem proposta atribuída");
+        lASP.setFont(new Font(18));
+        boxTvAlunosComOrientador = new VBox(lAO, tvAlunosComPropostaAtribuida);
         boxTvAlunosComOrientador.setAlignment(Pos.CENTER);
         VBox.setMargin(lAO, new Insets(0,0,30,0));
-        boxTvAlunosSemOrientador = new VBox(lASO, tvAlunosComPropostaSemOrientador);
+        boxTvAlunosSemOrientador = new VBox(lASP, tvAlunosSemPropostaAtribuida);
         boxTvAlunosSemOrientador.setAlignment(Pos.CENTER);
-        VBox.setMargin(lASO, new Insets(50,0,30,0));
+        VBox.setMargin(lASP, new Insets(50,0,30,0));
+
+    }
+
+    private void preparaTabelaPropostas(){
+        Label lPD = new Label("Propostas Disponíveis");
+        lPD.setFont(new Font(18));
+        Label lPA = new Label("Propostas Atribuídas");
+        lPA.setFont(new Font(18));
+
+        tPropostasDisponiveis = new TablePropostas(model,null);
+        tPropostasAtribuidas = new TablePropostas(model,null);
+        vBoxPropostas.getChildren().addAll(lPD,tPropostasDisponiveis,lPA,tPropostasAtribuidas);
+        VBox.setMargin(vBoxPropostas, new Insets(20,0,20,10));
+        vBoxPropostas.setAlignment(Pos.CENTER);
 
     }
 
@@ -223,9 +203,10 @@ public class ConsultaUI extends BorderPane {
     private void preparaMenu() {
         btnConsultaUI = new ButtonMenu("Consulta");
         btnListaAlunos = new ButtonMenu("Lista de Alunos");
+        btnListaPropostas = new ButtonMenu("Lista de Propostas");
         btnOrientacoesPorDocentes = new ButtonMenu("Lista de Orientadores");
         btnExportCSV = new ButtonMenu("Exportar para CSV");
-        menu = new MenuVertical(btnConsultaUI, btnExportCSV, btnListaAlunos,btnOrientacoesPorDocentes);
+        menu = new MenuVertical(btnConsultaUI, btnExportCSV, btnListaAlunos, btnListaPropostas, btnOrientacoesPorDocentes);
         setLeft(menu);
     }
 
@@ -241,6 +222,11 @@ public class ConsultaUI extends BorderPane {
         btnListaAlunos.setOnAction(actionEvent -> {
             nodesShow.clear();
             nodesShow.addAll(List.of(boxTvAlunosComOrientador, boxTvAlunosSemOrientador));
+            updateViews();
+        });
+        btnListaPropostas.setOnAction(actionEvent -> {
+            nodesShow.clear();
+            nodesShow.add(vBoxPropostas);
             updateViews();
         });
         btnOrientacoesPorDocentes.setOnAction(actionEvent -> {
@@ -367,10 +353,15 @@ public class ConsultaUI extends BorderPane {
 
 
     private void updateTables() {
-        tvAlunosComPropostaComOrientador.getItems().clear();
-        tvAlunosComPropostaSemOrientador.getItems().clear();
-        tvAlunosComPropostaComOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaEOrientador());
-        tvAlunosComPropostaSemOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaESemOrientador());
+        tvAlunosComPropostaAtribuida.getItems().clear();
+        tvAlunosSemPropostaAtribuida.getItems().clear();
+        tvAlunosComPropostaAtribuida.getItems().addAll(model.getTodosAlunosComPropostaAtribuidaCopia());
+        tvAlunosSemPropostaAtribuida.getItems().addAll(model.obtencaoAlunosSemPropostaAtribuida());
+
+        tPropostasDisponiveis.getItems().clear();
+        tPropostasAtribuidas.getItems().clear();
+        tPropostasDisponiveis.getItems().addAll(model.getPropostasDisponiveis());
+        tPropostasAtribuidas.getItems().addAll(model.getPropostasAtribuidas());
 
 
         Map<Docente, Integer> docentes = model.getDocentesPorOrientacoes();
