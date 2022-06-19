@@ -27,6 +27,10 @@ public class GestaoOrientadores extends StateAdapter{
         return EnumState.GESTAO_ORIENTADORES;
     }
 
+    /**
+     *
+     * @return retorna string com os alunos com proposta e orientador
+     */
     @Override
     public String getAlunosComPropostaEOrientador() {
         StringBuilder sb = new StringBuilder();
@@ -41,6 +45,10 @@ public class GestaoOrientadores extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return retorna uma copia das propostas com orientador
+     */
     @Override
     public List<Proposta> getPropostasComOrientador() {
         List<Proposta> propostas = data.getPropostasCopia();

@@ -122,6 +122,11 @@ abstract class StateAdapter implements IState{
     @Override
     public void begin() {}
 
+    /**
+     *
+     * @return retorna true se consegui guardar o estado da aplicação
+     * @throws IOException lança exceção caso não consiga abrir o ficheiro
+     */
     @Override
     public boolean save() throws IOException {
         if(getState() != EnumState.LOAD_STATE || getState() != EnumState.SAIR)

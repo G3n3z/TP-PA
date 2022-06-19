@@ -38,19 +38,30 @@ public class OpcoesCandidatura extends StateAdapter{
         return EnumState.OPCOES_CANDIDATURA;
     }
 
+    /**
+     * Apenas fecha a fase se o estado de CONFIG_OPTIONS estiver fechado
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode close() {
         if(data.getBooleanState(EnumState.CONFIG_OPTIONS)){
             setClose(true);
-            //MessageCenter.getInstance().putMessage("Fase fechada corretamente\n");
+            //"Fase fechada corretamente\n";
             data.closeState(getState());
             return ErrorCode.E0;
         }
-        //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n" +
-        //        "Fase anterior ainda aberta.");
+        //"Condições de fecho de fase não alcançadas.\n" +
+        //        "Fase anterior ainda aberta."
         return ErrorCode.E22;
     }
 
+    /**
+     *
+     * @param file path para o ficheiro a ser lido
+     * @return retorna true se conseguir ler todas as candidaturas sem erros
+     * @throws CollectionBaseException lança um container de exceções com os problemas causados. <p></p>
+     * No entanto adiciona todas as candidaturas que consiga ler com sucesso
+     */
     @Override
     public boolean addCandidatura(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
@@ -85,6 +96,14 @@ public class OpcoesCandidatura extends StateAdapter{
         return index != 1;
 
     }
+
+    /**
+     *
+     * @param index index onde vai a ler o ficheiro
+     * @return retorna candidatura instanciada com os dados lidos
+     * @throws IncompleteCSVLine lança exceção quando uma linha não está completa
+     * @throws InvalidCSVField lança exceção quando um campo é invalido
+     */
     public Candidatura readCandidatura(int index) throws IncompleteCSVLine, InvalidCSVField {
         long numAluno;
         List<String> ids = new ArrayList<>();
@@ -110,6 +129,14 @@ public class OpcoesCandidatura extends StateAdapter{
         return candidatura;
     }
 
+    /**
+     *
+     * @param candidatura candidatura criada
+     * @param index linha do ficheiro csv
+     * @return return true se a candidatura tem todos os dados validos
+     * @throws InvalidCSVField lança exceção se um dos dados estiver corrompido
+     * @seeAlso  InvalidCSVField.getExcepMessage()
+     */
     public boolean existsFieldsOfCandidatura(Candidatura candidatura, int index) throws InvalidCSVField {
         Aluno a = data.getAluno(candidatura.getNumAluno());
         StringBuilder sb = new StringBuilder();
@@ -129,6 +156,13 @@ public class OpcoesCandidatura extends StateAdapter{
         return !candidaturaTemPropostaComAluno(candidatura, index);
     }
 
+    /**
+     * Função que verifica se uma nova candidatura tem uma proposta com aluno associado
+     * @param candidatura candidatura a ser analisada e possivelmente inserida nos dados
+     * @param index index do csv
+     * @return return true se a candidatura for váida
+     * @throws InvalidCSVField lança exceção se a candidadtura tiver uma proposta com aluno ja associado
+     */
     public boolean candidaturaTemPropostaComAluno(Candidatura candidatura, int index) throws InvalidCSVField {
         int find = 0;
         boolean notfind;  //testa se certo id passado na candidatura existe para poder imprimir
@@ -153,6 +187,12 @@ public class OpcoesCandidatura extends StateAdapter{
         return find != candidatura.getIdProposta().size();
     }
 
+    /**
+     * Funçao que adiciona proposta a candidatura
+     * @param nAluno numero de aluno da candidatura em questão
+     * @param idProposta id da proposta a adicionar
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode addPropostaACandidatura(long nAluno, String idProposta) {
         Aluno a = data.getAluno(nAluno);
@@ -171,6 +211,11 @@ public class OpcoesCandidatura extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Função que exporta os dados das candidaturas para um ficheiro CSV
+     * @param file path para o ficheiro a ser gravado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
@@ -183,6 +228,12 @@ public class OpcoesCandidatura extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Funcao que remove proposta a uma candidatura
+     * @param id id da porposta a ser removida
+     * @param naluno numero de aluno da candidatura
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode removePropostaACandidatura(String id, long naluno) {
         if(!data.verificaProposta(id)){
@@ -208,6 +259,10 @@ public class OpcoesCandidatura extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Funcao que remove todas as candidaturas
+     * @return boolean se a operação correu bem
+     */
     @Override
     public boolean removeAll() {
         for (Candidatura c : data.getCandidaturas()){
@@ -215,6 +270,11 @@ public class OpcoesCandidatura extends StateAdapter{
         }
         return true;
     }
+
+    /**
+     *
+     * @return retorna String com os alunos com autoproposta
+     */
     @Override
     public String obtencaoAlunosComAutoProposta() {
         StringBuilder sb = new StringBuilder();
@@ -222,6 +282,10 @@ public class OpcoesCandidatura extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return String com os alunos com candidatura
+     */
     @Override
     public String obtencaoAlunosComCandidatura() {
         StringBuilder sb = new StringBuilder();
@@ -229,6 +293,10 @@ public class OpcoesCandidatura extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return retorna String com alunos sem candidatura
+     */
     @Override
     public String obtencaoAlunosSemCandidatura() {
         StringBuilder sb = new StringBuilder();
@@ -236,6 +304,11 @@ public class OpcoesCandidatura extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     * Funcao que o ontem as propostas com filtors
+     * @param filters inteiros que especificam os filtros a ser aplicados
+     * @return retorna Set com as propostas com filtros
+     */
     public Set<Proposta> getPropostasWithFilters(int ...filters){
         Set<Proposta> propostas = new HashSet<>();
         for (int i : filters){
