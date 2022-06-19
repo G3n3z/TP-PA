@@ -56,9 +56,9 @@ public class ConsultaUI extends BorderPane {
         preparaTabelaOrientadores();
         preparaTabelaOrientacoesPorDocent();
         Label title = new Label("Consulta");
-        title.setFont(new Font(24));
+        title.setFont(new Font(26));
         HBox boxTitle = new HBox(title);
-        HBox.setMargin(title, new Insets(60));
+        HBox.setMargin(title, new Insets(25));
         boxTitle.setAlignment(Pos.CENTER);
         boxTitle.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY,Insets.EMPTY)));
 
@@ -90,14 +90,13 @@ public class ConsultaUI extends BorderPane {
         lTvDocentes.setFont(new Font(18));
         tvDocentes = new TableDocentes(model);
 
-        lDadosOrientadoresMedia = new Label("");
-        hBoxdadosOrientadoresMedia = new HBox(lDadosOrientadoresMedia);
+        hBoxdadosOrientadoresMedia = new HBox();
         hBoxdadosOrientadoresMedia.setAlignment(Pos.CENTER);
 
         boxTvDocentes = new VBox(lTvDocentes,tvDocentes, hBoxdadosOrientadoresMedia);
         boxTvDocentes.setAlignment(Pos.CENTER);
         VBox.setMargin(lTvDocentes, new Insets(0,0,30,0));
-        VBox.setMargin(tvDocentes, new Insets(0,0,60,0));
+        VBox.setMargin(tvDocentes, new Insets(0,0,100,0));
 
     }
 
@@ -370,12 +369,16 @@ public class ConsultaUI extends BorderPane {
             labels.add(new Label(translateDadosLabelOrientador(set.getKey()) + ": " + set.getValue()));
         }
         for (Label label : labels) {
-            label.setFont(new Font(15));
+            label.setFont(new Font(14));
+            label.setTextFill(Color.WHITE);
+            label.setStyle("-fx-font-weight: bold");
         }
         hBoxdadosOrientadoresMedia.getChildren().clear();
         hBoxdadosOrientadoresMedia.getChildren().addAll(labels);
         hBoxdadosOrientadoresMedia.setAlignment(Pos.CENTER);
         hBoxdadosOrientadoresMedia.setSpacing(80);
+        hBoxdadosOrientadoresMedia.setPrefHeight(50);
+        hBoxdadosOrientadoresMedia.setBackground(new Background(new BackgroundFill(Color.web("#37304a"),CornerRadii.EMPTY,Insets.EMPTY)));
 
 
     }

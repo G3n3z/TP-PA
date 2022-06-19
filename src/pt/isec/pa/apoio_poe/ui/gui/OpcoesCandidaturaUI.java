@@ -220,6 +220,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
 
         });
         btnAvancar.setOnAction(actionEvent -> {
+            nodesVisibles.clear();
+            nodesVisibles.add(tableView);
             model.avancarFase();
         });
         btnFechar.setOnAction(actionEvent -> {
@@ -231,6 +233,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
             }
         });
         btnRecuar.setOnAction(actionEvent -> {
+            nodesVisibles.clear();
+            nodesVisibles.add(tableView);
             model.recuarFase();
         });
         btnInserirCandidaturas.setOnAction(actionEvent -> {
@@ -240,12 +244,15 @@ public class OpcoesCandidaturaUI extends BorderPane {
             nodesVisibles.clear();
             nodesVisibles.add(tableView);
             nodesVisibles.add(hBoxInsereCandidaturas);
-
+            repoeBotaoInserir();
+            clearFieldsEdit();
             update();
         });
         btnCandidaturas.setOnAction(actionEvent -> {
             nodesVisibles.clear();
             nodesVisibles.add(tableView);
+            repoeBotaoInserir();
+            clearFieldsEdit();
             update();
         });
         btnExportarCSV.setOnAction(actionEvent -> {
@@ -274,6 +281,8 @@ public class OpcoesCandidaturaUI extends BorderPane {
             if(e != ErrorCode.E0){
                 AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Inserção de Candidaturas", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
+            }else{
+                clearFieldsEdit();
             }
         });
         btnInsereCandCSV.setOnAction(actionEvent -> {
@@ -395,6 +404,7 @@ public class OpcoesCandidaturaUI extends BorderPane {
     private void updateClose() {
         if(model.getCloseState(EnumState.OPCOES_CANDIDATURA)){
             menu.getChildren().remove(btnInserirCandidaturas);
+            menu.getChildren().remove(btnRemoverAll);
             menu.getChildren().remove(btnFechar);
             tableView.removeCols("Editar", "Remover");
             nodesVisibles.clear();

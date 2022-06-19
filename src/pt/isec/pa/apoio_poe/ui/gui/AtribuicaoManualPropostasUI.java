@@ -50,7 +50,6 @@ public class AtribuicaoManualPropostasUI extends BorderPane {
         tfAluno = new TextField();
         tfProposta = new TextField();
         btnInsere = new Button("Insere Atribuição");
-        btnRemove = new Button("Remove Atribuição");
 
         VBox boxInput = new VBox(lProposta, tfProposta, lAluno, tfAluno, btnInsere);
         VBox.setMargin(lProposta, new Insets(50,0,20,0));

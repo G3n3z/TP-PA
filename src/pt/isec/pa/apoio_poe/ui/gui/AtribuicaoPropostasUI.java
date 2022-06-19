@@ -158,16 +158,18 @@ public class AtribuicaoPropostasUI extends BorderPane {
             atualizaStats();
         });
         btnAvancar.setOnAction(actionEvent -> {
+            btnAtribuicaoPropostas.fire();
             model.avancarFase();
         });
         btnFechar.setOnAction(actionEvent -> {
             ErrorCode e = model.fecharFase();
             if(e != ErrorCode.E0){
-                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no Fecho da Fase", "Todos os alunos necessitam de ter Proposta Confirmada");
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no Fecho da Fase", "Todos os alunos com candidatura necessitam de ter proposta atribuída");
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
         btnRecuar.setOnAction(actionEvent -> {
+            btnAtribuicaoPropostas.fire();
             model.recuarFase();
         });
         btnGestao.setOnAction(actionEvent -> {
@@ -186,12 +188,12 @@ public class AtribuicaoPropostasUI extends BorderPane {
         });
         btnExportarCSV.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("File open...");
+            fileChooser.setTitle("Gravar ficheiro...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Drawing (*.csv)", "*.csv")
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
             );
-            File f = fileChooser.showOpenDialog(this.getScene().getWindow());
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
             if(f == null){
                 return;
             }

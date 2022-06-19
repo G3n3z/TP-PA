@@ -111,6 +111,11 @@ public class ObtencaoPropostaFiltrosFaseCandidatura extends VBox {
         });
         TableColumn<Proposta, Long> colAluno = new TableColumn<>("N.Aluno");
         colAluno.setCellValueFactory(new PropertyValueFactory<>("numAluno"));
+        colRamo.setPrefWidth(120);
+        coltitulo.setPrefWidth(250);
+        colDocente.setPrefWidth(150);
+        colEntidade.setPrefWidth(200);
+        colAluno.setPrefWidth(100);
         tableView.getColumns().addAll(colId,colTipo,colRamo, coltitulo,colDocente, colEntidade,colAluno);
         tableView.getStylesheets().add("css/table1.css");
     }

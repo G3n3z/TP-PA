@@ -86,7 +86,7 @@ public class ConfigOptionsUI extends BorderPane {
         bFechar.setOnAction(actionEvent -> {
             ErrorCode e = model.fecharFase();
             if(e != ErrorCode.E0){
-                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas nno Fecho da Fase", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas no Fecho da Fase", MessageTranslate.translateErrorCode(e));
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
         });

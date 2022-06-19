@@ -58,7 +58,7 @@ public class ObtencaoDadosOrientadores extends VBox {
         ScrollPane scrollPane = new ScrollPane(box);
         scrollPane.setFitToWidth(true);
         getChildren().add(scrollPane);
-        setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+
     }
 
     private void preparaTabelaAtribuidaComOrientador() {
@@ -79,7 +79,7 @@ public class ObtencaoDadosOrientadores extends VBox {
             if(!alunoStringCellDataFeatures.getValue().getProposta().temDocenteOrientador()){
                 return new ReadOnlyObjectWrapper<>("");
             }
-            return  new ReadOnlyObjectWrapper<>(alunoStringCellDataFeatures.getValue().getProposta().getOrientador().getEmail());
+            return  new ReadOnlyObjectWrapper<>(alunoStringCellDataFeatures.getValue().getProposta().getOrientador().getNome());
         });
         TableColumn<Aluno, String> colEmailDocente = new TableColumn<>("Email Orientador");
         colEmailDocente.setCellValueFactory(alunoStringCellDataFeatures -> {
@@ -89,7 +89,7 @@ public class ObtencaoDadosOrientadores extends VBox {
             if(!alunoStringCellDataFeatures.getValue().getProposta().temDocenteOrientador()){
                 return new ReadOnlyObjectWrapper<>("");
             }
-            return  new ReadOnlyObjectWrapper<>(alunoStringCellDataFeatures.getValue().getProposta().getOrientador().getNome());
+            return  new ReadOnlyObjectWrapper<>(alunoStringCellDataFeatures.getValue().getProposta().getOrientador().getEmail());
         });
         tableAlunosComOrientador.addCols(colIDProposta);
         tableAlunosComOrientador.addCols(colEmailDocente);
@@ -139,7 +139,7 @@ public class ObtencaoDadosOrientadores extends VBox {
             tableAlunosComOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaEOrientador());
             tableAlunosSemOrientador.getItems().clear();
             tableAlunosSemOrientador.getItems().addAll(model.getAlunosComPropostaConfirmadaESemOrientador());
-
+            tvDocentes.getItems().clear();
             Map<Docente, Integer> docentes = model.getDocentesPorOrientacoes();
             tvDocentes.removeCols("Número de Orientações");
             TableColumn<Docente, Integer> tcOrientacoes = new TableColumn<>("Número de Orientações");

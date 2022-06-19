@@ -1,11 +1,14 @@
 package pt.isec.pa.apoio_poe.ui.gui;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Proposta;
@@ -31,8 +34,15 @@ public class ConflitoAtribuicaoCandidaturaUI extends BorderPane {
 
     private void createViews() {
         preparaTabelas();
-        Label lPropostas = new Label("Proposta em Conflito");
-        Label lAlunos = new Label("Alunos em Conflito");
+        Label lPropostas = new Label("Alunos em Conflito");
+        Label lAlunos = new Label("Propostas em Conflito");
+        lPropostas.setFont(new Font(18));
+        lPropostas.setAlignment(Pos.CENTER);
+        lPropostas.setPadding(new Insets(20,0,20,10));
+        lAlunos.setFont(new Font(18));
+        lAlunos.setAlignment(Pos.CENTER);
+        lAlunos.setPadding(new Insets(20,0,20,10));
+        tablePropostas.setPrefHeight(200);
         VBox box = new VBox(lPropostas,tableAlunos,lAlunos,tablePropostas);
         setCenter(box);
 

@@ -115,7 +115,8 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
         });
         tablePropostas.addCols(colEmailDocente);
         tablePropostas.addCols(colNome);
-
+        colEmailDocente.setPrefWidth(150);
+        colNome.setPrefWidth(150);
         Label lTable = new Label("Atribuição de Orientadores");
         lTable.setFont(new Font(26));
         HBox titleTable = new HBox(lTable);
@@ -163,7 +164,10 @@ public class AtribuicaoOrientadoresUI extends BorderPane {
                 AlertSingleton.getInstanceWarning().showAndWait();
             }
         });
-        btnRecuar.setOnAction(actionEvent -> model.recuarFase());
+        btnRecuar.setOnAction(actionEvent -> {
+            btnAtribuirOrientadores.fire();
+            model.recuarFase();
+        });
         btnFecharEAvancar.setOnAction(actionEvent -> {
            ErrorCode e = model.fecharFase();
            if(e != ErrorCode.E0){
