@@ -28,7 +28,7 @@ public class SairUI extends BorderPane {
         model.addPropertyChangeListener(ModelManager.PROP_STATE, evt -> update());
     }
 
-    private void update(){
+    private void update() {
         this.setVisible(model != null && model.getState() == EnumState.SAIR);
         if(model != null && model.getState() == EnumState.SAIR){
             this.setVisible(true);

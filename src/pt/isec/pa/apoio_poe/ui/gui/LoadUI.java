@@ -13,6 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
+import pt.isec.pa.apoio_poe.ui.gui.utils.AlertSingleton;
 import pt.isec.pa.apoio_poe.ui.gui.utils.ButtonMenu;
 
 import java.io.IOException;
@@ -39,16 +40,13 @@ public class LoadUI extends BorderPane {
         carregar.setOnAction(actionEvent -> {
             try {
                 model.load();
-            } catch (IOException e) {
-                System.out.println("Erro de leitura");
-            } catch (ClassNotFoundException e) {
-                System.out.println(e.getMessage());
+            } catch (ClassNotFoundException | IOException e) {
+                AlertSingleton.getInstanceWarning().setAlertText("", "Problemas na recuperação da aplicação", "Não foi possivel abrir o ficheiro");
+                AlertSingleton.getInstanceWarning().showAndWait();
             }
             update();
-            System.out.println(model.getState().toString());
         });
         sair.setOnAction(actionEvent -> {
-            System.out.println("Sair");
             Platform.exit();
         });
     }
