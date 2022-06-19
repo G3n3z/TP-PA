@@ -58,6 +58,7 @@ public class ConsultaUI extends BorderPane {
     private void createViews() {
         preparaMenu();
         preparaGraficos();
+        preparaTabelaPropostas();
         preparaTabelaOrientadores();
         preparaTabelaOrientacoesPorDocent();
         Label title = new Label("Consulta");
@@ -155,6 +156,7 @@ public class ConsultaUI extends BorderPane {
         Label lPA = new Label("Propostas Atribuídas");
         lPA.setFont(new Font(18));
 
+        vBoxPropostas = new VBox();
         tPropostasDisponiveis = new TablePropostas(model,null);
         tPropostasAtribuidas = new TablePropostas(model,null);
         vBoxPropostas.getChildren().addAll(lPD,tPropostasDisponiveis,lPA,tPropostasAtribuidas);

@@ -258,7 +258,6 @@ public class AtribuicaoPropostasUI extends BorderPane {
             setLeft(menu);
         }
         update();
-
     }
 
 }
