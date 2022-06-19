@@ -288,7 +288,7 @@ public class AtribuicaoPropostas extends StateAdapter{
         List<Aluno> al = new ArrayList<>();
         for (Aluno a : data.getAlunos()) {
             if(a.temPropostaConfirmada()){
-                al.add(a);
+                al.add(a.getClone());
             }
         }
         return al;

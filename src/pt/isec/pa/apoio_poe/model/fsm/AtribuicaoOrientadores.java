@@ -34,15 +34,24 @@ public class AtribuicaoOrientadores extends StateAdapter {
         return EnumState.ATRIBUICAO_ORIENTADORES;
     }
 
+    /**
+     * Apenas fecha a fase se a anterior estiver fechada
+     * @return ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode close() {
-        //TODO Verificar se a anterior esta fechada
+        if(!data.getBooleanState(EnumState.ATRIBUICAO_PROPOSTAS)){
+            return ErrorCode.E22;
+        }
         setClose(true);
         changeState(EnumState.CONSULTA);
         data.closeState(getState());
         return ErrorCode.E0;
     }
 
+    /**
+     * Metodo que confirma que o proponente é o orientador
+     */
     @Override
     public void associacaoAutomaticaDeDocentesAPropostas() {
         for(Proposta proposta : data.getProposta()){
@@ -52,11 +61,21 @@ public class AtribuicaoOrientadores extends StateAdapter {
         }
     }
 
+    /**
+     * Transicao de estado para a gestao de orientadores
+     * @return boolean com o resultado
+     */
     @Override
     public boolean gerirOrientadores() {
         changeState(EnumState.GESTAO_ORIENTADORES);
         return true;
     }
+
+    /**
+     *
+     * @param file path para o ficheiro no qual vai exportar
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){

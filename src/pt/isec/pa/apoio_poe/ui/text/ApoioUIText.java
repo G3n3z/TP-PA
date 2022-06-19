@@ -266,10 +266,36 @@ public class ApoioUIText {
         int option;
         ErrorCode error = ErrorCode.E0;
         if(!context.isClosed()) {
-            option = PAInput.chooseOption(context.getName(), "Importar Estágios/Projetos","Exportar para CSV", "Consultar Estágio/Projeto", "Editar Estágio/Projeto",
+            option = PAInput.chooseOption(context.getName(), "Importar Estagio/Projeto","Importar Estágios/Projetos por CSV","Exportar para CSV ", "Consultar Estágio/Projeto", "Editar Estágio/Projeto",
                     "Remover Estágio/Projeto", "Remover todos Estágios/Projetos", "Voltar", "Exit");
             switch (option) {
                 case 1 -> {
+
+                    String id = PAInput.readString("Id Proposta: ", true);
+                    String tipo = PAInput.readString("Tipo: ", true);
+                    Scanner sc = new Scanner(System.in);
+                    String ramo;
+                    List<String> ramos= new ArrayList<>();
+                    System.out.println("Ramo:");
+                    ramo = sc.next();
+
+                    while(!ramo.equals("x") ){
+                        System.out.println("Ramo: - Digite x para terminar de inserir");
+                        ramos.add(ramo);
+                        ramo = sc.next();
+                    }
+
+                    switch (tipo){
+                        case "T1" ->  error = context.insereProposta(tipo, id, ramos,PAInput.readString("Titulo: ", false), PAInput.readString("Email Docente: ", true),
+                                PAInput.readString("Entidade: ", true),PAInput.readString("Num Aluno: ", true));
+                        case "T2" ->  error = context.insereProposta(tipo, id, ramos,PAInput.readString("Titulo: ", false), PAInput.readString("Email Docente: ", true),
+                               " ",PAInput.readString("Num Aluno: ", true));
+                        case "T3" ->  error = context.insereProposta(tipo, id, ramos,PAInput.readString("Titulo: ", false), PAInput.readString("Email Docente: ", true),
+                                "",PAInput.readString("Num Aluno: ", true));
+                    }
+
+                }
+                case 2 -> {
                     try {
                         context.importPropostas(PAInput.readString("Nome do ficheiro: ", true));
                     }
@@ -277,13 +303,13 @@ public class ApoioUIText {
                         System.out.println(e.getMessageOfExceptions());
                     }
                 }
-                case 2 -> error = context.exportaCSV(PAInput.readString("Ficheiro: ", true));
-                case 3 -> System.out.println(context.getPropostasToString());
-                case 4 -> UIEditarPropostas();
-                case 5 -> error = context.removerProposta(PAInput.readString("Id Propostas: ",true));
-                case 6 -> context.removeAll();
-                case 7 -> context.recuarFase();
-                case 8 -> context.sair();
+                case 3 -> error = context.exportaCSV(PAInput.readString("Ficheiro: ", true));
+                case 4 -> System.out.println(context.getPropostasToString());
+                case 5 -> UIEditarPropostas();
+                case 6 -> error = context.removerProposta(PAInput.readString("Id Propostas: ",true));
+                case 7 -> context.removeAll();
+                case 8 -> context.recuarFase();
+                case 9 -> context.sair();
             }
         }else {
             option = PAInput.chooseOption(context.getName(), "Exportar para CSV", "Consultar Estágio/Projeto", "Voltar", "Exit");
@@ -332,7 +358,7 @@ public class ApoioUIText {
                         ramo = sc.next();
                         ramos.add(ramo);
                     }
-                    context.insereCandidatura(num, ramos);
+                    error = context.insereCandidatura(num, ramos);
                     sc.close();
                 }
                 case 2 -> {

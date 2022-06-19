@@ -13,6 +13,10 @@ public class AtribuicaoManualPropostas extends StateAdapter {
         super(context, isClosed, data);
     }
 
+    /**
+     * Mudar de estado
+     * @return retorna booleano se correu bem
+     */
     @Override
     public boolean recuarFase(){
         changeState(EnumState.ATRIBUICAO_PROPOSTAS);
@@ -22,17 +26,25 @@ public class AtribuicaoManualPropostas extends StateAdapter {
     @Override
     public EnumState getState() { return EnumState.ATRIBUICAO_MANUAL_PROPOSTAS; }
 
+    /**
+     * Obtem alunos com proposta confirmada
+     * @return um List com uma copia dos alunos com proposta confirmada
+     */
     @Override
     public List<Aluno> getAlunosComPropostaConfirmada() {
         List<Aluno> al = new ArrayList<>();
         for (Aluno a : data.getAlunos()) {
             if(a.temPropostaConfirmada()){
-                al.add(a);
+                al.add(a.getClone());
             }
         }
         return al;
     }
 
+    /**
+     *
+     * @return um list com os alunos aos quais a atribuiçao de propostas nao foi previamente definido
+     */
     @Override
     public List<Aluno> getAlunosComPropostaConfirmadaEditavel() {
         List<Aluno> al = new ArrayList<>();
