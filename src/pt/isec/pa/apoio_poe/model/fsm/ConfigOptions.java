@@ -16,6 +16,10 @@ public class ConfigOptions extends  StateAdapter{
         return EnumState.CONFIG_OPTIONS;
     }
 
+    /**
+     * Funcao de fechoda fase
+     * @return ErrorCode com o codigo de como correu a operação
+     */
     @Override
     public ErrorCode close() {
         if(verificaCondicaoFechoF1()) {
@@ -29,6 +33,7 @@ public class ConfigOptions extends  StateAdapter{
         //        "para cada ramo, o número total de propostas é igual ou superior ao número de alunos.\n");
         return ErrorCode.E24;
     }
+
 
     @Override
     public boolean gerirAlunos() {
@@ -54,6 +59,10 @@ public class ConfigOptions extends  StateAdapter{
         return true;
     }
 
+    /**
+     * Condição de fecho do estado, apenas permite fechar se existir propostas para cada aluno
+     * @return boolean para saber como correu a operação
+     */
     public boolean verificaCondicaoFechoF1() {
         int pDA = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null && proposta.getRamos().contains("DA")).count();
         int pRAS = (int) data.getProposta().stream().filter(proposta -> proposta.getRamos() != null && proposta.getNumAluno() == null  && proposta.getRamos().contains("RAS")).count();

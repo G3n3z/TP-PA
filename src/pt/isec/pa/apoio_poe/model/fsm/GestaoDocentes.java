@@ -29,6 +29,13 @@ public class GestaoDocentes extends StateAdapter{
         return EnumState.GESTAO_DOCENTES;
     }
 
+    /**
+     * Funcao de importação de docentes de ficheiro CSV
+     * @param file path para o ficheiro a ser lido
+     * @return retorna ErrorCode com o resultado da operacao
+     * @throws CollectionBaseException pode lançar excessao se existir problemas com os dados a serem lidos porem
+     * insere os docentes validos
+     */
     @Override
     public boolean importDocentes(String file) throws CollectionBaseException {
         CollectionBaseException col = null;
@@ -60,7 +67,13 @@ public class GestaoDocentes extends StateAdapter{
         return index != 1;
     }
 
-    // Le um docente numa linha de csv
+    /**
+     * Le linha de um csv
+     * @param index index da linha em que o csv esta aberto
+     * @return retorna Docente lido do csv
+     * @throws IncompleteCSVLine lança excessão se existir um uma linha incompleta
+     * @throws InvalidCSVField lança excessão se existir um campo invalido
+     */
     private Docente readDocente(int index) throws IncompleteCSVLine, InvalidCSVField {
         String email, nome;
 
@@ -75,7 +88,13 @@ public class GestaoDocentes extends StateAdapter{
         return new Docente(email, nome);
     }
 
-    // Verifica se o email esta ja atribuido a um aluno
+    /**
+     * Verifica se o email esta ja atribuido a um aluno
+     * @param index index da linha do csv
+     * @param email email cdo docente a ser verificado
+     * @return true se correu bem
+     * @throws InvalidCSVField lança excessao se algum dado estiver corrompido
+     */
     private boolean checkDocente(int index, String email) throws InvalidCSVField {
         if(data.existeAlunoComEmail(email)){
             throw new InvalidCSVField("Linha " + index + " -> Email já registado num aluno.", index, ErrorCode.E12);
@@ -83,6 +102,11 @@ public class GestaoDocentes extends StateAdapter{
         return true;
     }
 
+    /**
+     *  remove um docente por email
+     * @param email email do docente
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode removeDocente(String email) {
         Docente d = data.getDocente(email);
@@ -95,7 +119,11 @@ public class GestaoDocentes extends StateAdapter{
     }
 
 
-
+    /**
+     * exporta dados dos docentes
+     * @param file path para o ficheiro a ser criado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
@@ -109,6 +137,10 @@ public class GestaoDocentes extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * remove todos os docentes
+     * @return true se correu bem
+     */
     @Override
     public boolean removeAll() {
         for (Docente d : data.getDocentes()){
@@ -117,6 +149,12 @@ public class GestaoDocentes extends StateAdapter{
         return true;
     }
 
+    /**
+     * Funcao de edicao de nome
+     * @param novo_nome novo nome do docente
+     * @param email email do docente a ser editado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode changeNameDocente(String novo_nome, String email) {
         if(!data.changeNameDocente(novo_nome, email)){
@@ -126,6 +164,12 @@ public class GestaoDocentes extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Inserção manual de um docente
+     * @param email email do docente a ser criado
+     * @param nome nome do docente a ser criado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode insereDocente(String email, String nome) {
         Docente d = new Docente(email, nome);
@@ -140,6 +184,12 @@ public class GestaoDocentes extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Edicao de um docente
+     * @param email email do docente a ser editado
+     * @param nome novo nome do docente
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     public ErrorCode editDocente(String email, String nome) {
         Docente d = new Docente(email, nome);
         if(!data.editDocente(d)){

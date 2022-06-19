@@ -24,6 +24,11 @@ public class Consulta extends StateAdapter{
         return EnumState.CONSULTA;
     }
 
+    /**
+     *
+     * @param file Path para o ficheiro a exportar
+     * @return ErrorCode com o resultado do metodo
+     */
     @Override
     public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
@@ -37,7 +42,7 @@ public class Consulta extends StateAdapter{
                 CSVWriter.writeLine(",", false, true, a.getProposta().exportProposta());
                 CSVWriter.writeLine(",", false, true, a.getOrdem());
             }
-            if(a.getProposta().temDocenteOrientador()){
+            if(a.temPropostaConfirmada() && a.getProposta().temDocenteOrientador()){
                 CSVWriter.writeLine(",",false,true,a.getProposta().getOrientador().getExportDocente());
             }
             CSVWriter.writeLine(",", true,false);
@@ -48,6 +53,11 @@ public class Consulta extends StateAdapter{
         return ErrorCode.E0;
 
     }
+
+    /**
+     *
+     * @return retorna String com todos os alunos com proposta atribuida
+     */
     @Override
     public String getTodosAlunosComPropostaAtribuida() {
         StringBuilder sb = new StringBuilder();
@@ -60,6 +70,10 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return String com os alunos sem proposta mas com candidatura
+     */
     @Override
     public String obtencaoAlunosSemPropostaComCandidatura() {
         StringBuilder sb = new StringBuilder();
@@ -81,6 +95,10 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return retorna String com todas as propostas disponiveis
+     */
     @Override
     public String getPropostasDisponiveis() {
         StringBuilder sb = new StringBuilder();
@@ -88,6 +106,11 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+
+    /**
+     *
+     * @return retorna String com todas as propostas atribuidas
+     */
     @Override
     public String getPropostasAtribuidasToString() {
         StringBuilder sb = new StringBuilder();
@@ -95,6 +118,10 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return retorna String com as estatisticas por docente
+     */
     @Override
     public String getEstatisticasPorDocente() {
         StringBuilder sb = new StringBuilder();
@@ -123,6 +150,11 @@ public class Consulta extends StateAdapter{
         });
         return  sb.toString();
     }
+
+    /**
+     *
+     * @return retorna uma map com a copia de docentes e um ArrayList das propostas do qual é orientador
+     */
     private Map<Docente, ArrayList<Proposta>> getEstatiticasDocente(){
         Map<Docente, ArrayList<Proposta>> docente_proposta = new HashMap<>();
         data.getDocentes().forEach(d -> docente_proposta.put(d, new ArrayList<>()));
@@ -141,20 +173,14 @@ public class Consulta extends StateAdapter{
         return docente_proposta;
     }
 
+    /**
+     *
+     * @return retorna as propostas atribuidas por Ramos
+     */
     @Override
     public Map<String, Integer> getPropostasPorRamos() {
         Map<String, Integer> result = new HashMap<>();
-//        for (String ramo : Constantes.getRamos()) {
-//            result.put(ramo, (int) data.getProposta().stream().filter(p -> {
-//                if (p.getRamos() == null)
-//                    return false;
-//                for (String pRamo : p.getRamos()) {
-//                    if(ramo.equals(pRamo))
-//                        return true;
-//                }
-//                return false;
-//            }).count());
-//        }
+
         Integer quant;
 
         for (Aluno aluno : data.getAlunos()) {
@@ -169,10 +195,19 @@ public class Consulta extends StateAdapter{
                 }
             }
         }
-
+        for (String ramo : Constantes.getRamos()) {
+            if(!result.containsKey(ramo)){
+                result.put(ramo, 0);
+            }
+        }
         return result;
     }
 
+    /**
+     *
+     * @return os dados das atibuiçoes, quantidade de propostas atribuidas,  propostas não atribuidas, percentagem de propostas atibuidas
+     * percentagem de propostas não atibuidas
+     */
     @Override
     public List<Double> getDadosAtribuicoes() {
         List<Double> dados = new ArrayList<>();
@@ -185,6 +220,10 @@ public class Consulta extends StateAdapter{
         return dados;
     }
 
+    /**
+     *
+     * @return retorna um Map com o top5 das entidades e numero de de estágios da mesma
+     */
     @Override
     public Map<String, Integer> getTop5Empresas() {
 
@@ -225,7 +264,10 @@ public class Consulta extends StateAdapter{
         return top5;
     }
 
-
+    /**
+     *
+     * @return retorna um Map com uma copia do docentes e a quantidade de estágios a serem orientados pelos mesmos
+     */
     @Override
     public Map<Docente, Integer> getTop5Orientadores() {
         Map<Docente, Integer> auxTop5 = new HashMap<>();
@@ -262,6 +304,10 @@ public class Consulta extends StateAdapter{
 
     }
 
+    /**
+     *
+     * @return retorna um Map com os docentes e a quantidade das suas orientações
+     */
     @Override
     public Map<Docente, Integer> getDocentesPorOrientacoes() {
         Map<Docente, ArrayList<Proposta>> docente_proposta= getEstatiticasDocente();
@@ -271,6 +317,11 @@ public class Consulta extends StateAdapter{
         }
         return docente_numOrientacoes;
     }
+
+    /**
+     *
+     * @return retorna um List com uma copia dos alunos com proposta confirmada e orientador atribuido
+     */
     @Override
     public List<Aluno> getAlunosComPropostaConfirmadaEOrientador() {
         List<Aluno> alunos = new ArrayList<>();
@@ -283,6 +334,11 @@ public class Consulta extends StateAdapter{
         }
         return alunos;
     }
+
+    /**
+     *
+     * @return retorna um List com a copia dos alunos com proposta confirmada e sem orientador
+     */
     @Override
     public List<Aluno> getAlunosComPropostaConfirmadaESemOrientador() {
         List<Aluno> alunos = new ArrayList<>();
@@ -296,6 +352,10 @@ public class Consulta extends StateAdapter{
         return alunos;
     }
 
+    /**
+     *
+     * @return retorna um map com o email e o numero medio, maximo e minimo de orientações por docente
+     */
     @Override
     public Map<String, Number> getDadosNumeroOrientacoes() {
         int min = 0, max = 0, count = 0, index = 0;

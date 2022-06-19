@@ -22,11 +22,20 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
         return true;
     }
 
+    /**
+     * Metodo que retorna se existe conflito a resolver
+     * @return
+     */
     @Override
     public boolean existConflict() {
         return data.getProposta_aluno().size() > 0;
     }
 
+    /**
+     *
+     * @param numAluno Resolve um conflito a partir de um numero de aluno, ou seja associa o aluno com o numero de aluno recebido à proposta
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode resolveConflito(long numAluno) {
         boolean exists = false;
@@ -55,6 +64,10 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
         return EnumState.CONFLITO_ATRIBUICAO_CANDIDATURA;
     }
 
+    /**
+     *
+     * @return String com os dados dos alunos e proposta em conflito
+     */
     @Override
     public String getConflitoToString() {
         StringBuilder sb = new StringBuilder();
@@ -68,6 +81,10 @@ public class ConflitoAtribuicaoCandidatura extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     *
+     * @return retorna uma copia dos dados dos alunos e proposta em conflito
+     */
     @Override
     public  Map<Proposta, ArrayList<Aluno>> getConflito() {
         Map<Proposta, ArrayList<Aluno>> proposta_aluno = data.getProposta_aluno();

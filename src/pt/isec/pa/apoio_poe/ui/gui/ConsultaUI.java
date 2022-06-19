@@ -9,18 +9,20 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import pt.isec.pa.apoio_poe.model.ModelManager;
 import pt.isec.pa.apoio_poe.model.data.Aluno;
 import pt.isec.pa.apoio_poe.model.data.Docente;
+import pt.isec.pa.apoio_poe.model.errorCode.ErrorCode;
 import pt.isec.pa.apoio_poe.model.fsm.EnumState;
 import pt.isec.pa.apoio_poe.ui.gui.tables.TableAlunos;
 import pt.isec.pa.apoio_poe.ui.gui.tables.TableDocentes;
 import pt.isec.pa.apoio_poe.ui.gui.utils.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class ConsultaUI extends BorderPane {
 
     ModelManager model;
     MenuVertical menu;
-    ButtonMenu btnConsultaUI, btnListaAlunos, btnOrientacoesPorDocentes;
+    ButtonMenu btnConsultaUI, btnListaAlunos, btnOrientacoesPorDocentes, btnExportCSV;
     PieChart pieRamos, piePercProp, pieAbsProp;
     BarChart<String, Number> barChartTop5Empresas, barChartTop5DocentesOrientadores;
     BorderPane bp; ScrollPane scrollPane; VBox container;
@@ -222,7 +224,8 @@ public class ConsultaUI extends BorderPane {
         btnConsultaUI = new ButtonMenu("Consulta");
         btnListaAlunos = new ButtonMenu("Lista de Alunos");
         btnOrientacoesPorDocentes = new ButtonMenu("Lista de Orientadores");
-        menu = new MenuVertical(btnConsultaUI, btnListaAlunos,btnOrientacoesPorDocentes);
+        btnExportCSV = new ButtonMenu("Exportar para CSV");
+        menu = new MenuVertical(btnConsultaUI, btnExportCSV, btnListaAlunos,btnOrientacoesPorDocentes);
         setLeft(menu);
     }
 
@@ -245,6 +248,23 @@ public class ConsultaUI extends BorderPane {
             nodesShow.add(boxTvDocentes);
             updateViews();
             //bp.setBottom(hBoxdadosOrientadoresMedia);
+        });
+        btnExportCSV.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Gravar ficheiro...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("CSV (Separado por vírgulas) (*.csv)", "*.csv")
+            );
+            File f = fileChooser.showSaveDialog(this.getScene().getWindow());
+            if(f == null){
+                return;
+            }
+            ErrorCode e = model.exportCSV(f.getAbsolutePath());
+            if(e != ErrorCode.E0){
+                AlertSingleton.getInstanceWarning().setAlertText("Informação","Problemas na Exportação do CSV", MessageTranslate.translateErrorCode(e));
+                AlertSingleton.getInstanceWarning().showAndWait();
+            }
         });
 
     }

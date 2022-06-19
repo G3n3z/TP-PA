@@ -30,7 +30,13 @@ public class GestaoAlunos extends StateAdapter{
     }
 
 
-
+    /**
+     * Função de importação de dados relativos a alunos de CSV
+     * @param file path para o ficheiro a importar
+     * @return booleano com o resultado da operação
+     * @throws CollectionBaseException pode lançar um container de exceções caso existe algum dado invalido, no entanto <p></p>
+     * insere todos os alunos validos
+     */
     @Override
     public boolean addAluno(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file, ",")){
@@ -62,7 +68,13 @@ public class GestaoAlunos extends StateAdapter{
         return index != 1;
     }
 
-    // le um aluno de uma linha do ficheiro CSV
+    /**
+     *  le um aluno de uma linha do ficheiro CSV
+     * @param index recebe um index da linha do CSV que está a ler
+     * @return retorna um aluno criado
+     * @throws InvalidCSVField lança invalidCSVFiel se existir um campo com dados do tipo errado ou não validos
+     * @throws IncompleteCSVLine lança esta excessão caso a linha do CSV não tenho dados suficientes
+     */
     private Aluno readAluno(int index) throws InvalidCSVField, IncompleteCSVLine {
         String email, nome, ramo, curso;
         Long numAluno;
@@ -93,7 +105,16 @@ public class GestaoAlunos extends StateAdapter{
 
     }
 
-    // verifica se campos corretos
+
+    /**
+     * verifica se campos do aluno a inserir estão corretos
+     * @param index index do ficheiro csv
+     * @param email email do aluno
+     * @param curso curso do aluno
+     * @param ramo ramo do aluno
+     * @param classificacao classificação
+     * @throws InvalidCSVField lançar esta excessão caso alguma das validações corra mal
+     */
     private void fieldsCorrect(int index, String email, String curso, String ramo, double classificacao) throws InvalidCSVField {
         boolean ok = true;
         StringBuilder sb = new StringBuilder();
@@ -135,8 +156,11 @@ public class GestaoAlunos extends StateAdapter{
     }
 
 
-
-
+    /**
+     *  remove aluno por numero de aluno
+     * @param numero_de_aluno numero do aluno a remover
+     * @return ErrorCOde com o resultado da operação
+     */
     @Override
     public ErrorCode removeAluno(long numero_de_aluno) {
         Aluno a = data.getAluno(numero_de_aluno);
@@ -149,7 +173,11 @@ public class GestaoAlunos extends StateAdapter{
     }
 
 
-
+    /**
+     *
+     * @param file path para o ficheiro a guarda a informação
+     * @return retorna true se a função correr bem
+     */
     @Override
     public ErrorCode exportarCSV(String file) {
         List<Aluno> alunos;
@@ -165,6 +193,10 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E2;
     }
 
+    /**
+     * Função que remove todos os alunos
+     * @return retorna true se conclui com sucesso
+     */
     @Override
     public boolean removeAll(){
         for (Aluno a : data.getAlunos()){
@@ -173,11 +205,23 @@ public class GestaoAlunos extends StateAdapter{
         return true;
     }
 
+    /**
+     *
+     * @param novo_nome novo nome do aluno a ser alterado
+     * @param naluno numero do aluno a ser editado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode changeName(String novo_nome, long naluno) {
         return data.changeNameAluno(naluno, novo_nome) ? ErrorCode.E0 : ErrorCode.E3;
     }
 
+    /**
+     * Funcao que altera o curso do aluno
+     * @param novo_curso siga do curso
+     * @param nAluno numero de aluno a ser editado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode changeCursoAluno(String novo_curso, long nAluno) {
         if(!data.existeCursos(novo_curso)){
@@ -191,6 +235,13 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E0;
     }
 
+
+    /**
+     * Funcao que altera o ramo de um aluno
+     * @param novo_ramo siga do ramo
+     * @param nAluno numero de aluno a ser editado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode changeRamoAluno(String novo_ramo, long nAluno) {
         if(!data.existeRamos(novo_ramo)){
@@ -204,6 +255,12 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     *  Funcao que altera a classificação de um aluno
+     * @param nova_classificacao nova classificação
+     * @param nAluno numero de aluno a ser editado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode changeClassAluno(double nova_classificacao, long nAluno) {
         if (nova_classificacao < 0.0 || nova_classificacao > 1.0){
@@ -217,6 +274,11 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Altera a possiblidade do aluno aceder ao estagio
+     * @param nAluno numero do aluno a ser editado
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode changePossibilidadeAluno(long nAluno){
         if(!data.changePossibilidadeAluno(nAluno)){
@@ -226,6 +288,11 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     *
+     * @param a aluno a ser inserido nos dados
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode insereAluno(Aluno a) {
         try {
@@ -239,6 +306,17 @@ public class GestaoAlunos extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Funcao de edição dos campos possiveis de alteração de um aluno
+     * @param email email do aluno
+     * @param nome nome do aluno
+     * @param nAluno numero do aluno
+     * @param curso curso do aluno
+     * @param ramo ramo do aluno
+     * @param classificacao classificação do aluno
+     * @param isPossible possibilidade de acesso ao estagio do aluno
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode editAluno(String email, String nome, Long nAluno, String curso, String ramo, Double classificacao, Boolean isPossible){
         Aluno a = new Aluno(email, nome, nAluno, curso, ramo, classificacao, isPossible);
@@ -253,6 +331,7 @@ public class GestaoAlunos extends StateAdapter{
         }
         return error;
     }
+
 
     private ErrorCode verificaDados(Aluno a) {
         if(!data.existeCursos(a.getSiglaCurso())){
