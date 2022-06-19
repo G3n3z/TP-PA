@@ -33,7 +33,11 @@ public class GestaoPropostas extends StateAdapter{
     public EnumState getState() {
         return EnumState.GESTAO_PROPOSTAS;
     }
-
+    /**
+     * Importa propostas de ficheiro csv
+     * @return boolean false se impossível abrir ficheiro
+     *
+     */
     @Override
     public boolean importPropostas(String file) throws CollectionBaseException {
         if(!CSVReader.startScanner(file,",")){
@@ -82,7 +86,10 @@ public class GestaoPropostas extends StateAdapter{
             throw cb;
         return index != 1;
     }
-
+    /**
+     * Verifica e adiciona aos dados as propostas tipo T1 importadas
+     *
+     */
     public boolean leT1(int index) throws InvalidCSVField {
         String id, titulo, entidade;
         List<String> ramos;
@@ -122,7 +129,10 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Verifica e adiciona aos dados as propostas tipo T2 importadas
+     *
+     */
     public boolean leT2(int index) throws InvalidCSVField, IncompleteCSVLine {
         String id, titulo, docente;
         List<String> ramos;
@@ -161,7 +171,10 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Verifica e adiciona aos dados as propostas tipo T3 importadas
+     *
+     */
     public boolean leT3(int index) throws InvalidCSVField {
         String id, titulo;
         long numAluno;
@@ -183,19 +196,23 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Verifica se os ramos atribuídos são corretos
+     *
+     */
     private boolean checkRamos(int index, List<String> ramos) {
-        InvalidCSVField e;
         for(String ramo : ramos) {
             if (!data.existeRamos(ramo)) {
-                //MessageCenter.getInstance().putMessage("Linha " + index + " -> está a tentar inserir uma proposta com um ramo inexistente");
-                //throw new InvalidCSVField("Linha " + index + " -> está a tentar inserir uma proposta com um ramo inexistente", index);
+                //("Linha " + index + " -> está a tentar inserir uma proposta com um ramo inexistente");
                 return false;
             }
         }
         return true;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T1 importadas são corretos
+     *
+     */
     private boolean checkT1(int index, List<String> ramos, long numAluno) throws InvalidCSVField {
         boolean ok = true;
 
@@ -206,22 +223,22 @@ public class GestaoPropostas extends StateAdapter{
         }
 
         if(!data.verificaNumAluno(numAluno)){
-            //MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
+            //("Linha " + index + " -> aluno atribuído inexistente");
             sb.append("O aluno não existe. ");
             ok = false;
         }
         if(!data.verificaRamoAluno(numAluno, ramos)){
-            //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
+            //("Linha " + index + " -> atribuição de proposta a aluno de ramo diferente");
             sb.append("atribuição de proposta a aluno de ramo diferente. ");
             ok = false;
         }
         if(!data.verificaPossibilidade(numAluno)){
-            //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno não elegível");
+            //("Linha " + index + " -> atribuição de proposta a aluno não elegível");
             sb.append("atribuição de proposta a aluno não elegível. ");
             ok = false;
         }
         if(data.verificaJaAtribuido(numAluno)){
-            //MessageCenter.getInstance().putMessage("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
+            //("Linha " + index + " -> atribuição de proposta a aluno com proposta já atribuída");
             sb.append("atribuição de proposta a aluno com proposta já atribuída. ");
             ok = false;
         }
@@ -231,7 +248,10 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T1 importadas são corretos
+     *
+     */
     private boolean checkT2(int index, List<String> ramos, String docente) throws InvalidCSVField {
         StringBuilder sb = new StringBuilder();
 
@@ -247,7 +267,10 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T2 importadas são corretos
+     *
+     */
     private boolean checkT2Aluno(int index, List<String> ramos, String docente, long numAluno) throws  InvalidCSVField {
         StringBuilder sb = new StringBuilder();
 
@@ -276,7 +299,10 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T3 importadas são corretos
+     *
+     */
     private boolean checkT3(int index, long numAluno) throws InvalidCSVField {
         StringBuilder sb = new StringBuilder();
         if(!data.verificaNumAluno(numAluno)){
@@ -293,7 +319,11 @@ public class GestaoPropostas extends StateAdapter{
 
         return true;
     }
-
+    /**
+     * Exporta informação das propostas para ficheiro CSV
+     * @param file nome do ficheiro a gravar
+     *
+     */
     @Override
     public ErrorCode exportarCSV(String file) {
         if(!CSVWriter.startWriter(file)){
@@ -304,7 +334,11 @@ public class GestaoPropostas extends StateAdapter{
         CSVWriter.closeFile();
         return ErrorCode.E0;
     }
-
+    /**
+     * Remove uma proposta
+     * @param id id da proposta a remover
+     * @return ErrorCode com o resultado da remoção
+     */
     @Override
     public ErrorCode removeProposta(String id) {
         if(!data.verificaProposta(id)){
@@ -315,7 +349,10 @@ public class GestaoPropostas extends StateAdapter{
         data.removeProposta(id);
         return ErrorCode.E0;
     }
-
+    /**
+     * Remove todas as propostas
+     *
+     */
     @Override
     public boolean removeAll() {
         for (Proposta p : data.getProposta()){
@@ -323,7 +360,12 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Altera o titulo da proposta
+     * @param id id da proposta a alterar
+     * @param novo_titulo novo titulo da proposta
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode changeTitulo(String id, String novo_titulo){
         Proposta p = getPropostaById(id);
@@ -332,7 +374,12 @@ public class GestaoPropostas extends StateAdapter{
         p.setTitulo(novo_titulo);
         return ErrorCode.E0;
     }
-
+    /**
+     * Altera a entidade da proposta
+     * @param id id da proposta a alterar
+     * @param nova_entidade nova entidade da proposta
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode changeEntidade(String id, String nova_entidade) {
         Proposta p = getPropostaById(id);
@@ -347,7 +394,12 @@ public class GestaoPropostas extends StateAdapter{
         }
         return ErrorCode.E0;
     }
-
+    /**
+     * Adiciona ramo a proposta
+     * @param id id da proposta a alterar
+     * @param ramo ramo a adicionar
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode addRamo(String id, String ramo)  {
         if(!data.existeRamos(ramo)){
@@ -365,7 +417,11 @@ public class GestaoPropostas extends StateAdapter{
         p.addRamo(ramo);
         return ErrorCode.E0;
     }
-
+    /**
+     * Obtém uma proposta dos dados
+     * @param id id da proposta
+     * @return Proposta proposta pretendida
+     */
     private Proposta getPropostaById(String id) {
         List<Proposta> propostas = data.getPropostasAPartirDeId(new ArrayList<>(), Collections.singletonList(id));
         if(propostas.size() == 0){
@@ -374,7 +430,12 @@ public class GestaoPropostas extends StateAdapter{
         }
         return propostas.get(0);
     }
-
+    /**
+     * Remove o ramo a uma proposta
+     * @param id id da proposta a alterar
+     * @param ramo ramo a remover
+     * @return ErrorCode com o resultado da operação
+     */
     @Override
     public ErrorCode removeRamo(String id, String ramo) {
         if(!data.existeRamos(ramo)){
@@ -393,6 +454,18 @@ public class GestaoPropostas extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Insere uma proposta
+     * @param tipo tipo da proposta a inserir
+     * @param id id da proposta a inserir
+     * @param ramos lista dos ramos da proposta a inserir
+     * @param titulo titulo da proposta a inserir
+     * @param docente email do docente preponente caso exista
+     * @param entidade entidade da proposta a inserir
+     * @param nAluno número do aluno pré-atribuído caso exista
+     * @return ErrorCode com o resultado da inserção
+     *
+     */
     @Override
     public ErrorCode insereProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
         ErrorCode e;
@@ -429,7 +502,10 @@ public class GestaoPropostas extends StateAdapter{
         }
         return ErrorCode.E0;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T3 são corretos
+     *
+     */
     private ErrorCode verificaT3(String tipo, String id, String titulo, Long numAluno) {
         if(!data.verificaNumAluno(numAluno)){
             //MessageCenter.getInstance().putMessage("Linha " + index + " -> aluno atribuído inexistente");
@@ -443,7 +519,10 @@ public class GestaoPropostas extends StateAdapter{
 
         return ErrorCode.E0;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T2 são corretos
+     *
+     */
     private ErrorCode verificaT2(String tipo, String id, List<String> ramos, String titulo, String docente, Long nAluno) {
         if (!checkRamos(0, ramos)) {
             return ErrorCode.E3;
@@ -470,7 +549,10 @@ public class GestaoPropostas extends StateAdapter{
 
         return ErrorCode.E0;
     }
-
+    /**
+     * Verifica se os dados das propostas tipo T1 são corretos
+     *
+     */
     private ErrorCode verificaT1(String tipo, String id, List<String> ramos, String titulo, String entidade, Long numAluno) {
         if(ramos.size() == 0){
             return ErrorCode.E7;
@@ -507,7 +589,10 @@ public class GestaoPropostas extends StateAdapter{
         return ErrorCode.E0;
 
     }
-
+    /**
+     * Verifica se uma propostas contem os ramos
+     *
+     */
     private boolean verificaExistenciaRamos(List<String> ramos) {
         for (String r: ramos) {
             if(!Constantes.getRamos().contains(r)){
@@ -516,7 +601,18 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
-
+    /**
+     * Edita uma proposta existente
+     * @param tipo tipo da proposta a editar
+     * @param id id da proposta a editar
+     * @param ramos lista dos ramos da proposta a editar
+     * @param titulo titulo da proposta a editar
+     * @param docente email do docente preponente caso exista
+     * @param entidade entidade da proposta a editar
+     * @param nAluno número do aluno pré-atribuído caso exista
+     * @return ErrorCode com o resultado da edição
+     *
+     */
     @Override
     public ErrorCode editProposta(String tipo, String id, List<String> ramos, String titulo, String docente, String entidade, String nAluno) {
         ErrorCode e;
@@ -602,7 +698,12 @@ public class GestaoPropostas extends StateAdapter{
         return ErrorCode.E0;
     }
 
-
+    /**
+     * Edita o docente de uma proposta do tipo projeto
+     * @param p proposta a editar
+     * @param docente docente a atribuir
+     * @return ErrorCode com o resultado da edição
+     */
 
     private ErrorCode editProjeto(Proposta p, String id, String titulo, String docente, List<String> ramos, String nAluno) {
         ErrorCode e = ErrorCode.E0;
@@ -612,7 +713,12 @@ public class GestaoPropostas extends StateAdapter{
         }
         return e;
     }
-
+    /**
+     * Edita o docente orientador e proponente de uma proposta do tipo projeto
+     * @param p proposta a editar
+     * @param docente docente a atribuir
+     * @return ErrorCode com o resultado da edição
+     */
     private ErrorCode alteraDocente(Projeto p, String docente) {
         if(!data.existeDocenteComEmail(docente)){
             return ErrorCode.E4;
@@ -625,6 +731,10 @@ public class GestaoPropostas extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Altera a entidade de uma proposta do tipo estágio
+     * @return ErrorCode com o resultado da edição
+     */
     private ErrorCode editEstagio(Proposta p, String id, String titulo, String entidade, List<String> ramos, String nAluno) {
         ErrorCode e = ErrorCode.E0;
 
@@ -636,10 +746,13 @@ public class GestaoPropostas extends StateAdapter{
         return e;
     }
 
+    /**
+     * Altera os ramos de uma proposta
+     * @param p proposta a alterar
+     * @param ramos Lista dos novos ramos da proposta
+     * @return ErrorCode com o resultado da edição
+     */
     private ErrorCode alteraRamos(Proposta p, List<String> ramos) {
-        //if(new HashSet<>(ramos).containsAll(p.getRamos())){
-        //    return ErrorCode.E0;
-        //}
 
         for (String ramo : ramos) {
             if(!Constantes.getRamos().contains(ramo)){
