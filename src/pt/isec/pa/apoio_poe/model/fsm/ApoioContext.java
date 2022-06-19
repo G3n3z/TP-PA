@@ -227,7 +227,7 @@ public class ApoioContext {
     }
 
     public String getPropostasDisponiveis() {
-        return state.getPropostasDisponiveis();
+        return state.getPropostasDisponiveisToString();
     }
 
     public String getPropostasAtribuidas(){

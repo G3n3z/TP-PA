@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface IState {
     boolean avancarFase();
@@ -116,7 +115,7 @@ public interface IState {
 
     String obtencaoAlunosSemPropostaComCandidatura();
 
-    String getPropostasDisponiveis();
+    String getPropostasDisponiveisToString();
 
     String getPropostasAtribuidasToString();
 
@@ -177,4 +176,8 @@ public interface IState {
     List<Aluno> getAlunosComPropostaConfirmadaEditavel();
 
     void goLoad();
+    List<Aluno> getTodosAlunosComPropostaAtribuidaCopia();
+    List<Aluno> obtencaoAlunosSemPropostaAtribuida();
+    List<Proposta> getPropostasDisponiveis();
+    List<Proposta> getPropostasAtribuidas();
 }

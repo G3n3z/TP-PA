@@ -303,7 +303,7 @@ abstract class StateAdapter implements IState{
     }
 
     @Override
-    public String getPropostasDisponiveis() {
+    public String getPropostasDisponiveisToString() {
         return null;
     }
 
@@ -466,5 +466,19 @@ abstract class StateAdapter implements IState{
     @Override
     public void goLoad() {
         changeState(EnumState.LOAD_STATE);
+    }
+    @Override
+    public List<Aluno> getTodosAlunosComPropostaAtribuidaCopia(){
+        return null;
+    }
+    @Override
+    public List<Aluno> obtencaoAlunosSemPropostaAtribuida(){
+        return  null;
+    }
+    public List<Proposta> getPropostasDisponiveis(){
+        return  null;
+    }
+    public List<Proposta> getPropostasAtribuidas(){
+        return null;
     }
 }

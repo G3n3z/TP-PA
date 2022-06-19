@@ -70,6 +70,33 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+    @Override
+    public List<Aluno> getTodosAlunosComPropostaAtribuidaCopia() {
+        List<Aluno> alunos = new ArrayList<>();
+        for (Aluno aluno : data.getAlunos()) {
+            if(aluno.temPropostaConfirmada()){
+                alunos.add(aluno.getClone());
+            }
+        }
+
+        return alunos;
+    }
+
+    @Override
+    public List<Aluno> obtencaoAlunosSemPropostaAtribuida() {
+        List<Aluno> alunos = new ArrayList<>();
+
+        for (Aluno a : data.getAlunos()) {
+            if (a.temPropostaConfirmada() && a.temPropostaNaoConfirmada())
+                continue;
+            if (!a.temCandidatura())
+                continue;
+            alunos.add(a.getClone());
+        }
+        return alunos;
+    }
+
+
     /**
      *
      * @return String com os alunos sem proposta mas com candidatura
@@ -95,15 +122,29 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+
+
+
+
     /**
      *
      * @return retorna String com todas as propostas disponiveis
      */
     @Override
-    public String getPropostasDisponiveis() {
+    public String getPropostasDisponiveisToString() {
         StringBuilder sb = new StringBuilder();
         data.getProposta().stream().filter(p -> !p.isAtribuida() && !(p instanceof Projeto_Estagio)).forEach(p -> sb.append(p).append("\n"));
         return sb.toString();
+    }
+    @Override
+    public List<Proposta> getPropostasDisponiveis() {
+        List<Proposta> propostas = new ArrayList<>();
+        for (Proposta p : data.getProposta()) {
+            if(!p.isAtribuida() && !(p instanceof Projeto_Estagio)){
+                propostas.add(p.getClone());
+            }
+        }
+        return propostas;
     }
 
 
@@ -116,6 +157,17 @@ public class Consulta extends StateAdapter{
         StringBuilder sb = new StringBuilder();
         data.getProposta().stream().filter(Proposta::isAtribuida).forEach(p -> sb.append(p).append("\n"));
         return sb.toString();
+    }
+
+    @Override
+    public List<Proposta> getPropostasAtribuidas(){
+        List<Proposta> propostas = new ArrayList<>();
+        for (Proposta proposta : data.getProposta()) {
+            if(proposta.isAtribuida()){
+                propostas.add(proposta.getClone());
+            }
+        }
+        return propostas;
     }
 
     /**
