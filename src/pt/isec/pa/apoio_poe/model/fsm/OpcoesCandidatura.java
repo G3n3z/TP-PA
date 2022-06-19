@@ -322,6 +322,11 @@ public class OpcoesCandidatura extends StateAdapter{
         return propostas;
     }
 
+    /**
+     * Funcao que retorna as propostas com filtros em String
+     * @param filters inteiros que especificam os filtros a ser aplicados
+     * @return String com as propostas
+     */
     @Override
     public String getPropostasWithFiltersToString(int[] filters) {
         StringBuilder sb = new StringBuilder();
@@ -329,12 +334,23 @@ public class OpcoesCandidatura extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     * Funcao que remove candidatura a um aluno
+     * @param numAluno numero de aluno a  remover a candidatura
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode removeCandidatura(long numAluno) {
         data.removeCandidatura(numAluno);
         return ErrorCode.E0;
     }
 
+    /**
+     *  Funcaod e inserção manual de candidatura
+     * @param nAluno numero de aluno a ser inserida a candidatura
+     * @param ids List com as propostas da candidatura
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode insereCandidatura(String nAluno, List<String> ids) {
         Long numAluno = parseNumAluno(nAluno);
@@ -364,6 +380,12 @@ public class OpcoesCandidatura extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Funcao de edicao de candidatura
+     * @param nAluno numero de aluno a qual a candidatura ira ser alterada
+     * @param ids novos ids das propostas
+     * @return retorna ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode editCandidatura(String nAluno, List<String> ids) {
         Long numAluno = parseNumAluno(nAluno);
@@ -399,6 +421,11 @@ public class OpcoesCandidatura extends StateAdapter{
         return ErrorCode.E0;
     }
 
+    /**
+     * Funcao que transforma uma string em um long
+     * @param nAluno string com numero de aluno a ser transformado
+     * @return retorna um Long com o numero transformado, poderá ser null se não conseguir trasnformar a string em long
+     */
     private Long parseNumAluno(String nAluno) {
         long numAluno;
         try {
@@ -409,6 +436,10 @@ public class OpcoesCandidatura extends StateAdapter{
         return numAluno;
     }
 
+    /**
+     *
+     * @return retorna List com os copias dos alunos com autoproposta
+     */
     @Override
     public List<Aluno> getAlunosComAutoProposta() {
         List<Aluno> al = new ArrayList<>();
@@ -421,6 +452,10 @@ public class OpcoesCandidatura extends StateAdapter{
 
     }
 
+    /**
+     *
+     * @return retorna List com os copias dos alunos com candidatura
+     */
     @Override
     public List<Aluno> getAlunosComCandidatura() {
 
@@ -433,6 +468,10 @@ public class OpcoesCandidatura extends StateAdapter{
         return al;
     }
 
+    /**
+     *
+     * @return retorna List com os copias dos alunos sem candudatura
+     */
     @Override
     public List<Aluno> getAlunosSemCandidatura() {
         List<Aluno> al = new ArrayList<>();
@@ -444,6 +483,11 @@ public class OpcoesCandidatura extends StateAdapter{
         return al;
     }
 
+    /**
+     *
+     * @param opcoes inteiros que correspondem aos filtros a serem aplicados
+     * @return retorna List com os copias das propostas com os filtros aplicados
+     */
     @Override
     public List<Proposta> getPropostasWithFiltersCopia(int ...opcoes) {
         Set<Proposta> propostas =  getPropostasWithFilters(opcoes);
