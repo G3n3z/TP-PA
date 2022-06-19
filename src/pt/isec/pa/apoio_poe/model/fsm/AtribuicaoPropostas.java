@@ -74,7 +74,7 @@ public class AtribuicaoPropostas extends StateAdapter{
     public void atribuicaoAutomaticaEstagio_PropostaEProjetoComAluno() {
         Aluno aluno;
         for (Proposta p : data.getProposta()){
-            if(p.getNumAluno() == null || (p instanceof Estagio)){
+            if(p.getNumAluno() == null){
                 continue;
             }
             aluno = data.getAluno(p.getNumAluno());

@@ -35,38 +35,70 @@ abstract class StateAdapter implements IState{
         changeState(newState.createState(context, data));
     }
 
+    /**
+     * Funcao que permite fechar a fase, implementacoes diferente conforme o estado em si
+     * @return ErrorCode com o resultado da operacao
+     */
     @Override
     public ErrorCode close() {
         close = true;
         return ErrorCode.E0;
     }
 
+    /**
+     * Transicao de estado, implementado em alguns estados concretos
+     * @return boolean para saber como correu a operação
+     */
     @Override
     public boolean avancarFase() {
         return false;
     }
+
+    /**
+     * Funcao que faz com que os estados que tenham implementado esta transição a efetuem
+     * @return booleano a dizer como correu
+     */
     @Override
     public boolean recuarFase() {
         return false;
     }
+
+    /**
+     * Transicao de estado
+     * @return um boolean para saber como correu a operacao
+     */
     @Override
     public boolean gerirAlunos() {
         return false;
     }
+    /**
+     * Transicao de estado
+     * @return um boolean para saber como correu a operacao
+     */
     @Override
     public boolean gerirDocentes() {return false;}
+
+    /**
+     * Transicao de estado
+     * @return um boolean para saber como correu a operacao
+     */
     @Override
     public boolean gerirEstagios() {
         return false;
     }
 
+    /**
+     * Transicao de estado para o conflito
+     * @return um boolean para saber como correu a operacao
+     */
     @Override
     public boolean conflitoAtribuicaoCandidatura() {
         return false;
     }
 
 
-    /* Metodos para saber se a fase esta fechada ou nao */
+    /**
+     *  Metodos para saber se a fase esta fechada ou nao */
     public boolean isClose() {
         return close;
     }
@@ -84,16 +116,7 @@ abstract class StateAdapter implements IState{
 
     @Override
     public boolean load() throws IOException, ClassNotFoundException {
-        //return false;
-//        try{
-//            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(data.getFicheiroBin()));
-//            data = (Data) oos.readObject();
-//            context.setData(data);
-//            changeState(data.getLastState());
-//        }catch (Exception e){
-//            throw e;
-//        }
-        return true;
+        return false;
     }
 
     @Override

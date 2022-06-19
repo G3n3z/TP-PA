@@ -227,6 +227,7 @@ public class Aluno extends Pessoa implements Cloneable{
             clone.propostaNaoConfirmada = propostaNaoConfirmada.getClone();
         if (proposta !=null)
             clone.proposta = proposta.getClone();
+        clone.setOrdem(ordem);
         return clone;
     }
 

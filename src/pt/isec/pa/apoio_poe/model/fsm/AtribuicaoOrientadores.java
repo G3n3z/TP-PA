@@ -103,7 +103,10 @@ public class AtribuicaoOrientadores extends StateAdapter {
         return ErrorCode.E0;
     }
 
-
+    /**
+     *
+     * @return
+     */
     @Override
     public String getEstatisticasPorDocente() {
         StringBuilder sb = new StringBuilder();
