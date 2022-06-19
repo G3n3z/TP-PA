@@ -299,9 +299,13 @@ public class GestaoPropostas extends StateAdapter{
         }
         return true;
     }
+
     /**
      * Verifica se os dados das propostas tipo T3 importadas são corretos
-     *
+     * @param index index da linha do ficheiro csv
+     * @param numAluno número do aluno
+     * @return boolean true caso execute tudo bem
+     * @throws InvalidCSVField lança exceção quando um campo é invalido
      */
     private boolean checkT3(int index, long numAluno) throws InvalidCSVField {
         StringBuilder sb = new StringBuilder();
