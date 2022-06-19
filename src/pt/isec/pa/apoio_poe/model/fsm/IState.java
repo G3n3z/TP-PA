@@ -16,6 +16,11 @@ import java.util.Set;
 public interface IState {
     boolean avancarFase();
     boolean recuarFase();
+
+    /**
+     * Obtencao do estado atual da aplicacao
+     * @return a enumeração do real estado atual da fsm
+     */
     EnumState getState();
     ErrorCode close();
     boolean gerirAlunos();
