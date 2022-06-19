@@ -70,6 +70,10 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     * Obtencao de copia dos alunos com propostas com atribuicao
+     * @return retorna List com copia dos alunos com propostas com atribuicao
+     */
     @Override
     public List<Aluno> getTodosAlunosComPropostaAtribuidaCopia() {
         List<Aluno> alunos = new ArrayList<>();
@@ -82,6 +86,10 @@ public class Consulta extends StateAdapter{
         return alunos;
     }
 
+    /**
+     * Obtencao de copia dos alunos sem propostas
+     * @return retorna List com copia dos alunos sem propostas
+     */
     @Override
     public List<Aluno> obtencaoAlunosSemPropostaAtribuida() {
         List<Aluno> alunos = new ArrayList<>();
@@ -123,9 +131,6 @@ public class Consulta extends StateAdapter{
     }
 
 
-
-
-
     /**
      *
      * @return retorna String com todas as propostas disponiveis
@@ -136,6 +141,11 @@ public class Consulta extends StateAdapter{
         data.getProposta().stream().filter(p -> !p.isAtribuida() && !(p instanceof Projeto_Estagio)).forEach(p -> sb.append(p).append("\n"));
         return sb.toString();
     }
+
+    /**
+     * Obtencao de copia das propostas Disponiveis
+     * @return retorna List com copia das propostas Disponiveis
+     */
     @Override
     public List<Proposta> getPropostasDisponiveis() {
         List<Proposta> propostas = new ArrayList<>();
@@ -159,6 +169,10 @@ public class Consulta extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     * Obtencao de copia das propostas atribuidas
+     * @return retorna List com copia das propostas atribuidas
+     */
     @Override
     public List<Proposta> getPropostasAtribuidas(){
         List<Proposta> propostas = new ArrayList<>();

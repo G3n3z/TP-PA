@@ -160,7 +160,8 @@ public class ConsultaUI extends BorderPane {
         tPropostasDisponiveis = new TablePropostas(model,null);
         tPropostasAtribuidas = new TablePropostas(model,null);
         vBoxPropostas.getChildren().addAll(lPD,tPropostasDisponiveis,lPA,tPropostasAtribuidas);
-        VBox.setMargin(vBoxPropostas, new Insets(20,0,20,10));
+        VBox.setMargin(lPD, new Insets(20,0,20,10));
+        VBox.setMargin(lPA, new Insets(20,0,20,10));
         vBoxPropostas.setAlignment(Pos.CENTER);
 
     }
