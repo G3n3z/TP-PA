@@ -59,10 +59,6 @@ public class AtribuicaoPropostas extends StateAdapter{
             data.closeState(getState());
             return ErrorCode.E0;
         }
-        //MessageCenter.getInstance().putMessage("Condições de fecho de fase não alcançadas.\n");
-        //MessageCenter.getInstance().putMessage(qualAlunoComCandidaturaSemPropostaAssocaida());
-//        data.closeState(getState());
-//        return ErrorCode.E0;
         return ErrorCode.E26;
     }
 
@@ -107,7 +103,6 @@ public class AtribuicaoPropostas extends StateAdapter{
             }
             CSVWriter.writeLine(",", true,false);
         }
-        //data.exportAlunosCandidaturaProposta();
         CSVWriter.closeFile();
 
         return ErrorCode.E0;
@@ -227,6 +222,12 @@ public class AtribuicaoPropostas extends StateAdapter{
         });
         return sb.toString();
     }
+
+
+    /**
+     * Obtencao dos Alunos com autoptoposta atribuida
+     * @return String com os alunos
+     */
     @Override
     public String obtencaoAlunosComAutoPropostaAtribuida() {
         StringBuilder sb = new StringBuilder();
@@ -236,6 +237,10 @@ public class AtribuicaoPropostas extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     * Obtencao de alunos com proposta atribuida
+     * @return String formata com os alunos
+     */
     @Override
     public String getTodosAlunosComPropostaAtribuida() {
         StringBuilder sb = new StringBuilder();
@@ -247,6 +252,11 @@ public class AtribuicaoPropostas extends StateAdapter{
 
         return sb.toString();
     }
+
+    /**
+     * Obtnecao de ALunos com candidatura
+     * @return String com os alunos
+     */
     @Override
     public String obtencaoAlunosComCandidatura() {
         StringBuilder sb = new StringBuilder();
@@ -255,6 +265,10 @@ public class AtribuicaoPropostas extends StateAdapter{
         return sb.toString();
     }
 
+    /**
+     * Obtencao de Alunos sem proposta
+     * @return String com os dados do alunos
+     */
     @Override
     public String obtencaoAlunosSemProposta() {
         StringBuilder sb = new StringBuilder();
@@ -263,6 +277,12 @@ public class AtribuicaoPropostas extends StateAdapter{
                         .append("\n"));
         return sb.toString();
     }
+
+    /**
+     *
+     * @param filters
+     * @return
+     */
     @Override
     public String getPropostasWithFiltersToStringAtribuicao(int[] filters) {
         StringBuilder sb = new StringBuilder();
@@ -304,6 +324,11 @@ public class AtribuicaoPropostas extends StateAdapter{
         }
         return al;
     }
+
+    /**
+     * Obtencao dos Alunos com autoptoposta atribuida
+     * @return List com os alunos
+     */
     @Override
     public List<Aluno> getAlunosComAutoProposta() {
         List<Aluno> al = new ArrayList<>();
