@@ -280,8 +280,8 @@ public class AtribuicaoPropostas extends StateAdapter{
 
     /**
      *
-     * @param filters
-     * @return
+     * @param filters array de inteiros que especifica quais os filtros a aplicar.
+     * @return String com as propostas com os filtros aplicados
      */
     @Override
     public String getPropostasWithFiltersToStringAtribuicao(int[] filters) {
@@ -290,6 +290,12 @@ public class AtribuicaoPropostas extends StateAdapter{
         return sb.toString();
     }
 
+
+    /**
+     *
+     * @param filters array de inteiros que especifica quais os filtros a aplicar.
+     * @return Set com propostas com filtros
+     */
     public Set<Proposta> getPropostasWithFiltersAtribuicao(int ...filters){
         Set<Proposta> propostas = new HashSet<>();
         for (int i : filters){
