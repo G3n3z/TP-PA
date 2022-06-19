@@ -346,6 +346,11 @@ public class AtribuicaoPropostas extends StateAdapter{
         return al;
 
     }
+
+    /**
+     * Obtencao de alunos com candidatura
+     * @return List com copia dos alunos
+     */
     @Override
     public List<Aluno> getAlunosComCandidatura() {
 
@@ -357,6 +362,12 @@ public class AtribuicaoPropostas extends StateAdapter{
         }
         return al;
     }
+
+    /**
+     *
+     * @param opcoes filtros a aplicar
+     * @return List com copia das propostas com filtors
+     */
     public List<Proposta> getPropostasWithFiltersCopia(int ...opcoes) {
         Set<Proposta> propostas =  getPropostasWithFiltersAtribuicao(opcoes);
         List<Proposta> copia = new ArrayList<>();
